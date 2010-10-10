@@ -1,5 +1,5 @@
 namespace :test do
-  desc 'Test changes continuously; Control-Z runs all tests; Control-C quits.'
+  desc 'Test changes; Ctrl-Z forces; Ctrl-\ reloads; Ctrl-C quits.'
   task :loop do |test_loop_task|
     ARGV.delete test_loop_task.name # interferes with RSpec test runner
     Rails.env = 'test' if defined? Rails and Rails.respond_to? :env= # Rails 3
@@ -15,7 +15,8 @@ namespace :test do
 
     # continuously watch for and test changed code
     started_at = last_ran_at = Time.now
-    trap(:TSTP) { last_ran_at = Time.at(0) } # bound to Control-Z
+    trap(:QUIT) { started_at = Time.at(0) }  # Control-\
+    trap(:TSTP) { last_ran_at = Time.at(0) } # Control-Z
 
     loop do
       # figure out what test files need to be run

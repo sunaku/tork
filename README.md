@@ -15,10 +15,10 @@ determine which test files in your test suite correspond to those changes.
 Features
 --------
 
-* Tests CHANGES in your Ruby application; does NOT run all tests every time.
-
 * Supports Test::Unit, RSpec, or any other testing framework that is utilized
   by your application's `test/test_helper.rb` and `spec/spec_helper.rb` files.
+
+* Tests CHANGES in your Ruby application; does NOT run all tests every time.
 
 * Reabsorbs test execution overhead if the test or spec helper file changes.
 
@@ -46,6 +46,9 @@ rake test:loop
 
 * Press Control-Z to forcibly run all tests, even
   if there are no changes in your Ruby application.
+
+* Press Control-\ (backslash) to forcibly reabsorb the test
+  execution overhead, even if its sources have not changed.
 
 * Press Control-C to quit the test loop.
 
