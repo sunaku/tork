@@ -44,9 +44,8 @@ Usage
 
 rake test:loop
 
-* Press Control-4 or Control-\ (backslash)
-  to forcibly run all tests, even if there
-  are no changes in your Ruby application.
+* Press Control-Z to forcibly run all tests, even
+  if there are no changes in your Ruby application.
 
 * Press Control-C to quit the test loop.
 
