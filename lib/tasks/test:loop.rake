@@ -6,7 +6,7 @@ namespace :test do
 
     # absorb test execution overhead into master process
     overhead_file_glob = '{test,spec}/*_helper.rb'
-    $LOAD_PATH.unshift 'lib' # for non-Rails applications' test or spec helper
+    $LOAD_PATH.unshift 'lib' # for non-Rails applications
 
     Dir[overhead_file_glob].each do |file|
       $LOAD_PATH.unshift file.pathmap('%d')
@@ -14,13 +14,16 @@ namespace :test do
     end
 
     # continuously watch for and test changed code
+    long_ago = Time.at(0)
     started_at = Time.now
-    last_ran_at = (ENV['RUN'] == '1') ? Time.at(0) : started_at
+    last_ran_at = (ENV['RUN'] == '1') ? long_ago : started_at
+    trap(:QUIT) { last_ran_at = long_ago } # bound to Control-4
+
     loop do
       # figure out what test files need to be run
       test_files = {
         '{test,spec}/**/*_{test,spec}.rb' => '%p',
-        '{app,lib}/**/*.rb' => '{test,spec}/**/%n_{test,spec}%x',
+        '{lib,app}/**/*.rb' => '{test,spec}/**/%n_{test,spec}%x',
       }.
       map do |source_file_glob, test_file_pathmap|
         Dir[source_file_glob].

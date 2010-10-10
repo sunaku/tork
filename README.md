@@ -24,7 +24,7 @@ Features
 
 * Mostly I/O bound, so you can have it always running without CPU slowdowns.
 
-* Composed of just 35 (SLOC) lines of code! :-)
+* Implemented in less than 40 (SLOC) lines of code! :-)
 
 
 Install
@@ -48,8 +48,11 @@ rake test:loop
   to run all tests initially, even if there
   are no changes in your Ruby application.
 
-* To stop the task after it has begun running,
-  press Control-C or kill the process manually.
+* Press Control-4 or Control-\ (backslash)
+  to forcibly run all tests, even if there
+  are no changes in your Ruby application.
+
+* Press Control-C to quit the test loop.
 
 
 License
