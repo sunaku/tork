@@ -2,12 +2,14 @@ namespace :test do
   desc 'Test changes continuously; pass RUN=1 to force initial run.'
   task :loop do |test_loop_task|
     ARGV.delete test_loop_task.name # interferes with RSpec test runner
-    Rails.env = 'test' if Rails.respond_to? :env= # needed for Rails 3
+    Rails.env = 'test' if defined? Rails and Rails.respond_to? :env= # Rails 3
 
     # absorb test execution overhead into master process
     overhead_file_glob = '{test,spec}/*_helper.rb'
+    $LOAD_PATH.unshift 'lib' # for non-Rails applications' test or spec helper
+
     Dir[overhead_file_glob].each do |file|
-      $LOAD_PATH << file.pathmap('%d')
+      $LOAD_PATH.unshift file.pathmap('%d')
       require file.pathmap('%n')
     end
 
