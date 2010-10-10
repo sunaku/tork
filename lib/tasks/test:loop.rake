@@ -1,5 +1,5 @@
 namespace :test do
-  desc 'Test changes continuously; pass RUN=1 to force initial run.'
+  desc 'Test changes continuously; Control-4 runs all tests; Control-C quits.'
   task :loop do |test_loop_task|
     ARGV.delete test_loop_task.name # interferes with RSpec test runner
     Rails.env = 'test' if defined? Rails and Rails.respond_to? :env= # Rails 3
@@ -14,10 +14,8 @@ namespace :test do
     end
 
     # continuously watch for and test changed code
-    long_ago = Time.at(0)
-    started_at = Time.now
-    last_ran_at = (ENV['RUN'] == '1') ? long_ago : started_at
-    trap(:QUIT) { last_ran_at = long_ago } # bound to Control-4
+    started_at = last_ran_at = Time.now
+    trap(:QUIT) { last_ran_at = Time.at(0) } # bound to Control-4
 
     loop do
       # figure out what test files need to be run

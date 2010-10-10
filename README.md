@@ -44,10 +44,6 @@ Usage
 
 rake test:loop
 
-* Pass "RUN=1" as a command-line argument
-  to run all tests initially, even if there
-  are no changes in your Ruby application.
-
 * Press Control-4 or Control-\ (backslash)
   to forcibly run all tests, even if there
   are no changes in your Ruby application.
