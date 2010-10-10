@@ -35,9 +35,6 @@ As a Ruby on Rails plugin:
     rails plugin install git://github.com/sunaku/test-loop  # Rails >= 3
     script/plugin install git://github.com/sunaku/test-loop # older Rails
 
-As a regular Ruby library, download the `lib/tasks/test:loop.rake` file and
-require it into your Rakefile or use it directly by passing it to `rake -f`.
-
 
 Usage
 -----
