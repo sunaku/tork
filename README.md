@@ -1,7 +1,7 @@
-test:loop - Continuous testing for Ruby with fork/eval
+test-loop - Continuous testing for Ruby with fork/eval
 ======================================================
 
-test:loop is a fast continuous testing tool for Ruby that continuously detects
+test-loop is a fast continuous testing tool for Ruby that continuously detects
 and tests changes in your Ruby application in an efficient manner, whereby it:
 
 1. Absorbs the test execution overhead into the main Ruby process.
@@ -32,7 +32,7 @@ Install
 
 As a Ruby gem:
 
-    gem install test:loop
+    gem install test-loop
 
 As a Rails plugin:
 
@@ -43,7 +43,7 @@ As a Rails plugin:
 Usage
 -----
 
-test:loop # if installed as a Ruby gem
+test-loop # if installed as a Ruby gem
 
 rake test:loop # if installed as a Rails plugin
 

@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name        = 'test:loop'
+  s.name        = 'test-loop'
   s.version     = '0.0.1'
   s.author      = 'Suraj N. Kurapati'
   s.homepage    = 'http://github.com/sunaku/test-loop'
@@ -7,8 +7,8 @@ Gem::Specification.new do |s|
   s.files       = %w[
     LICENSE
     README.md
-    bin/test:loop
-    lib/test:loop.rb
-    lib/tasks/test:loop.rake
+    bin/test-loop
+    lib/test-loop.rb
+    lib/tasks/test-loop.rake
   ]
 end

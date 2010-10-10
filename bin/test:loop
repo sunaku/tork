@@ -1,2 +1,0 @@
-#!/usr/bin/env ruby
-load File.expand_path('../../lib/test:loop.rb', __FILE__)
