@@ -8,7 +8,7 @@ and tests changes in your Ruby application in an efficient manner, whereby it:
 2. Forks to evaluate your test files directly and without overhead.
 
 It relies on file modification times to determine what parts of your Ruby
-application have changed and then uses Rake's String#pathmap function to
+application have changed and then uses Rake's `String#pathmap` function to
 determine which test files in your test suite correspond to those changes.
 
 
@@ -27,8 +27,8 @@ Features
 * Implemented in less than 40 (SLOC) lines of code! :-)
 
 
-Install
--------
+Installation
+------------
 
 As a Ruby gem:
 
@@ -40,12 +40,20 @@ As a Rails plugin:
     script/plugin install git://github.com/sunaku/test-loop # older Rails
 
 
-Usage
------
+Invocation
+----------
 
-test-loop # if installed as a Ruby gem
+If installed as a Ruby gem:
 
-rake test:loop # if installed as a Rails plugin
+    test-loop
+
+If installed as a Rails plugin:
+
+    rake test:loop
+
+
+Operation
+---------
 
 * Press Control-Z to forcibly run all tests, even
   if there are no changes in your Ruby application.
