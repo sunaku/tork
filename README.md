@@ -24,7 +24,7 @@ Features
 
 * Mostly I/O bound, so you can have it always running without CPU slowdowns.
 
-* Implemented in less than 40 (SLOC) lines of code! :-)
+* Implemented in less than 50 (SLOC) lines of code! :-)
 
 
 Installation

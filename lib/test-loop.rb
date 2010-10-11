@@ -11,8 +11,16 @@ end
 
 # continuously watch for and test changed code
 started_at = last_ran_at = Time.now
-trap(:QUIT) { started_at = Time.at(0); puts 'Reloading overhead...' }
-trap(:TSTP) { last_ran_at = Time.at(0); puts 'Testing everything...' }
+
+trap :QUIT do
+  puts 'Reloading overhead...'
+  started_at = Time.at(0)
+end
+
+trap :TSTP do
+  puts 'Testing everything...'
+  last_ran_at = Time.at(0)
+end
 
 puts 'Ready for testing...'
 loop do
@@ -30,7 +38,7 @@ loop do
   # fork worker process to run the test files
   unless test_files.empty?
     last_ran_at = Time.now
-    fork { test_files.each {|f| load f } }
+    fork { test_files.each {|file| load file } }
     Process.wait
   end
 
