@@ -11,9 +11,10 @@ end
 
 # continuously watch for and test changed code
 started_at = last_ran_at = Time.now
-trap(:QUIT) { started_at = Time.at(0) }  # Control-\
-trap(:TSTP) { last_ran_at = Time.at(0) } # Control-Z
+trap(:QUIT) { started_at = Time.at(0); puts 'Reloading overhead...' }
+trap(:TSTP) { last_ran_at = Time.at(0); puts 'Testing everything...' }
 
+puts 'Ready for testing...'
 loop do
   # figure out what test files need to be run
   test_files = {
