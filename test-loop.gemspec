@@ -11,4 +11,5 @@ Gem::Specification.new do |s|
     lib/test-loop.rb
     lib/tasks/test-loop.rake
   ]
+  s.executables << 'test-loop'
 end
