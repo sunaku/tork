@@ -15,14 +15,14 @@ determine which test files in your test suite correspond to those changes.
 Features
 --------
 
-* Supports Test::Unit, RSpec, or any other testing framework that is utilized
-  by your application's `test/test_helper.rb` and `spec/spec_helper.rb` files.
-
 * Tests CHANGES in your Ruby application; does NOT run all tests every time.
 
 * Reabsorbs test execution overhead if the test or spec helper file changes.
 
 * Mostly I/O bound, so you can have it always running without CPU slowdowns.
+
+* Supports Test::Unit, RSpec, or any other testing framework that is utilized
+  by your application's `test/test_helper.rb` and `spec/spec_helper.rb` files.
 
 * Implemented in less than 50 (SLOC) lines of code! :-)
 
@@ -55,13 +55,13 @@ If installed as a Rails plugin:
 Operation
 ---------
 
-* Press Control-Z to forcibly run all tests, even
-  if there are no changes in your Ruby application.
+* Press Control-Z (or send the SIGTSTP signal) to forcibly run all
+  tests, even if there are no changes in your Ruby application.
 
-* Press Control-\ (backslash) to forcibly reabsorb the test
-  execution overhead, even if its sources have not changed.
+* Press Control-\ (or send the SIGQUIT signal) to forcibly reabsorb
+  the test execution overhead, even if its sources have not changed.
 
-* Press Control-C to quit the test loop.
+* Press Control-C (or send the SIGINT signal) to quit the test loop.
 
 
 License
