@@ -34,6 +34,10 @@ As a Ruby gem:
 
     gem install test-loop
 
+As a Git clone:
+
+    git clone git://github.com/sunaku/test-loop
+
 
 Invocation
 ----------
@@ -41,6 +45,10 @@ Invocation
 If installed as a Ruby gem:
 
     test-loop
+
+If installed as a Git clone:
+
+    ruby -Ilib bin/test-loop
 
 
 Operation
