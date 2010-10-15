@@ -9,7 +9,6 @@ Gem::Specification.new do |s|
     README.md
     bin/test-loop
     lib/test-loop.rb
-    lib/tasks/test-loop.rake
   ]
   s.executables << 'test-loop'
 end

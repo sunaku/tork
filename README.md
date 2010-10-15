@@ -34,11 +34,6 @@ As a Ruby gem:
 
     gem install test-loop
 
-As a Rails plugin:
-
-    rails plugin install git://github.com/sunaku/test-loop  # Rails >= 3
-    script/plugin install git://github.com/sunaku/test-loop # older Rails
-
 
 Invocation
 ----------
@@ -46,10 +41,6 @@ Invocation
 If installed as a Ruby gem:
 
     test-loop
-
-If installed as a Rails plugin:
-
-    rake test:loop
 
 
 Operation
