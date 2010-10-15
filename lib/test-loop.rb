@@ -13,7 +13,7 @@ end
 started_at = last_ran_at = Time.now
 
 trap :QUIT do
-  puts 'Reloading overhead...'
+  puts 'Reabsorbing overhead...'
   started_at = Time.at(0)
 end
 
@@ -42,7 +42,7 @@ loop do
     Process.wait
   end
 
-  # re-absorb test execution overhead as necessary
+  # reabsorb test execution overhead as necessary
   if Dir[overhead_file_glob].any? {|file| File.mtime(file) > started_at }
     exec 'ruby', __FILE__, *ARGV
   end
