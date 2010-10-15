@@ -13,16 +13,16 @@ end
 started_at = last_ran_at = Time.now
 
 trap :QUIT do
-  puts 'Reabsorbing overhead...'
+  puts 'test-loop: Reabsorbing overhead...'
   started_at = Time.at(0)
 end
 
 trap :TSTP do
-  puts 'Testing everything...'
+  puts 'test-loop: Testing everything...'
   last_ran_at = Time.at(0)
 end
 
-puts 'Ready for testing...'
+puts 'test-loop: Ready for testing!'
 loop do
   # figure out what test files need to be run
   test_files = {
