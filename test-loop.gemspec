@@ -8,7 +8,6 @@ Gem::Specification.new do |s|
     LICENSE
     README.md
     bin/test-loop
-    lib/test-loop.rb
   ]
   s.executables << 'test-loop'
 end

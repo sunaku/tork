@@ -48,7 +48,7 @@ If installed as a Ruby gem:
 
 If installed as a Git clone:
 
-    ruby -Ilib bin/test-loop
+    ruby bin/test-loop
 
 
 Operation
