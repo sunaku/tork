@@ -1,3 +1,8 @@
+Version 1.0.1 (2010-10-16)
+==========================
+
+* Ensure that $LOAD_PATH reflects `ruby -Ilib:test`.
+
 Version 1.0.0 (2010-10-15)
 ==========================
 
