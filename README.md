@@ -24,7 +24,7 @@ Features
 * Supports Test::Unit, RSpec, or any other testing framework that is utilized
   by your application's `test/test_helper.rb` and `spec/spec_helper.rb` files.
 
-* Implemented in less than 50 (SLOC) lines of code! :-)
+* Implemented in less than 40 (SLOC) lines of code! :-)
 
 
 Installation
