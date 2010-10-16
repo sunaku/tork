@@ -6,7 +6,7 @@ overhead_file_glob = '{test,spec}/*_helper.rb'
 $LOAD_PATH.unshift 'lib' # for non-Rails applications
 
 Dir[overhead_file_glob].each do |file|
-  $LOAD_PATH.unshift file.pathmap('%d')
+  $LOAD_PATH.insert 1, file.pathmap('%d')
   require file.pathmap('%n')
 end
 
