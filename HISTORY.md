@@ -1,3 +1,9 @@
+Version 1.0.2 (2010-10-16)
+==========================
+
+* All *_helper.rb files inside test/ and spec/ were absorbed as overhead
+  instead of just the test_helper.rb and spec_helper.rb files.
+
 Version 1.0.1 (2010-10-16)
 ==========================
 
