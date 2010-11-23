@@ -2,7 +2,7 @@
 require 'rake' # for String#pathmap
 
 # absorb test execution overhead into master process
-overhead_file_glob = '{test,spec}/{test,spec}_helper.rb'
+overhead_file_glob = '{test,spec}/*{test,spec}_helper.rb'
 $LOAD_PATH.unshift 'lib' # for non-Rails applications
 
 Dir[overhead_file_glob].each do |file|
