@@ -1,8 +1,15 @@
+Version 1.1.0 (2010-11-22)
+==========================
+
+* All *_{test,spec}_helper.rb files inside test/ and
+  spec/ are now considered to be absorable overhead.
+
 Version 1.0.2 (2010-10-16)
 ==========================
 
-* All *_helper.rb files inside test/ and spec/ were absorbed as overhead
-  instead of just the test_helper.rb and spec_helper.rb files.
+* All *_helper.rb files inside test/ and spec/
+  were absorbed as overhead instead of just
+  the test_helper.rb and spec_helper.rb files.
 
 Version 1.0.1 (2010-10-16)
 ==========================
