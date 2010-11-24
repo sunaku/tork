@@ -13,15 +13,16 @@ end
 
 # continuously watch for and test changed code
 started_at = last_ran_at = Time.now
+never_ran_at = Time.at(0)
 
 trap :QUIT do
-  puts 'test-loop: Reabsorbing overhead...'
-  started_at = Time.at(0)
+  puts 'test-loop: Re-executing loop...'
+  started_at = never_ran_at
 end
 
 trap :TSTP do
   puts 'test-loop: Testing everything...'
-  last_ran_at = Time.at(0)
+  last_ran_at = never_ran_at
 end
 
 puts 'test-loop: Ready for testing!'
