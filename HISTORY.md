@@ -1,3 +1,10 @@
+Version 1.2.0 (2010-11-23)
+==========================
+
+* Notify user when absorbing overhead initially.
+
+* DRY up the repetiton of Time.at(0) calculation.
+
 Version 1.1.0 (2010-11-22)
 ==========================
 
