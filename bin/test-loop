@@ -5,6 +5,7 @@ require 'rake' # for String#pathmap
 overhead_file_glob = '{test,spec}/*{test,spec}_helper.rb'
 $LOAD_PATH.unshift 'lib' # for non-Rails applications
 
+puts 'test-loop: Absorbing overhead...'
 Dir[overhead_file_glob].each do |file|
   $LOAD_PATH.insert 1, file.pathmap('%d')
   require file.pathmap('%n')
