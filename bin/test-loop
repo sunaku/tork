@@ -2,7 +2,11 @@
 begin
   require 'rake' # for String#pathmap
 
-  puts 'test-loop: Loading configuration...'
+  def notify message
+    puts "test-loop: #{message}"
+  end
+
+  notify 'Loading configuration...'
   config_file = File.join(Dir.pwd, 'test-loop.conf')
   load config_file if File.exist? config_file
 
@@ -21,7 +25,7 @@ begin
   # absorb test execution overhead into master process
   $LOAD_PATH.unshift 'lib' # for non-Rails applications
 
-  puts 'test-loop: Absorbing overhead...'
+  notify 'Absorbing overhead...'
   Dir[*@overhead_file_globs].each do |file|
     $LOAD_PATH.insert 1, file.pathmap('%d')
     require file.pathmap('%n')
@@ -32,16 +36,16 @@ begin
   never_ran_at = Time.at(0)
 
   trap :QUIT do
-    puts 'test-loop: Re-executing loop...'
+    notify 'Re-executing loop...'
     started_at = never_ran_at
   end
 
   trap :TSTP do
-    puts 'test-loop: Testing everything...'
+    notify 'Testing everything...'
     last_ran_at = never_ran_at
   end
 
-  puts 'test-loop: Ready for testing!'
+  notify 'Ready for testing!'
   loop do
     # figure out what test files need to be run
     test_files = @source_file_to_test_file_mapping.
@@ -54,8 +58,7 @@ begin
     # fork worker process to run the test files
     unless test_files.empty?
       last_ran_at = Time.now
-      puts test_files.map {|s| "test-loop: #{s}" }
-      fork { test_files.each {|file| load file } }
+      fork { test_files.each {|file| notify file; load file } }
       Process.wait
     end
 
