@@ -54,6 +54,7 @@ begin
     # fork worker process to run the test files
     unless test_files.empty?
       last_ran_at = Time.now
+      puts test_files.map {|s| "test-loop: #{s}" }
       fork { test_files.each {|file| load file } }
       Process.wait
     end
