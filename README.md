@@ -63,6 +63,27 @@ Operation
 * Press Control-C (or send the SIGINT signal) to quit the test loop.
 
 
+Configuration
+-------------
+
+test-loop looks for a configuration file named `test-loop.conf` in its working
+directory.  This configuration file is a normal Ruby script which can define
+the following instance variables:
+
+* `@overhead_file_globs` is an array of file globbing patterns that describe a
+  set of Ruby scripts that are loaded into the main Ruby process as overhead.
+
+* `@reabsorb_file_globs` is an array of file globbing patterns that describe a
+  set of files which cause the overhead to be reabsorbed whenever they change.
+
+* `@source_file_to_test_file_mapping` is a hash that maps a file globbing
+  pattern describing a set of source files to a Rake pathmap expression
+  yielding a file globbing pattern describing a set of test files that need to
+  be run.  In other words, whenever the source files (the hash key; left-hand
+  side of the mapping) change, their associated test files (the hash value;
+  right-hand side of the mapping) are run.
+
+
 License
 -------
 
