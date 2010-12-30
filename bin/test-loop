@@ -22,6 +22,8 @@ begin
     '{lib,app}/**/*.rb' => '{test,spec}/**/%n_{test,spec}%x',
   )
 
+  @after_test_execution ||= lambda {|status, ran_at, files|}
+
   # absorb test execution overhead into master process
   $LOAD_PATH.unshift 'lib' # for non-Rails applications
 
@@ -60,6 +62,7 @@ begin
       last_ran_at = Time.now
       fork { test_files.each {|file| notify file; load file } }
       Process.wait
+      @after_test_execution.call($?, last_ran_at, test_files)
     end
 
     # reabsorb test execution overhead as necessary

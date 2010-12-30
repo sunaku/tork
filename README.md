@@ -83,6 +83,23 @@ the following instance variables:
   side of the mapping) change, their associated test files (the hash value;
   right-hand side of the mapping) are run.
 
+* `@after_test_execution` is a proc/lambda object that is executed after tests
+  are run.  It is passed three things: the status of the test execution
+  subprocess, the time when the tests were run, and the list of test files
+  that were run.
+
+  For example, to get on-screen-display notifications through libnotify,
+  add the following to your `test-loop.conf` file:
+
+      @after_test_execution = lambda do |status, ran_at, files|
+        if status.success?
+          result, icon = 'PASS', 'apple-green'
+        else
+          result, icon = 'FAIL', 'apple-red'
+        end
+        system 'notify-send', '-i', icon, "#{result} at #{ran_at}", files.join("\n")
+      end
+
 
 License
 -------
