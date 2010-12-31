@@ -66,9 +66,9 @@ Operation
 Configuration
 -------------
 
-test-loop looks for a configuration file named `.test-loop` in its working
-directory.  This configuration file is a normal Ruby script which can define
-the following instance variables:
+test-loop looks for a configuration file named `.test-loop` in the current
+working directory.  This configuration file is a normal Ruby script which can
+define the following instance variables:
 
 * `@overhead_file_globs` is an array of file globbing patterns that describe a
   set of Ruby scripts that are loaded into the main Ruby process as overhead.
