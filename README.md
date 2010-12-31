@@ -77,11 +77,12 @@ the following instance variables:
   set of files which cause the overhead to be reabsorbed whenever they change.
 
 * `@source_file_to_test_file_mapping` is a hash that maps a file globbing
-  pattern describing a set of source files to a Rake pathmap expression
-  yielding a file globbing pattern describing a set of test files that need to
-  be run.  In other words, whenever the source files (the hash key; left-hand
-  side of the mapping) change, their associated test files (the hash value;
-  right-hand side of the mapping) are run.
+  pattern describing a set of source files to a [Rake pathmap expression](
+  http://rake.rubyforge.org/classes/String.html#M000017 ) yielding a file
+  globbing pattern describing a set of test files that need to be run.  In
+  other words, whenever the source files (the hash key; left-hand side of the
+  mapping) change, their associated test files (the hash value; right-hand
+  side of the mapping) are run.
 
 * `@after_test_execution` is a proc/lambda object that is executed after tests
   are run.  It is passed three things: the status of the test execution
