@@ -104,4 +104,4 @@ the following instance variables:
 License
 -------
 
-See the LICENSE file for details.
+See the `bin/test-loop` file.

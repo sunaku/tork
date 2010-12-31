@@ -5,7 +5,6 @@ Gem::Specification.new do |s|
   s.homepage    = 'http://github.com/sunaku/test-loop'
   s.summary     = 'Continuous testing for Ruby with fork/eval'
   s.files       = %w[
-    LICENSE
     README.md
     bin/test-loop
   ]
