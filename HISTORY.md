@@ -1,3 +1,17 @@
+Version 2.0.0 (2010-12-31)
+==========================
+
+* Add support for loading configuration file, which
+  allows you to define additional test file globs
+  and mappings, from the current working directory.
+
+* Add support for executing arbitrary logic after every test run
+  via the `@after_test_execution` hook in the configuration file.
+
+* Before running tests, print out their file paths.
+
+* Automatically retry when overhead absorption fails.
+
 Version 1.2.0 (2010-11-23)
 ==========================
 
