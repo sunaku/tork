@@ -66,7 +66,7 @@ Operation
 Configuration
 -------------
 
-test-loop looks for a configuration file named `test-loop.conf` in its working
+test-loop looks for a configuration file named `.test-loop` in its working
 directory.  This configuration file is a normal Ruby script which can define
 the following instance variables:
 
@@ -90,7 +90,7 @@ the following instance variables:
   that were run.
 
   For example, to get on-screen-display notifications through libnotify,
-  add the following to your `test-loop.conf` file:
+  add the following to your `.test-loop` file:
 
       @after_test_execution = lambda do |status, ran_at, files|
         if status.success?

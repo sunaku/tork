@@ -27,7 +27,7 @@ end
 
 begin
   notify 'Loading configuration...'
-  config_file = File.join(Dir.pwd, 'test-loop.conf')
+  config_file = File.join(Dir.pwd, '.test-loop')
   load config_file if File.exist? config_file
 
   (@overhead_file_globs ||= []).
