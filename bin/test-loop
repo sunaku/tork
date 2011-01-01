@@ -87,6 +87,7 @@ begin
 
     # reabsorb test execution overhead as necessary
     if Dir[*@reabsorb_file_globs].any? {|file| File.mtime(file) > started_at }
+      notify 'Reabsorbing overhead...'
       exec $0, *ARGV
     end
 
