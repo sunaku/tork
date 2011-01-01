@@ -1,3 +1,12 @@
+Version 2.0.1 (2011-01-01)
+==========================
+
+* Fix syntax error caused by a dangling comma. Thanks
+  to darthdeus (Jakub Arnold) for reporting [this bug](
+  https://github.com/sunaku/test-loop/issues#issue/1 ).
+
+* Notify user before reabsorbing overhead.
+
 Version 2.0.0 (2010-12-31)
 ==========================
 
