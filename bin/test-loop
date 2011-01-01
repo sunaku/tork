@@ -39,7 +39,7 @@ begin
 
   (@source_file_to_test_file_mapping ||= {}).merge!(
     '{test,spec}/**/*_{test,spec}.rb' => '%p',
-    '{lib,app}/**/*.rb' => '{test,spec}/**/%n_{test,spec}%x',
+    '{lib,app}/**/*.rb' => '{test,spec}/**/%n_{test,spec}%x'
   )
 
   @after_test_execution ||= lambda {|status, ran_at, files|}
