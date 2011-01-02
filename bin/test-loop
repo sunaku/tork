@@ -89,6 +89,8 @@ begin
 
     sleep 1
   end
+rescue Interrupt
+  # user wants to quit the loop
 rescue StandardError, LoadError => error
   puts error.inspect, error.backtrace
   sleep 1 and exec $0, *ARGV
