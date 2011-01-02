@@ -1,3 +1,10 @@
+Version 2.0.2 (2011-01-02)
+==========================
+
+* Do not print stack trace when Control-C pressed.
+
+* Reduce the amount of notifications shown to user.
+
 Version 2.0.1 (2011-01-01)
 ==========================
 
