@@ -8,8 +8,8 @@ and tests changes in your Ruby application in an efficient manner, whereby it:
 2. Forks to evaluate your test files directly and without overhead.
 
 It relies on file modification times to determine what parts of your Ruby
-application have changed and then uses Rake's `String#pathmap` function to
-determine which test files in your test suite correspond to those changes.
+application have changed and then determines which test files in your test
+suite correspond to those changes using a simple lambda mapping function.
 
 
 Features
@@ -24,7 +24,7 @@ Features
 * Supports Test::Unit, RSpec, or any other testing framework that is utilized
   by your application's `test/test_helper.rb` and `spec/spec_helper.rb` files.
 
-* Implemented in less than 55 (SLOC) lines of code! :-)
+* Implemented in less than 60 (SLOC) lines of code! :-)
 
 
 Installation
@@ -77,12 +77,23 @@ define the following instance variables:
   set of files which cause the overhead to be reabsorbed whenever they change.
 
 * `@source_file_to_test_file_mapping` is a hash that maps a file globbing
-  pattern describing a set of source files to a [Rake pathmap expression](
-  http://rake.rubyforge.org/classes/String.html#M000017 ) yielding a file
-  globbing pattern describing a set of test files that need to be run.  In
-  other words, whenever the source files (the hash key; left-hand side of the
-  mapping) change, their associated test files (the hash value; right-hand
+  pattern describing a set of source files to a lambda function yielding a
+  file globbing pattern describing a set of test files that need to be run.
+  In other words, whenever the source files (the hash key; left-hand side of
+  the mapping) change, their associated test files (the hash value; right-hand
   side of the mapping) are run.
+
+  For example, if test files had the same names as their source files but the
+  letters were in reverse order, then you would add the following to your
+  `.test-loop` file:
+
+      @source_file_to_test_file_mapping = {
+        '{lib,app}/**/*.rb' => lambda do |path|
+          extn = File.extname(path)
+          name = File.basename(path, extn)
+          "{test,spec}/**/#{name.reverse}#{extn}" # <== notice the reverse()
+        end
+      }
 
 * `@after_test_execution` is a proc/lambda object that is executed after tests
   are run.  It is passed three things: the status of the test execution

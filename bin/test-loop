@@ -21,14 +21,11 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
-
-require 'rake' # for String#pathmap
-
-def notify message
-  puts "test-loop: #{message}"
-end
-
 begin
+  def notify message
+    puts "test-loop: #{message}"
+  end
+
   notify 'Loading configuration...'
   config_file = File.join(Dir.pwd, '.test-loop')
   load config_file if File.exist? config_file
@@ -41,8 +38,15 @@ begin
     push(config_file, 'config/*.{rb,yml}').uniq!
 
   (@source_file_to_test_file_mapping ||= {}).merge!(
-    '{test,spec}/**/*_{test,spec}.rb' => '%p',
-    '{lib,app}/**/*.rb' => '{test,spec}/**/%n_{test,spec}%x'
+    # source files that correspond to test files
+    '{lib,app}/**/*.rb' => lambda do |path|
+      extn = File.extname(path)
+      name = File.basename(path, extn)
+      "{test,spec}/**/#{name}_{test,spec}#{extn}"
+    end,
+
+    # the actual test files themselves
+    '{test,spec}/**/*_{test,spec}.rb' => lambda {|path| path }
   )
 
   @after_test_execution ||= lambda {|status, ran_at, files|}
@@ -52,8 +56,8 @@ begin
 
   notify 'Absorbing overhead...'
   Dir[*@overhead_file_globs].each do |file|
-    $LOAD_PATH.insert 1, file.pathmap('%d')
-    require file.pathmap('%n')
+    $LOAD_PATH.insert 1, File.dirname(file)
+    require File.basename(file, File.extname(file))
   end
 
   # continuously watch for and test changed code
@@ -66,10 +70,10 @@ begin
   loop do
     # figure out what test files need to be run
     test_files = @source_file_to_test_file_mapping.
-    map do |source_file_glob, test_file_pathmap|
+    map do |source_file_glob, test_file_glob_mapper|
       Dir[source_file_glob].
       select {|file| File.mtime(file) > last_ran_at }.
-      map {|path| Dir[path.pathmap(test_file_pathmap)] }
+      map {|path| Dir[test_file_glob_mapper.call(path)] }
     end.flatten.uniq
 
     # fork worker process to run the test files
