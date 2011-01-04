@@ -1,3 +1,11 @@
+Version 3.0.0 (2011-01-04)
+==========================
+
+* Replace Rake #pathmap usage with lambda functions
+  in the `@source_file_to_test_file_mapping` hash.
+
+* Be resilient to syntax errors from loaded files.
+
 Version 2.0.2 (2011-01-02)
 ==========================
 

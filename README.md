@@ -54,13 +54,13 @@ If installed as a Git clone:
 Operation
 ---------
 
-* Press Control-Z (or send the SIGTSTP signal) to forcibly run all
+* Press Control-Z or send the SIGTSTP signal to forcibly run all
   tests, even if there are no changes in your Ruby application.
 
-* Press Control-\ (or send the SIGQUIT signal) to forcibly reabsorb
+* Press Control-\ or send the SIGQUIT signal to forcibly reabsorb
   the test execution overhead, even if its sources have not changed.
 
-* Press Control-C (or send the SIGINT signal) to quit the test loop.
+* Press Control-C or send the SIGINT signal to quit the test loop.
 
 
 Configuration
