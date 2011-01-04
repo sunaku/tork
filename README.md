@@ -8,21 +8,24 @@ and tests changes in your Ruby application in an efficient manner, whereby it:
 2. Forks to evaluate your test files directly and without overhead.
 
 It relies on file modification times to determine what parts of your Ruby
-application have changed and then determines which test files in your test
-suite correspond to those changes using a simple lambda mapping function.
+application have changed and then uses a simple lambda mapping function to
+determine which test files in your test suite correspond to those changes.
 
 
 Features
 --------
 
-* Tests CHANGES in your Ruby application; does NOT run all tests every time.
+* Tests *changes* in your Ruby application; does not run all tests every time.
 
 * Reabsorbs test execution overhead if the test or spec helper file changes.
 
 * Mostly I/O bound, so you can have it always running without CPU slowdowns.
 
-* Supports Test::Unit, RSpec, or any other testing framework that is utilized
-  by your application's `test/test_helper.rb` and `spec/spec_helper.rb` files.
+* Supports any testing framework that (1) reflects failures in the process'
+  exit status and (2) is loaded by your application's `test/test_helper.rb`
+  or `spec/spec_helper.rb` file.
+
+* Configurable through a `.test-loop` file in your current working directory.
 
 * Implemented in less than 60 (SLOC) lines of code! :-)
 
@@ -95,7 +98,7 @@ define the following instance variables:
         end
       }
 
-* `@after_test_execution` is a proc/lambda object that is executed after tests
+* `@after_test_execution` is a lambda function that is executed after tests
   are run.  It is passed three things: the status of the test execution
   subprocess, the time when the tests were run, and the list of test files
   that were run.
