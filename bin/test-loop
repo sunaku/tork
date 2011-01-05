@@ -21,6 +21,9 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
+
+process_invocation_vector = [$0, *ARGV].map! {|s| s.dup }
+
 begin
   notify = lambda {|message| puts "test-loop: #{message}" }
 
@@ -86,14 +89,16 @@ begin
     # reabsorb test execution overhead as necessary
     if Dir[*@reabsorb_file_globs].any? {|file| File.mtime(file) > started_at }
       notify.call 'Restarting loop...'
-      exec $0, *ARGV
+      exec(*process_invocation_vector)
     end
 
     sleep 1
   end
+
 rescue Interrupt
   # user wants to quit the loop
+
 rescue StandardError, LoadError, SyntaxError => error
   puts error.inspect, error.backtrace
-  sleep 1 and exec $0, *ARGV
+  sleep 1 and exec(*process_invocation_vector)
 end
