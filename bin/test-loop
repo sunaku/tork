@@ -22,11 +22,9 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 begin
-  def notify message
-    puts "test-loop: #{message}"
-  end
+  notify = lambda {|message| puts "test-loop: #{message}" }
 
-  notify 'Loading configuration...'
+  notify.call 'Loading configuration...'
   config_file = File.join(Dir.pwd, '.test-loop')
   load config_file if File.exist? config_file
 
@@ -54,7 +52,7 @@ begin
   # absorb test execution overhead into master process
   $LOAD_PATH.unshift 'lib' # for non-Rails applications
 
-  notify 'Absorbing overhead...'
+  notify.call 'Absorbing overhead...'
   Dir[*@overhead_file_globs].each do |file|
     $LOAD_PATH.insert 1, File.dirname(file)
     require File.basename(file, File.extname(file))
@@ -66,7 +64,7 @@ begin
   trap(:QUIT) { started_at = epoch_time }
   trap(:TSTP) { last_ran_at = epoch_time }
 
-  notify 'Ready for testing!'
+  notify.call 'Ready for testing!'
   loop do
     # figure out what test files need to be run
     test_files = @source_file_to_test_file_mapping.
@@ -78,16 +76,16 @@ begin
 
     # fork worker process to run the test files
     unless test_files.empty?
-      notify 'Running tests...'
+      notify.call 'Running tests...'
       last_ran_at = Time.now
-      fork { test_files.each {|file| notify file; load file } }
+      fork { test_files.each {|file| notify.call file; load file } }
       Process.wait
       @after_test_execution.call($?, last_ran_at, test_files)
     end
 
     # reabsorb test execution overhead as necessary
     if Dir[*@reabsorb_file_globs].any? {|file| File.mtime(file) > started_at }
-      notify 'Restarting loop...'
+      notify.call 'Restarting loop...'
       exec $0, *ARGV
     end
 
