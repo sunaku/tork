@@ -1,3 +1,12 @@
+Version 3.0.1 (2011-01-05)
+==========================
+
+* Be resilient to $0 and ARGV being changed by tests.
+
+* Reduce pollution by making `notify()` into lambda.
+
+* Beautify markdown formatting and revise the README.
+
 Version 3.0.0 (2011-01-04)
 ==========================
 
