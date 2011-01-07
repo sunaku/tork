@@ -36,7 +36,7 @@ begin
 
   (@reabsorb_file_globs ||= []).
     concat(@overhead_file_globs).
-    push(config_file, 'config/*.{rb,yml}').uniq!
+    push(config_file, 'config/*.{rb,yml}', 'Gemfile').uniq!
 
   (@source_file_to_test_file_mapping ||= {}).merge!(
     # source files that correspond to test files
