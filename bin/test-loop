@@ -98,7 +98,7 @@ begin
 rescue Interrupt
   # user wants to quit the loop
 
-rescue StandardError, LoadError, SyntaxError => error
+rescue Exception => error
   puts error.inspect, error.backtrace
   sleep 1 and exec(*process_invocation_vector)
 end
