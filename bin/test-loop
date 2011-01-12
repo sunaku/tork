@@ -75,7 +75,7 @@ begin
     end
   end
 
-  @after_all_tests ||= lambda {|ran_at, test_files, test_statuses|}
+  @after_all_tests ||= lambda {|success, ran_at, files, statuses|}
 
   # absorb test execution overhead into master process
   $LOAD_PATH.unshift 'lib' # for non-Rails applications
@@ -135,7 +135,14 @@ begin
       end
 
       statuses = Process.waitall.map {|pid, status| status }
-      @after_all_tests.call(last_ran_at, test_files, statuses)
+
+      success = true
+      test_files.zip(statuses).map do |file, status|
+        success &&= test_passed = status.success?
+        notify.call "#{test_passed ? 'PASS' : 'FAIL'} #{file}"
+      end
+
+      @after_all_tests.call(success, last_ran_at, test_files, statuses)
     end
 
     # reabsorb test execution overhead as necessary

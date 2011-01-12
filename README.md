@@ -117,35 +117,33 @@ define the following instance variables:
   accelerates your test-driven development cycle and improves productivity!
 
 * `@after_all_tests` is a lambda function that is executed after all tests are
-  run.  It is passed three things: the time when the tests were run, a list of
-  test files, and the exit statuses of running those test files.
+  run.  It is passed four things: whether all tests had passed, the time when
+  test execution began, a list of test files, and the exit statuses of the
+  worker processes that evaluated those test files.
 
-  For example, to print a summary of the test execution results while also
-  displaying them as an on-screen-display notification through libnotify,
-  add the following to your `.test-loop` file:
+  For example, to display a summary of the test execution results as an OSD
+  notification via libnotify, add the following to your `.test-loop` file:
 
-      @after_all_tests = lambda do |ran_at, test_files, test_statuses|
-        success = true
-        details = test_files.zip(test_statuses).map do |file, status|
-          if status.success?
-            "\u2714 #{file}"
-          else
-            success = false
-            "\u2718 #{file}"
-          end
+      @after_all_tests = lambda do |success, ran_at, files, statuses|
+        icon = success ? 'apple-green' : 'apple-red'
+        title = "#{success ? 'PASS' : 'FAIL'} at #{ran_at}"
+        details = files.zip(statuses).map do |file, status|
+          "#{status.success? ? '✔' : '✘'} #{file}"
         end
-
-        if success
-          verdict, icon = 'PASS', 'apple-green'
-        else
-          verdict, icon = 'FAIL', 'apple-red'
-        end
-
-        title = "#{verdict} at #{ran_at}"
-        puts nil, title, details, nil
-
         system 'notify-send', '-i', icon, title, details.join("\n")
       end
+
+  Also add the following at the very top if you use Ruby 1.9.x:
+
+      # encoding: utf-8
+
+  That will prevent the following errors from occurring:
+
+      invalid multibyte char (US-ASCII)
+
+      syntax error, unexpected $end, expecting ':'
+      "#{status.success? ? '✔' : '✘'} #{file}"
+                            ^>
 
 
 License
