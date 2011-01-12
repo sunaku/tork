@@ -1,3 +1,10 @@
+Version 3.0.2 (2011-01-11)
+==========================
+
+* Reabsorb overhead upon Gemfile changes (Rails 3).
+
+* Try to recover from all kinds of exceptions.
+
 Version 3.0.1 (2011-01-05)
 ==========================
 
