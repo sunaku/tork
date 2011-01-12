@@ -24,6 +24,8 @@
 
 process_invocation_vector = [$0, *ARGV].map! {|s| s.dup }
 
+require 'diff'
+
 begin
   notify = lambda {|message| puts "test-loop: #{message}" }
 
@@ -50,7 +52,30 @@ begin
     '{test,spec}/**/*_{test,spec}.rb' => lambda {|path| path }
   )
 
-  @after_test_execution ||= lambda {|status, ran_at, files|}
+  @test_file_cache = {} # path => readlines
+
+  @test_name_parser ||= lambda do |line|
+    case line
+    when /^\s*def test_(\w+)/ then $1
+    when /^\s*(test|context|should|describe|it)\b (['"])(.*?)\2/ then $3
+    end
+  end
+
+  @before_each_test ||= lambda do |test_file, test_names|
+    unless test_names.empty?
+      case File.basename(test_file)
+
+      when /(\b|_)test(\b|_)/ # Minitest
+        test_methods = test_names.map {|name| name.gsub(/\W+/, '_').downcase }
+        ARGV.push '-n', "/#{test_methods.join('|')}/"
+
+      when /(\b|_)spec(\b|_)/ # RSpec
+        ARGV.push '-e', test_names.map {|name| Regexp.quote(name) }.join('|')
+      end
+    end
+  end
+
+  @after_all_tests ||= lambda {|ran_at, test_files, test_statuses|}
 
   # absorb test execution overhead into master process
   $LOAD_PATH.unshift 'lib' # for non-Rails applications
@@ -81,9 +106,36 @@ begin
     unless test_files.empty?
       notify.call 'Running tests...'
       last_ran_at = Time.now
-      fork { test_files.each {|file| notify.call file; load file } }
-      Process.wait
-      @after_test_execution.call($?, last_ran_at, test_files)
+      test_files.each do |test_file|
+        notify.call test_file
+
+        # cache the contents of the test file for diffing below
+        new_lines = File.readlines(test_file)
+        old_lines = @test_file_cache[test_file] || new_lines
+        @test_file_cache[test_file] = new_lines
+
+        fork do
+          # determine which test blocks changed inside the test file
+          test_names = Diff.new(old_lines, new_lines).diffs.map do |diff|
+            line_num = diff[0][1] # wrapped in an extra array for some reason
+            catch :found do
+              # search backwards from the line that changed up to
+              # the first line in the file for test definitions
+              line_num.downto(0) do |i|
+                if test_name = @test_name_parser.call(new_lines[i])
+                  throw :found, test_name
+                end
+              end
+            end
+          end.compact.uniq
+
+          @before_each_test.call test_file, test_names
+          load test_file
+        end
+      end
+
+      statuses = Process.waitall.map {|pid, status| status }
+      @after_all_tests.call(last_ran_at, test_files, statuses)
     end
 
     # reabsorb test execution overhead as necessary

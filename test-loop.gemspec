@@ -9,4 +9,5 @@ Gem::Specification.new do |s|
     bin/test-loop
   ]
   s.executables << 'test-loop'
+  s.add_dependency 'diff', '>= 0.3.6'
 end
