@@ -125,7 +125,7 @@ begin
                 if test_name = @test_name_parser.call(new_lines[i])
                   throw :found, test_name
                 end
-              end
+              end; nil # prevent unsuccessful search from returning line_num
             end
           end.compact.uniq
 
