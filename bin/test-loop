@@ -90,7 +90,7 @@ begin
   epoch_time = Time.at(0)
   started_at = last_ran_at = Time.now
   trap(:QUIT) { started_at = epoch_time }
-  trap(:TSTP) { last_ran_at = epoch_time }
+  trap(:TSTP) { last_ran_at = epoch_time; @test_file_cache.clear }
 
   notify.call 'Ready for testing!'
   loop do
