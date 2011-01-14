@@ -107,8 +107,6 @@ begin
       last_ran_at = Time.now
 
       test_files.each do |test_file|
-        notify.call test_file
-
         # cache the contents of the test file for diffing below
         new_lines = File.readlines(test_file)
         old_lines = @test_file_cache[test_file] || new_lines
