@@ -1,3 +1,17 @@
+Version 4.0.0 (2011-01-13)
+==========================
+
+* Only run changed tests inside changed test files.
+
+* Run tests in parallel: one worker per test file.
+
+* Print the status of each test file after execution.
+
+* Rename `@after_test_execution` to `@after_all_tests`
+  and change its function signature.
+
+* Clean up implementation and improve documentation.
+
 Version 3.0.2 (2011-01-11)
 ==========================
 
