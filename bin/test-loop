@@ -145,6 +145,7 @@ begin
         success &&= test_passed = status.success?
         notify.call "#{test_passed ? 'PASS' : 'FAIL'} #{file}"
       end
+      notify.call "Ran in #{Time.now - last_ran_at} seconds"
 
       @after_all_tests.call(success, last_ran_at, test_files, statuses)
     end
