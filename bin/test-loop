@@ -78,11 +78,10 @@ begin
   @after_all_tests ||= lambda {|success, ran_at, files, statuses|}
 
   # absorb test execution overhead into master process
-  $LOAD_PATH.unshift 'lib' # for non-Rails applications
+  $LOAD_PATH.unshift 'lib', 'test', 'spec'
 
   notify.call 'Absorbing overhead...'
   Dir[*@overhead_file_globs].each do |file|
-    $LOAD_PATH.insert 1, File.dirname(file)
     require File.basename(file, File.extname(file))
   end
 
