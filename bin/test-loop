@@ -29,6 +29,7 @@ require 'diff'
 begin
   notify = lambda {|message| puts "test-loop: #{message}" }
 
+  # load user's configuration and supply default values
   notify.call 'Loading configuration...'
   config_file = File.join(Dir.pwd, '.test-loop')
   load config_file if File.exist? config_file
@@ -36,8 +37,7 @@ begin
   (@overhead_file_globs ||= []).
     push('{test,spec}/*{test,spec}_helper.rb').uniq!
 
-  (@reabsorb_file_globs ||= []).
-    concat(@overhead_file_globs).
+  (@reabsorb_file_globs ||= []).concat(@overhead_file_globs).
     push(config_file, 'config/*.{rb,yml}', 'Gemfile').uniq!
 
   (@source_file_to_test_file_mapping ||= {}).merge!(
@@ -96,16 +96,17 @@ begin
   loop do
     # figure out what test files need to be run
     test_files = @source_file_to_test_file_mapping.
-    map do |source_file_glob, test_file_glob_mapper|
-      Dir[source_file_glob].
-      select {|file| File.mtime(file) > last_ran_at }.
-      map {|path| Dir[test_file_glob_mapper.call(path)] }
-    end.flatten.uniq
+      map do |source_file_glob, test_file_glob_mapper|
+        Dir[source_file_glob].
+        select {|file| File.mtime(file) > last_ran_at }.
+        map {|path| Dir[test_file_glob_mapper.call(path)] }
+      end.flatten.uniq
 
-    # fork worker process to run the test files
+    # fork worker processes to run the test files in parallel
     unless test_files.empty?
       notify.call 'Running tests...'
       last_ran_at = Time.now
+
       test_files.each do |test_file|
         notify.call test_file
 
@@ -115,25 +116,31 @@ begin
         @test_file_cache[test_file] = new_lines
 
         fork do
-          # determine which test blocks changed inside the test file
+          # determine which test blocks have changed inside the test file
           test_names = Diff.new(old_lines, new_lines).diffs.map do |diff|
-            line_num = diff[0][1] # wrapped in an extra array for some reason
             catch :found do
               # search backwards from the line that changed up to
               # the first line in the file for test definitions
-              line_num.downto(0) do |i|
+              diff[0][1].downto(0) do |i| # [[+/-, line number, line value]]
                 if test_name = @test_name_parser.call(new_lines[i])
                   throw :found, test_name
                 end
-              end; nil # prevent unsuccessful search from returning line_num
+              end; nil # prevent unsuccessful search from returning an integer
             end
           end.compact.uniq
 
           @before_each_test.call test_file, test_names
+
           load test_file
+
+          # at this point, the at_exit() hook of the testing framework used by
+          # the user's test suite will take care of running all tests defined
+          # by the test file loaded above and will also reflect any failures
+          # in the worker's exit status
         end
       end
 
+      # wait for worker processes to finish and report results
       statuses = Process.waitall.map {|pid, status| status }
 
       success = true

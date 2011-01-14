@@ -6,12 +6,12 @@ and tests changes in your Ruby application in an efficient manner, whereby it:
 
 1. Absorbs the test execution overhead into the main Ruby process.
 2. Forks to evaluate your test files directly and without overhead.
+3. Tries to run only the test blocks that changed in your test files.
 
 It relies on file modification times to determine what parts of your Ruby
-application have changed, uses a lambda mapping function to determine which
-test files in your test suite correspond to those changes, and finally tries to
-run only those test blocks inside your test files that have changed since the
-last run by diffing and applying a simple heuristic (see `@test_name_parser`).
+application have changed, applies a lambda mapping function to determine which
+test files in your test suite correspond to those changes, and uses diffing to
+find and run only those test blocks that have changed inside your test files.
 
 
 Features
@@ -26,9 +26,9 @@ Features
 
 * Mostly I/O bound, so you can have it always running without CPU slowdowns.
 
-* Supports any testing framework that (1) reflects failures in the process'
-  exit status and (2) is loaded by your application's `test/test_helper.rb`
-  or `spec/spec_helper.rb` file.
+* Supports Test::Unit, RSpec, and any other testing framework that (1)
+  reflects failures in the process' exit status and (2) is loaded by your
+  application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
 
 * Configurable through a `.test-loop` file in your current working directory.
 
@@ -103,23 +103,24 @@ define the following instance variables:
         end
       }
 
-* `@test_name_parser` is a lambda function that is passed a line of source code
-  to determine whether that line can be considered as a test definition---in
-  which case, it must return the name of the test being defined.
+* `@test_name_parser` is a lambda function that is passed a line of source
+  code to determine whether that line can be considered as a test definition,
+  in which case it must return the name of the test being defined.
 
 * `@before_each_test` is a lambda function that is executed inside the worker
-  process before loading the test file.  It is passed the path to the test file
-  and the names of tests (identified by `@test_name_parser`) inside the test
-  file that should be executed because they have changed since the last run.
+  process before loading the test file.  It is passed the path to the test
+  file and the names of tests (identified by `@test_name_parser`) inside the
+  test file that have changed since the last time the test file was run.
 
   These test names should be passed down to your chosen testing library,
   instructing it to skip all other tests except those passed down to it.  This
   accelerates your test-driven development cycle and improves productivity!
 
-* `@after_all_tests` is a lambda function that is executed after all tests are
-  run.  It is passed four things: whether all tests had passed, the time when
-  test execution began, a list of test files, and the exit statuses of the
-  worker processes that evaluated those test files.
+* `@after_all_tests` is a lambda function that is executed inside the master
+  process after all tests have finished running.  It is passed four things:
+  whether all tests had passed, the time when test execution began, a list of
+  test files, and the exit statuses of the worker processes that evaluated
+  those test files.
 
   For example, to display a summary of the test execution results as an OSD
   notification via libnotify, add the following to your `.test-loop` file:
@@ -149,4 +150,4 @@ define the following instance variables:
 License
 -------
 
-See the `bin/test-loop` file.
+Released under the ISC license.  See the `bin/test-loop` file for details.
