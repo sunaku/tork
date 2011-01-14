@@ -65,7 +65,7 @@ begin
     unless test_names.empty?
       case File.basename(test_file)
 
-      when /(\b|_)test(\b|_)/ # Minitest
+      when /(\b|_)test(\b|_)/ # Test::Unit
         test_methods = test_names.map {|name| name.gsub(/\W+/, '_') }
         ARGV.push '--name', "/#{test_methods.join('|')}/"
 

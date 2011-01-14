@@ -144,7 +144,7 @@ define the following instance variables:
 
       syntax error, unexpected $end, expecting ':'
       "#{status.success? ? '✔' : '✘'} #{file}"
-                            ^>
+                            ^
 
 
 License

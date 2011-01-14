@@ -1,3 +1,19 @@
+Version 4.0.1 (2011-01-14)
+==========================
+
+* Print how much time it took to run all tests.
+
+* Do not print test file before loading because it
+  is hard to follow parallel test execution anyway.
+
+* Print rescued top-level exceptions to STDERR.
+
+* Strip surrounding spaces from parsed test names.
+
+* Use long options when passing test names in ARGV.
+
+* Only prepend lib/, test/, and spec/ to $LOAD_PATH.
+
 Version 4.0.0 (2011-01-13)
 ==========================
 
