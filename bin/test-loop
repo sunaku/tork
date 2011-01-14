@@ -67,10 +67,10 @@ begin
 
       when /(\b|_)test(\b|_)/ # Minitest
         test_methods = test_names.map {|name| name.gsub(/\W+/, '_') }
-        ARGV.push '-n', "/#{test_methods.join('|')}/"
+        ARGV.push '--name', "/#{test_methods.join('|')}/"
 
       when /(\b|_)spec(\b|_)/ # RSpec
-        ARGV.push '-e', test_names.map {|name| Regexp.quote(name) }.join('|')
+        ARGV.push '--example', test_names.map {|n| Regexp.escape n }.join('|')
       end
     end
   end
