@@ -1,3 +1,13 @@
+Version 5.0.0 (2011-01-17)
+==========================
+
+* The configuration file must now yield a Ruby
+  hash instead of polluting the global Object
+  private environment with instance variables.
+
+* Shortened the `:source_file_glob_to_test_file_mapping`
+  configuration parameter name to `:test_file_matchers`.
+
 Version 4.0.1 (2011-01-14)
 ==========================
 

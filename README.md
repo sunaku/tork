@@ -5,8 +5,8 @@ test-loop is a fast continuous testing tool for Ruby that continuously detects
 and tests changes in your Ruby application in an efficient manner, whereby it:
 
 1. Absorbs the test execution overhead into the main Ruby process.
-2. Forks to evaluate your test files directly and without overhead.
-3. Tries to run only the test blocks that changed in your test files.
+2. Forks to run (eval) your test files directly, without overhead.
+3. Avoids running unchanged test blocks inside changed test files.
 
 It relies on file modification times to determine what parts of your Ruby
 application have changed, applies a lambda mapping function to determine which
@@ -17,8 +17,8 @@ find and run only those test blocks that have changed inside your test files.
 Features
 --------
 
-* Tests *changes* in your Ruby application: ignores unmodified test files
-  as well as unmodified test blocks inside modified test files.
+* Tests *changes* in your Ruby application: avoids running (1) unchanged
+  test files and (2) unchanged test blocks inside changed test files.
 
 * Reabsorbs test execution overhead if the test or spec helper file changes.
 
@@ -119,8 +119,7 @@ statement yields a hash that may optionally contain the following entries:
 * `@after_all_tests` is a lambda function that is executed inside the master
   process after all tests have finished running.  It is passed four things:
   whether all tests had passed, the time when test execution began, a list of
-  test files, and the exit statuses of the worker processes that evaluated
-  those test files.
+  test files, and the exit statuses of the worker processes that ran them.
 
   For example, to display a summary of the test execution results as an OSD
   notification via libnotify, add the following hash entry to your
