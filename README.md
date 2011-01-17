@@ -84,18 +84,18 @@ statement yields a hash that may optionally contain the following entries:
 * `:reabsorb_file_globs` is an array of file globbing patterns that describe a
   set of files which cause the overhead to be reabsorbed whenever they change.
 
-* `:source_file_to_test_file_mapping` is a hash that maps a file globbing
-  pattern describing a set of source files to a lambda function yielding a
-  file globbing pattern describing a set of test files that need to be run.
-  In other words, whenever the source files (the hash key; left-hand side of
-  the mapping) change, their associated test files (the hash value; right-hand
+* `:test_file_matchers` is a hash that maps a file globbing pattern
+  describing a set of source files to a lambda function yielding a file
+  globbing pattern describing a set of test files that need to be run.  In
+  other words, whenever the source files (the hash key; left-hand side of the
+  mapping) change, their associated test files (the hash value; right-hand
   side of the mapping) are run.
 
   For example, if test files had the same names as their source files but the
   letters were in reverse order, then you would add the following hash entry
   to your `.test-loop` file:
 
-      :source_file_to_test_file_mapping => {
+      :test_file_matchers => {
         '{lib,app}/**/*.rb' => lambda do |path|
           extn = File.extname(path)
           name = File.basename(path, extn)
