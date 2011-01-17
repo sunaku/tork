@@ -32,15 +32,16 @@ begin
   # load user's configuration and supply default values
   notify.call 'Loading configuration...'
   config_file = File.join(Dir.pwd, '.test-loop')
-  load config_file if File.exist? config_file
+  config_data = File.read(config_file) if File.exist? config_file
+  config = eval(config_data.to_s, TOPLEVEL_BINDING, config_file) || {}
 
-  (@overhead_file_globs ||= []).
+  (config[:overhead_file_globs] ||= []).
     push('{test,spec}/*{test,spec}_helper.rb').uniq!
 
-  (@reabsorb_file_globs ||= []).concat(@overhead_file_globs).
+  (config[:reabsorb_file_globs] ||= []).concat(config[:overhead_file_globs]).
     push(config_file, 'config/*.{rb,yml}', 'Gemfile').uniq!
 
-  (@source_file_to_test_file_mapping ||= {}).merge!(
+  (config[:source_file_to_test_file_mapping] ||= {}).merge!(
     # source files that correspond to test files
     '{lib,app}/**/*.rb' => lambda do |path|
       extn = File.extname(path)
@@ -52,16 +53,14 @@ begin
     '{test,spec}/**/*_{test,spec}.rb' => lambda {|path| path }
   )
 
-  @test_file_cache = {} # path => readlines
-
-  @test_name_parser ||= lambda do |line|
+  config[:test_name_parser] ||= lambda do |line|
     case line
     when /^\s*def test_(\w+)/ then $1
     when /^\s*(test|context|should|describe|it)\b (['"])(.*?)\2/ then $3.strip
     end
   end
 
-  @before_each_test ||= lambda do |test_file, test_names|
+  config[:before_each_test] ||= lambda do |test_file, test_names|
     unless test_names.empty?
       case File.basename(test_file)
 
@@ -75,26 +74,26 @@ begin
     end
   end
 
-  @after_all_tests ||= lambda {|success, ran_at, files, statuses|}
+  config[:after_all_tests] ||= lambda {|success, ran_at, files, statuses|}
 
   # absorb test execution overhead into master process
   $LOAD_PATH.unshift 'lib', 'test', 'spec'
 
   notify.call 'Absorbing overhead...'
-  Dir[*@overhead_file_globs].each do |file|
+  Dir[*config[:overhead_file_globs]].each do |file|
     require File.basename(file, File.extname(file))
   end
 
   # continuously watch for and test changed code
-  epoch_time = Time.at(0)
+  test_file_cache = {} # path => readlines
   started_at = last_ran_at = Time.now
-  trap(:QUIT) { started_at = epoch_time }
-  trap(:TSTP) { last_ran_at = epoch_time; @test_file_cache.clear }
+  trap(:QUIT) { started_at = Time.at(0) }
+  trap(:TSTP) { last_ran_at = Time.at(0); test_file_cache.clear }
 
   notify.call 'Ready for testing!'
   loop do
     # figure out what test files need to be run
-    test_files = @source_file_to_test_file_mapping.
+    test_files = config[:source_file_to_test_file_mapping].
       map do |source_file_glob, test_file_glob_mapper|
         Dir[source_file_glob].
         select {|file| File.mtime(file) > last_ran_at }.
@@ -109,8 +108,8 @@ begin
       test_files.each do |test_file|
         # cache the contents of the test file for diffing below
         new_lines = File.readlines(test_file)
-        old_lines = @test_file_cache[test_file] || new_lines
-        @test_file_cache[test_file] = new_lines
+        old_lines = test_file_cache[test_file] || new_lines
+        test_file_cache[test_file] = new_lines
 
         fork do
           # determine which test blocks have changed inside the test file
@@ -119,14 +118,14 @@ begin
               # search backwards from the line that changed up to
               # the first line in the file for test definitions
               diff[0][1].downto(0) do |i| # [[+/-, line number, line value]]
-                if test_name = @test_name_parser.call(new_lines[i])
+                if test_name = config[:test_name_parser].call(new_lines[i])
                   throw :found, test_name
                 end
               end; nil # prevent unsuccessful search from returning an integer
             end
           end.compact.uniq
 
-          @before_each_test.call test_file, test_names
+          config[:before_each_test].call test_file, test_names
 
           load test_file
 
@@ -147,11 +146,11 @@ begin
       end
       notify.call "Ran in #{Time.now - last_ran_at} seconds"
 
-      @after_all_tests.call(success, last_ran_at, test_files, statuses)
+      config[:after_all_tests].call success, last_ran_at, test_files, statuses
     end
 
     # reabsorb test execution overhead as necessary
-    if Dir[*@reabsorb_file_globs].any? {|file| File.mtime(file) > started_at }
+    if Dir[*config[:reabsorb_file_globs]].any? {|file| File.mtime(file) > started_at }
       notify.call 'Restarting loop...'
       exec(*process_invocation_vector)
     end

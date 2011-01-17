@@ -75,16 +75,16 @@ Configuration
 -------------
 
 test-loop looks for a configuration file named `.test-loop` in the current
-working directory.  This configuration file is a normal Ruby script which can
-define the following instance variables:
+working directory.  This configuration file is a normal Ruby file whose last
+statement yields a hash that may optionally contain the following entries:
 
-* `@overhead_file_globs` is an array of file globbing patterns that describe a
+* `:overhead_file_globs` is an array of file globbing patterns that describe a
   set of Ruby scripts that are loaded into the main Ruby process as overhead.
 
-* `@reabsorb_file_globs` is an array of file globbing patterns that describe a
+* `:reabsorb_file_globs` is an array of file globbing patterns that describe a
   set of files which cause the overhead to be reabsorbed whenever they change.
 
-* `@source_file_to_test_file_mapping` is a hash that maps a file globbing
+* `:source_file_to_test_file_mapping` is a hash that maps a file globbing
   pattern describing a set of source files to a lambda function yielding a
   file globbing pattern describing a set of test files that need to be run.
   In other words, whenever the source files (the hash key; left-hand side of
@@ -92,10 +92,10 @@ define the following instance variables:
   side of the mapping) are run.
 
   For example, if test files had the same names as their source files but the
-  letters were in reverse order, then you would add the following to your
-  `.test-loop` file:
+  letters were in reverse order, then you would add the following hash entry
+  to your `.test-loop` file:
 
-      @source_file_to_test_file_mapping = {
+      :source_file_to_test_file_mapping => {
         '{lib,app}/**/*.rb' => lambda do |path|
           extn = File.extname(path)
           name = File.basename(path, extn)
@@ -103,11 +103,11 @@ define the following instance variables:
         end
       }
 
-* `@test_name_parser` is a lambda function that is passed a line of source
+* `:test_name_parser` is a lambda function that is passed a line of source
   code to determine whether that line can be considered as a test definition,
   in which case it must return the name of the test being defined.
 
-* `@before_each_test` is a lambda function that is executed inside the worker
+* `:before_each_test` is a lambda function that is executed inside the worker
   process before loading the test file.  It is passed the path to the test
   file and the names of tests (identified by `@test_name_parser`) inside the
   test file that have changed since the last time the test file was run.
@@ -123,9 +123,10 @@ define the following instance variables:
   those test files.
 
   For example, to display a summary of the test execution results as an OSD
-  notification via libnotify, add the following to your `.test-loop` file:
+  notification via libnotify, add the following hash entry to your
+  `.test-loop` file:
 
-      @after_all_tests = lambda do |success, ran_at, files, statuses|
+      :after_all_tests => lambda do |success, ran_at, files, statuses|
         icon = success ? 'apple-green' : 'apple-red'
         title = "#{success ? 'PASS' : 'FAIL'} at #{ran_at}"
         details = files.zip(statuses).map do |file, status|
@@ -134,7 +135,7 @@ define the following instance variables:
         system 'notify-send', '-i', icon, title, details.join("\n")
       end
 
-  Also add the following at the very top if you use Ruby 1.9.x:
+  Also add the following at the top of the file if you use Ruby 1.9.x:
 
       # encoding: utf-8
 
