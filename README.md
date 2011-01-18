@@ -1,11 +1,11 @@
 test-loop - Continuous testing for Ruby with fork/eval
 ======================================================
 
-test-loop is a fast continuous testing tool for Ruby that continuously detects
-and tests changes in your Ruby application in an efficient manner, whereby it:
+test-loop is a fast continuous testing tool for Ruby that automatically
+detects and tests changes in your application in an efficient manner:
 
 1. Absorbs the test execution overhead into the main Ruby process.
-2. Forks to run (eval) your test files directly, without overhead.
+2. Forks to run your test files without overhead and in parallel.
 3. Avoids running unchanged test blocks inside changed test files.
 
 It relies on file modification times to determine what parts of your Ruby
