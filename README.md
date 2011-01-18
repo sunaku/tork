@@ -93,7 +93,7 @@ statement yields a hash that may optionally contain the following entries:
 
   For example, if test files had the same names as their source files but the
   letters were in reverse order, then you would add the following hash entry
-  to your `.test-loop` file:
+  to your configuration file:
 
       :test_file_matchers => {
         '{lib,app}/**/*.rb' => lambda do |path|
@@ -123,7 +123,7 @@ statement yields a hash that may optionally contain the following entries:
 
   For example, to display a summary of the test execution results as an OSD
   notification via libnotify, add the following hash entry to your
-  `.test-loop` file:
+  configuration file:
 
       :after_all_tests => lambda do |success, ran_at, files, statuses|
         icon = success ? 'apple-green' : 'apple-red'
