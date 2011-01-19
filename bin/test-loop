@@ -64,7 +64,7 @@ begin
     unless test_names.empty?
       test_name_pattern = test_names.map do |name|
         # sanitize string interpolation and non-method-name characters
-        name.strip.gsub(/\#\{.*?\}/, ' ').gsub(/\W+/, '.+')
+        name.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
       end.join('|')
 
       case File.basename(test_file)
