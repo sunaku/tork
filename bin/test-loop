@@ -56,20 +56,24 @@ begin
   config[:test_name_parser] ||= lambda do |line|
     case line
     when /^\s*def test_(\w+)/ then $1
-    when /^\s*(test|context|should|describe|it)\b (['"])(.*?)\2/ then $3.strip
+    when /^\s*(test|context|should|describe|it)\b (['"])(.*?)\2/ then $3
     end
   end
 
   config[:before_each_test] ||= lambda do |test_file, test_names|
     unless test_names.empty?
+      test_name_pattern = test_names.map do |name|
+        # sanitize string interpolation and non-method-name characters
+        name.strip.gsub(/\#\{.*?\}/, ' ').gsub(/\W+/, '.+')
+      end.join('|')
+
       case File.basename(test_file)
 
       when /(\b|_)test(\b|_)/ # Test::Unit
-        test_methods = test_names.map {|name| name.gsub(/\W+/, '_') }
-        ARGV.push '--name', "/#{test_methods.join('|')}/"
+        ARGV.push '--name', "/#{test_name_pattern}/"
 
       when /(\b|_)spec(\b|_)/ # RSpec
-        ARGV.push '--example', test_names.map {|n| Regexp.escape n }.join('|')
+        ARGV.push '--example', test_name_pattern
       end
     end
   end
