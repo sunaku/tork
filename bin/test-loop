@@ -55,8 +55,8 @@ begin
 
   config[:test_name_parser] ||= lambda do |line|
     case line
-    when /^\s*def test_(\w+)/ then $1
-    when /^\s*(test|context|should|describe|it)\b (['"])(.*?)\2/ then $3
+    when /^\s*def\s+test_(\w+)/ then $1
+    when /^\s*(test|context|should|describe|it)\b.+?(['"])(.*?)\2/ then $3
     end
   end
 
