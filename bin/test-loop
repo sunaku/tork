@@ -142,7 +142,7 @@ begin
       statuses = Process.waitall.map {|pid, status| status }
 
       success = true
-      test_files.zip(statuses).map do |file, status|
+      test_files.zip(statuses).each do |file, status|
         success &&= test_passed = status.success?
         notify.call "#{test_passed ? 'PASS' : 'FAIL'} #{file}"
       end
