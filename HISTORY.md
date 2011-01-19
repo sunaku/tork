@@ -1,3 +1,14 @@
+Version 5.0.2 (2011-01-19)
+==========================
+
+* Support string interpolations that yield empty strings in test names.
+
+* Accept extra characters before test name in test definition:
+  * Whitespace between `def` and `test_` in traditional test methods.
+  * Opening parenthesis between test name and test definition keyword.
+
+* Mention that diff gem is necessary for manual git clone installation.
+
 Version 5.0.1 (2011-01-18)
 ==========================
 

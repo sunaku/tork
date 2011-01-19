@@ -20,19 +20,19 @@ Features
 * Tests *changes* in your Ruby application: avoids running (1) unchanged
   test files and (2) unchanged test blocks inside changed test files.
 
-* Reabsorbs test execution overhead if the test or spec helper file changes.
-
-* Evaluates test files in parallel, making full use of multiple processors.
-
-* Mostly I/O bound, so you can have it always running without CPU slowdowns.
-
 * Supports Test::Unit, RSpec, and any other testing framework that (1)
   reflects failures in the process' exit status and (2) is loaded by your
   application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
 
+* Reabsorbs test execution overhead if the test or spec helper file changes.
+
+* Executes test files in parallel, making full use of multiple processors.
+
+* Generally I/O bound, so you can have it always running without CPU slowdown.
+
 * Configurable through a `.test-loop` file in your current working directory.
 
-* Implemented in less than 100 (SLOC) lines of code! :-)
+* Implemented in less than 100 lines (SLOC) of pure Ruby code! :-)
 
 
 Installation
