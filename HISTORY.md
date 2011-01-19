@@ -1,3 +1,14 @@
+Version 5.0.1 (2011-01-18)
+==========================
+
+* Sanitize string interpolation in parsed test names.
+
+* Remove useless use of #map; result is not reused.
+
+* Mention parallelism and revise the introduction.
+
+* DRY the mentioning of .test-loop file in README.
+
 Version 5.0.0 (2011-01-17)
 ==========================
 
