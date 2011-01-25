@@ -1,3 +1,15 @@
+Version 5.0.3 (2011-01-25)
+==========================
+
+* Use "diff/lcs" library instead of "diff" for RSpec compatibility.
+
+  Thanks to millisami for reporting this bug:
+  https://github.com/sunaku/test-loop/issues/3
+
+* Terminate worker processes when user presses Control-C.
+
+* Reabsorb when bundler is run, not when Gemfile changes.
+
 Version 5.0.2 (2011-01-19)
 ==========================
 
