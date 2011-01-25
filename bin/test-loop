@@ -39,7 +39,7 @@ begin
     push('{test,spec}/*{test,spec}_helper.rb').uniq!
 
   (config[:reabsorb_file_globs] ||= []).concat(config[:overhead_file_globs]).
-    push(config_file, 'config/*.{rb,yml}', 'Gemfile').uniq!
+    push(config_file, 'config/*.{rb,yml}', 'Gemfile.lock').uniq!
 
   (config[:test_file_matchers] ||= {}).merge!(
     # source files that correspond to test files
