@@ -24,7 +24,7 @@
 
 process_invocation_vector = [$0, *ARGV].map! {|s| s.dup }
 
-require 'diff'
+require 'diff/lcs'
 
 begin
   notify = lambda {|message| puts "test-loop: #{message}" }
@@ -115,11 +115,11 @@ begin
 
         fork do
           # determine which test blocks have changed inside the test file
-          test_names = Diff.new(old_lines, new_lines).diffs.map do |diff|
+          test_names = Diff::LCS.diff(old_lines, new_lines).flatten.map do |change|
             catch :found do
               # search backwards from the line that changed up to
               # the first line in the file for test definitions
-              diff[0][1].downto(0) do |i| # [[+/-, line number, line value]]
+              change.position.downto(0) do |i|
                 if test_name = config[:test_name_parser].call(new_lines[i])
                   throw :found, test_name
                 end

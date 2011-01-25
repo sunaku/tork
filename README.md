@@ -44,7 +44,7 @@ As a Ruby gem:
 
 As a Git clone:
 
-    gem install diff
+    gem install diff-lcs
     git clone git://github.com/sunaku/test-loop
 
 
