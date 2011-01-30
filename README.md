@@ -87,8 +87,9 @@ Configuration
 -------------
 
 test-loop looks for a configuration file named `.test-loop` in the current
-working directory.  This configuration file is a normal Ruby file whose last
-statement yields a hash that may optionally contain the following entries:
+working directory.  This configuration file is a normal Ruby file which can
+modify the `$test_loop_config` hash containing default values for the
+following configuration parameters:
 
 * `:overhead_file_globs` is an array of file globbing patterns that describe a
   set of Ruby scripts that are loaded into the main Ruby process as overhead.
@@ -107,13 +108,13 @@ statement yields a hash that may optionally contain the following entries:
   letters were in reverse order, then you would add the following hash entry
   to your configuration file:
 
-      :test_file_matchers => {
+      $test_loop_config[:test_file_matchers].merge!(
         '{lib,app}/**/*.rb' => lambda do |path|
           extn = File.extname(path)
           name = File.basename(path, extn)
           "{test,spec}/**/#{name.reverse}#{extn}" # <== notice the reverse()
         end
-      }
+      )
 
 * `:test_name_parser` is a lambda function that is passed a line of source
   code to determine whether that line can be considered as a test definition,
@@ -137,7 +138,8 @@ statement yields a hash that may optionally contain the following entries:
   notification via libnotify, add the following hash entry to your
   configuration file:
 
-      :after_all_tests => lambda do |success, ran_at, files, statuses|
+      $test_loop_config[:after_all_tests] = lambda do
+      |success, ran_at, files, statuses|
         icon = success ? 'apple-green' : 'apple-red'
         title = "#{success ? 'PASS' : 'FAIL'} at #{ran_at}"
         details = files.zip(statuses).map do |file, status|

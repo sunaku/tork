@@ -29,56 +29,57 @@ require 'diff/lcs'
 begin
   notify = lambda {|message| puts "test-loop: #{message}" }
 
-  # load user's configuration and supply default values
-  notify.call 'Loading configuration...'
-  config_file = File.join(Dir.pwd, '.test-loop')
-  config_data = File.read(config_file) if File.exist? config_file
-  config = eval(config_data.to_s, TOPLEVEL_BINDING, config_file) || {}
+  # supply default configuration
+  config = $test_loop_config = {
+    :overhead_file_globs => ['{test,spec}/{test,spec}_helper.rb'],
 
-  (config[:overhead_file_globs] ||= []).
-    push('{test,spec}/{test,spec}_helper.rb').uniq!
+    :reabsorb_file_globs => ['{test,spec}/{test,spec}_helper.rb',
+                             'config/*.{rb,yml}', 'Gemfile.lock',
+                             '.test-loop'],
 
-  (config[:reabsorb_file_globs] ||= []).concat(config[:overhead_file_globs]).
-    push(config_file, 'config/*.{rb,yml}', 'Gemfile.lock').uniq!
+    :test_file_matchers => {
+      # source files that correspond to test files
+      '{lib,app}/**/*.rb' => lambda do |path|
+        extn = File.extname(path)
+        name = File.basename(path, extn)
+        "{test,spec}/**/#{name}_{test,spec}#{extn}"
+      end,
 
-  (config[:test_file_matchers] ||= {}).merge!(
-    # source files that correspond to test files
-    '{lib,app}/**/*.rb' => lambda do |path|
-      extn = File.extname(path)
-      name = File.basename(path, extn)
-      "{test,spec}/**/#{name}_{test,spec}#{extn}"
+      # the actual test files themselves
+      '{test,spec}/**/*_{test,spec}.rb' => lambda {|path| path }
+    },
+
+    :test_name_parser => lambda do |line|
+      case line
+      when /^\s*def\s+test_(\w+)/ then $1
+      when /^\s*(test|context|should|describe|it)\b.+?(['"])(.*?)\2/ then $3
+      end
     end,
 
-    # the actual test files themselves
-    '{test,spec}/**/*_{test,spec}.rb' => lambda {|path| path }
-  )
+    :before_each_test => lambda do |test_file, test_names|
+      unless test_names.empty?
+        test_name_pattern = test_names.map do |name|
+          # sanitize string interpolation and non-method-name characters
+          name.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
+        end.join('|')
 
-  config[:test_name_parser] ||= lambda do |line|
-    case line
-    when /^\s*def\s+test_(\w+)/ then $1
-    when /^\s*(test|context|should|describe|it)\b.+?(['"])(.*?)\2/ then $3
-    end
-  end
-
-  config[:before_each_test] ||= lambda do |test_file, test_names|
-    unless test_names.empty?
-      test_name_pattern = test_names.map do |name|
-        # sanitize string interpolation and non-method-name characters
-        name.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
-      end.join('|')
-
-      case File.basename(test_file)
-
-      when /(\b|_)test(\b|_)/ # Test::Unit
-        ARGV.push '--name', "/#{test_name_pattern}/"
-
-      when /(\b|_)spec(\b|_)/ # RSpec
-        ARGV.push '--example', test_name_pattern
+        case File.basename(test_file)
+        when /(\b|_)test(\b|_)/ # Test::Unit
+          ARGV.push '--name', "/#{test_name_pattern}/"
+        when /(\b|_)spec(\b|_)/ # RSpec
+          ARGV.push '--example', test_name_pattern
+        end
       end
-    end
-  end
+    end,
 
-  config[:after_all_tests] ||= lambda {|success, ran_at, files, statuses|}
+    :after_all_tests => lambda {|success, ran_at, files, statuses|}
+  }
+
+  # load user's configuration overrides
+  if File.exist? config_file = File.join(Dir.pwd, '.test-loop')
+    notify.call 'Loading configuration...'
+    load config_file
+  end
 
   # absorb test execution overhead into master process
   $LOAD_PATH.unshift 'lib', 'test', 'spec'
