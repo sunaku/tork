@@ -36,7 +36,7 @@ begin
   config = eval(config_data.to_s, TOPLEVEL_BINDING, config_file) || {}
 
   (config[:overhead_file_globs] ||= []).
-    push('{test,spec}/*{test,spec}_helper.rb').uniq!
+    push('{test,spec}/{test,spec}_helper.rb').uniq!
 
   (config[:reabsorb_file_globs] ||= []).concat(config[:overhead_file_globs]).
     push(config_file, 'config/*.{rb,yml}', 'Gemfile.lock').uniq!
