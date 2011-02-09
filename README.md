@@ -136,33 +136,30 @@ you can query and modify the `$test_loop_config` OpenStruct object as follows:
 
 * `$test_loop_config.after_all_tests` is a lambda function that is executed
   inside the master process after all tests have finished running.  It is
-  passed four things: whether all tests had passed, the time when test
-  execution began, a list of test files, and the exit statuses of the worker
-  processes that ran them.
+  passed (1) a list of passing test files along with the exit statuses of the
+  worker processes that ran them, (2) a list of failing test files along with
+  the exit statuses of the worker processes that ran them, (3) the time when
+  test execution began, and (4) how many seconds it took for the overall test
+  execution to complete.
 
   For example, to display a summary of the test execution results as an OSD
-  notification via libnotify, add the following to your configuration file:
+  notification, add the following to your configuration file:
 
-      $test_loop_config.after_all_tests = lambda do |success, ran_at, files, statuses|
-        icon = success ? 'apple-green' : 'apple-red'
-        title = "#{success ? 'PASS' : 'FAIL'} at #{ran_at}"
-        details = files.zip(statuses).map do |file, status|
-          "#{status.success? ? '✔' : '✘'} #{file}"
+      $test_loop_config.after_all_tests = lambda do |passes, fails, started_at, elapsed_time|
+        success = fails.empty?
+
+        title = started_at.strftime("#{success ? 'PASS' : 'FAIL'} at %X on %x")
+
+        message = '%d ran, %d passed, %d failed in %0.1f seconds' %
+          [passes.length + fails.length, passes.length, fails.length, elapsed_time]
+
+        Thread.new do # launch in background
+          system 'notify-send', '-i', "dialog-#{success ? 'information' : 'error'}", title, message or
+          system 'growlnotify', '-a', 'Xcode', '-m', message, title or
+          system 'xmessage', '-timeout', '5', '-title', title, message or
+          puts title, message
         end
-        system 'notify-send', '-i', icon, title, details.join("\n")
       end
-
-  Also add the following at the top of the file if you use Ruby 1.9.x:
-
-      # encoding: utf-8
-
-  That will prevent the following errors from occurring:
-
-      invalid multibyte char (US-ASCII)
-
-      syntax error, unexpected $end, expecting ':'
-      "#{status.success? ? '✔' : '✘'} #{file}"
-                            ^
 
 
 License
