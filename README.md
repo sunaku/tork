@@ -14,6 +14,17 @@ test files in your test suite correspond to those changes, and uses diffing to
 find and run only those test blocks that have changed inside your test files.
 
 
+> IMPORTANT note for Ruby on Rails users!
+> ---------------------------------------
+>
+> Ensure that your `config/environments/test.rb` file disables class caching:
+>
+>     config.cache_classes = false
+>
+> Otherwise, test-loop will appear to ignore class-level changes in your
+> models, controllers, etc. and will thereby cause you great frustration!
+
+
 Features
 --------
 
