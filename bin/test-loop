@@ -24,56 +24,56 @@
 
 process_invocation_vector = [$0, *ARGV].map! {|s| s.dup }
 
+require 'ostruct'
 require 'diff/lcs'
 
 begin
   notify = lambda {|message| puts "test-loop: #{message}" }
 
   # supply default configuration
-  config = $test_loop_config = {
-    :overhead_file_globs => ['{test,spec}/{test,spec}_helper.rb'],
+  config = $test_loop_config = OpenStruct.new
 
-    :reabsorb_file_globs => ['{test,spec}/{test,spec}_helper.rb',
-                             'config/*.{rb,yml}', 'Gemfile.lock',
-                             '.test-loop'],
+  config.overhead_file_globs = ['{test,spec}/{test,spec}_helper.rb']
 
-    :test_file_matchers => {
-      # source files that correspond to test files
-      '{lib,app}/**/*.rb' => lambda do |path|
-        extn = File.extname(path)
-        name = File.basename(path, extn)
-        "{test,spec}/**/#{name}_{test,spec}#{extn}"
-      end,
+  config.reabsorb_file_globs = config.overhead_file_globs +
+    ['config/*.{rb,yml}', 'Gemfile.lock', '.test-loop']
 
-      # the actual test files themselves
-      '{test,spec}/**/*_{test,spec}.rb' => lambda {|path| path }
-    },
-
-    :test_name_parser => lambda do |line|
-      case line
-      when /^\s*def\s+test_(\w+)/ then $1
-      when /^\s*(test|context|should|describe|it)\b.+?(['"])(.*?)\2/ then $3
-      end
+  config.test_file_matchers = {
+    # source files that correspond to test files
+    '{lib,app}/**/*.rb' => lambda do |path|
+      extn = File.extname(path)
+      name = File.basename(path, extn)
+      "{test,spec}/**/#{name}_{test,spec}#{extn}"
     end,
 
-    :before_each_test => lambda do |test_file, test_names|
-      unless test_names.empty?
-        test_name_pattern = test_names.map do |name|
-          # sanitize string interpolation and non-method-name characters
-          name.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
-        end.join('|')
-
-        case File.basename(test_file)
-        when /(\b|_)test(\b|_)/ # Test::Unit
-          ARGV.push '--name', "/#{test_name_pattern}/"
-        when /(\b|_)spec(\b|_)/ # RSpec
-          ARGV.push '--example', test_name_pattern
-        end
-      end
-    end,
-
-    :after_all_tests => lambda {|success, ran_at, files, statuses|}
+    # the actual test files themselves
+    '{test,spec}/**/*_{test,spec}.rb' => lambda {|path| path }
   }
+
+  config.test_name_parser = lambda do |line|
+    case line
+    when /^\s*def\s+test_(\w+)/ then $1
+    when /^\s*(test|context|should|describe|it)\b.+?(['"])(.*?)\2/ then $3
+    end
+  end
+
+  config.before_each_test = lambda do |test_file, test_names|
+    unless test_names.empty?
+      test_name_pattern = test_names.map do |name|
+        # sanitize string interpolation and non-method-name characters
+        name.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
+      end.join('|')
+
+      case File.basename(test_file)
+      when /(\b|_)test(\b|_)/ # Test::Unit
+        ARGV.push '--name', "/#{test_name_pattern}/"
+      when /(\b|_)spec(\b|_)/ # RSpec
+        ARGV.push '--example', test_name_pattern
+      end
+    end
+  end
+
+  config.after_all_tests = lambda {|success, ran_at, files, statuses|}
 
   # load user's configuration overrides
   if File.exist? config_file = File.join(Dir.pwd, '.test-loop')
@@ -85,7 +85,7 @@ begin
   $LOAD_PATH.unshift 'lib', 'test', 'spec'
 
   notify.call 'Absorbing overhead...'
-  Dir[*config[:overhead_file_globs]].each do |file|
+  Dir[*config.overhead_file_globs].each do |file|
     require File.basename(file, File.extname(file))
   end
 
@@ -98,7 +98,7 @@ begin
   notify.call 'Ready for testing!'
   loop do
     # figure out what test files need to be run
-    test_files = config[:test_file_matchers].map do |source_glob, test_matcher|
+    test_files = config.test_file_matchers.map do |source_glob, test_matcher|
       Dir[source_glob].select {|file| File.mtime(file) > last_ran_at }.
       map {|path| Dir[test_matcher.call path] }
     end.flatten.uniq
@@ -121,14 +121,14 @@ begin
               # search backwards from the line that changed up to
               # the first line in the file for test definitions
               change.position.downto(0) do |i|
-                if test_name = config[:test_name_parser].call(new_lines[i])
+                if test_name = config.test_name_parser.call(new_lines[i])
                   throw :found, test_name
                 end
               end; nil # prevent unsuccessful search from returning an integer
             end
           end.compact.uniq
 
-          config[:before_each_test].call test_file, test_names
+          config.before_each_test.call test_file, test_names
 
           load test_file
 
@@ -149,11 +149,11 @@ begin
       end
       notify.call "Ran in #{Time.now - last_ran_at} seconds"
 
-      config[:after_all_tests].call success, last_ran_at, test_files, statuses
+      config.after_all_tests.call success, last_ran_at, test_files, statuses
     end
 
     # reabsorb test execution overhead as necessary
-    if Dir[*config[:reabsorb_file_globs]].any? {|file| File.mtime(file) > started_at }
+    if Dir[*config.reabsorb_file_globs].any? {|file| File.mtime(file) > started_at }
       notify.call 'Restarting loop...'
       exec(*process_invocation_vector)
     end

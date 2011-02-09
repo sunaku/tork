@@ -87,59 +87,59 @@ Configuration
 -------------
 
 test-loop looks for a configuration file named `.test-loop` in the current
-working directory.  This configuration file is a normal Ruby file which can
-modify the `$test_loop_config` hash containing default values for the
-following configuration parameters:
+working directory.  This configuration file is a normal Ruby script, in which
+you can query and modify the `$test_loop_config` OpenStruct object as follows:
 
-* `:overhead_file_globs` is an array of file globbing patterns that describe a
-  set of Ruby scripts that are loaded into the main Ruby process as overhead.
+* `$test_loop_config.overhead_file_globs` is an array of file globbing
+  patterns that describe a set of Ruby scripts that are loaded into the main
+  Ruby process as overhead.
 
-* `:reabsorb_file_globs` is an array of file globbing patterns that describe a
-  set of files which cause the overhead to be reabsorbed whenever they change.
+* `$test_loop_config.reabsorb_file_globs` is an array of file globbing
+  patterns that describe a set of files which cause the overhead to be
+  reabsorbed whenever they change.
 
-* `:test_file_matchers` is a hash that maps a file globbing pattern
-  describing a set of source files to a lambda function yielding a file
-  globbing pattern describing a set of test files that need to be run.  In
-  other words, whenever the source files (the hash key; left-hand side of the
-  mapping) change, their associated test files (the hash value; right-hand
+* `$test_loop_config.test_file_matchers` is a hash that maps a file globbing
+  pattern describing a set of source files to a lambda function yielding a
+  file globbing pattern describing a set of test files that need to be run.
+  In other words, whenever the source files (the hash key; left-hand side of
+  the mapping) change, their associated test files (the hash value; right-hand
   side of the mapping) are run.
 
   For example, if test files had the same names as their source files but the
-  letters were in reverse order, then you would add the following hash entry
-  to your configuration file:
+  letters were in reverse order, then you would add the following to your
+  configuration file:
 
-      $test_loop_config[:test_file_matchers].merge!(
-        '{lib,app}/**/*.rb' => lambda do |path|
-          extn = File.extname(path)
-          name = File.basename(path, extn)
-          "{test,spec}/**/#{name.reverse}#{extn}" # <== notice the reverse()
-        end
-      )
+      $test_loop_config.test_file_matchers['{lib,app}/**/*.rb'] = lambda do |path|
+        extn = File.extname(path)
+        name = File.basename(path, extn)
+        "{test,spec}/**/#{name.reverse}#{extn}" # <== notice the reverse()
+      end
 
-* `:test_name_parser` is a lambda function that is passed a line of source
-  code to determine whether that line can be considered as a test definition,
-  in which case it must return the name of the test being defined.
+* `$test_loop_config.test_name_parser` is a lambda function that is passed a
+  line of source code to determine whether that line can be considered as a
+  test definition, in which case it must return the name of the test being
+  defined.
 
-* `:before_each_test` is a lambda function that is executed inside the worker
-  process before loading the test file.  It is passed the path to the test
-  file and the names of tests (identified by `@test_name_parser`) inside the
-  test file that have changed since the last time the test file was run.
+* `$test_loop_config.before_each_test` is a lambda function that is executed
+  inside the worker process before loading the test file.  It is passed the
+  path to the test file and the names of tests (identified by
+  `$test_loop_config.test_name_parser`) inside the test file that have changed
+  since the last time the test file was run.
 
   These test names should be passed down to your chosen testing library,
   instructing it to skip all other tests except those passed down to it.  This
   accelerates your test-driven development cycle and improves productivity!
 
-* `@after_all_tests` is a lambda function that is executed inside the master
-  process after all tests have finished running.  It is passed four things:
-  whether all tests had passed, the time when test execution began, a list of
-  test files, and the exit statuses of the worker processes that ran them.
+* `$test_loop_config.after_all_tests` is a lambda function that is executed
+  inside the master process after all tests have finished running.  It is
+  passed four things: whether all tests had passed, the time when test
+  execution began, a list of test files, and the exit statuses of the worker
+  processes that ran them.
 
   For example, to display a summary of the test execution results as an OSD
-  notification via libnotify, add the following hash entry to your
-  configuration file:
+  notification via libnotify, add the following to your configuration file:
 
-      $test_loop_config[:after_all_tests] = lambda do
-      |success, ran_at, files, statuses|
+      $test_loop_config.after_all_tests = lambda do |success, ran_at, files, statuses|
         icon = success ? 'apple-green' : 'apple-red'
         title = "#{success ? 'PASS' : 'FAIL'} at #{ran_at}"
         details = files.zip(statuses).map do |file, status|
