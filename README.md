@@ -106,8 +106,12 @@ you can query and modify the `$test_loop_config` OpenStruct object as follows:
   side of the mapping) are run.
 
   For example, if test files had the same names as their source files but the
-  letters were in reverse order, then you would add the following to your
-  configuration file:
+  letters were in reverse order like this:
+
+  * lib/hello.rb => test/olleh.rb
+  * app/world.rb => spec/ldrow.rb
+
+  Then you would add the following to your configuration file:
 
       $test_loop_config.test_file_matchers['{lib,app}/**/*.rb'] = lambda do |path|
         extn = File.extname(path)
