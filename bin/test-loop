@@ -24,10 +24,10 @@
 
 process_invocation_vector = [$0, *ARGV].map! {|s| s.dup }
 
-require 'ostruct'
-require 'diff/lcs'
-
 begin
+  require 'ostruct'
+  require 'diff/lcs'
+
   notify = lambda {|message| puts "test-loop: #{message}" }
 
   # supply default configuration
