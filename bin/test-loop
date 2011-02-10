@@ -30,6 +30,17 @@ begin
 
   notify = lambda {|message| puts "test-loop: #{message}" }
 
+  # install signal handlers for user control
+  trap(:INT) { Process.kill :KILL, -$$ } # annihilate all subprocesses
+
+  master_pid = $$
+  trap(:USR1) { exit unless $$ == master_pid } # kill workers; not master
+  trap(:QUIT) { Process.kill :USR1, -$$; exec(*process_invocation_vector) }
+
+  test_file_cache = {} # path => readlines
+  started_at = last_ran_at = Time.now
+  trap(:TSTP) { last_ran_at = Time.at(0); test_file_cache.clear }
+
   # supply default configuration
   config = $test_loop_config = OpenStruct.new
 
@@ -90,11 +101,6 @@ begin
   end
 
   # continuously watch for and test changed code
-  test_file_cache = {} # path => readlines
-  started_at = last_ran_at = Time.now
-  trap(:QUIT) { started_at = Time.at(0) }
-  trap(:TSTP) { last_ran_at = Time.at(0); test_file_cache.clear }
-
   notify.call 'Ready for testing!'
   loop do
     # figure out what test files need to be run
@@ -156,15 +162,11 @@ begin
     # reabsorb test execution overhead as necessary
     if Dir[*config.reabsorb_file_globs].any? {|file| File.mtime(file) > started_at }
       notify.call 'Restarting loop...'
-      exec(*process_invocation_vector)
+      Process.kill :QUIT, $$
     end
 
     sleep 1
   end
-
-rescue Interrupt
-  # user wants to quit the loop so terminate all worker processes
-  Process.kill :SIGKILL, -$$ # negative PID propagates signal to children
 
 rescue Exception => error
   STDERR.puts error.inspect, error.backtrace
