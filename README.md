@@ -125,10 +125,10 @@ you can query and modify the `$test_loop_config` OpenStruct object as follows:
   defined.
 
 * `$test_loop_config.before_each_test` is a lambda function that is executed
-  inside the worker process before loading the test file.  It is passed the
-  path to the test file and the names of tests (identified by
-  `$test_loop_config.test_name_parser`) inside the test file that have changed
-  since the last time the test file was run.
+  inside the worker process before loading the test file.  It is passed (1)
+  the path to the test file and (2) the names of tests (which were identified
+  by `$test_loop_config.test_name_parser`) inside the test file that have
+  changed since the last time the test file was run.
 
   These test names should be passed down to your chosen testing library,
   instructing it to skip all other tests except those passed down to it.  This

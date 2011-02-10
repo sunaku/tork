@@ -1,3 +1,20 @@
+Version 6.0.0 (2011-02-09)
+==========================
+
+* Only consider `{test,spec}_helper.rb` as overhead, not all `*_helper.rb`.
+
+* Give the user freedom to inspect and change the default configuration by
+  storing it in a `$test_loop_config` global variable instead of returning the
+  user's desired configuration as a hash from the user's configuration file.
+
+* Change the method signature of the `after_all_tests` lambda function.
+
+* Add support for growl and xmessage in the `after_all_tests` example.
+
+* Add note about disabling class caching in Rails test environment.
+
+* Add better explanation for the `test_file_matchers` example.
+
 Version 5.0.3 (2011-01-25)
 ==========================
 

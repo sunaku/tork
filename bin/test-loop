@@ -163,9 +163,8 @@ begin
   end
 
 rescue Interrupt
-  # user wants to quit the loop; terminate worker processes
-  # NOTE: negative PID causes signal to propagate to all child processes
-  Process.kill :SIGKILL, -$$
+  # user wants to quit the loop so terminate all worker processes
+  Process.kill :SIGKILL, -$$ # negative PID propagates signal to children
 
 rescue Exception => error
   STDERR.puts error.inspect, error.backtrace
