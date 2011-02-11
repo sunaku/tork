@@ -175,8 +175,9 @@ module Test
         worker_pid = fork do
           # capture test output in log file because tests are run in parallel
           # which makes it difficult to understand interleaved output thereof
-          $stdout.reopen(log_file, 'w').sync = true
-          $stderr.reopen($stdout)
+          $stdout.reopen log_file, 'w'
+          $stdout.sync = true
+          $stderr.reopen $stdout
 
           # determine which test blocks have changed inside the test file
           test_names = Diff::LCS.diff(old_lines, new_lines).flatten.map \
