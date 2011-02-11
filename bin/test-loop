@@ -156,7 +156,7 @@ module Test
           if Dir[*Config.reabsorb_file_globs].
              any? {|file| File.mtime(file) > @started_at }
           then
-            Process.kill :QUIT, $$
+            reload_master_process
           end
 
           sleep 1
