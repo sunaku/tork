@@ -27,7 +27,7 @@ require 'diff/lcs'
 
 module Test
   module Loop
-    CONFIG_FILE = File.join(Dir.pwd, '.test-loop')
+    CONFIG_FILE = File.join(Dir.pwd, '.test-loop').freeze
 
     Config = OpenStruct.new(
       :overhead_file_globs => ['{test,spec}/{test,spec}_helper.rb'],
@@ -87,7 +87,7 @@ module Test
     end
 
     class << self; private
-      SCRIPT_NAME = File.basename($0)
+      SCRIPT_NAME = File.basename($0).freeze
       EXEC_VECTOR = [$0, *ARGV].map {|s| s.dup.freeze }.freeze
 
       def notify message
