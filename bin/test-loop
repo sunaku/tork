@@ -224,4 +224,4 @@ module Test
   end
 end
 
-Test::Loop.run
+Test::Loop.run if $0 == __FILE__
