@@ -82,7 +82,7 @@ module Test
       run_test_loop
     rescue Exception => error
       STDERR.puts error.inspect, error.backtrace
-      sleep 1
+      pause_momentarily
       reload_master_process
     end
 
@@ -111,6 +111,10 @@ module Test
         notify 'Restarting loop...'
         Process.kill :USR1, -$$
         exec(*EXEC_VECTOR)
+      end
+
+      def pause_momentarily
+        sleep 1
       end
 
       def load_user_config
@@ -155,7 +159,7 @@ module Test
           reload_master_process if Dir[*Config.reabsorb_file_globs].
             any? {|file| File.mtime(file) > @started_at }
 
-          sleep 1
+          pause_momentarily
         end
       end
 
