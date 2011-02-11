@@ -1,3 +1,10 @@
+Version 7.0.1 (2011-02-10)
+==========================
+
+* Fix minitest deadlock issues with I/O redirection.
+
+* Do not signal to restart loop when overhead changes.
+
 Version 7.0.0 (2011-02-10)
 ==========================
 
