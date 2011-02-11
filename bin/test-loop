@@ -26,56 +26,55 @@ require 'ostruct'
 require 'diff/lcs'
 
 module Test
-  module Loop
-    CONFIG_FILE = File.join(Dir.pwd, '.test-loop').freeze
+  (Loop = OpenStruct.new).instance_eval do
+    self.config_file_path = File.join(Dir.pwd, '.test-loop')
 
-    Config = OpenStruct.new(
-      :overhead_file_globs => ['{test,spec}/{test,spec}_helper.rb'],
+    self.overhead_file_globs = ['{test,spec}/{test,spec}_helper.rb']
 
-      :reabsorb_file_globs => ['{test,spec}/{test,spec}_helper.rb',
-                               'config/*.{rb,yml}', 'Gemfile.lock',
-                               File.basename(CONFIG_FILE)],
+    self.reabsorb_file_globs = self.overhead_file_globs +
+      ['config/*.{rb,yml}', 'Gemfile.lock', File.basename(config_file_path)]
 
-      :test_file_matchers => {
-        # source files that correspond to test files
-        '{lib,app}/**/*.rb' => lambda do |path|
-          extn = File.extname(path)
-          name = File.basename(path, extn)
-          "{test,spec}/**/#{name}_{test,spec}#{extn}"
-        end,
-
-        # the actual test files themselves
-        '{test,spec}/**/*_{test,spec}.rb' => lambda {|path| path }
-      },
-
-      :test_name_parser => lambda do |line|
-        case line
-        when /^\s*def\s+test_(\w+)/ then $1
-        when /^\s*(test|context|should|describe|it)\b.+?(['"])(.*?)\2/ then $3
-        end
+    self.test_file_matchers = {
+      # source files that correspond to test files
+      '{lib,app}/**/*.rb' => lambda do |path|
+        extn = File.extname(path)
+        name = File.basename(path, extn)
+        "{test,spec}/**/#{name}_{test,spec}#{extn}"
       end,
 
-      :before_each_test => lambda do |test_file, log_file, test_names|
-        unless test_names.empty?
-          test_name_pattern = test_names.map do |name|
-            # sanitize string interpolation and non-method-name characters
-            name.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
-          end.join('|')
+      # the actual test files themselves
+      '{test,spec}/**/*_{test,spec}.rb' => lambda {|path| path }
+    }
 
-          case File.basename(test_file)
-          when /(\b|_)test(\b|_)/ # Test::Unit
-            ARGV.push '--name', "/#{test_name_pattern}/"
-          when /(\b|_)spec(\b|_)/ # RSpec
-            ARGV.push '--example', test_name_pattern
-          end
+    self.test_name_parser = lambda do |line|
+      case line
+      when /^\s*def\s+test_(\w+)/ then $1
+      when /^\s*(test|context|should|describe|it)\b.+?(['"])(.*?)\2/ then $3
+      end
+    end
+
+    self.before_each_test = lambda do |test_file, log_file, test_names|
+      unless test_names.empty?
+        test_name_pattern = test_names.map do |name|
+          # sanitize string interpolation and non-method-name characters
+          name.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
+        end.join('|')
+
+        case File.basename(test_file)
+        when /(\b|_)test(\b|_)/ # Test::Unit
+          ARGV.push '--name', "/#{test_name_pattern}/"
+        when /(\b|_)spec(\b|_)/ # RSpec
+          ARGV.push '--example', test_name_pattern
         end
-      end,
+      end
+    end
 
-      :after_each_test =>
-        lambda {|test_file, log_file, run_status, started_at, elapsed_time|}
-    )
+    self.after_each_test =
+      lambda {|test_file, log_file, run_status, started_at, elapsed_time|}
+  end
 
-    def self.run
+  class << Loop
+    def run
       register_signals
       load_user_config
       absorb_overhead
@@ -86,143 +85,140 @@ module Test
       reload_master_process
     end
 
-    class << self; private
-      SCRIPT_NAME = File.basename($0).freeze
-      EXEC_VECTOR = [$0, *ARGV].map {|s| s.dup.freeze }.freeze
+    private
 
-      def notify message
-        # using print() because puts() is not an atomic operation
-        print "#{SCRIPT_NAME}: #{message}\n"
+    SCRIPT_NAME = File.basename($0).freeze
+    EXEC_VECTOR = [$0, *ARGV].map {|s| s.dup.freeze }.freeze
+
+    def notify message
+      # using print() because puts() is not an atomic operation
+      print "#{SCRIPT_NAME}: #{message}\n"
+    end
+
+    def register_signals
+      trap(:INT) { destroy_process_group }
+      master_pid = $$ # kill only the workers, not the master
+      trap(:USR1) { destroy_process_group unless $$ == master_pid }
+      trap(:QUIT) { reload_master_process }
+      trap(:TSTP) {} # ignore until ready for testing in run_test_loop()
+    end
+
+    def destroy_process_group
+      Process.kill :KILL, -$$
+    end
+
+    def reload_master_process
+      notify 'Restarting loop...'
+      Process.kill :USR1, -$$
+      exec(*EXEC_VECTOR)
+    end
+
+    def pause_momentarily
+      sleep 1
+    end
+
+    def load_user_config
+      if File.exist? config_file_path
+        notify 'Loading configuration...'
+        load config_file_path
       end
+    end
 
-      def register_signals
-        trap(:INT) { destroy_process_group }
-        master_pid = $$ # kill only the workers, not the master
-        trap(:USR1) { destroy_process_group unless $$ == master_pid }
-        trap(:QUIT) { reload_master_process }
-        trap(:TSTP) {} # ignore until ready for testing in run_test_loop()
+    def absorb_overhead
+      notify 'Absorbing overhead...'
+      $LOAD_PATH.unshift 'lib', 'test', 'spec'
+      Dir[*overhead_file_globs].each do |file|
+        require File.basename(file, File.extname(file))
       end
+    end
 
-      def destroy_process_group
-        Process.kill :KILL, -$$
+    def run_test_loop
+      @running_files = []
+      @running_files_lock = Mutex.new
+
+      @lines_by_file = {} # path => readlines
+      @last_ran_at = @started_at = Time.now
+      trap(:TSTP) { @last_ran_at = Time.at(0); @lines_by_file.clear }
+
+      notify 'Ready for testing!'
+      loop do
+        # figure out what test files need to be run
+        test_files = test_file_matchers.map do |source_glob, test_matcher|
+          Dir[source_glob].select {|file| File.mtime(file) > @last_ran_at }.
+          map {|path| Dir[test_matcher.call path] }
+        end.flatten.uniq
+
+        test_files = @running_files_lock.
+          synchronize { test_files - @running_files }
+
+        # fork worker processes to run the test files in parallel
+        @last_ran_at = Time.now
+        test_files.each {|file| run_test_file file }
+
+        # reabsorb test execution overhead as necessary
+        reload_master_process if Dir[*reabsorb_file_globs].
+          any? {|file| File.mtime(file) > @started_at }
+
+        pause_momentarily
       end
+    end
 
-      def reload_master_process
-        notify 'Restarting loop...'
-        Process.kill :USR1, -$$
-        exec(*EXEC_VECTOR)
-      end
+    def run_test_file test_file
+      @running_files_lock.synchronize { @running_files.push test_file }
+      log_file = test_file + '.log'
 
-      def pause_momentarily
-        sleep 1
-      end
+      # cache the contents of the test file for diffing below
+      new_lines = File.readlines(test_file)
+      old_lines = @lines_by_file[test_file] || new_lines
+      @lines_by_file[test_file] = new_lines
 
-      def load_user_config
-        if File.exist? CONFIG_FILE
-          notify 'Loading configuration...'
-          load CONFIG_FILE
-        end
-      end
+      worker_pid = fork do
+        # capture test output in log file because tests are run in parallel
+        # which makes it difficult to understand interleaved output thereof
+        $stdout.reopen log_file, 'w'
+        $stdout.sync = true
+        $stderr.reopen $stdout
 
-      def absorb_overhead
-        notify 'Absorbing overhead...'
-        $LOAD_PATH.unshift 'lib', 'test', 'spec'
-        Dir[*Config.overhead_file_globs].each do |file|
-          require File.basename(file, File.extname(file))
-        end
-      end
-
-      def run_test_loop
-        @running_files = []
-        @running_files_lock = Mutex.new
-
-        @lines_by_file = {} # path => readlines
-        @last_ran_at = @started_at = Time.now
-        trap(:TSTP) { @last_ran_at = Time.at(0); @lines_by_file.clear }
-
-        notify 'Ready for testing!'
-        loop do
-          # figure out what test files need to be run
-          test_files = Config.test_file_matchers.map do |source_glob, test_matcher|
-            Dir[source_glob].select {|file| File.mtime(file) > @last_ran_at }.
-            map {|path| Dir[test_matcher.call path] }
-          end.flatten.uniq
-
-          test_files = @running_files_lock.
-            synchronize { test_files - @running_files }
-
-          # fork worker processes to run the test files in parallel
-          @last_ran_at = Time.now
-          test_files.each {|f| run_test_file f }
-
-          # reabsorb test execution overhead as necessary
-          reload_master_process if Dir[*Config.reabsorb_file_globs].
-            any? {|file| File.mtime(file) > @started_at }
-
-          pause_momentarily
-        end
-      end
-
-      def run_test_file test_file
-        @running_files_lock.synchronize { @running_files.push test_file }
-        log_file = test_file + '.log'
-
-        # cache the contents of the test file for diffing below
-        new_lines = File.readlines(test_file)
-        old_lines = @lines_by_file[test_file] || new_lines
-        @lines_by_file[test_file] = new_lines
-
-        worker_pid = fork do
-          # capture test output in log file because tests are run in parallel
-          # which makes it difficult to understand interleaved output thereof
-          $stdout.reopen log_file, 'w'
-          $stdout.sync = true
-          $stderr.reopen $stdout
-
-          # determine which test blocks have changed inside the test file
-          test_names = Diff::LCS.diff(old_lines, new_lines).flatten.map do |change|
-            catch :found do
-              # search backwards from the line that changed up to
-              # the first line in the file for test definitions
-              change.position.downto(0) do |i|
-                if test_name = Config.test_name_parser.call(new_lines[i])
-                  throw :found, test_name
-                end
-              end; nil # prevent unsuccessful search from returning an integer
-            end
-          end.compact.uniq
-
-          # tell the testing framework to run only the changed test blocks
-          Config.before_each_test.call test_file, log_file, test_names
-
-          # after loading the user's test file, the at_exit() hook of the
-          # user's testing framework will take care of running the tests and
-          # reflecting any failures in the worker process' exit status
-          load $0 = test_file # set $0 because Test::Unit outputs it
-        end
-
-        # monitor and report on the worker's progress
-        Thread.new do
-          report = lambda do |state|
-            notify [state, worker_pid, test_file].join("\t")
+        # determine which test blocks have changed inside the test file
+        test_names = Diff::LCS.diff(old_lines, new_lines).flatten.map do |change|
+          catch :found do
+            # search backwards from the line that changed up to
+            # the first line in the file for test definitions
+            change.position.downto(0) do |i|
+              if test_name = test_name_parser.call(new_lines[i])
+                throw :found, test_name
+              end
+            end; nil # prevent unsuccessful search from returning an integer
           end
-          report.call :RUN
+        end.compact.uniq
 
-          # wait for worker to finish
-          begin
-            Process.waitpid worker_pid
-          rescue Errno::ECHILD
-            # worker finished and the OS has forgotten about it already
-          end
-          elapsed_time = Time.now - @last_ran_at
+        # tell the testing framework to run only the changed test blocks
+        before_each_test.call test_file, log_file, test_names
 
-          report.call $?.success? && :PASS || :FAIL
+        # after loading the user's test file, the at_exit() hook of the
+        # user's testing framework will take care of running the tests and
+        # reflecting any failures in the worker process' exit status
+        load $0 = test_file # set $0 because Test::Unit outputs it
+      end
 
-          Config.after_each_test.call \
-            test_file, log_file, $?, @last_ran_at, elapsed_time
-
-          @running_files_lock.synchronize { @running_files.delete test_file }
+      # monitor and report on the worker's progress
+      Thread.new do
+        report = lambda do |state|
+          notify [state, worker_pid, test_file].join("\t")
         end
+        report.call :RUN
+
+        # wait for worker to finish
+        begin
+          Process.waitpid worker_pid
+        rescue Errno::ECHILD
+          # worker finished and the OS has forgotten about it already
+        end
+        elapsed_time = Time.now - @last_ran_at
+
+        report.call $?.success? && :PASS || :FAIL
+        after_each_test.call test_file, log_file, $?, @last_ran_at, elapsed_time
+        @running_files_lock.synchronize { @running_files.delete test_file }
       end
     end
   end

@@ -92,22 +92,22 @@ Configuration
 -------------
 
 test-loop looks for a configuration file named `.test-loop` in the current
-working directory.  This configuration file is a Ruby script in which you
-can query and modify the `Test::Loop::Config` OpenStruct object as follows:
+working directory.  This configuration file is a normal Ruby script in which
+you can query and modify the `Test::Loop` OpenStruct configuration as follows:
 
-* `Test::Loop::Config.overhead_file_globs` is an array of file globbing
-  patterns that describe a set of Ruby scripts that are loaded into the main
-  Ruby process as overhead.
+* `Test::Loop.overhead_file_globs` is an array of file globbing patterns that
+  describe a set of Ruby scripts that are loaded into the main Ruby process as
+  overhead.
 
-* `Test::Loop::Config.reabsorb_file_globs` is an array of file globbing
-  patterns that describe a set of files which cause the overhead to be
-  reabsorbed whenever they change.
+* `Test::Loop.reabsorb_file_globs` is an array of file globbing patterns that
+  describe a set of files which cause the overhead to be reabsorbed whenever
+  they change.
 
-* `Test::Loop::Config.test_file_matchers` is a hash that maps a file globbing
-  pattern describing a set of source files to a lambda function yielding a
-  file globbing pattern describing a set of test files that need to be run.
-  In other words, whenever the source files (the hash key; left-hand side of
-  the mapping) change, their associated test files (the hash value; right-hand
+* `Test::Loop.test_file_matchers` is a hash that maps a file globbing pattern
+  describing a set of source files to a lambda function yielding a file
+  globbing pattern describing a set of test files that need to be run.  In
+  other words, whenever the source files (the hash key; left-hand side of the
+  mapping) change, their associated test files (the hash value; right-hand
   side of the mapping) are run.
 
   For example, if test files had the same names as their source files but the
@@ -118,23 +118,22 @@ can query and modify the `Test::Loop::Config` OpenStruct object as follows:
 
   Then you would add the following to your configuration file:
 
-      Test::Loop::Config.test_file_matchers['{lib,app}/**/*.rb'] = lambda do |path|
+      Test::Loop.test_file_matchers['{lib,app}/**/*.rb'] = lambda do |path|
         extn = File.extname(path)
         name = File.basename(path, extn)
         "{test,spec}/**/#{name.reverse}#{extn}" # <== notice the reverse()
       end
 
-* `Test::Loop::Config.test_name_parser` is a lambda function that is passed a
-  line of source code to determine whether that line can be considered as a
-  test definition, in which case it must return the name of the test being
-  defined.
+* `Test::Loop.test_name_parser` is a lambda function that is passed a line of
+  source code to determine whether that line can be considered as a test
+  definition, in which case it must return the name of the test being defined.
 
-* `Test::Loop::Config.before_each_test` is a lambda function that is executed
-  inside the worker process before loading the test file.  It is passed (1)
-  the path to the test file, (2) the path to the log file containing the live
-  output of running the test file, and (3) an array containing the names of
-  tests (which were identified by `Test::Loop::Config.test_name_parser`)
-  inside the test file that have changed since the last run of the test file.
+* `Test::Loop.before_each_test` is a lambda function that is executed inside
+  the worker process before loading the test file.  It is passed (1) the path
+  to the test file, (2) the path to the log file containing the live output of
+  running the test file, and (3) an array containing the names of tests (which
+  were identified by `Test::Loop.test_name_parser`) inside the test file that
+  have changed since the last run of the test file.
 
   These test names should be passed down to your chosen testing library,
   instructing it to skip all other tests except those passed down to it.  This
@@ -144,26 +143,26 @@ can query and modify the `Test::Loop::Config` OpenStruct object as follows:
   If you wish to add additional functionality atop the default implementation,
   simply store, redefine, and recall it:
 
-      default_implementation = Test::Loop::Config.before_each_test
+      default_implementation = Test::Loop.before_each_test
 
-      Test::Loop::Config.before_each_test = lambda do |test_file, log_file, test_names|
+      Test::Loop.before_each_test = lambda do |test_file, log_file, test_names|
         default_implementation.call test_file, log_file, test_names
         # do something additional ...
       end
 
-* `Test::Loop::Config.after_each_test` is a lambda function that is executed
-  inside the master process after a test has finished running.  It is passed
-  (1) the path to the test file, (2) the path to the log file containing the
-  output of running the test file, (3) a `Process::Status` object describing
-  the exit status of the worker process that ran the test file, (4) the time
-  when test execution began, and (5) how many seconds it took for the overall
-  test execution to complete.
+* `Test::Loop.after_each_test` is a lambda function that is executed inside
+  the master process after a test has finished running.  It is passed (1) the
+  path to the test file, (2) the path to the log file containing the output of
+  running the test file, (3) a `Process::Status` object describing the exit
+  status of the worker process that ran the test file, (4) the time when test
+  execution began, and (5) how many seconds it took for the overall test
+  execution to complete.
 
   For example, to display a summary of the test execution results as an
   on-screen-display notification while also displaying the log file if the
   test failed, add the following to your configuration file:
 
-      Test::Loop::Config.after_each_test = lambda do |test_file, log_file, run_status, started_at, elapsed_time|
+      Test::Loop.after_each_test = lambda do |test_file, log_file, run_status, started_at, elapsed_time|
         success = run_status.success?
 
         title = '%s at %s in %0.1fs' %
