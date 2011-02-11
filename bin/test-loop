@@ -139,8 +139,7 @@ module Test
         notify 'Ready for testing!'
         loop do
           # figure out what test files need to be run
-          test_files = Config.test_file_matchers.map \
-          do |source_glob, test_matcher|
+          test_files = Config.test_file_matchers.map do |source_glob, test_matcher|
             Dir[source_glob].select {|file| File.mtime(file) > @last_ran_at }.
             map {|path| Dir[test_matcher.call path] }
           end.flatten.uniq
@@ -153,11 +152,8 @@ module Test
           test_files.each {|f| run_test_file f }
 
           # reabsorb test execution overhead as necessary
-          if Dir[*Config.reabsorb_file_globs].
-             any? {|file| File.mtime(file) > @started_at }
-          then
-            reload_master_process
-          end
+          reload_master_process if Dir[*Config.reabsorb_file_globs].
+            any? {|file| File.mtime(file) > @started_at }
 
           sleep 1
         end
@@ -180,8 +176,7 @@ module Test
           $stderr.reopen $stdout
 
           # determine which test blocks have changed inside the test file
-          test_names = Diff::LCS.diff(old_lines, new_lines).flatten.map \
-          do |change|
+          test_names = Diff::LCS.diff(old_lines, new_lines).flatten.map do |change|
             catch :found do
               # search backwards from the line that changed up to
               # the first line in the file for test definitions
