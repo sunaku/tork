@@ -140,6 +140,17 @@ can query and modify the `Test::Loop::Config` OpenStruct object as follows:
   instructing it to skip all other tests except those passed down to it.  This
   accelerates your test-driven development cycle and improves productivity!
 
+  The default implementation of this function supports Test::Unit and RSpec.
+  If you wish to add additional functionality atop the default implementation,
+  simply store, redefine, and recall it:
+
+      default_implementation = Test::Loop::Config.before_each_test
+
+      Test::Loop::Config.before_each_test = lambda do |test_file, log_file, test_names|
+        default_implementation.call test_file, log_file, test_names
+        # do something additional ...
+      end
+
 * `Test::Loop::Config.after_each_test` is a lambda function that is executed
   inside the master process after a test has finished running.  It is passed
   (1) the path to the test file, (2) the path to the log file containing the
