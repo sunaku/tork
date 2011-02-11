@@ -1,3 +1,28 @@
+Version 7.0.0 (2011-02-10)
+==========================
+
+* Switch from shell-script style to modular Ruby style in the source code.
+  This yields more lines of code, but the result is much easier to read.
+
+  * Replace the `$test_loop_config` global variable with the
+    `Test::Loop::Config` constant.
+
+* Do not wait for all test runs to finish before detecting more changes.
+
+  * Replace the `after_all_tests` parameter with `after_each_test`.
+
+* Capture test run output into separate log files; one log per test file.
+
+  * The `before_each_test` function is now passed the path to a log file.
+
+* Register signal handlers at the earliest and act upon signals immediately.
+
+  * Previously, SIGQUIT did not work if there were no test helpers.
+
+* Send the SIGUSR1 signal to terminate workers and their subprocesses.
+
+* Break long lines at 80 characters in the source code.
+
 Version 6.0.0 (2011-02-09)
 ==========================
 
