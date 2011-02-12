@@ -8,11 +8,6 @@ detects and tests changes in your application in an efficient manner:
 2. Forks to run your test files without overhead and in parallel.
 3. Avoids running unchanged test blocks inside changed test files.
 
-It relies on file modification times to determine what parts of your Ruby
-application have changed, applies a lambda mapping function to determine which
-test files in your test suite correspond to those changes, and uses diffing to
-find and run only those test blocks that have changed inside your test files.
-
 
 > IMPORTANT note for Ruby on Rails users!
 > ---------------------------------------
@@ -22,7 +17,7 @@ find and run only those test blocks that have changed inside your test files.
 >     config.cache_classes = false
 >
 > Otherwise, test-loop will appear to ignore class-level changes in your
-> models, controllers, etc. and will thereby cause you great frustration!
+> models, controllers, helpers, etc. thereby causing you great frustration!
 
 
 Features
@@ -110,18 +105,18 @@ you can query and modify the `Test::Loop` OpenStruct configuration as follows:
   mapping) change, their associated test files (the hash value; right-hand
   side of the mapping) are run.
 
-  For example, if test files had the same names as their source files but the
-  letters were in reverse order like this:
+  For example, if test files had the same names as their source files followed
+  by an underscore and the file name in reverse like this:
 
-  * lib/hello.rb => test/olleh.rb
-  * app/world.rb => spec/ldrow.rb
+  * lib/hello.rb => test/hello_olleh.rb
+  * app/world.rb => spec/world_ldrow.rb
 
   Then you would add the following to your configuration file:
 
       Test::Loop.test_file_matchers['{lib,app}/**/*.rb'] = lambda do |path|
         extn = File.extname(path)
         name = File.basename(path, extn)
-        "{test,spec}/**/#{name.reverse}#{extn}" # <== notice the reverse()
+        "{test,spec}/**/#{name}_#{name.reverse}#{extn}"
       end
 
 * `Test::Loop.test_name_parser` is a lambda function that is passed a line of
@@ -135,19 +130,23 @@ you can query and modify the `Test::Loop` OpenStruct configuration as follows:
   were identified by `Test::Loop.test_name_parser`) inside the test file that
   have changed since the last run of the test file.
 
-  These test names should be passed down to your chosen testing library,
-  instructing it to skip all other tests except those passed down to it.  This
-  accelerates your test-driven development cycle and improves productivity!
+  The default implementation of this function instructs Test::Unit and RSpec
+  to only run certain test blocks inside the test file. This accelerates your
+  test-driven development cycle and improves productivity!
 
-  The default implementation of this function supports Test::Unit and RSpec.
-  If you wish to add additional functionality atop the default implementation,
-  simply store, redefine, and recall it:
+  If you wish to add extend the default implementation, store and recall it:
 
       default_implementation = Test::Loop.before_each_test
 
       Test::Loop.before_each_test = lambda do |test_file, log_file, test_names|
         default_implementation.call test_file, log_file, test_names
         # do something additional ...
+      end
+
+  Or if you want to completely replace the default implementation:
+
+      Test::Loop.before_each_test = lambda do |test_file, log_file, test_names|
+        # your replacement here ...
       end
 
 * `Test::Loop.after_each_test` is a lambda function that is executed inside
