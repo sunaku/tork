@@ -26,52 +26,52 @@ require 'ostruct'
 require 'diff/lcs'
 
 module Test
-  (Loop = OpenStruct.new).instance_eval do
-    self.config_file_path = File.join(Dir.pwd, '.test-loop')
+  Loop = OpenStruct.new
 
-    self.overhead_file_globs = ['{test,spec}/{test,spec}_helper.rb']
+  Loop.config_file_path = File.join(Dir.pwd, '.test-loop')
 
-    self.reabsorb_file_globs = self.overhead_file_globs +
-      ['config/*.{rb,yml}', 'Gemfile.lock', File.basename(config_file_path)]
+  Loop.overhead_file_globs = ['{test,spec}/{test,spec}_helper.rb']
 
-    self.test_file_matchers = {
-      # source files that correspond to test files
-      '{lib,app}/**/*.rb' => lambda do |path|
-        extn = File.extname(path)
-        name = File.basename(path, extn)
-        "{test,spec}/**/#{name}_{test,spec}#{extn}"
-      end,
+  Loop.reabsorb_file_globs = Loop.overhead_file_globs +
+    ['config/*.{rb,yml}', 'Gemfile.lock', File.basename(Loop.config_file_path)]
 
-      # the actual test files themselves
-      '{test,spec}/**/*_{test,spec}.rb' => lambda {|path| path }
-    }
+  Loop.test_file_matchers = {
+    # source files that correspond to test files
+    '{lib,app}/**/*.rb' => lambda do |path|
+      extn = File.extname(path)
+      name = File.basename(path, extn)
+      "{test,spec}/**/#{name}_{test,spec}#{extn}"
+    end,
 
-    self.test_name_parser = lambda do |line|
-      case line
-      when /^\s*def\s+test_(\w+)/ then $1
-      when /^\s*(test|context|should|describe|it)\b.+?(['"])(.*?)\2/ then $3
-      end
+    # the actual test files themselves
+    '{test,spec}/**/*_{test,spec}.rb' => lambda {|path| path }
+  }
+
+  Loop.test_name_parser = lambda do |line|
+    case line
+    when /^\s*def\s+test_(\w+)/ then $1
+    when /^\s*(test|context|should|describe|it)\b.+?(['"])(.*?)\2/ then $3
     end
-
-    self.before_each_test = lambda do |test_file, log_file, test_names|
-      unless test_names.empty?
-        test_name_pattern = test_names.map do |name|
-          # sanitize string interpolation and non-method-name characters
-          name.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
-        end.join('|')
-
-        case File.basename(test_file)
-        when /(\b|_)test(\b|_)/ # Test::Unit
-          ARGV.push '--name', "/#{test_name_pattern}/"
-        when /(\b|_)spec(\b|_)/ # RSpec
-          ARGV.push '--example', test_name_pattern
-        end
-      end
-    end
-
-    self.after_each_test =
-      lambda {|test_file, log_file, run_status, started_at, elapsed_time|}
   end
+
+  Loop.before_each_test = lambda do |test_file, log_file, test_names|
+    unless test_names.empty?
+      test_name_pattern = test_names.map do |name|
+        # sanitize string interpolation and non-method-name characters
+        name.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
+      end.join('|')
+
+      case File.basename(test_file)
+      when /(\b|_)test(\b|_)/ # Test::Unit
+        ARGV.push '--name', "/#{test_name_pattern}/"
+      when /(\b|_)spec(\b|_)/ # RSpec
+        ARGV.push '--example', test_name_pattern
+      end
+    end
+  end
+
+  Loop.after_each_test =
+    lambda {|test_file, log_file, run_status, started_at, elapsed_time|}
 
   class << Loop
     def run
