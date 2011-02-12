@@ -1,3 +1,22 @@
+Version 8.0.0 (2011-02-12)
+==========================
+
+* Move configuration into `Test::Loop` object itself.
+
+* Allow loading `bin/test-loop` into IRB for testing.
+
+* Simplify initialization of default configuration.
+
+* Revise README: delete needless cruft; add examples.
+
+* Add example on extending `before_each_test` function.
+
+* DRY `sleep 1` commands into higher order function.
+
+* Accept > 80 character lines in some cases.
+
+* Freeze more constant values against modification.
+
 Version 7.0.1 (2011-02-10)
 ==========================
 
