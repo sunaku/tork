@@ -96,20 +96,17 @@ module Test
     end
 
     def register_signals
-      trap(:INT) { destroy_process_group }
-      master_pid = $$ # kill only the workers, not the master
-      trap(:USR1) { destroy_process_group unless $$ == master_pid }
+      trap(:INT) { kill_master_and_workers }
       trap(:QUIT) { reload_master_process }
       trap(:TSTP) {} # ignore until ready for testing in run_test_loop()
     end
 
-    def destroy_process_group
+    def kill_master_and_workers
       Process.kill :KILL, -$$
     end
 
     def reload_master_process
       notify 'Restarting loop...'
-      Process.kill :USR1, -$$
       exec(*EXEC_VECTOR)
     end
 

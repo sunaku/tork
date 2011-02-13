@@ -80,8 +80,6 @@ Operation
 
 * Press Control-C or send the SIGINT signal to quit the test loop.
 
-* Send the SIGUSR1 signal to terminate workers and their subprocesses.
-
 
 Configuration
 -------------
