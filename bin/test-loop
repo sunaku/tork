@@ -75,6 +75,7 @@ module Test
 
   class << Loop
     def run
+      init_test_loop
       register_signals
       load_user_config
       absorb_overhead
@@ -98,7 +99,7 @@ module Test
     def register_signals
       trap(:INT) { kill_master_and_workers }
       trap(:QUIT) { reload_master_process }
-      trap(:TSTP) {} # ignore until ready for testing in run_test_loop()
+      trap(:TSTP) { forcibly_run_all_tests }
     end
 
     def kill_master_and_workers
@@ -129,14 +130,19 @@ module Test
       end
     end
 
-    def run_test_loop
+    def init_test_loop
       @running_files = []
       @running_files_lock = Mutex.new
-
       @lines_by_file = {} # path => readlines
       @last_ran_at = @started_at = Time.now
-      trap(:TSTP) { @last_ran_at = Time.at(0); @lines_by_file.clear }
+    end
 
+    def forcibly_run_all_tests
+      @last_ran_at = Time.at(0)
+      @lines_by_file.clear
+    end
+
+    def run_test_loop
       notify 'Ready for testing!'
       loop do
         # figure out what test files need to be run
