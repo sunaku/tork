@@ -174,8 +174,8 @@ you can query and modify the `Test::Loop` OpenStruct configuration as follows:
           puts title, message
 
           unless success # show failure log
-            system 'xdg-open', log_file or
             system 'open', log_file or
+            system 'xdg-open', log_file or
             system 'xmessage', '-title', log_file, '-file', log_file or
             puts log_file, File.read(log_file)
           end

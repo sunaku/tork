@@ -1,3 +1,10 @@
+Version 9.0.0 (2011-02-15)
+==========================
+
+* Remove SIGUSR1 for killing worker processes.
+
+* Handle Ctrl-Z signal from the very beginning.
+
 Version 8.0.0 (2011-02-12)
 ==========================
 
