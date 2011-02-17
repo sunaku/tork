@@ -33,7 +33,7 @@ module Test
   Loop.overhead_file_globs = ['{test,spec}/{test,spec}_helper.rb']
 
   Loop.reabsorb_file_globs = Loop.overhead_file_globs +
-    ['config/*.{rb,yml}', 'Gemfile.lock', File.basename(Loop.config_file_path)]
+    ['config/**/*.{rb,yml}', 'Gemfile.lock', File.basename(Loop.config_file_path)]
 
   Loop.test_file_matchers = {
     # source files that correspond to test files
