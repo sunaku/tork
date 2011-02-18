@@ -94,9 +94,11 @@ module Test
     end
 
     def register_signals
-      trap(:INT) { kill_master_and_workers }
-      trap(:QUIT) { reload_master_process }
-      trap(:TSTP) { forcibly_run_all_tests }
+      # puts newline to shield normal output from control-key interference:
+      # some shells like BASH emit text when control-key combos are pressed
+      trap(:INT) { puts; kill_master_and_workers }
+      trap(:QUIT) { puts; reload_master_process }
+      trap(:TSTP) { puts; forcibly_run_all_tests }
     end
 
     def kill_master_and_workers
