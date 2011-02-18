@@ -203,10 +203,7 @@ module Test
 
       # monitor and report on the worker's progress
       Thread.new do
-        report = lambda do |state|
-          notify [state, worker_pid, test_file].join("\t")
-        end
-        report.call :RUN
+        notify "TEST #{test_file}"
 
         # wait for worker to finish
         begin
@@ -216,7 +213,7 @@ module Test
         end
         elapsed_time = Time.now - @last_ran_at
 
-        report.call $?.success? && :PASS || :FAIL
+        notify "#{$?.success? && :PASS || :FAIL} #{test_file}"
         after_each_test.call test_file, log_file, $?, @last_ran_at, elapsed_time
         @running_files_lock.synchronize { @running_files.delete test_file }
       end
