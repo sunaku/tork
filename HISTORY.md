@@ -1,3 +1,17 @@
+Version 9.0.1 (2011-02-18)
+==========================
+
+* Shield normal output from control-key combos printed into the terminal.
+
+* Do not print worker PID in status messages because every test file has
+  exactly one worker anyway.
+
+* Reabsorb on any `*.{rb,yml}` changes beneath the config/ directory.
+
+* Do not reabsorb overhead when the configuration file changes.
+
+* Add `after_each_test` example for failure-only notifications.
+
 Version 9.0.0 (2011-02-15)
 ==========================
 
