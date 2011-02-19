@@ -155,13 +155,41 @@ you can query and modify the `Test::Loop` OpenStruct configuration as follows:
   execution began, and (5) how many seconds it took for the overall test
   execution to complete.
 
-  For example, to display a summary of the test execution results as an
-  on-screen-display notification while also displaying the log file if the
-  test failed, add the following to your configuration file:
+  For example, to see on-screen-display notifications about test failures only
+  (not successes) and also see their corresponding failure logs in your
+  terminal, add the following to your configuration file:
+
+      Test::Loop.after_each_test = lambda do |test_file, log_file, run_status, started_at, elapsed_time|
+        unless run_status.success?
+          # display the failure log
+          divider = '#' * 80
+          STDERR.print [divider, File.read(log_file), divider, nil].join("\n")
+
+          # notify user about failure
+          title = 'FAIL at %s in %0.1fs' % [started_at.strftime('%r'), elapsed_time]
+          message = test_file
+          Thread.new do # run in background
+            system 'notify-send', '-i', 'dialog-error', title, message or
+            system 'growlnotify', '-a', 'Xcode', '-m', message, title or
+            system 'xmessage', '-timeout', '5', '-title', title, message
+          end
+        end
+      end
+
+  For example, to see on-screen-display notifications about completed test
+  runs (both successes and failures) and also see failure logs for failed test
+  runs in your terminal, add the following to your configuration file:
 
       Test::Loop.after_each_test = lambda do |test_file, log_file, run_status, started_at, elapsed_time|
         success = run_status.success?
 
+        # display the failure log
+        unless success
+          divider = '#' * 80
+          STDERR.print [divider, File.read(log_file), divider, nil].join("\n")
+        end
+
+        # notify the user about test completion
         title = '%s at %s in %0.1fs' %
           [success ? 'PASS' : 'FAIL', started_at.strftime('%X'), elapsed_time]
 
@@ -170,15 +198,7 @@ you can query and modify the `Test::Loop` OpenStruct configuration as follows:
         Thread.new do # run in background
           system 'notify-send', '-i', "dialog-#{success ? 'information' : 'error'}", title, message or
           system 'growlnotify', '-a', 'Xcode', '-m', message, title or
-          system 'xmessage', '-timeout', '5', '-title', title, message or
-          puts title, message
-
-          unless success # show failure log
-            system 'open', log_file or
-            system 'xdg-open', log_file or
-            system 'xmessage', '-title', log_file, '-file', log_file or
-            puts log_file, File.read(log_file)
-          end
+          system 'xmessage', '-timeout', '5', '-title', title, message
         end
       end
 
