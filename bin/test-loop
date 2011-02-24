@@ -38,8 +38,8 @@ module Test
     # source files that correspond to test files
     '{lib,app}/**/*.rb' => lambda do |path|
       extn = File.extname(path)
-      name = File.basename(path, extn)
-      "{test,spec}/**/#{name}_{test,spec}#{extn}"
+      base = File.basename(path, extn)
+      "{test,spec}/**/#{base}_{test,spec}#{extn}"
     end,
 
     # the actual test files themselves
@@ -56,7 +56,7 @@ module Test
   Loop.before_each_test = lambda do |test_file, log_file, test_names|
     unless test_names.empty?
       test_name_pattern = test_names.map do |name|
-        # sanitize string interpolation and non-method-name characters
+        # sanitize string interpolations and invalid method name characters
         name.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
       end.join('|')
 

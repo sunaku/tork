@@ -1,3 +1,12 @@
+Version 9.1.0 (2011-02-23)
+==========================
+
+* Print the status of completed tests in ANSI color.
+
+* Print the failure log of failing tests to STDERR.
+
+* `$?` is not defined when Errno::ECHILD is raised.
+
 Version 9.0.1 (2011-02-18)
 ==========================
 
