@@ -10,4 +10,5 @@ Gem::Specification.new do |s|
   ]
   s.executables << 'test-loop'
   s.add_dependency 'diff-lcs', '>= 1.1.2'
+  s.add_dependency 'ansi', '>= 1.2.2'
 end

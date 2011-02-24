@@ -24,6 +24,7 @@
 
 require 'ostruct'
 require 'diff/lcs'
+require 'ansi'
 
 module Test
   Loop = OpenStruct.new
@@ -208,15 +209,21 @@ module Test
         notify "TEST #{test_file}"
 
         # wait for worker to finish
-        begin
-          Process.waitpid worker_pid
-        rescue Errno::ECHILD
-          # worker finished and the OS has forgotten about it already
-        end
+        Process.waitpid worker_pid
+        run_status = $?
         elapsed_time = Time.now - @last_ran_at
 
-        notify "#{$?.success? && :PASS || :FAIL} #{test_file}"
-        after_each_test.call test_file, log_file, $?, @last_ran_at, elapsed_time
+        # report test results along with any failure logs
+        if run_status.success?
+          notify ANSI::Code.green("PASS #{test_file}")
+        else
+          notify ANSI::Code.red("FAIL #{test_file}")
+          STDERR.print File.read(log_file)
+        end
+
+        after_each_test.call \
+          test_file, log_file, run_status, @last_ran_at, elapsed_time
+
         @running_files_lock.synchronize { @running_files.delete test_file }
       end
     end
