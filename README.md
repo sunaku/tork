@@ -50,6 +50,7 @@ Installation
 As a Ruby gem:
 
     gem install test-loop
+    sed -i '$s/^load G/load $0 = G/' `which test-loop`
 
 As a Git clone:
 
