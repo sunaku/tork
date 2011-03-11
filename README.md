@@ -9,17 +9,6 @@ detects and tests changes in your application in an efficient manner:
 3. Avoids running unchanged test blocks inside changed test files.
 
 
-> IMPORTANT note for Ruby on Rails users!
-> ---------------------------------------
->
-> Ensure that your `config/environments/test.rb` file disables class caching:
->
->     config.cache_classes = false
->
-> Otherwise, test-loop will appear to ignore class-level changes in your
-> models, controllers, helpers, etc. thereby causing you great frustration!
-
-
 Features
 --------
 
@@ -192,6 +181,23 @@ you can query and modify the `Test::Loop` OpenStruct configuration as follows:
           system 'xmessage', '-timeout', '5', '-title', title, message
         end
       end
+
+
+Known issues
+------------
+
+* Ensure that your `config/environments/test.rb` file disables class caching:
+
+      config.cache_classes = false
+
+  Otherwise, test-loop will appear to ignore class-level changes in your
+  models, controllers, helpers, etc. thereby causing you great frustration!
+
+* SQLite3 [raises `SQLite3::BusyException: database is locked` errors](
+  https://github.com/sunaku/test-loop/issues/2 ) because test-loop runs your
+  test files in parallel.  You can work around this by using an [in-memory
+  adapter for SQLite3]( https://github.com/mvz/memory_test_fix ) or by using
+  different database software (such as MySQL) for your test environment.
 
 
 License
