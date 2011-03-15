@@ -1,3 +1,11 @@
+Version 9.1.1 (2011-03-15)
+==========================
+
+* $0 does not work from RubyGems wrapper executable.
+  Thanks to Brian Burns for reporting this issue.
+
+* Add information about sqlite3 errors & workaround in README.
+
 Version 9.1.0 (2011-02-23)
 ==========================
 
