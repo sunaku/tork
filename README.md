@@ -57,7 +57,7 @@ If installed as a Ruby gem:
 
 If installed as a Git clone:
 
-    ruby bin/test-loop
+    env RUBYLIB=lib ruby bin/test-loop
 
 
 Operation
