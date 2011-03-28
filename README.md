@@ -82,6 +82,10 @@ your `{test,spec}/{test,spec}_helper.rb` files.
 
       require 'test/loop/rails'
 
+* OSD notifications on test failures:
+
+      require 'test/loop/notify'
+
 
 Configuration
 -------------
