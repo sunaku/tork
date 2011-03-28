@@ -71,6 +71,18 @@ Operation
 * Press Control-C or send the SIGINT signal to quit the test loop.
 
 
+Configuration Presets
+---------------------
+
+The following sub-libraries provide "preset" configurations.  To use them,
+simply add the require() lines shown below to your `.test-loop` file or to
+your `{test,spec}/{test,spec}_helper.rb` files.
+
+* Defaults for Ruby on Rails testing:
+
+      require 'test/loop/rails'
+
+
 Configuration
 -------------
 

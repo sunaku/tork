@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
     README.md
     bin/test-loop
     lib/test/loop.rb
+    lib/test/loop/rails.rb
   ]
   s.executables << 'test-loop'
   s.add_dependency 'diff-lcs', '>= 1.1.2'

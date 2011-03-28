@@ -30,12 +30,11 @@ module Test
 
   Loop.overhead_file_globs = ['{test,spec}/{test,spec}_helper.rb']
 
-  Loop.reabsorb_file_globs = Loop.overhead_file_globs +
-    ['config/**/*.{rb,yml}', 'Gemfile.lock']
+  Loop.reabsorb_file_globs = Loop.overhead_file_globs.dup
 
   Loop.test_file_matchers = {
     # source files that correspond to test files
-    '{lib,app}/**/*.rb' => lambda do |path|
+    'lib/**/*.rb' => lambda do |path|
       extn = File.extname(path)
       base = File.basename(path, extn)
       "{test,spec}/**/#{base}_{test,spec}#{extn}"
