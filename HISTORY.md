@@ -1,3 +1,10 @@
+Version 9.2.0 (2011-03-28)
+==========================
+
+* Extract Rails-specific configuration to 'test/loop/rails' sublibrary.
+
+* Add 'test/loop/notify' sublibrary for OSD notifications on failures.
+
 Version 9.1.1 (2011-03-15)
 ==========================
 
