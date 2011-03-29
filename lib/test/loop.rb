@@ -152,7 +152,7 @@ module Test
         test_files = @running_files_lock.
           synchronize { test_files - @running_files }
 
-        # fork worker processes to run the test files in parallel
+        # fork workers to run the test files in parallel
         @last_ran_at = Time.now
         test_files.each {|file| run_test_file file }
 

@@ -71,22 +71,6 @@ Operation
 * Press Control-C or send the SIGINT signal to quit the test loop.
 
 
-Configuration Presets
----------------------
-
-The following sub-libraries provide "preset" configurations.  To use them,
-simply add the require() lines shown below to your `.test-loop` file or to
-your `{test,spec}/{test,spec}_helper.rb` files.
-
-* Defaults for Ruby on Rails testing:
-
-      require 'test/loop/rails'
-
-* OSD notifications on test failures:
-
-      require 'test/loop/notify'
-
-
 Configuration
 -------------
 
@@ -178,6 +162,10 @@ you can query and modify the `Test::Loop` OpenStruct configuration as follows:
         end
       end
 
+  Note that the above functionality is available as a configuration preset:
+
+      require 'test/loop/notify'
+
   For example, to see on-screen-display notifications about completed test
   runs, regardless of whether they passed or failed, add the following to your
   configuration file:
@@ -196,6 +184,22 @@ you can query and modify the `Test::Loop` OpenStruct configuration as follows:
           system 'xmessage', '-timeout', '5', '-title', title, message
         end
       end
+
+
+Configuration Presets
+---------------------
+
+The following sub-libraries provide "preset" configurations.  To use them,
+simply add the require() lines shown below to your `.test-loop` file or to
+your application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
+
+* Defaults for Ruby on Rails testing:
+
+      require 'test/loop/rails'
+
+* OSD notifications on test failures:
+
+      require 'test/loop/notify'
 
 
 Known issues
