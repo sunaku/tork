@@ -153,8 +153,10 @@ module Test
           synchronize { test_files - @running_files }
 
         # fork workers to run the test files in parallel
-        @last_ran_at = Time.now
-        test_files.each {|file| run_test_file file }
+        unless test_files.empty?
+          @last_ran_at = Time.now
+          test_files.each {|file| run_test_file file }
+        end
 
         # reabsorb test execution overhead as necessary
         reload_master_process if Dir[*reabsorb_file_globs].
