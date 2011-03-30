@@ -1,5 +1,5 @@
 test-loop - Continuous testing for Ruby with fork/eval
-======================================================
+==============================================================================
 
 test-loop is a fast continuous testing tool for Ruby that automatically
 detects and tests changes in your application in an efficient manner:
@@ -8,9 +8,9 @@ detects and tests changes in your application in an efficient manner:
 2. Forks to run your test files without overhead and in parallel.
 3. Avoids running unchanged test blocks inside changed test files.
 
-
+------------------------------------------------------------------------------
 Features
---------
+------------------------------------------------------------------------------
 
 * Tests *changes* in your Ruby application: avoids running (1) unchanged
   test files and (2) unchanged test blocks inside changed test files.
@@ -32,9 +32,9 @@ Features
 
 * Implemented in less than 150 lines (SLOC) of pure Ruby code! :-)
 
-
+------------------------------------------------------------------------------
 Installation
-------------
+------------------------------------------------------------------------------
 
 As a Ruby gem:
 
@@ -46,9 +46,9 @@ As a Git clone:
     gem install ansi -v '>= 1.2.2'
     git clone git://github.com/sunaku/test-loop
 
-
+------------------------------------------------------------------------------
 Invocation
-----------
+------------------------------------------------------------------------------
 
 If installed as a Ruby gem:
 
@@ -58,9 +58,9 @@ If installed as a Git clone:
 
     env RUBYLIB=lib ruby bin/test-loop
 
-
+------------------------------------------------------------------------------
 Operation
----------
+------------------------------------------------------------------------------
 
 * Press Control-Z or send the SIGTSTP signal to forcibly run all
   tests, even if there are no changes in your Ruby application.
@@ -70,9 +70,9 @@ Operation
 
 * Press Control-C or send the SIGINT signal to quit the test loop.
 
-
+------------------------------------------------------------------------------
 Configuration
--------------
+------------------------------------------------------------------------------
 
 test-loop looks for a configuration file named `.test-loop` in the current
 working directory.  This configuration file is a normal Ruby script in which
@@ -185,25 +185,27 @@ you can query and modify the `Test::Loop` OpenStruct configuration as follows:
         end
       end
 
-
+------------------------------------------------------------------------------
 Configuration Presets
----------------------
+------------------------------------------------------------------------------
 
 The following sub-libraries provide "preset" configurations.  To use them,
 simply add the require() lines shown below to your `.test-loop` file or to
 your application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
 
-* Defaults for Ruby on Rails testing:
+* Support for Ruby on Rails testing:
 
       require 'test/loop/rails'
 
-* OSD notifications on test failures:
+* On-screen-display notifications for test failures:
 
       require 'test/loop/notify'
 
-
+------------------------------------------------------------------------------
 Known issues
-------------
+------------------------------------------------------------------------------
+
+If using Ruby on Rails:
 
 * Ensure that your `config/environments/test.rb` file disables class caching:
 
@@ -218,8 +220,8 @@ Known issues
   adapter for SQLite3]( https://github.com/mvz/memory_test_fix ) or by using
   different database software (such as MySQL) for your test environment.
 
-
+------------------------------------------------------------------------------
 License
--------
+------------------------------------------------------------------------------
 
 Released under the ISC license.  See the `bin/test-loop` file for details.
