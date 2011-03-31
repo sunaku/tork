@@ -104,6 +104,7 @@ module Test
     end
 
     def kill_master_and_workers
+      notify 'Exiting...'
       Process.kill :KILL, -$$
     end
 
@@ -141,6 +142,7 @@ module Test
     end
 
     def forcibly_run_all_tests
+      notify 'Running all tests...'
       @last_ran_at = Time.at(0)
       @lines_by_file.clear
     end
