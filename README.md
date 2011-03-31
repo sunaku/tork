@@ -144,6 +144,13 @@ you can query and modify the `Test::Loop` OpenStruct configuration as follows:
   execution began, and (5) how many seconds it took for the overall test
   execution to complete.
 
+  For example, to delete log files for successful tests, add the following to
+  your configuration file:
+
+      Test::Loop.after_each_test = lambda do |test_file, log_file, run_status, started_at, elapsed_time|
+        File.delete(log_file) if run_status.success?
+      end
+
   For example, to see on-screen-display notifications only about test
   failures, add the following to your configuration file:
 
