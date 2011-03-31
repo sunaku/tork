@@ -104,9 +104,11 @@ module Test
       Process.kill :KILL, -$$
     end
 
-    def reload_master_process
+    def reload_master_process(test_files = [])
       notify 'Restarting loop...'
-      exec(*EXEC_VECTOR)
+      # pass test files in ENV to be run after the reabsorb
+      env = test_files.empty? ? {} : {'test_loop_reload' => test_files.join(',')}
+      exec(env, *EXEC_VECTOR)
     end
 
     def pause_momentarily
@@ -149,18 +151,22 @@ module Test
           map {|path| Dir[test_matcher.call path] }
         end.flatten.uniq
 
+        # load test files passed in ENV to run after a reabsorb
+        test_files |= ENV.delete('test_loop_reload').
+          split(',') if ENV['test_loop_reload']
+
         test_files = @running_files_lock.
           synchronize { test_files - @running_files }
+
+        # reabsorb test execution overhead as necessary
+        reload_master_process(test_files) if Dir[*reabsorb_file_globs].
+          any? {|file| File.mtime(file) > @started_at }
 
         # fork workers to run the test files in parallel
         unless test_files.empty?
           @last_ran_at = Time.now
           test_files.each {|file| run_test_file file }
         end
-
-        # reabsorb test execution overhead as necessary
-        reload_master_process if Dir[*reabsorb_file_globs].
-          any? {|file| File.mtime(file) > @started_at }
 
         pause_momentarily
       end
