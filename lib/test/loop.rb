@@ -69,10 +69,6 @@ module Test
   Loop.after_each_test =
     lambda {|test_file, log_file, run_status, started_at, elapsed_time|}
 
-  ANSI_CLEAR_LINE = "\e[2K\e[0G"
-  ANSI_GREEN = "\e[32m%s\e[0m"
-  ANSI_RED = "\e[31m%s\e[0m"
-
   class << Loop
     def run
       init_test_loop
@@ -89,6 +85,10 @@ module Test
     private
 
     EXEC_VECTOR = [$0, *ARGV].map {|s| s.dup.freeze }.freeze
+
+    ANSI_CLEAR_LINE = "\e[2K\e[0G"
+    ANSI_GREEN = "\e[32m%s\e[0m"
+    ANSI_RED = "\e[31m%s\e[0m"
 
     def notify message
       # using print() because puts() is not an atomic operation
