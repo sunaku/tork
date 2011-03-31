@@ -43,7 +43,6 @@ As a Ruby gem:
 As a Git clone:
 
     gem install diff-lcs -v '>= 1.1.2'
-    gem install ansi -v '>= 1.2.2'
     git clone git://github.com/sunaku/test-loop
 
 ------------------------------------------------------------------------------

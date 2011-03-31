@@ -23,7 +23,6 @@
 
 require 'ostruct'
 require 'diff/lcs'
-require 'ansi'
 
 module Test
   Loop = OpenStruct.new
@@ -70,6 +69,10 @@ module Test
   Loop.after_each_test =
     lambda {|test_file, log_file, run_status, started_at, elapsed_time|}
 
+  ANSI_CLEAR_LINE = "\e[2K\e[0G"
+  ANSI_GREEN = "\e[32m%s\e[0m"
+  ANSI_RED = "\e[31m%s\e[0m"
+
   class << Loop
     def run
       init_test_loop
@@ -93,11 +96,11 @@ module Test
     end
 
     def register_signals
-      # puts newline to shield normal output from control-key interference:
+      # clear line to shield normal output from control-key interference:
       # some shells like BASH emit text when control-key combos are pressed
-      trap(:INT) { puts; kill_master_and_workers }
-      trap(:QUIT) { puts; reload_master_process }
-      trap(:TSTP) { puts; forcibly_run_all_tests }
+      trap(:INT)  { print ANSI_CLEAR_LINE; kill_master_and_workers }
+      trap(:QUIT) { print ANSI_CLEAR_LINE; reload_master_process   }
+      trap(:TSTP) { print ANSI_CLEAR_LINE; forcibly_run_all_tests  }
     end
 
     def kill_master_and_workers
@@ -221,9 +224,9 @@ module Test
 
         # report test results along with any failure logs
         if run_status.success?
-          notify ANSI::Code.green("PASS #{test_file}")
+          notify ANSI_GREEN % "PASS #{test_file}"
         else
-          notify ANSI::Code.red("FAIL #{test_file}")
+          notify ANSI_RED % "FAIL #{test_file}"
           STDERR.print File.read(log_file)
         end
 
