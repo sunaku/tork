@@ -21,6 +21,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
+require 'base64'
 require 'ostruct'
 require 'diff/lcs'
 
@@ -85,6 +86,7 @@ module Test
     private
 
     EXEC_VECTOR = [$0, *ARGV].map {|s| s.dup.freeze }.freeze
+    RELOAD_ENV_KEY = 'TEST_LOOP_RELOAD'.freeze
 
     ANSI_CLEAR_LINE = "\e[2K\e[0G"
     ANSI_GREEN = "\e[32m%s\e[0m"
@@ -108,11 +110,11 @@ module Test
       Process.kill :KILL, -$$
     end
 
-    def reload_master_process(test_files = [])
+    def reload_master_process test_files = []
       notify 'Restarting loop...'
-      # pass test files in ENV to be run after the reabsorb
-      env = test_files.empty? ? {} : {'test_loop_reload' => test_files.join(',')}
-      exec(env, *EXEC_VECTOR)
+      # pass test files to be run by the next incarnation of test-loop in ENV
+      env = {RELOAD_ENV_KEY => Base64.encode64(Marshal.dump(test_files))}
+      exec env, *EXEC_VECTOR
     end
 
     def pause_momentarily
@@ -156,9 +158,12 @@ module Test
           map {|path| Dir[test_matcher.call path] }
         end.flatten.uniq
 
-        # load test files passed in ENV to run after a reabsorb
-        test_files |= ENV.delete('test_loop_reload').
-          split(',') if ENV['test_loop_reload']
+        # also run the test files passed in by the
+        # previous incarnation of test-loop in ENV
+        if ENV.key? RELOAD_ENV_KEY
+          redux = Marshal.load(Base64.decode64(ENV.delete(RELOAD_ENV_KEY)))
+          test_files.concat(redux).uniq!
+        end
 
         test_files = @running_files_lock.
           synchronize { test_files - @running_files }
