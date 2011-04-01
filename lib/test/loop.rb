@@ -109,6 +109,7 @@ module Test
     end
 
     def kill_workers
+      notify 'Stopping tests...'
       Process.kill :TERM, -$$
       Process.waitall
     end
