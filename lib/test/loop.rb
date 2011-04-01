@@ -87,9 +87,9 @@ module Test
     EXEC_VECTOR = [$0, *ARGV].map {|s| s.dup.freeze }.freeze
     RELOAD_ENV_KEY = 'TEST_LOOP_RELOAD'.freeze
 
-    ANSI_CLEAR_LINE = "\e[2K\e[0G"
-    ANSI_GREEN = "\e[32m%s\e[0m"
-    ANSI_RED = "\e[31m%s\e[0m"
+    ANSI_CLEAR_LINE = "\e[2K\e[0G".freeze
+    ANSI_GREEN = "\e[32m%s\e[0m".freeze
+    ANSI_RED = "\e[31m%s\e[0m".freeze
 
     def notify message
       # using print() because puts() is not an atomic operation
@@ -150,24 +150,25 @@ module Test
     def run_test_loop
       notify 'Ready for testing!'
       loop do
-        # figure out what test files need to be run
+        # find test files that have been modified since the last run
         test_files = test_file_matchers.map do |source_glob, test_matcher|
           Dir[source_glob].select {|file| File.mtime(file) > @last_ran_at }.
           map {|path| Dir[test_matcher.call path] }
         end.flatten.uniq
 
-        # also run the test files passed in by the
-        # previous incarnation of test-loop in ENV
+        # also run test files given by the previous incarnation of test-loop
         if ENV.key? RELOAD_ENV_KEY
           test_files.concat(eval(ENV.delete(RELOAD_ENV_KEY))).uniq!
         end
 
+        # exclude test files that are already running
         test_files = @running_files_lock.
           synchronize { test_files - @running_files }
 
         # reabsorb test execution overhead as necessary
-        reload_master_process(test_files) if Dir[*reabsorb_file_globs].
-          any? {|file| File.mtime(file) > @started_at }
+        if Dir[*reabsorb_file_globs].any? {|f| File.mtime(f) > @started_at }
+          reload_master_process test_files
+        end
 
         # fork workers to run the test files in parallel
         unless test_files.empty?
