@@ -109,9 +109,11 @@ module Test
       Process.kill :KILL, -$$
     end
 
+    # The given test files are passed to the next incarnation
+    # of test-loop in the RELOAD_ENV_KEY environment variable.
     def reload_master_process test_files = []
       notify 'Restarting loop...'
-      # pass test files to be run by the next incarnation of test-loop in ENV
+      @running_files_lock.synchronize { test_files.concat @running_files }
       exec({RELOAD_ENV_KEY => test_files.inspect}, *EXEC_VECTOR)
     end
 
@@ -161,16 +163,16 @@ module Test
           test_files.concat(eval(ENV.delete(RELOAD_ENV_KEY))).uniq!
         end
 
-        # exclude test files that are already running
-        test_files = @running_files_lock.
-          synchronize { test_files - @running_files }
-
         # reabsorb test execution overhead as necessary
         if Dir[*reabsorb_file_globs].any? {|f| File.mtime(f) > @started_at }
           reload_master_process test_files
         end
 
-        # fork workers to run the test files in parallel
+        # fork workers to run the test files in parallel,
+        # excluding test files that are already running
+        test_files = @running_files_lock.
+          synchronize { test_files - @running_files }
+
         unless test_files.empty?
           @last_ran_at = Time.now
           test_files.each {|file| run_test_file file }
