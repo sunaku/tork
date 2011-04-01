@@ -88,7 +88,6 @@ module Test
 
     EXEC_VECTOR = [$0, *ARGV].map {|s| s.dup.freeze }.freeze
     RELOAD_ENV_KEY = 'TEST_LOOP_RELOAD'.freeze
-    MASTER_PID = $$.freeze
 
     ANSI_CLEAR_LINE = "\e[2K\e[0G".freeze
     ANSI_GREEN = "\e[32m%s\e[0m".freeze
@@ -105,7 +104,8 @@ module Test
       trap(:INT)  { print ANSI_CLEAR_LINE; kill_workers; exit }
       trap(:QUIT) { print ANSI_CLEAR_LINE; reload_master_process   }
       trap(:TSTP) { print ANSI_CLEAR_LINE; forcibly_run_all_tests  }
-      trap(:TERM) { exit unless $$ == MASTER_PID }
+      master_pid = $$
+      trap(:TERM) { exit unless $$ == master_pid }
     end
 
     def kill_workers
