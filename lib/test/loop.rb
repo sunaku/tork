@@ -98,12 +98,20 @@ module Test
       print "test-loop: #{message}\n"
     end
 
+    def init_test_loop
+      @running_files = []
+      @running_files_lock = Mutex.new
+      @lines_by_file = {} # path => readlines
+      @last_ran_at = @started_at = Time.now
+    end
+
     def register_signals
       # clear line to shield normal output from control-key interference:
       # some shells like BASH emit text when control-key combos are pressed
       trap(:INT)  { print ANSI_CLEAR_LINE; kill_workers; exit }
-      trap(:QUIT) { print ANSI_CLEAR_LINE; reload_master_process   }
-      trap(:TSTP) { print ANSI_CLEAR_LINE; forcibly_run_all_tests  }
+      trap(:QUIT) { print ANSI_CLEAR_LINE; reload_master_process }
+      trap(:TSTP) { print ANSI_CLEAR_LINE; forcibly_run_all_tests }
+
       master_pid = $$
       trap(:TERM) { exit unless $$ == master_pid }
     end
@@ -123,10 +131,6 @@ module Test
       exec({RELOAD_ENV_KEY => test_files.inspect}, *EXEC_VECTOR)
     end
 
-    def pause_momentarily
-      sleep 1
-    end
-
     def load_user_config
       if File.exist? config_file = File.join(Dir.pwd, '.test-loop')
         notify 'Loading configuration...'
@@ -142,11 +146,8 @@ module Test
       end
     end
 
-    def init_test_loop
-      @running_files = []
-      @running_files_lock = Mutex.new
-      @lines_by_file = {} # path => readlines
-      @last_ran_at = @started_at = Time.now
+    def pause_momentarily
+      sleep 1
     end
 
     def forcibly_run_all_tests
