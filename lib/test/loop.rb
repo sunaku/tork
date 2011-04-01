@@ -86,6 +86,7 @@ module Test
 
     EXEC_VECTOR = [$0, *ARGV].map {|s| s.dup.freeze }.freeze
     RELOAD_ENV_KEY = 'TEST_LOOP_RELOAD'.freeze
+    MASTER_PID = $$.freeze
 
     ANSI_CLEAR_LINE = "\e[2K\e[0G".freeze
     ANSI_GREEN = "\e[32m%s\e[0m".freeze
@@ -102,6 +103,12 @@ module Test
       trap(:INT)  { print ANSI_CLEAR_LINE; kill_master_and_workers }
       trap(:QUIT) { print ANSI_CLEAR_LINE; reload_master_process   }
       trap(:TSTP) { print ANSI_CLEAR_LINE; forcibly_run_all_tests  }
+      trap(:TERM) { exit unless $$ == MASTER_PID }
+    end
+
+    def kill_workers
+      Process.kill :TERM, -$$
+      Process.waitall
     end
 
     def kill_master_and_workers
@@ -114,6 +121,7 @@ module Test
     def reload_master_process test_files = []
       notify 'Restarting loop...'
       @running_files_lock.synchronize { test_files.concat @running_files }
+      kill_workers
       exec({RELOAD_ENV_KEY => test_files.inspect}, *EXEC_VECTOR)
     end
 
