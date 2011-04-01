@@ -21,7 +21,6 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-require 'base64'
 require 'ostruct'
 require 'diff/lcs'
 
@@ -113,8 +112,7 @@ module Test
     def reload_master_process test_files = []
       notify 'Restarting loop...'
       # pass test files to be run by the next incarnation of test-loop in ENV
-      env = {RELOAD_ENV_KEY => Base64.encode64(Marshal.dump(test_files))}
-      exec env, *EXEC_VECTOR
+      exec({RELOAD_ENV_KEY => test_files.inspect}, *EXEC_VECTOR)
     end
 
     def pause_momentarily
@@ -161,8 +159,7 @@ module Test
         # also run the test files passed in by the
         # previous incarnation of test-loop in ENV
         if ENV.key? RELOAD_ENV_KEY
-          redux = Marshal.load(Base64.decode64(ENV.delete(RELOAD_ENV_KEY)))
-          test_files.concat(redux).uniq!
+          test_files.concat(eval(ENV.delete(RELOAD_ENV_KEY))).uniq!
         end
 
         test_files = @running_files_lock.
