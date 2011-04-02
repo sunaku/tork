@@ -1,3 +1,42 @@
+Version 9.3.0 (2011-04-01)
+==========================
+
+New features:
+
+* Resume currently running tests--as well as those currently needing to be
+  run--after reabsorbing test execution overhead. (Brian Burns)
+
+* Stop currently running tests (and wait for them to finish) before
+  reabsorbing overhead.  This greatly improves responsiveness because worker
+  processes are no longer there to compete with the new master process for
+  system resources.
+
+* Notify user when running all tests and when exiting. (Brian Burns)
+
+* Notify user when overhead changes instead of when restarting the loop.
+
+* Use ANSI clear line command to erase control-key combinations outputted by
+  shells such as BASH and ZSH in test-loop's output. (Brian Burns)
+
+Bug fixes:
+
+* `@last_ran_at` was being set during every iteration of the loop.  This is
+  problematic when Ruby's `Time.now` is more precise than your filesystem's
+  modification timestamp.  For example, in the ext3 filesystem under Linux,
+  file modification timestamps have a precision of 1 second.  (Brian Burns)
+
+* Exit gently on SIGINT by sending SIGTERM to all worker processes and then
+  running waitall(), instead of sending SIGKILL to the entire process group.
+  As a result, test-loop no longer exits with a non-zero status upon SIGINT.
+
+* Remove 'ansi' gem dependency. (Brian Burns)
+
+Documentation:
+
+* Add tip on deleting logs for passing tests. (Brian Burns)
+
+* Add tip on monitoring test processes with watch(1) in README.
+
 Version 9.2.0 (2011-03-28)
 ==========================
 

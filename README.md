@@ -30,7 +30,7 @@ Features
 
 * Configurable through a `.test-loop` file in your current working directory.
 
-* Implemented in less than 150 lines (SLOC) of pure Ruby code! :-)
+* Implemented in less than 200 lines (SLOC) of pure Ruby code! :-)
 
 ------------------------------------------------------------------------------
 Installation
@@ -99,8 +99,8 @@ you can query and modify the `Test::Loop` OpenStruct configuration as follows:
   For example, if test files had the same names as their source files followed
   by an underscore and the file name in reverse like this:
 
-  * lib/hello.rb => test/hello_olleh.rb
-  * app/world.rb => spec/world_ldrow.rb
+  * `lib/hello.rb` => `test/hello_olleh.rb`
+  * `app/world.rb` => `spec/world_ldrow.rb`
 
   Then you would add the following to your configuration file:
 
