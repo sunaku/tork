@@ -102,7 +102,6 @@ module Test
     # The given test files are passed down (along with currently running
     # test files) to the next incarnation of test-loop for resumption.
     def reload_master_process test_files = []
-      notify 'Restarting loop...'
       @running_files_lock.synchronize { test_files.concat @running_files }
       kill_workers
       exec({RESUME_ENV_KEY => test_files.inspect}, *EXEC_VECTOR)
@@ -153,6 +152,7 @@ module Test
 
         # reabsorb test execution overhead as necessary
         if Dir[*reabsorb_file_globs].any? {|f| File.mtime(f) > @started_at }
+          notify 'Overhead changed!'
           reload_master_process test_files
         end
 
