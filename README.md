@@ -57,6 +57,10 @@ If installed as a Git clone:
 
     env RUBYLIB=lib ruby bin/test-loop
 
+You can monitor your test processes in another terminal:
+
+    watch "ps xf | egrep 'test-loop|(test|spec)/.+\.rb' | sed '1,3d'"
+
 ------------------------------------------------------------------------------
 Operation
 ------------------------------------------------------------------------------
