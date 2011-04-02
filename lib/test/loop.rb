@@ -87,7 +87,7 @@ module Test
     private
 
     EXEC_VECTOR = [$0, *ARGV].map {|s| s.dup.freeze }.freeze
-    RELOAD_ENV_KEY = 'TEST_LOOP_RELOAD'.freeze
+    RESUME_ENV_KEY = 'TEST_LOOP_RESUME_FILES'.freeze
 
     ANSI_CLEAR_LINE = "\e[2K\e[0G".freeze
     ANSI_GREEN = "\e[32m%s\e[0m".freeze
@@ -122,13 +122,13 @@ module Test
       Process.waitall
     end
 
-    # The given test files are passed to the next incarnation
-    # of test-loop in the RELOAD_ENV_KEY environment variable.
+    # The given test files are passed down (along with currently running
+    # test files) to the next incarnation of test-loop for resumption.
     def reload_master_process test_files = []
       notify 'Restarting loop...'
       @running_files_lock.synchronize { test_files.concat @running_files }
       kill_workers
-      exec({RELOAD_ENV_KEY => test_files.inspect}, *EXEC_VECTOR)
+      exec({RESUME_ENV_KEY => test_files.inspect}, *EXEC_VECTOR)
     end
 
     def load_user_config
@@ -165,9 +165,13 @@ module Test
           map {|path| Dir[test_matcher.call path] }
         end.flatten.uniq
 
-        # also run test files given by the previous incarnation of test-loop
-        if ENV.key? RELOAD_ENV_KEY
-          test_files.concat(eval(ENV.delete(RELOAD_ENV_KEY))).uniq!
+        # resume test files stopped by the previous incarnation of test-loop
+        if ENV.key? RESUME_ENV_KEY
+          resume_files = eval(ENV.delete(RESUME_ENV_KEY))
+          unless resume_files.empty?
+            notify 'Resuming tests...'
+            test_files.concat(resume_files).uniq!
+          end
         end
 
         # reabsorb test execution overhead as necessary
