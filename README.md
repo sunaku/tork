@@ -234,4 +234,4 @@ If using Ruby on Rails:
 License
 ------------------------------------------------------------------------------
 
-Released under the ISC license.  See the `bin/test-loop` file for details.
+Released under the ISC license.  See the LICENSE file for details.

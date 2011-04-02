@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'test-loop'
   s.version     = '9.2.0'
-  s.author      = 'Suraj N. Kurapati'
+  s.authors     = ['Suraj N. Kurapati', 'Brian D. Burns']
   s.homepage    = 'http://github.com/sunaku/test-loop'
   s.summary     = 'Continuous testing for Ruby with fork/eval'
   s.files       = %w[
