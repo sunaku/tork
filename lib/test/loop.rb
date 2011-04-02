@@ -55,6 +55,7 @@ module Test
       run_test_loop
     rescue SystemExit
       # allow exit() to terminate the test loop
+      notify 'Goodbye!'
     rescue Exception => error
       STDERR.puts error.inspect, error.backtrace
       pause_momentarily
