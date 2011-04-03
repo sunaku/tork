@@ -110,6 +110,19 @@ you can query and modify the `Test::Loop` OpenStruct configuration as follows:
         "{test,spec}/**/#{name}_#{name.reverse}#{extn}"
       end
 
+  In addition, these lambda functions can return `nil` if they do not wish for
+  a particular source file to be tested.  For example, to ignore tests for all
+  source files except those within a `models/` directory, you would write:
+
+      Test::Loop.test_file_matchers['{lib,app}/**/*.rb'] = lambda do |path|
+        if path.include? '/models/'
+          "{test,spec}/**/#{File.basename(path)}"
+        end
+      end
+
+  For source files not satisfying the above constraint, this lambda function
+  will return `nil`, thereby excluding those source files from being tested.
+
 * `Test::Loop.test_name_parser` is a lambda function that is passed a line of
   source code to determine whether that line can be considered as a test
   definition, in which case it must return the name of the test being defined.

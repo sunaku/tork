@@ -139,7 +139,7 @@ module Test
         # find test files that have been modified since the last run
         test_files = test_file_matchers.map do |source_glob, test_matcher|
           Dir[source_glob].select {|file| File.mtime(file) > @last_ran_at }.
-          map {|path| Dir[test_matcher.call path] }
+          map {|path| Dir[test_matcher.call(path).to_s] }
         end.flatten.uniq
 
         # resume test files stopped by the previous incarnation of test-loop
