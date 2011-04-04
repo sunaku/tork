@@ -27,24 +27,25 @@ module Test
     end
   end
 
-  Loop.before_each_test = lambda do |test_file, log_file, test_names|
-    unless test_names.empty?
-      test_name_pattern = test_names.map do |name|
-        # sanitize string interpolations and invalid method name characters
-        name.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
-      end.join('|')
+  Loop.before_each_test = [
+    lambda {|test_file, log_file, test_names|
+      unless test_names.empty?
+        test_name_pattern = test_names.map do |name|
+          # sanitize string interpolations and invalid method name characters
+          name.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
+        end.join('|')
 
-      case File.basename(test_file)
-      when /(\b|_)test(\b|_)/ # Test::Unit
-        ARGV.push '--name', "/#{test_name_pattern}/"
-      when /(\b|_)spec(\b|_)/ # RSpec
-        ARGV.push '--example', test_name_pattern
+        case File.basename(test_file)
+        when /(\b|_)test(\b|_)/ # Test::Unit
+          ARGV.push '--name', "/#{test_name_pattern}/"
+        when /(\b|_)spec(\b|_)/ # RSpec
+          ARGV.push '--example', test_name_pattern
+        end
       end
-    end
-  end
+    }
+  ]
 
-  Loop.after_each_test =
-    lambda {|test_file, log_file, run_status, started_at, elapsed_time|}
+  Loop.after_each_test = []
 
   class << Loop
     def run
@@ -205,7 +206,7 @@ module Test
         end.compact.uniq
 
         # tell the testing framework to run only the changed test blocks
-        before_each_test.call test_file, log_file, test_names
+        before_each_test.each {|f| f.call test_file, log_file, test_names }
 
         # make the process title Test::Unit friendly and ps(1) searchable
         $0 = "test-loop #{test_file}"
@@ -233,8 +234,9 @@ module Test
           STDERR.print File.read(log_file)
         end
 
-        after_each_test.call \
-          test_file, log_file, run_status, @last_ran_at, elapsed_time
+        after_each_test.each do |f|
+          f.call test_file, log_file, run_status, @last_ran_at, elapsed_time
+        end
 
         @running_files_lock.synchronize { @running_files.delete test_file }
       end

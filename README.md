@@ -134,37 +134,37 @@ the name of the test being defined.
 
 ### Test::Loop.before_each_test
 
-A lambda function that is executed inside the worker process before loading
-the test file.  It is passed (1) the path to the test file, (2) the path to
+Array of lambda functions that are executed inside the worker process before
+loading the test file.
+
+These functions are passed (1) the path to the test file, (2) the path to
 the log file containing the live output of running the test file, and (3) an
 array containing the names of tests (which were identified by
 `Test::Loop.test_name_parser`) inside the test file that have changed since
 the last run of the test file.
 
-The default implementation of this function instructs Test::Unit and RSpec to
-only run certain test blocks inside the test file. This accelerates your
+For example, to print a worker process' ID and what work it will perform:
+
+    Test::Loop.before_each_test.push lambda {
+      |test_file, log_file, test_names|
+
+      p :worker_pid => $$,
+        :test_file => test_file,
+        :log_file => log_file,
+        :test_names => test_names
+    }
+
+By default, the first function in this array instructs Test::Unit and RSpec to
+only run certain test blocks inside the test file.  This accelerates your
 test-driven development cycle and improves productivity!
-
-If you wish to add extend the default implementation, store and recall it:
-
-    default_implementation = Test::Loop.before_each_test
-
-    Test::Loop.before_each_test = lambda do |test_file, log_file, test_names|
-      default_implementation.call test_file, log_file, test_names
-      # do something additional ...
-    end
-
-Or if you want to completely replace the default implementation:
-
-    Test::Loop.before_each_test = lambda do |test_file, log_file, test_names|
-      # your replacement here ...
-    end
 
 ### Test::Loop.after_each_test
 
-A lambda function that is executed inside the master process after a test has
-finished running.  It is passed (1) the path to the test file, (2) the path to
-the log file containing the output of running the test file, (3) a
+Array of lambda functions that are executed inside the master process after a
+test has finished running.
+
+These functions are passed (1) the path to the test file, (2) the path to the
+log file containing the output of running the test file, (3) a
 `Process::Status` object describing the exit status of the worker process that
 ran the test file, (4) the time when test execution began, and (5) how many
 seconds it took for the overall test execution to complete.
@@ -172,14 +172,18 @@ seconds it took for the overall test execution to complete.
 For example, to delete log files for successful tests, add the following to
 your configuration file:
 
-    Test::Loop.after_each_test = lambda do |test_file, log_file, run_status, started_at, elapsed_time|
+    Test::Loop.after_each_test.push lambda {
+      |test_file, log_file, run_status, started_at, elapsed_time|
+
       File.delete(log_file) if run_status.success?
-    end
+    }
 
 For example, to see on-screen-display notifications only about test failures,
 add the following to your configuration file:
 
-    Test::Loop.after_each_test = lambda do |test_file, log_file, run_status, started_at, elapsed_time|
+    Test::Loop.after_each_test.push lambda {
+      |test_file, log_file, run_status, started_at, elapsed_time|
+
       unless run_status.success?
         title = 'FAIL at %s in %0.1fs' % [started_at.strftime('%r'), elapsed_time]
 
@@ -191,7 +195,7 @@ add the following to your configuration file:
           system 'xmessage', '-timeout', '5', '-title', title, message
         end
       end
-    end
+    }
 
 Note that the above functionality is available as a configuration preset:
 
@@ -201,7 +205,9 @@ For example, to see on-screen-display notifications about completed test runs,
 regardless of whether they passed or failed, add the following to your
 configuration file:
 
-    Test::Loop.after_each_test = lambda do |test_file, log_file, run_status, started_at, elapsed_time|
+    Test::Loop.after_each_test.push lambda {
+      |test_file, log_file, run_status, started_at, elapsed_time|
+
       success = run_status.success?
 
       title = '%s at %s in %0.1fs' %
@@ -214,7 +220,7 @@ configuration file:
         system 'growlnotify', '-a', 'Xcode', '-m', message, title or
         system 'xmessage', '-timeout', '5', '-title', title, message
       end
-    end
+    }
 
 ------------------------------------------------------------------------------
 Configuration Presets
