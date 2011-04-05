@@ -48,14 +48,21 @@ module Test
 
   class << Loop
     def run
-      init_test_loop
-      register_signals
-      load_user_config
-      absorb_overhead
-      run_test_loop
-    rescue SystemExit
-      # allow exit() to terminate the test loop
+      @running_files = []
+      @running_files_lock = Mutex.new
+      @lines_by_file = {} # path => readlines
+      @last_ran_at = @started_at = Time.now
+
+      catch self do
+        register_signals
+        load_user_config
+        absorb_overhead
+        run_test_loop
+      end
+
+      kill_workers
       notify 'Goodbye!'
+
     rescue Exception => error
       STDERR.puts error.inspect, error.backtrace
       pause_momentarily
@@ -76,17 +83,10 @@ module Test
       print "test-loop: #{message}\n"
     end
 
-    def init_test_loop
-      @running_files = []
-      @running_files_lock = Mutex.new
-      @lines_by_file = {} # path => readlines
-      @last_ran_at = @started_at = Time.now
-    end
-
     def register_signals
       # clear line to shield normal output from control-key interference:
       # some shells like BASH emit text when control-key combos are pressed
-      trap(:INT)  { print ANSI_CLEAR_LINE; kill_workers; exit }
+      trap(:INT)  { print ANSI_CLEAR_LINE; throw self }
       trap(:QUIT) { print ANSI_CLEAR_LINE; reload_master_process }
       trap(:TSTP) { print ANSI_CLEAR_LINE; forcibly_run_all_tests }
 
