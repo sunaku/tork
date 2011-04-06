@@ -1,3 +1,32 @@
+Version 9.4.0 (2011-04-06)
+==========================
+
+New features:
+
+* Allow lambda functions in `Test::Loop.test_file_matchers` to return `nil` so
+  that you can exclude certain tests from being executed. (Brian Burns)
+
+* Prefix worker process title with "test-loop" for easier ps(1) searchability.
+  The monitoring command in the README is now simplified to the following:
+
+      watch 'ps xf | grep test-loop | sed 1,3d'
+
+Bug fixes:
+
+* Skip `at_exit()` when exiting master process.  This prevents an empty test
+  from being run when exiting the loop after having processed a test/spec
+  helper that loads the Test::Unit library. (Brian Burns)
+
+Housekeeping:
+
+* Use throw/catch to break loop instead of raising SystemExit exception.
+
+* Trap SIGTERM with IGNORE/DEFAULT instead of using a closure in master.
+
+* Unregister master's custom signal handlers inside worker processes.
+
+* Separate configuration parameters into subsections in README.
+
 Version 9.3.0 (2011-04-01)
 ==========================
 
