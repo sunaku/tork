@@ -1,5 +1,15 @@
+------------------------------------------------------------------------------
+Version 10.0.0 (2011-04-06)
+------------------------------------------------------------------------------
+
+Incompatible changes:
+
+* The `Test::Loop.before_each_test` and `Test::Loop.after_each_test`
+  parameters are arrays now.
+
+------------------------------------------------------------------------------
 Version 9.4.0 (2011-04-06)
-==========================
+------------------------------------------------------------------------------
 
 New features:
 
@@ -27,8 +37,9 @@ Housekeeping:
 
 * Separate configuration parameters into subsections in README.
 
+------------------------------------------------------------------------------
 Version 9.3.0 (2011-04-01)
-==========================
+------------------------------------------------------------------------------
 
 New features:
 
@@ -66,23 +77,26 @@ Documentation:
 
 * Add tip on monitoring test processes with watch(1) in README.
 
+------------------------------------------------------------------------------
 Version 9.2.0 (2011-03-28)
-==========================
+------------------------------------------------------------------------------
 
 * Extract Rails-specific configuration to 'test/loop/rails' sublibrary.
 
 * Add 'test/loop/notify' sublibrary for OSD notifications on failures.
 
+------------------------------------------------------------------------------
 Version 9.1.1 (2011-03-15)
-==========================
+------------------------------------------------------------------------------
 
 * $0 does not work from RubyGems wrapper executable.
   Thanks to Brian Burns for reporting this issue.
 
 * Add information about sqlite3 errors & workaround in README.
 
+------------------------------------------------------------------------------
 Version 9.1.0 (2011-02-23)
-==========================
+------------------------------------------------------------------------------
 
 * Print the status of completed tests in ANSI color.
 
@@ -90,8 +104,9 @@ Version 9.1.0 (2011-02-23)
 
 * `$?` is not defined when Errno::ECHILD is raised.
 
+------------------------------------------------------------------------------
 Version 9.0.1 (2011-02-18)
-==========================
+------------------------------------------------------------------------------
 
 * Shield normal output from control-key combos printed into the terminal.
 
@@ -104,15 +119,17 @@ Version 9.0.1 (2011-02-18)
 
 * Add `after_each_test` example for failure-only notifications.
 
+------------------------------------------------------------------------------
 Version 9.0.0 (2011-02-15)
-==========================
+------------------------------------------------------------------------------
 
 * Remove SIGUSR1 for killing worker processes.
 
 * Handle Ctrl-Z signal from the very beginning.
 
+------------------------------------------------------------------------------
 Version 8.0.0 (2011-02-12)
-==========================
+------------------------------------------------------------------------------
 
 * Move configuration into `Test::Loop` object itself.
 
@@ -130,15 +147,17 @@ Version 8.0.0 (2011-02-12)
 
 * Freeze more constant values against modification.
 
+------------------------------------------------------------------------------
 Version 7.0.1 (2011-02-10)
-==========================
+------------------------------------------------------------------------------
 
 * Fix minitest deadlock issues with I/O redirection.
 
 * Do not signal to restart loop when overhead changes.
 
+------------------------------------------------------------------------------
 Version 7.0.0 (2011-02-10)
-==========================
+------------------------------------------------------------------------------
 
 * Switch from shell-script style to modular Ruby style in the source code.
   This yields more lines of code, but the result is much easier to read.
@@ -162,8 +181,9 @@ Version 7.0.0 (2011-02-10)
 
 * Break long lines at 80 characters in the source code.
 
+------------------------------------------------------------------------------
 Version 6.0.0 (2011-02-09)
-==========================
+------------------------------------------------------------------------------
 
 * Only consider `{test,spec}_helper.rb` as overhead, not all `*_helper.rb`.
 
@@ -179,8 +199,9 @@ Version 6.0.0 (2011-02-09)
 
 * Add better explanation for the `test_file_matchers` example.
 
+------------------------------------------------------------------------------
 Version 5.0.3 (2011-01-25)
-==========================
+------------------------------------------------------------------------------
 
 * Use "diff/lcs" library instead of "diff" for RSpec compatibility.
 
@@ -191,8 +212,9 @@ Version 5.0.3 (2011-01-25)
 
 * Reabsorb when bundler is run, not when Gemfile changes.
 
+------------------------------------------------------------------------------
 Version 5.0.2 (2011-01-19)
-==========================
+------------------------------------------------------------------------------
 
 * Support string interpolations that yield empty strings in test names.
 
@@ -202,8 +224,9 @@ Version 5.0.2 (2011-01-19)
 
 * Mention that diff gem is necessary for manual git clone installation.
 
+------------------------------------------------------------------------------
 Version 5.0.1 (2011-01-18)
-==========================
+------------------------------------------------------------------------------
 
 * Sanitize string interpolation in parsed test names.
 
@@ -213,8 +236,9 @@ Version 5.0.1 (2011-01-18)
 
 * DRY the mentioning of .test-loop file in README.
 
+------------------------------------------------------------------------------
 Version 5.0.0 (2011-01-17)
-==========================
+------------------------------------------------------------------------------
 
 * The configuration file must now yield a Ruby
   hash instead of polluting the global Object
@@ -223,8 +247,9 @@ Version 5.0.0 (2011-01-17)
 * Shortened the `:source_file_glob_to_test_file_mapping`
   configuration parameter name to `:test_file_matchers`.
 
+------------------------------------------------------------------------------
 Version 4.0.1 (2011-01-14)
-==========================
+------------------------------------------------------------------------------
 
 * Print how much time it took to run all tests.
 
@@ -239,8 +264,9 @@ Version 4.0.1 (2011-01-14)
 
 * Only prepend lib/, test/, and spec/ to $LOAD_PATH.
 
+------------------------------------------------------------------------------
 Version 4.0.0 (2011-01-13)
-==========================
+------------------------------------------------------------------------------
 
 * Only run changed tests inside changed test files.
 
@@ -253,15 +279,17 @@ Version 4.0.0 (2011-01-13)
 
 * Clean up implementation and improve documentation.
 
+------------------------------------------------------------------------------
 Version 3.0.2 (2011-01-11)
-==========================
+------------------------------------------------------------------------------
 
 * Reabsorb overhead upon Gemfile changes (Rails 3).
 
 * Try to recover from all kinds of exceptions.
 
+------------------------------------------------------------------------------
 Version 3.0.1 (2011-01-05)
-==========================
+------------------------------------------------------------------------------
 
 * Be resilient to $0 and ARGV being changed by tests.
 
@@ -269,23 +297,26 @@ Version 3.0.1 (2011-01-05)
 
 * Beautify markdown formatting and revise the README.
 
+------------------------------------------------------------------------------
 Version 3.0.0 (2011-01-04)
-==========================
+------------------------------------------------------------------------------
 
 * Replace Rake #pathmap usage with lambda functions
   in the `@source_file_to_test_file_mapping` hash.
 
 * Be resilient to syntax errors from loaded files.
 
+------------------------------------------------------------------------------
 Version 2.0.2 (2011-01-02)
-==========================
+------------------------------------------------------------------------------
 
 * Do not print stack trace when Control-C pressed.
 
 * Reduce the amount of notifications shown to user.
 
+------------------------------------------------------------------------------
 Version 2.0.1 (2011-01-01)
-==========================
+------------------------------------------------------------------------------
 
 * Fix syntax error caused by a dangling comma. Thanks
   to darthdeus (Jakub Arnold) for reporting [this bug](
@@ -293,8 +324,9 @@ Version 2.0.1 (2011-01-01)
 
 * Notify user before reabsorbing overhead.
 
+------------------------------------------------------------------------------
 Version 2.0.0 (2010-12-31)
-==========================
+------------------------------------------------------------------------------
 
 * Add support for loading configuration file, which
   allows you to define additional test file globs
@@ -307,33 +339,38 @@ Version 2.0.0 (2010-12-31)
 
 * Automatically retry when overhead absorption fails.
 
+------------------------------------------------------------------------------
 Version 1.2.0 (2010-11-23)
-==========================
+------------------------------------------------------------------------------
 
 * Notify user when absorbing overhead initially.
 
 * DRY up the repetiton of Time.at(0) calculation.
 
+------------------------------------------------------------------------------
 Version 1.1.0 (2010-11-22)
-==========================
+------------------------------------------------------------------------------
 
 * All *_{test,spec}_helper.rb files inside test/ and
   spec/ are now considered to be absorable overhead.
 
+------------------------------------------------------------------------------
 Version 1.0.2 (2010-10-16)
-==========================
+------------------------------------------------------------------------------
 
 * All *_helper.rb files inside test/ and spec/
   were absorbed as overhead instead of just
   the test_helper.rb and spec_helper.rb files.
 
+------------------------------------------------------------------------------
 Version 1.0.1 (2010-10-16)
-==========================
+------------------------------------------------------------------------------
 
 * Ensure that $LOAD_PATH reflects `ruby -Ilib:test`.
 
+------------------------------------------------------------------------------
 Version 1.0.0 (2010-10-15)
-==========================
+------------------------------------------------------------------------------
 
 * Remove ability to install as a Rails plugin.
 
@@ -343,16 +380,16 @@ Version 1.0.0 (2010-10-15)
 
 * Display status messages for better user interactivity.
 
-
+------------------------------------------------------------------------------
 Version 0.0.2 (2010-10-11)
-==========================
+------------------------------------------------------------------------------
 
 * Forgot to register bin/test-loop as gem executable.
 
 * Revise Usage section into Invocation and Operation.
 
-
+------------------------------------------------------------------------------
 Version 0.0.1 (2010-10-10)
-==========================
+------------------------------------------------------------------------------
 
 * First public release.  Enjoy!

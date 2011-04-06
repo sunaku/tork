@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'test-loop'
-  s.version     = '9.4.0'
+  s.version     = '10.0.0'
   s.authors     = ['Suraj N. Kurapati', 'Brian D. Burns']
   s.homepage    = 'http://github.com/sunaku/test-loop'
   s.summary     = 'Continuous testing for Ruby with fork/eval'
