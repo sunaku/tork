@@ -81,132 +81,140 @@ test-loop looks for a configuration file named `.test-loop` in the current
 working directory.  This configuration file is a normal Ruby script in which
 you can query and modify the `Test::Loop` OpenStruct configuration as follows:
 
-* `Test::Loop.overhead_file_globs` is an array of file globbing patterns that
-  describe a set of Ruby scripts that are loaded into the main Ruby process as
-  overhead.
+### Test::Loop.overhead_file_globs
 
-* `Test::Loop.reabsorb_file_globs` is an array of file globbing patterns that
-  describe a set of files which cause the overhead to be reabsorbed whenever
-  they change.
+An array of file globbing patterns that describe a set of Ruby scripts that
+are loaded into the main Ruby process as overhead.
 
-* `Test::Loop.test_file_matchers` is a hash that maps a file globbing pattern
-  describing a set of source files to a lambda function yielding a file
-  globbing pattern describing a set of test files that need to be run.  In
-  other words, whenever the source files (the hash key; left-hand side of the
-  mapping) change, their associated test files (the hash value; right-hand
-  side of the mapping) are run.
+### Test::Loop.reabsorb_file_globs
 
-  For example, if test files had the same names as their source files followed
-  by an underscore and the file name in reverse like this:
+An array of file globbing patterns that describe a set of files which cause
+the overhead to be reabsorbed whenever they change.
 
-  * `lib/hello.rb` => `test/hello_olleh.rb`
-  * `app/world.rb` => `spec/world_ldrow.rb`
+### Test::Loop.test_file_matchers
 
-  Then you would add the following to your configuration file:
+A hash that maps a file globbing pattern describing a set of source files to a
+lambda function yielding a file globbing pattern describing a set of test
+files that need to be run.  In other words, whenever the source files (the
+hash key; left-hand side of the mapping) change, their associated test files
+(the hash value; right-hand side of the mapping) are run.
 
-      Test::Loop.test_file_matchers['{lib,app}/**/*.rb'] = lambda do |path|
-        extn = File.extname(path)
-        name = File.basename(path, extn)
-        "{test,spec}/**/#{name}_#{name.reverse}#{extn}"
+For example, if test files had the same names as their source files followed
+by an underscore and the file name in reverse like this:
+
+* `lib/hello.rb` => `test/hello_olleh.rb`
+* `app/world.rb` => `spec/world_ldrow.rb`
+
+Then you would add the following to your configuration file:
+
+    Test::Loop.test_file_matchers['{lib,app}/**/*.rb'] = lambda do |path|
+      extn = File.extname(path)
+      name = File.basename(path, extn)
+      "{test,spec}/**/#{name}_#{name.reverse}#{extn}"
+    end
+
+In addition, these lambda functions can return `nil` if they do not wish for a
+particular source file to be tested.  For example, to ignore tests for all
+source files except those within a `models/` directory, you would write:
+
+    Test::Loop.test_file_matchers['{lib,app}/**/*.rb'] = lambda do |path|
+      if path.include? '/models/'
+        "{test,spec}/**/#{File.basename(path)}"
       end
+    end
 
-  In addition, these lambda functions can return `nil` if they do not wish for
-  a particular source file to be tested.  For example, to ignore tests for all
-  source files except those within a `models/` directory, you would write:
+For source files not satisfying the above constraint, this lambda function
+will return `nil`, thereby excluding those source files from being tested.
 
-      Test::Loop.test_file_matchers['{lib,app}/**/*.rb'] = lambda do |path|
-        if path.include? '/models/'
-          "{test,spec}/**/#{File.basename(path)}"
-        end
-      end
+### Test::Loop.test_name_parser
 
-  For source files not satisfying the above constraint, this lambda function
-  will return `nil`, thereby excluding those source files from being tested.
+A lambda function that is passed a line of source code to determine whether
+that line can be considered as a test definition, in which case it must return
+the name of the test being defined.
 
-* `Test::Loop.test_name_parser` is a lambda function that is passed a line of
-  source code to determine whether that line can be considered as a test
-  definition, in which case it must return the name of the test being defined.
+### Test::Loop.before_each_test
 
-* `Test::Loop.before_each_test` is a lambda function that is executed inside
-  the worker process before loading the test file.  It is passed (1) the path
-  to the test file, (2) the path to the log file containing the live output of
-  running the test file, and (3) an array containing the names of tests (which
-  were identified by `Test::Loop.test_name_parser`) inside the test file that
-  have changed since the last run of the test file.
+A lambda function that is executed inside the worker process before loading
+the test file.  It is passed (1) the path to the test file, (2) the path to
+the log file containing the live output of running the test file, and (3) an
+array containing the names of tests (which were identified by
+`Test::Loop.test_name_parser`) inside the test file that have changed since
+the last run of the test file.
 
-  The default implementation of this function instructs Test::Unit and RSpec
-  to only run certain test blocks inside the test file. This accelerates your
-  test-driven development cycle and improves productivity!
+The default implementation of this function instructs Test::Unit and RSpec to
+only run certain test blocks inside the test file. This accelerates your
+test-driven development cycle and improves productivity!
 
-  If you wish to add extend the default implementation, store and recall it:
+If you wish to add extend the default implementation, store and recall it:
 
-      default_implementation = Test::Loop.before_each_test
+    default_implementation = Test::Loop.before_each_test
 
-      Test::Loop.before_each_test = lambda do |test_file, log_file, test_names|
-        default_implementation.call test_file, log_file, test_names
-        # do something additional ...
-      end
+    Test::Loop.before_each_test = lambda do |test_file, log_file, test_names|
+      default_implementation.call test_file, log_file, test_names
+      # do something additional ...
+    end
 
-  Or if you want to completely replace the default implementation:
+Or if you want to completely replace the default implementation:
 
-      Test::Loop.before_each_test = lambda do |test_file, log_file, test_names|
-        # your replacement here ...
-      end
+    Test::Loop.before_each_test = lambda do |test_file, log_file, test_names|
+      # your replacement here ...
+    end
 
-* `Test::Loop.after_each_test` is a lambda function that is executed inside
-  the master process after a test has finished running.  It is passed (1) the
-  path to the test file, (2) the path to the log file containing the output of
-  running the test file, (3) a `Process::Status` object describing the exit
-  status of the worker process that ran the test file, (4) the time when test
-  execution began, and (5) how many seconds it took for the overall test
-  execution to complete.
+### Test::Loop.after_each_test
 
-  For example, to delete log files for successful tests, add the following to
-  your configuration file:
+A lambda function that is executed inside the master process after a test has
+finished running.  It is passed (1) the path to the test file, (2) the path to
+the log file containing the output of running the test file, (3) a
+`Process::Status` object describing the exit status of the worker process that
+ran the test file, (4) the time when test execution began, and (5) how many
+seconds it took for the overall test execution to complete.
 
-      Test::Loop.after_each_test = lambda do |test_file, log_file, run_status, started_at, elapsed_time|
-        File.delete(log_file) if run_status.success?
-      end
+For example, to delete log files for successful tests, add the following to
+your configuration file:
 
-  For example, to see on-screen-display notifications only about test
-  failures, add the following to your configuration file:
+    Test::Loop.after_each_test = lambda do |test_file, log_file, run_status, started_at, elapsed_time|
+      File.delete(log_file) if run_status.success?
+    end
 
-      Test::Loop.after_each_test = lambda do |test_file, log_file, run_status, started_at, elapsed_time|
-        unless run_status.success?
-          title = 'FAIL at %s in %0.1fs' % [started_at.strftime('%r'), elapsed_time]
+For example, to see on-screen-display notifications only about test failures,
+add the following to your configuration file:
 
-          message = test_file
-
-          Thread.new do # run in background
-            system 'notify-send', '-i', 'dialog-error', title, message or
-            system 'growlnotify', '-a', 'Xcode', '-m', message, title or
-            system 'xmessage', '-timeout', '5', '-title', title, message
-          end
-        end
-      end
-
-  Note that the above functionality is available as a configuration preset:
-
-      require 'test/loop/notify'
-
-  For example, to see on-screen-display notifications about completed test
-  runs, regardless of whether they passed or failed, add the following to your
-  configuration file:
-
-      Test::Loop.after_each_test = lambda do |test_file, log_file, run_status, started_at, elapsed_time|
-        success = run_status.success?
-
-        title = '%s at %s in %0.1fs' %
-          [success ? 'PASS' : 'FAIL', started_at.strftime('%X'), elapsed_time]
+    Test::Loop.after_each_test = lambda do |test_file, log_file, run_status, started_at, elapsed_time|
+      unless run_status.success?
+        title = 'FAIL at %s in %0.1fs' % [started_at.strftime('%r'), elapsed_time]
 
         message = test_file
 
         Thread.new do # run in background
-          system 'notify-send', '-i', "dialog-#{success ? 'information' : 'error'}", title, message or
+          system 'notify-send', '-i', 'dialog-error', title, message or
           system 'growlnotify', '-a', 'Xcode', '-m', message, title or
           system 'xmessage', '-timeout', '5', '-title', title, message
         end
       end
+    end
+
+Note that the above functionality is available as a configuration preset:
+
+    require 'test/loop/notify'
+
+For example, to see on-screen-display notifications about completed test runs,
+regardless of whether they passed or failed, add the following to your
+configuration file:
+
+    Test::Loop.after_each_test = lambda do |test_file, log_file, run_status, started_at, elapsed_time|
+      success = run_status.success?
+
+      title = '%s at %s in %0.1fs' %
+        [success ? 'PASS' : 'FAIL', started_at.strftime('%X'), elapsed_time]
+
+      message = test_file
+
+      Thread.new do # run in background
+        system 'notify-send', '-i', "dialog-#{success ? 'information' : 'error'}", title, message or
+        system 'growlnotify', '-a', 'Xcode', '-m', message, title or
+        system 'xmessage', '-timeout', '5', '-title', title, message
+      end
+    end
 
 ------------------------------------------------------------------------------
 Configuration Presets
