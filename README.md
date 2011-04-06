@@ -59,7 +59,7 @@ If installed as a Git clone:
 
 You can monitor your test processes in another terminal:
 
-    watch "ps xf | egrep 'test-loop|(test|spec)/.+\.rb' | sed '1,3d'"
+    watch 'ps xf | grep test-loop | sed 1,3d'
 
 ------------------------------------------------------------------------------
 Operation

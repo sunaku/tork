@@ -207,10 +207,13 @@ module Test
         # tell the testing framework to run only the changed test blocks
         before_each_test.call test_file, log_file, test_names
 
+        # make the process title Test::Unit friendly and ps(1) searchable
+        $0 = "test-loop #{test_file}"
+
         # after loading the user's test file, the at_exit() hook of the
         # user's testing framework will take care of running the tests and
         # reflecting any failures in the worker process' exit status
-        load $0 = test_file # set $0 because Test::Unit outputs it
+        load test_file
       end
 
       # monitor and report on the worker's progress
