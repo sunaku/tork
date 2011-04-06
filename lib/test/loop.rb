@@ -84,14 +84,15 @@ module Test
     end
 
     def register_signals
+      # this signal is ignored in master and honored in workers, so all
+      # workers can be killed by sending it to the entire process group
+      trap :TERM, :IGNORE
+
       # clear line to shield normal output from control-key interference:
       # some shells like BASH emit text when control-key combos are pressed
       trap(:INT)  { print ANSI_CLEAR_LINE; throw self }
       trap(:QUIT) { print ANSI_CLEAR_LINE; reload_master_process }
       trap(:TSTP) { print ANSI_CLEAR_LINE; forcibly_run_all_tests }
-
-      master_pid = $$
-      trap(:TERM) { exit unless $$ == master_pid }
     end
 
     def kill_workers
@@ -181,6 +182,10 @@ module Test
       @lines_by_file[test_file] = new_lines
 
       worker_pid = fork do
+        # this signal is ignored in master and honored in workers, so all
+        # workers can be killed by seding it to the entire process group
+        trap :TERM, :DEFAULT
+
         # capture test output in log file because tests are run in parallel
         # which makes it difficult to understand interleaved output thereof
         $stdout.reopen log_file, 'w'
