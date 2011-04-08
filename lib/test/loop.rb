@@ -54,20 +54,22 @@ module Test
       @lines_by_file = {} # path => readlines
       @last_ran_at = @started_at = Time.now
 
-      catch self do
-        register_signals
-        load_user_config
-        absorb_overhead
-        run_test_loop
-      end
+      register_signals
+      load_user_config
+      absorb_overhead
+      run_test_loop
 
-      kill_workers
-      notify 'Goodbye!'
+    rescue Interrupt
+      # allow user to break the loop by pressing Ctrl-C or sending SIGINT
 
     rescue Exception => error
       STDERR.puts error.inspect, error.backtrace
       pause_momentarily
       reload_master_process
+
+    ensure
+      kill_workers
+      notify 'Goodbye!'
     end
 
     private
@@ -103,7 +105,6 @@ module Test
         end
       end
 
-      master_trap.call(:INT)  { trap :INT, :IGNORE; throw self }
       master_trap.call(:QUIT) { reload_master_process }
       master_trap.call(:TSTP) { forcibly_run_all_tests }
     end
