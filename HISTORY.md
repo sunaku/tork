@@ -1,4 +1,19 @@
 ------------------------------------------------------------------------------
+Version 10.0.1 (2011-04-08)
+------------------------------------------------------------------------------
+
+Bug fixes:
+
+* Workers must ignore SIGTSTP, otherwise master waits forever before exiting.
+
+* Unregister trap in workers upon first reception instead of racing to
+  unregister the trap handlers inherited from the master process.
+
+* Prevent uncaught throw error on subsequent Ctrl-C.
+
+* Simpler solution for terminating loop upon Ctrl-C.
+
+------------------------------------------------------------------------------
 Version 10.0.0 (2011-04-06)
 ------------------------------------------------------------------------------
 
