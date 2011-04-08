@@ -183,8 +183,12 @@ module Test
       @lines_by_file[test_file] = new_lines
 
       worker_pid = fork do
-        # unregister custom signal handlers meant for master process
-        [:TERM, :INT, :QUIT, :TSTP].each {|sig| trap sig, :DEFAULT }
+        # this signal is ignored in master and honored in workers, so all
+        # workers can be killed by sending it to the entire process group
+        trap :TERM, :DEFAULT
+
+        # ignore signals meant for master process
+        [:INT, :QUIT, :TSTP].each {|sig| trap sig, :IGNORE }
 
         # capture test output in log file because tests are run in parallel
         # which makes it difficult to understand interleaved output thereof
