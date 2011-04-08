@@ -80,8 +80,10 @@ module Test
     ANSI_RED = "\e[31m%s\e[0m".freeze
 
     def notify message
-      # using print() because puts() is not an atomic operation
-      print "test-loop: #{message}\n"
+      # using print() because puts() is not an atomic operation.
+      # also, clear the line before printing because some shells emit
+      # text when control-key combos are pressed (to trigger signals)
+      print "#{ANSI_CLEAR_LINE}test-loop: #{message}\n"
     end
 
     def register_signals
@@ -89,11 +91,21 @@ module Test
       # workers can be killed by sending it to the entire process group
       trap :TERM, :IGNORE
 
-      # clear line to shield normal output from control-key interference:
-      # some shells like BASH emit text when control-key combos are pressed
-      trap(:INT)  { print ANSI_CLEAR_LINE; throw self }
-      trap(:QUIT) { print ANSI_CLEAR_LINE; reload_master_process }
-      trap(:TSTP) { print ANSI_CLEAR_LINE; forcibly_run_all_tests }
+      master_pid = $$
+      master_trap = lambda do |signal, &handler|
+        trap signal do
+          if $$ == master_pid
+            handler.call
+          else
+            # ignore future ocurrences of this signal in worker processes
+            trap signal, :IGNORE
+          end
+        end
+      end
+
+      master_trap.call(:INT)  { throw self }
+      master_trap.call(:QUIT) { reload_master_process }
+      master_trap.call(:TSTP) { forcibly_run_all_tests }
     end
 
     def kill_workers
@@ -186,9 +198,6 @@ module Test
         # this signal is ignored in master and honored in workers, so all
         # workers can be killed by sending it to the entire process group
         trap :TERM, :DEFAULT
-
-        # ignore signals meant for master process
-        [:INT, :QUIT, :TSTP].each {|sig| trap sig, :IGNORE }
 
         # capture test output in log file because tests are run in parallel
         # which makes it difficult to understand interleaved output thereof
