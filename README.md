@@ -251,6 +251,9 @@ If using Ruby on Rails:
   Otherwise, test-loop will appear to ignore class-level changes in your
   models, controllers, helpers, etc. thereby causing you great frustration!
 
+  **NOTE** that test-loop will automatically disable this setting for you if
+  you are using using Rails 3, so you need not change any configuration files!
+
 * SQLite3 [raises `SQLite3::BusyException: database is locked` errors](
   https://github.com/sunaku/test-loop/issues/2 ) because test-loop runs your
   test files in parallel.  You can work around this by using an [in-memory
