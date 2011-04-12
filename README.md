@@ -238,6 +238,10 @@ your application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
 
       require 'test/loop/notify'
 
+* Support for MiniTest testing framework:
+
+      require 'test/loop/minitest'
+
 ------------------------------------------------------------------------------
 Known issues
 ------------------------------------------------------------------------------
