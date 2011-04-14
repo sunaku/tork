@@ -242,6 +242,10 @@ your application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
 
       require 'test/loop/minitest'
 
+* Support for Test::Unit testing framework:
+
+      require 'test/loop/testunit'
+
 ------------------------------------------------------------------------------
 Known issues
 ------------------------------------------------------------------------------
