@@ -205,9 +205,8 @@ module Test
 
         # capture test output in log file because tests are run in parallel
         # which makes it difficult to understand interleaved output thereof
-        $stdout.reopen log_file, 'w'
-        $stdout.sync = true
-        $stderr.reopen $stdout
+        STDERR.reopen $stderr.reopen STDOUT.reopen $stdout.reopen(log_file, 'w')
+        STDERR.sync = $stderr.sync = STDOUT.sync = $stdout.sync = true
 
         # determine which test blocks have changed inside the test file
         test_names = Diff::LCS.diff(old_lines, new_lines).flatten.map do |change|
