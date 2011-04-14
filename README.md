@@ -30,7 +30,7 @@ Features
 
 * Configurable through a `.test-loop` file in your current working directory.
 
-* Implemented in less than 200 lines (SLOC) of pure Ruby code! :-)
+* Implemented in less than 250 lines (SLOC) of pure Ruby code! :-)
 
 ------------------------------------------------------------------------------
 Installation

@@ -1,4 +1,30 @@
 ------------------------------------------------------------------------------
+Version 11.0.0 (2011-04-14)
+------------------------------------------------------------------------------
+
+Incompatible changes:
+
+* The `test/loop/rails` preset has been internalized and is now applied
+  automatically if your test execution overhead includes Ruby on Rails.
+
+New features:
+
+* If you are using Rails 3, test-loop will automatically set
+  `config.cache_classes = false` for your test environment.  (Brian D. Burns)
+
+Bug fixes:
+
+* Avoid deadlock errors when printing output from Test::Unit and MiniTest.
+  (Brian D. Burns)
+
+      `write': deadlock detected (fatal)
+
+* Signaled worker termination is neither pass nor fail.
+  Do not treat it as a failure by printing the log file.
+
+* Ignore SIGINT in workers; only master must honor it.
+
+------------------------------------------------------------------------------
 Version 10.0.1 (2011-04-08)
 ------------------------------------------------------------------------------
 
@@ -29,7 +55,7 @@ Version 9.4.0 (2011-04-06)
 New features:
 
 * Allow lambda functions in `Test::Loop.test_file_matchers` to return `nil` so
-  that you can exclude certain tests from being executed. (Brian Burns)
+  that you can exclude certain tests from being executed. (Brian D. Burns)
 
 * Prefix worker process title with "test-loop" for easier ps(1) searchability.
   The monitoring command in the README is now simplified to the following:
@@ -40,7 +66,7 @@ Bug fixes:
 
 * Skip `at_exit()` when exiting master process.  This prevents an empty test
   from being run when exiting the loop after having processed a test/spec
-  helper that loads the Test::Unit library. (Brian Burns)
+  helper that loads the Test::Unit library. (Brian D. Burns)
 
 Housekeeping:
 
@@ -59,36 +85,36 @@ Version 9.3.0 (2011-04-01)
 New features:
 
 * Resume currently running tests--as well as those currently needing to be
-  run--after reabsorbing test execution overhead. (Brian Burns)
+  run--after reabsorbing test execution overhead. (Brian D. Burns)
 
 * Stop currently running tests (and wait for them to finish) before
   reabsorbing overhead.  This greatly improves responsiveness because worker
   processes are no longer there to compete with the new master process for
   system resources.
 
-* Notify user when running all tests and when exiting. (Brian Burns)
+* Notify user when running all tests and when exiting. (Brian D. Burns)
 
 * Notify user when overhead changes instead of when restarting the loop.
 
 * Use ANSI clear line command to erase control-key combinations outputted by
-  shells such as BASH and ZSH in test-loop's output. (Brian Burns)
+  shells such as BASH and ZSH in test-loop's output. (Brian D. Burns)
 
 Bug fixes:
 
 * `@last_ran_at` was being set during every iteration of the loop.  This is
   problematic when Ruby's `Time.now` is more precise than your filesystem's
   modification timestamp.  For example, in the ext3 filesystem under Linux,
-  file modification timestamps have a precision of 1 second.  (Brian Burns)
+  file modification timestamps have a precision of 1 second.  (Brian D. Burns)
 
 * Exit gently on SIGINT by sending SIGTERM to all worker processes and then
   running waitall(), instead of sending SIGKILL to the entire process group.
   As a result, test-loop no longer exits with a non-zero status upon SIGINT.
 
-* Remove 'ansi' gem dependency. (Brian Burns)
+* Remove 'ansi' gem dependency. (Brian D. Burns)
 
 Documentation:
 
-* Add tip on deleting logs for passing tests. (Brian Burns)
+* Add tip on deleting logs for passing tests. (Brian D. Burns)
 
 * Add tip on monitoring test processes with watch(1) in README.
 
@@ -105,7 +131,7 @@ Version 9.1.1 (2011-03-15)
 ------------------------------------------------------------------------------
 
 * $0 does not work from RubyGems wrapper executable.
-  Thanks to Brian Burns for reporting this issue.
+  Thanks to Brian D. Burns for reporting this issue.
 
 * Add information about sqlite3 errors & workaround in README.
 
