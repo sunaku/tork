@@ -227,21 +227,9 @@ The following sub-libraries provide "preset" configurations.  To use them,
 simply add the require() lines shown below to your `.test-loop` file or to
 your application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
 
-### require 'test/loop/rails'
-
-Provides support for the Ruby on Rails web framework.
-
 ### require 'test/loop/notify'
 
 Shows on-screen-display notifications for test failures.
-
-### require 'test/loop/minitest'
-
-Provides support for the MiniTest testing framework.
-
-### require 'test/loop/testunit'
-
-Provides support for the Test::Unit testing framework.
 
 ------------------------------------------------------------------------------
 Known issues
@@ -250,8 +238,8 @@ Known issues
 ### Ruby on Rails
 
 * Ensure that your `config/environments/test.rb` file disables class caching
-  as follows (**NOTE:** the `test/loop/rails` preset does this for you if you
-  use Rails 3):
+  as follows (**NOTE:** this is done automatically for you if you use Rails
+  3):
 
       config.cache_classes = false
 
