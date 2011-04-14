@@ -245,7 +245,7 @@ module Test
         # report test results along with any failure logs
         if run_status.success?
           notify ANSI_GREEN % "PASS #{test_file}"
-        else
+        elsif run_status.exited?
           notify ANSI_RED % "FAIL #{test_file}"
           STDERR.print File.read(log_file)
         end
