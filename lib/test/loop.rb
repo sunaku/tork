@@ -200,6 +200,9 @@ module Test
         # workers can be killed by sending it to the entire process group
         trap :TERM, :DEFAULT
 
+        # this signal is honored by master and ignored in workers
+        trap :INT, :IGNORE
+
         # capture test output in log file because tests are run in parallel
         # which makes it difficult to understand interleaved output thereof
         $stdout.reopen log_file, 'w'
