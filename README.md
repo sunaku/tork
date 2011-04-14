@@ -179,7 +179,8 @@ your configuration file:
     }
 
 For example, to see on-screen-display notifications only about test failures,
-add the following to your configuration file:
+add the following to your configuration file (**NOTE:** the `test/loop/notify`
+preset does this for you):
 
     Test::Loop.after_each_test.push lambda {
       |test_file, log_file, run_status, started_at, elapsed_time|
@@ -196,10 +197,6 @@ add the following to your configuration file:
         end
       end
     }
-
-Note that the above functionality is available as a configuration preset:
-
-    require 'test/loop/notify'
 
 For example, to see on-screen-display notifications about completed test runs,
 regardless of whether they passed or failed, add the following to your
@@ -230,37 +227,36 @@ The following sub-libraries provide "preset" configurations.  To use them,
 simply add the require() lines shown below to your `.test-loop` file or to
 your application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
 
-* Support for Ruby on Rails testing:
+### require 'test/loop/rails'
 
-      require 'test/loop/rails'
+Provides support for the Ruby on Rails web framework.
 
-* On-screen-display notifications for test failures:
+### require 'test/loop/notify'
 
-      require 'test/loop/notify'
+Shows on-screen-display notifications for test failures.
 
-* Support for MiniTest testing framework:
+### require 'test/loop/minitest'
 
-      require 'test/loop/minitest'
+Provides support for the MiniTest testing framework.
 
-* Support for Test::Unit testing framework:
+### require 'test/loop/testunit'
 
-      require 'test/loop/testunit'
+Provides support for the Test::Unit testing framework.
 
 ------------------------------------------------------------------------------
 Known issues
 ------------------------------------------------------------------------------
 
-If using Ruby on Rails:
+### Ruby on Rails
 
-* Ensure that your `config/environments/test.rb` file disables class caching:
+* Ensure that your `config/environments/test.rb` file disables class caching
+  as follows (**NOTE:** the `test/loop/rails` preset does this for you if you
+  use Rails 3):
 
       config.cache_classes = false
 
-  Otherwise, test-loop will appear to ignore class-level changes in your
-  models, controllers, helpers, etc. thereby causing you great frustration!
-
-  **NOTE** that test-loop will automatically disable this setting for you if
-  you are using using Rails 3, so you need not change any configuration files!
+  Otherwise, test-loop will appear to ignore source-code changes in your
+  models, controllers, helpers, and other Ruby source files.
 
 * SQLite3 [raises `SQLite3::BusyException: database is locked` errors](
   https://github.com/sunaku/test-loop/issues/2 ) because test-loop runs your
