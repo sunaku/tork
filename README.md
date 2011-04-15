@@ -231,6 +231,10 @@ your application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
 
 Shows on-screen-display notifications for test failures.
 
+### require 'test/loop/rails'
+
+Provides support for the Ruby on Rails web framework.
+
 ------------------------------------------------------------------------------
 Known issues
 ------------------------------------------------------------------------------
@@ -238,8 +242,8 @@ Known issues
 ### Ruby on Rails
 
 * Ensure that your `config/environments/test.rb` file disables class caching
-  as follows (**NOTE:** this is done automatically for you if you use Rails
-  3):
+  as follows (**NOTE:** if you are using Rails 3, the `test/loop/rails` preset
+  will automatically do this for you):
 
       config.cache_classes = false
 
