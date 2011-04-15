@@ -57,7 +57,6 @@ module Test
       register_signals
       load_user_config
       absorb_overhead
-      load_lib_support
       run_test_loop
 
     rescue Interrupt
@@ -137,10 +136,6 @@ module Test
       Dir[*overhead_file_globs].each do |file|
         require File.basename(file, File.extname(file))
       end
-    end
-
-    def load_lib_support
-      Dir[File.expand_path '../loop/support/*.rb', __FILE__].each {|f| load f }
     end
 
     def pause_momentarily
