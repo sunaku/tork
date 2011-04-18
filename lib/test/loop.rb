@@ -74,8 +74,9 @@ module Test
 
     private
 
-    EXEC_VECTOR = [$0, *ARGV].map {|s| s.dup.freeze }.freeze
+    MASTER_ARGV = [$0, *ARGV].map {|s| s.dup.freeze }.freeze
     RESUME_ENV_KEY = 'TEST_LOOP_RESUME_FILES'.freeze
+    MASTER_ENV = ENV.to_hash.delete_if {|k,v| k == RESUME_ENV_KEY }.freeze
 
     ANSI_CLEAR_LINE = "\e[2K\e[0G".freeze
     ANSI_GREEN = "\e[32m%s\e[0m".freeze
@@ -120,7 +121,8 @@ module Test
     def reload_master_process test_files = []
       @running_files_lock.synchronize { test_files.concat @running_files }
       kill_workers
-      exec({RESUME_ENV_KEY => test_files.inspect}, *EXEC_VECTOR)
+      exec MASTER_ENV.merge(RESUME_ENV_KEY => test_files.inspect),
+           *MASTER_ARGV, {:unsetenv_others => true}
     end
 
     def load_user_config
