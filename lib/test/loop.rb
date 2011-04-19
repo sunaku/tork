@@ -50,7 +50,6 @@ module Test
   class << Loop
     def run
       @running_files = []
-      @running_files_lock = Mutex.new
       @lines_by_file = {} # path => readlines
       @last_ran_at = @started_at = Time.now
 
@@ -119,7 +118,7 @@ module Test
     # The given test files are passed down (along with currently running
     # test files) to the next incarnation of test-loop for resumption.
     def reload_master_process test_files = []
-      @running_files_lock.synchronize { test_files.concat @running_files }
+      test_files.concat @running_files
       kill_workers
       exec MASTER_ENV.merge(RESUME_ENV_KEY => test_files.inspect),
            *MASTER_ARGV, {:unsetenv_others => true}
@@ -176,9 +175,7 @@ module Test
 
         # fork workers to run the test files in parallel,
         # excluding test files that are already running
-        test_files = @running_files_lock.
-          synchronize { test_files - @running_files }
-
+        test_files -= @running_files
         unless test_files.empty?
           @last_ran_at = Time.now
           test_files.each {|file| run_test_file file }
@@ -189,7 +186,7 @@ module Test
     end
 
     def run_test_file test_file
-      @running_files_lock.synchronize { @running_files.push test_file }
+      @running_files.push test_file
       log_file = test_file + '.log'
 
       # cache the contents of the test file for diffing below
@@ -255,7 +252,7 @@ module Test
           f.call test_file, log_file, run_status, @last_ran_at, elapsed_time
         end
 
-        @running_files_lock.synchronize { @running_files.delete test_file }
+        @running_files.delete test_file
       end
     end
   end
