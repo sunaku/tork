@@ -70,7 +70,7 @@ module Test
 
     private
 
-    MASTER_ARGV = [$0, *ARGV].map {|s| s.dup.freeze }.freeze
+    MASTER_EXECV = [$0, *ARGV].map {|s| s.dup.freeze }.freeze
     MASTER_ENV = Hash[ENV.map {|k,v| [k.freeze, v.freeze] }].freeze
     RESUME_ENV_KEY = 'TEST_LOOP_RESUME_FILES'.freeze
 
@@ -145,9 +145,8 @@ module Test
     def reload_master_process test_files = []
       test_files.concat @running_files
       kill_workers
-      env = MASTER_ENV.merge(RESUME_ENV_KEY => test_files.inspect)
-      arg = MASTER_ARGV + [{:unsetenv_others => true}]
-      exec env, *arg
+      ENV.replace MASTER_ENV.merge(RESUME_ENV_KEY => test_files.inspect)
+      exec(*MASTER_EXECV)
     end
 
     def load_user_config
