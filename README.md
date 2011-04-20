@@ -44,9 +44,10 @@ Prerequisites
 
     To check if your system qualifies, launch `irb` and enter the following:
 
-        Process.respond_to? :fork                       # must be true
+        Process.respond_to? :fork                    # must be true
 
-        Signal.list.keys & %w[INT TSTP QUIT TERM CHLD]  # must not be empty
+        signals = %w[INT TSTP QUIT TERM CHLD].sort
+        Signal.list.keys.sort & signals == signals   # must be true
 
 ------------------------------------------------------------------------------
 Installation
