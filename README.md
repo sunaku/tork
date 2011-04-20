@@ -75,7 +75,7 @@ If installed as a Git clone:
 
 You can monitor your test processes in another terminal:
 
-    watch 'ps xf | grep test-loop | sed 1,3d'
+    watch 'ps xf | fgrep test-loop | fgrep -v fgrep'
 
 If it stops responding, you can annihilate test-loop from another terminal:
 
