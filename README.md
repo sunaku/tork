@@ -4,33 +4,35 @@ test-loop - Continuous testing for Ruby with fork/eval
 test-loop is a fast continuous testing tool for Ruby that automatically
 detects and tests changes in your application in an efficient manner:
 
-1. Absorbs the test execution overhead into the main Ruby process.
-2. Forks to run your test files without overhead and in parallel.
-3. Avoids running unchanged test blocks inside changed test files.
+  1. Absorbs the test execution overhead into the main Ruby process.
+
+  2. Forks to run your test files without overhead and in parallel.
+
+  3. Avoids running unchanged test blocks inside changed test files.
 
 ------------------------------------------------------------------------------
 Features
 ------------------------------------------------------------------------------
 
-* Tests *changes* in your Ruby application: avoids running (1) unchanged
-  test files and (2) unchanged test blocks inside changed test files.
+  * Tests *changes* in your Ruby application: avoids running (1) unchanged
+    test files and (2) unchanged test blocks inside changed test files.
 
-* Supports Test::Unit, RSpec, and any other testing framework that (1)
-  reflects failures in the process' exit status and (2) is loaded by your
-  application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
+  * Supports Test::Unit, RSpec, and any other testing framework that (1)
+    reflects failures in the process' exit status and (2) is loaded by your
+    application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
 
-* Reabsorbs test execution overhead if the test or spec helper file changes.
+  * Reabsorbs test execution overhead if the test or spec helper file changes.
 
-* Executes test files in parallel, making full use of multiple processors.
+  * Executes test files in parallel, making full use of multiple processors.
 
-* Logs the output from your tests into separate files: one log per test file.
-  The path to a log file is simply the path of its test file plus ".log".
+  * Logs the output from your tests into separate files: one log per test.
+    The path to a log file is simply the path of its test file plus ".log".
 
-* Generally I/O bound, so you can have it always running without CPU slowdown.
+  * Generally I/O bound, so you can keep it running without CPU slowdown.
 
-* Configurable through a `.test-loop` file in your current working directory.
+  * Configurable through a `.test-loop` file in your working directory.
 
-* Implemented in less than 250 lines (SLOC) of pure Ruby code! :-)
+  * Implemented in less than 250 lines (SLOC) of pure Ruby code! :-)
 
 ------------------------------------------------------------------------------
 Prerequisites
@@ -75,13 +77,13 @@ If it stops responding, you can annihilate test-loop from another terminal:
 Operation
 ------------------------------------------------------------------------------
 
-* Press Control-Z or send the SIGTSTP signal to forcibly run all
-  tests, even if there are no changes in your Ruby application.
+  * Press Control-Z or send the SIGTSTP signal to forcibly run all
+    tests, even if there are no changes in your Ruby application.
 
-* Press Control-\ or send the SIGQUIT signal to forcibly reabsorb
-  the test execution overhead, even if its sources have not changed.
+  * Press Control-\ or send the SIGQUIT signal to forcibly reabsorb
+    the test execution overhead, even if its sources have not changed.
 
-* Press Control-C or send the SIGINT signal to quit the test loop.
+  * Press Control-C or send the SIGINT signal to quit the test loop.
 
 ------------------------------------------------------------------------------
 Configuration
@@ -112,8 +114,8 @@ hash key; left-hand side of the mapping) change, their associated test files
 For example, if test files had the same names as their source files followed
 by an underscore and the file name in reverse like this:
 
-* `lib/hello.rb` => `test/hello_olleh.rb`
-* `app/world.rb` => `spec/world_ldrow.rb`
+  * `lib/hello.rb` => `test/hello_olleh.rb`
+  * `app/world.rb` => `spec/world_ldrow.rb`
 
 Then you would add the following to your configuration file:
 
@@ -230,7 +232,7 @@ configuration file:
     }
 
 ------------------------------------------------------------------------------
-Configuration Presets
+Configuration presets
 ------------------------------------------------------------------------------
 
 The following sub-libraries provide "preset" configurations.  To use them,
@@ -251,20 +253,20 @@ Known issues
 
 ### Ruby on Rails
 
-* Ensure that your `config/environments/test.rb` file disables class caching
-  as follows (**NOTE:** if you are using Rails 3, the `test/loop/rails` preset
-  will automatically do this for you):
+  * Ensure that your `config/environments/test.rb` file disables class caching
+    as follows (**NOTE:** if you are using Rails 3, the `test/loop/rails`
+    preset will automatically do this for you):
 
-      config.cache_classes = false
+        config.cache_classes = false
 
-  Otherwise, test-loop will appear to ignore source-code changes in your
-  models, controllers, helpers, and other Ruby source files.
+    Otherwise, test-loop will appear to ignore source-code changes in your
+    models, controllers, helpers, and other Ruby source files.
 
-* SQLite3 [raises `SQLite3::BusyException: database is locked` errors](
-  https://github.com/sunaku/test-loop/issues/2 ) because test-loop runs your
-  test files in parallel.  You can work around this by using an [in-memory
-  adapter for SQLite3]( https://github.com/mvz/memory_test_fix ) or by using
-  different database software (such as MySQL) for your test environment.
+  * SQLite3 [raises `SQLite3::BusyException: database is locked` errors](
+    https://github.com/sunaku/test-loop/issues/2 ) because test-loop runs your
+    test files in parallel.  You can work around this by using an [in-memory
+    adapter for SQLite3]( https://github.com/mvz/memory_test_fix ) or by using
+    different database software (such as MySQL) for your test environment.
 
 ------------------------------------------------------------------------------
 License
