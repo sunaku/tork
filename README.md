@@ -61,6 +61,10 @@ You can monitor your test processes in another terminal:
 
     watch 'ps xf | grep test-loop | sed 1,3d'
 
+If it stops responding, you can annihilate test-loop from another terminal:
+
+    pkill -9 -f test-loop
+
 ------------------------------------------------------------------------------
 Operation
 ------------------------------------------------------------------------------
