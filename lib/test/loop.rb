@@ -99,22 +99,7 @@ module Test
       # workers can be killed by sending it to the entire process group
       trap :TERM, :IGNORE
 
-      master_pid = $$
-      master_trap = lambda do |signal, &handler|
-        trap signal do
-          if $$ == master_pid
-            handler.call
-          else
-            # ignore future ocurrences of this signal in worker processes
-            trap signal, :IGNORE
-          end
-        end
-      end
-
-      master_trap.call(:INT)  { raise Interrupt }
-      master_trap.call(:QUIT) { reload_master_process }
-      master_trap.call(:TSTP) { forcibly_run_all_tests }
-      master_trap.call(:CHLD) do
+      trap :CHLD do
         finished_at = Time.now
 
         begin
@@ -145,6 +130,10 @@ module Test
           # http://stackoverflow.com/questions/1495354
         end
       end
+
+      trap(:INT)  { raise Interrupt }
+      trap(:QUIT) { reload_master_process }
+      trap(:TSTP) { forcibly_run_all_tests }
     end
 
     def kill_workers
@@ -236,9 +225,11 @@ module Test
 
       started_at = Time.now
       worker_pid = fork do
-        # this signal is ignored in master and honored in workers, so all
-        # workers can be killed by sending it to the entire process group
-        trap :TERM, :DEFAULT
+        # handle signals meant for worker process
+        [:TERM, :CHLD].each {|sig| trap sig, :DEFAULT }
+
+        # ignore signals meant for master process
+        [:INT, :QUIT, :TSTP].each {|sig| trap sig, :IGNORE }
 
         # detach worker from master's terminal device so that
         # it does not receieve the user's control-key presses
