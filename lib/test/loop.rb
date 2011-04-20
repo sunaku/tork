@@ -108,6 +108,7 @@ module Test
         end
       end
 
+      master_trap.call(:INT)  { raise Interrupt }
       master_trap.call(:QUIT) { reload_master_process }
       master_trap.call(:TSTP) { forcibly_run_all_tests }
       master_trap.call(:CHLD) do
