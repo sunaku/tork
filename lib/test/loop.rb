@@ -49,18 +49,14 @@ module Test
 
   class << Loop
     def run
-      @running_files = []
-      @lines_by_file = {} # path => readlines
-      @last_ran_at = @started_at = Time.now
-      @worker_by_pid = {}
-
+      initialize_vars
       register_signals
       load_user_config
       absorb_overhead
       run_test_loop
 
     rescue Interrupt
-      # allow user to break the loop by pressing Ctrl-C or sending SIGINT
+      # allow user to break the loop
 
     rescue Exception => error
       STDERR.puts error.inspect, error.backtrace
@@ -89,6 +85,13 @@ module Test
       # also, clear the line before printing because some shells emit
       # text when control-key combos are pressed (to trigger signals)
       print "#{ANSI_CLEAR_LINE}test-loop: #{message}\n"
+    end
+
+    def initialize_vars
+      @running_files = []
+      @lines_by_file = {} # path => readlines
+      @last_ran_at = @started_at = Time.now
+      @worker_by_pid = {}
     end
 
     def register_signals
