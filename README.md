@@ -38,6 +38,9 @@ Features
 Prerequisites
 ------------------------------------------------------------------------------
 
+  * Ruby 1.9.2 or newer.  You can use Ruby 1.8 once [this
+    bug](http://redmine.ruby-lang.org/issues/4588) is fixed.
+
   * Operating system that supports POSIX signals and the `fork()` system call.
 
     To check if your system qualifies, launch `irb` and enter the following:

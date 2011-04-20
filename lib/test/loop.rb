@@ -97,7 +97,7 @@ module Test
     def register_signals
       # this signal is ignored in master and honored in workers, so all
       # workers can be killed by sending it to the entire process group
-      trap :TERM, :IGNORE
+      trap :TERM, 'IGNORE'
 
       trap :CHLD do
         finished_at = Time.now
@@ -145,8 +145,9 @@ module Test
     def reload_master_process test_files = []
       test_files.concat @running_files
       kill_workers
-      exec MASTER_ENV.merge(RESUME_ENV_KEY => test_files.inspect),
-           *MASTER_ARGV, {:unsetenv_others => true}
+      env = MASTER_ENV.merge(RESUME_ENV_KEY => test_files.inspect)
+      arg = MASTER_ARGV + [{:unsetenv_others => true}]
+      exec env, *arg
     end
 
     def load_user_config
@@ -224,10 +225,10 @@ module Test
       started_at = Time.now
       worker_pid = fork do
         # handle signals meant for worker process
-        [:TERM, :CHLD].each {|sig| trap sig, :DEFAULT }
+        [:TERM, :CHLD].each {|sig| trap sig, 'DEFAULT' }
 
         # ignore signals meant for master process
-        [:INT, :TSTP, :QUIT].each {|sig| trap sig, :IGNORE }
+        [:INT, :TSTP, :QUIT].each {|sig| trap sig, 'IGNORE' }
 
         # detach worker from master's terminal device so that
         # it does not receieve the user's control-key presses
