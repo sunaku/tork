@@ -234,7 +234,9 @@ module Test
         # detach worker from master's terminal device so that
         # it does not receieve the user's control-key presses
         Process.setsid
-        STDIN.reopen '/dev/null'
+
+        # detach worker from master's standard input stream
+        STDIN.reopen IO.pipe.first
 
         # capture test output in log file because tests are run in parallel
         # which makes it difficult to understand interleaved output thereof
