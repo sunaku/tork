@@ -71,8 +71,8 @@ module Test
     private
 
     MASTER_ARGV = [$0, *ARGV].map {|s| s.dup.freeze }.freeze
+    MASTER_ENV = Hash[ENV.map {|k,v| [k.freeze, v.freeze] }].freeze
     RESUME_ENV_KEY = 'TEST_LOOP_RESUME_FILES'.freeze
-    MASTER_ENV = ENV.to_hash.delete_if {|k,v| k == RESUME_ENV_KEY }.freeze
 
     ANSI_CLEAR_LINE = "\e[2K\e[0G".freeze
     ANSI_GREEN = "\e[32m%s\e[0m".freeze
