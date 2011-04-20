@@ -1,4 +1,57 @@
 ------------------------------------------------------------------------------
+Version 12.0.0 (2011-04-19)
+------------------------------------------------------------------------------
+
+Incompatible changes:
+
+  * You must now explicitly `require 'test/loop/rails'` for Rails support
+    because we can only *automatically* apply our Railtie (to disable class
+    caching) after the overhead has been loaded, and by then it's too late:
+    your models are already loaded & cached by the Rails environment.
+
+  * Your tests can no longer read from the user's terminal (master's STDIN);
+    instead they will read from an empty stream (the reading end of IO.popen).
+
+Bug fixes:
+
+  * Replace threads with SIGCHLD for reporting test results.
+
+    This fixes deadlock errors that sometimes occurred when the user's chosen
+    test library tried to print something to STDOUT/STDERR (even though those
+    streams were redirected to a log file in the worker process).
+
+    Thanks to Brian D. Burns for suggesting and verifying that the use of
+    threads to monitor workers was the culprit behind the deadlocks errors.
+
+  * Ctrl-C did not raise Interrupt in my Rails 3 test suite.
+
+Housekeeping:
+
+  * Ensure a clean ENV when reabsorbing overhead.  Environment variables set
+    by your test execution overhead are not propagated to subsequent
+    reabsorptions.  (Brian D. Burns)
+
+  * Call `setsid()` to detach worker from master's terminal.
+    <http://stackoverflow.com/questions/1740308#1740314>
+
+  * Mutex is not needed since we only use GIL'ed array methods.
+    <http://www.ruby-forum.com/topic/174086#762788>
+
+  * Remove redundant STDOUT coercion after loading user's testing library.
+
+  * Further simplify `Test::Loop.run()` by higher-order programming.
+
+  * Add LICENSE file to gem package.
+
+Documentation:
+
+  * Add prerequisites section about POSIX environment.
+
+  * Add tip about annihilating test-loop processes.
+
+  * Fix markdown formatting.
+
+------------------------------------------------------------------------------
 Version 11.0.1 (2011-04-14)
 ------------------------------------------------------------------------------
 
