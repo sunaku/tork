@@ -106,24 +106,24 @@ module Test
           worker_pid = Process.wait
           run_status = $?
 
-          worker = @worker_by_pid.delete(worker_pid)
-          elapsed_time = finished_at - worker.started_at
+          if worker = @worker_by_pid.delete(worker_pid)
+            elapsed_time = finished_at - worker.started_at
 
-          # report test results along with any failure logs
-          if run_status.success?
-            notify ANSI_GREEN % "PASS #{worker.test_file}"
-          elsif run_status.exited?
-            notify ANSI_RED % "FAIL #{worker.test_file}"
-            STDERR.print File.read(worker.log_file)
+            # report test results along with any failure logs
+            if run_status.success?
+              notify ANSI_GREEN % "PASS #{worker.test_file}"
+            elsif run_status.exited?
+              notify ANSI_RED % "FAIL #{worker.test_file}"
+              STDERR.print File.read(worker.log_file)
+            end
+
+            after_each_test.each do |hook|
+              hook.call worker.test_file, worker.log_file, run_status,
+                        worker.started_at, elapsed_time
+            end
+
+            @running_files.delete worker.test_file
           end
-
-          after_each_test.each do |hook|
-            hook.call worker.test_file, worker.log_file, run_status,
-                      worker.started_at, elapsed_time
-          end
-
-          @running_files.delete worker.test_file
-
         rescue Errno::ECHILD
           # could not get the terminated child's PID.
           # Ruby's backtick operator can cause this:
