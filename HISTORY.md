@@ -1,4 +1,26 @@
 ------------------------------------------------------------------------------
+Version 12.0.1 (2011-04-20)
+------------------------------------------------------------------------------
+
+Bug fixes:
+
+  * Restore support for Ruby 1.8.7.
+
+  * Allow user's test execution overhead to fork.
+
+Housekeeping:
+
+  * Freeze master's ENV properly; keep resume key.
+
+  * Remove completed test from running list sooner.
+
+Documentation:
+
+  * Add instructions to check for POSIX prerequisites.
+
+  * Support multiple test-loop instances in watch command.
+
+------------------------------------------------------------------------------
 Version 12.0.0 (2011-04-19)
 ------------------------------------------------------------------------------
 
