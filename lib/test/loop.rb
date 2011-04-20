@@ -52,6 +52,7 @@ module Test
       @running_files = []
       @lines_by_file = {} # path => readlines
       @last_ran_at = @started_at = Time.now
+      @worker_by_pid = {}
 
       register_signals
       load_user_config
@@ -81,6 +82,8 @@ module Test
     ANSI_GREEN = "\e[32m%s\e[0m".freeze
     ANSI_RED = "\e[31m%s\e[0m".freeze
 
+    Worker = Struct.new(:test_file, :log_file, :started_at)
+
     def notify message
       # using print() because puts() is not an atomic operation.
       # also, clear the line before printing because some shells emit
@@ -107,6 +110,37 @@ module Test
 
       master_trap.call(:QUIT) { reload_master_process }
       master_trap.call(:TSTP) { forcibly_run_all_tests }
+      master_trap.call(:CHLD) do
+        finished_at = Time.now
+
+        begin
+          worker_pid = Process.wait
+          run_status = $?
+
+          worker = @worker_by_pid.delete(worker_pid)
+          elapsed_time = finished_at - worker.started_at
+
+          # report test results along with any failure logs
+          if run_status.success?
+            notify ANSI_GREEN % "PASS #{worker.test_file}"
+          elsif run_status.exited?
+            notify ANSI_RED % "FAIL #{worker.test_file}"
+            STDERR.print File.read(worker.log_file)
+          end
+
+          after_each_test.each do |hook|
+            hook.call worker.test_file, worker.log_file, run_status,
+                      worker.started_at, elapsed_time
+          end
+
+          @running_files.delete worker.test_file
+
+        rescue Errno::ECHILD
+          # could not get the terminated child's PID.
+          # Ruby's backtick operator can cause this:
+          # http://stackoverflow.com/questions/1495354
+        end
+      end
     end
 
     def kill_workers
@@ -186,6 +220,8 @@ module Test
     end
 
     def run_test_file test_file
+      notify "TEST #{test_file}"
+
       @running_files.push test_file
       log_file = test_file + '.log'
 
@@ -194,6 +230,7 @@ module Test
       old_lines = @lines_by_file[test_file] || new_lines
       @lines_by_file[test_file] = new_lines
 
+      started_at = Time.now
       worker_pid = fork do
         # this signal is ignored in master and honored in workers, so all
         # workers can be killed by sending it to the entire process group
@@ -233,29 +270,7 @@ module Test
         load test_file
       end
 
-      # monitor and report on the worker's progress
-      Thread.new do
-        notify "TEST #{test_file}"
-
-        # wait for worker to finish
-        Process.waitpid worker_pid
-        run_status = $?
-        elapsed_time = Time.now - @last_ran_at
-
-        # report test results along with any failure logs
-        if run_status.success?
-          notify ANSI_GREEN % "PASS #{test_file}"
-        elsif run_status.exited?
-          notify ANSI_RED % "FAIL #{test_file}"
-          STDERR.print File.read(log_file)
-        end
-
-        after_each_test.each do |f|
-          f.call test_file, log_file, run_status, @last_ran_at, elapsed_time
-        end
-
-        @running_files.delete test_file
-      end
+      @worker_by_pid[worker_pid] = Worker.new(test_file, log_file, started_at)
     end
   end
 end
