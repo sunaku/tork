@@ -38,7 +38,13 @@ Features
 Prerequisites
 ------------------------------------------------------------------------------
 
-* Operating system that supports POSIX signals and the `fork()` system call.
+  * Operating system that supports POSIX signals and the `fork()` system call.
+
+    To check if your system qualifies, launch `irb` and enter the following:
+
+        Process.respond_to? :fork                       # must be true
+
+        Signal.list.keys & %w[INT TSTP QUIT TERM CHLD]  # must not be empty
 
 ------------------------------------------------------------------------------
 Installation

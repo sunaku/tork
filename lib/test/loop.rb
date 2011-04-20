@@ -130,8 +130,8 @@ module Test
       end
 
       trap(:INT)  { raise Interrupt }
-      trap(:QUIT) { reload_master_process }
       trap(:TSTP) { forcibly_run_all_tests }
+      trap(:QUIT) { reload_master_process }
     end
 
     def kill_workers
@@ -227,7 +227,7 @@ module Test
         [:TERM, :CHLD].each {|sig| trap sig, :DEFAULT }
 
         # ignore signals meant for master process
-        [:INT, :QUIT, :TSTP].each {|sig| trap sig, :IGNORE }
+        [:INT, :TSTP, :QUIT].each {|sig| trap sig, :IGNORE }
 
         # detach worker from master's terminal device so that
         # it does not receieve the user's control-key presses
