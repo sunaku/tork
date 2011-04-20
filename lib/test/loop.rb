@@ -199,12 +199,14 @@ module Test
         # workers can be killed by sending it to the entire process group
         trap :TERM, :DEFAULT
 
-        # this signal is honored by master and ignored in workers
-        trap :INT, :IGNORE
+        # detach worker from master's terminal device so that
+        # it does not receieve the user's control-key presses
+        Process.setsid
+        STDIN.reopen '/dev/null'
 
         # capture test output in log file because tests are run in parallel
         # which makes it difficult to understand interleaved output thereof
-        $stderr.reopen($stdout.reopen(log_file, 'w')).sync = true
+        STDERR.reopen(STDOUT.reopen(log_file, 'w')).sync = true
 
         # determine which test blocks have changed inside the test file
         test_names = Diff::LCS.diff(old_lines, new_lines).flatten.map do |change|
