@@ -107,7 +107,7 @@ module Test
           run_status = $?
 
           if worker = @worker_by_pid.delete(worker_pid)
-            elapsed_time = finished_at - worker.started_at
+            @running_files.delete worker.test_file
 
             # report test results along with any failure logs
             if run_status.success?
@@ -119,10 +119,8 @@ module Test
 
             after_each_test.each do |hook|
               hook.call worker.test_file, worker.log_file, run_status,
-                        worker.started_at, elapsed_time
+                        worker.started_at, finished_at - worker.started_at
             end
-
-            @running_files.delete worker.test_file
           end
         rescue Errno::ECHILD
           # could not get the terminated child's PID.
