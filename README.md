@@ -104,17 +104,17 @@ you can query and modify the `Test::Loop` OpenStruct configuration as follows:
 
 ### Test::Loop.overhead_file_globs
 
-An array of file globbing patterns that describe a set of Ruby scripts that
-are loaded into the main Ruby process as overhead.
+Array of file globbing patterns that describe a set of Ruby scripts that are
+loaded into the main Ruby process as overhead.
 
 ### Test::Loop.reabsorb_file_globs
 
-An array of file globbing patterns that describe a set of files which cause
-the overhead to be reabsorbed whenever they change.
+Array of file globbing patterns that describe a set of files which cause the
+overhead to be reabsorbed whenever they change.
 
 ### Test::Loop.test_file_matchers
 
-A hash that maps a file globbing pattern describing a set of source files to a
+Hash that maps a file globbing pattern describing a set of source files to a
 lambda function yielding a file globbing pattern describing a set of test
 files that need to be run.  In other words, whenever the source files (the
 hash key; left-hand side of the mapping) change, their associated test files
@@ -149,9 +149,9 @@ will return `nil`, thereby excluding those source files from being tested.
 
 ### Test::Loop.test_name_parser
 
-A lambda function that is passed a line of source code to determine whether
-that line can be considered as a test definition, in which case it must return
-the name of the test being defined.
+Lambda function that is passed a line of source code to determine whether that
+line can be considered as a test definition, in which case it must return the
+name of the test being defined.
 
 ### Test::Loop.before_each_test
 
