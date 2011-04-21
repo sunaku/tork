@@ -223,15 +223,12 @@ module Test
 
       started_at = Time.now
       worker_pid = fork do
-        # handle signals meant for worker process
-        [:TERM, :CHLD].each {|sig| trap sig, 'DEFAULT' }
-
-        # ignore signals meant for master process
-        [:INT, :TSTP, :QUIT].each {|sig| trap sig, 'IGNORE' }
-
         # detach worker from master's terminal device so that
         # it does not receieve the user's control-key presses
         Process.setsid
+
+        # unregister signal handlers inherited from master process
+        [:TERM, :CHLD, :INT, :TSTP, :QUIT].each {|sig| trap sig, 'DEFAULT' }
 
         # detach worker from master's standard input stream
         STDIN.reopen IO.pipe.first
