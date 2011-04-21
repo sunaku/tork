@@ -2,6 +2,7 @@ require 'test/loop'
 
 Test::Loop.reabsorb_file_globs.push(
   'config/**/*.{rb,yml}',
+  'db/schema.rb',
   'Gemfile.lock'
 )
 
