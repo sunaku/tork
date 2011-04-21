@@ -1,4 +1,30 @@
 ------------------------------------------------------------------------------
+Version 12.0.2 (2011-04-21)
+------------------------------------------------------------------------------
+
+Bug fixes:
+
+  * Consider DB schema dump file as overhead in Rails.
+
+  * Do not consider test factories as overhead in Rails.
+
+  * Run test files when test factory files change in Rails.
+
+Housekeeping:
+
+  * Detach worker from master's terminal device sooner.
+
+Documentation:
+
+  * All required signals must be present in irb check.
+
+  * Prevent ps(1) from truncating lines to $TERM width.
+
+  * Retain ps(1) column header in watch command output.
+
+  * Begin parameter descriptions with the noun itself.
+
+------------------------------------------------------------------------------
 Version 12.0.1 (2011-04-20)
 ------------------------------------------------------------------------------
 
