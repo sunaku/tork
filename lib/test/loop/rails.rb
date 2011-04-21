@@ -5,8 +5,8 @@ Test::Loop.reabsorb_file_globs.push(
   'Gemfile.lock'
 )
 
-Test::Loop.test_file_matchers['app/**/*.rb'] =
-  Test::Loop.test_file_matchers['lib/**/*.rb']
+Test::Loop.test_file_matchers['{app,lib,test,spec}/**/*.rb'] =
+  Test::Loop.test_file_matchers.delete('lib/**/*.rb')
 
 require 'rails/railtie'
 Class.new Rails::Railtie do
