@@ -92,6 +92,7 @@ module Test
       @lines_by_file = {} # path => readlines
       @last_ran_at = @started_at = Time.now
       @worker_by_pid = {}
+      @exited_children = []
     end
 
     def register_signals
@@ -100,27 +101,17 @@ module Test
       trap :TERM, 'IGNORE'
 
       trap :CHLD do
-        finished_at = Time.now
-
         begin
-          worker_pid = Process.wait
-          run_status = $?
+          finished_at = Time.now
+          loop do
+            pid, status = Process.wait2(-1, Process::WNOHANG)
+            break unless pid
 
-          if worker = @worker_by_pid.delete(worker_pid)
-            @running_files.delete worker.test_file
-
-            # report test results along with any failure logs
-            if run_status.success?
-              notify ANSI_GREEN % "PASS #{worker.test_file}"
-            elsif run_status.exited?
-              notify ANSI_RED % "FAIL #{worker.test_file}"
-              STDERR.print File.read(worker.log_file)
-            end
-
-            after_each_test.each do |hook|
-              hook.call worker.test_file, worker.log_file, run_status,
-                        worker.started_at, finished_at - worker.started_at
-            end
+            @exited_children.push({
+              :worker_pid  => pid,
+              :finished_at => finished_at,
+              :run_status  => status
+            })
           end
         rescue Errno::ECHILD
           # could not get the terminated child's PID.
@@ -160,7 +151,10 @@ module Test
       notify 'Absorbing overhead...'
       $LOAD_PATH.unshift 'lib', 'test', 'spec'
       Dir[*overhead_file_globs].each do |file|
+        # Don't eat any child process handling done by the code we are loading.
+        old = trap :CHLD, 'DEFAULT'
         require File.basename(file, File.extname(file))
+        trap :CHLD, old
       end
     end
 
@@ -177,6 +171,11 @@ module Test
     def run_test_loop
       notify 'Ready for testing!'
       loop do
+        # clean up any exited workers from the last run
+        while child = @exited_children.shift do
+          finish_test_file child
+        end
+
         # find test files that have been modified since the last run
         test_files = test_file_matchers.map do |source_glob, test_matcher|
           Dir[source_glob].select {|file| File.mtime(file) > @last_ran_at }.
@@ -263,6 +262,29 @@ module Test
       end
 
       @worker_by_pid[worker_pid] = Worker.new(test_file, log_file, started_at)
+    end
+
+    def finish_test_file(child)
+      worker_pid  = child[:worker_pid]
+      finished_at = child[:finished_at]
+      run_status  = child[:run_status]
+
+      if worker = @worker_by_pid.delete(worker_pid)
+        @running_files.delete worker.test_file
+
+        # report test results along with any failure logs
+        if run_status.success?
+          notify ANSI_GREEN % "PASS #{worker.test_file}"
+        elsif run_status.exited?
+          notify ANSI_RED % "FAIL #{worker.test_file}"
+          STDERR.print File.read(worker.log_file)
+        end
+
+        after_each_test.each do |hook|
+          hook.call worker.test_file, worker.log_file, run_status,
+                    worker.started_at, finished_at - worker.started_at
+        end
+      end
     end
   end
 end
