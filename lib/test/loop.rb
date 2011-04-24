@@ -50,7 +50,7 @@ module Test
   class << Loop
     def run
       initialize_vars
-      register_signals
+      register_controls
       load_user_config
       absorb_overhead
       run_test_loop
@@ -78,7 +78,8 @@ module Test
     ANSI_GREEN = "\e[32m%s\e[0m".freeze
     ANSI_RED = "\e[31m%s\e[0m".freeze
 
-    Worker = Struct.new(:test_file, :log_file, :started_at)
+    Worker = Struct.new(:test_file, :log_file, :started_at, :finished_at,
+                        :exit_status)
 
     def notify message
       # using print() because puts() is not an atomic operation.
@@ -92,31 +93,10 @@ module Test
       @lines_by_file = {} # path => readlines
       @last_ran_at = @started_at = Time.now
       @worker_by_pid = {}
-      @exited_children = []
     end
 
-    def register_signals
-      trap :CHLD do
-        begin
-          finished_at = Time.now
-          loop do
-            pid, status = Process.wait2(-1, Process::WNOHANG)
-            break unless pid
-
-            @exited_children.push({
-              :worker_pid  => pid,
-              :finished_at => finished_at,
-              :run_status  => status
-            })
-          end
-        rescue Errno::ECHILD
-          # could not get the terminated child's PID.
-          # Ruby's backtick operator can cause this:
-          # http://stackoverflow.com/questions/1495354
-        end
-      end
-
-      trap(:INT)  { raise Interrupt }
+    def register_controls
+      trap(:INT) { raise Interrupt }
       trap(:TSTP) { forcibly_run_all_tests }
       trap(:QUIT) { reload_master_process }
     end
@@ -148,10 +128,7 @@ module Test
       notify 'Absorbing overhead...'
       $LOAD_PATH.unshift 'lib', 'test', 'spec'
       Dir[*overhead_file_globs].each do |file|
-        # Don't eat any child process handling done by the code we are loading.
-        old = trap :CHLD, 'DEFAULT'
         require File.basename(file, File.extname(file))
-        trap :CHLD, old
       end
     end
 
@@ -167,10 +144,29 @@ module Test
 
     def run_test_loop
       notify 'Ready for testing!'
+
+      # collect children (of which some may be workers) for reaping below
+      exited_children = []
+      trap :CHLD do
+        finished_at = Time.now
+        begin
+          while wait2_array = Process.wait2(-1, Process::WNOHANG)
+            exited_children.push [wait2_array, finished_at]
+          end
+        rescue SystemCallError
+          # raised by wait() when there are no child processes at all
+        end
+      end
+
       loop do
-        # clean up any exited workers from the last run
-        while child = @exited_children.shift do
-          finish_test_file child
+        # reap finished workers from previous iterations of the loop
+        while info = exited_children.shift
+          (child_pid, exit_status), finished_at = info
+          if worker = @worker_by_pid.delete(child_pid)
+            worker.exit_status = exit_status
+            worker.finished_at = finished_at
+            reap_worker worker
+          end
         end
 
         # find test files that have been modified since the last run
@@ -199,26 +195,26 @@ module Test
         test_files -= @running_files
         unless test_files.empty?
           @last_ran_at = Time.now
-          test_files.each {|file| run_test_file file }
+          test_files.each {|file| fork_worker Worker.new(file) }
         end
 
         pause_momentarily
       end
     end
 
-    def run_test_file test_file
-      notify "TEST #{test_file}"
+    def fork_worker worker
+      notify "TEST #{worker.test_file}"
 
-      @running_files.push test_file
-      log_file = test_file + '.log'
+      @running_files.push worker.test_file
+      worker.log_file = worker.test_file + '.log'
 
       # cache the contents of the test file for diffing below
-      new_lines = File.readlines(test_file)
-      old_lines = @lines_by_file[test_file] || new_lines
-      @lines_by_file[test_file] = new_lines
+      new_lines = File.readlines(worker.test_file)
+      old_lines = @lines_by_file[worker.test_file] || new_lines
+      @lines_by_file[worker.test_file] = new_lines
 
-      started_at = Time.now
-      worker_pid = fork do
+      worker.started_at = Time.now
+      pid = fork do
         # detach worker from master's terminal device so that
         # it does not receieve the user's control-key presses
         Process.setsid
@@ -231,7 +227,7 @@ module Test
 
         # capture test output in log file because tests are run in parallel
         # which makes it difficult to understand interleaved output thereof
-        STDERR.reopen(STDOUT.reopen(log_file, 'w')).sync = true
+        STDERR.reopen(STDOUT.reopen(worker.log_file, 'w')).sync = true
 
         # determine which test blocks have changed inside the test file
         test_names = Diff::LCS.diff(old_lines, new_lines).flatten.map do |change|
@@ -247,40 +243,36 @@ module Test
         end.compact.uniq
 
         # tell the testing framework to run only the changed test blocks
-        before_each_test.each {|f| f.call test_file, log_file, test_names }
+        before_each_test.each do |hook|
+          hook.call worker.test_file, worker.log_file, test_names
+        end
 
         # make the process title Test::Unit friendly and ps(1) searchable
-        $0 = "test-loop #{test_file}"
+        $0 = "test-loop #{worker.test_file}"
 
         # after loading the user's test file, the at_exit() hook of the
         # user's testing framework will take care of running the tests and
         # reflecting any failures in the worker process' exit status
-        load test_file
+        load worker.test_file
       end
 
-      @worker_by_pid[worker_pid] = Worker.new(test_file, log_file, started_at)
+      @worker_by_pid[pid] = worker
     end
 
-    def finish_test_file(child)
-      worker_pid  = child[:worker_pid]
-      finished_at = child[:finished_at]
-      run_status  = child[:run_status]
+    def reap_worker worker
+      @running_files.delete worker.test_file
 
-      if worker = @worker_by_pid.delete(worker_pid)
-        @running_files.delete worker.test_file
+      # report test results along with any failure logs
+      if worker.exit_status.success?
+        notify ANSI_GREEN % "PASS #{worker.test_file}"
+      elsif worker.exit_status.exited?
+        notify ANSI_RED % "FAIL #{worker.test_file}"
+        STDERR.print File.read(worker.log_file)
+      end
 
-        # report test results along with any failure logs
-        if run_status.success?
-          notify ANSI_GREEN % "PASS #{worker.test_file}"
-        elsif run_status.exited?
-          notify ANSI_RED % "FAIL #{worker.test_file}"
-          STDERR.print File.read(worker.log_file)
-        end
-
-        after_each_test.each do |hook|
-          hook.call worker.test_file, worker.log_file, run_status,
-                    worker.started_at, finished_at - worker.started_at
-        end
+      after_each_test.each do |hook|
+        hook.call worker.test_file, worker.log_file, worker.exit_status,
+                  worker.started_at, worker.finished_at - worker.started_at
       end
     end
   end
