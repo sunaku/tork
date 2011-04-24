@@ -96,10 +96,6 @@ module Test
     end
 
     def register_signals
-      # this signal is ignored in master and honored in workers, so all
-      # workers can be killed by sending it to the entire process group
-      trap :TERM, 'IGNORE'
-
       trap :CHLD do
         begin
           finished_at = Time.now
@@ -127,6 +123,7 @@ module Test
 
     def kill_workers
       notify 'Stopping tests...'
+      trap :TERM, 'IGNORE'
       Process.kill :TERM, -$$
       Process.waitall
     end
@@ -227,7 +224,7 @@ module Test
         Process.setsid
 
         # unregister signal handlers inherited from master process
-        [:TERM, :CHLD, :INT, :TSTP, :QUIT].each {|sig| trap sig, 'DEFAULT' }
+        [:CHLD, :INT, :TSTP, :QUIT].each {|sig| trap sig, 'DEFAULT' }
 
         # detach worker from master's standard input stream
         STDIN.reopen IO.pipe.first
