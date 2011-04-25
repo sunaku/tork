@@ -49,11 +49,12 @@ module Test
 
   class << Loop
     def run
-      initialize_vars
-      register_controls
+      init_shared_vars
+      trap_user_signals
       load_user_config
-      absorb_overhead
-      run_test_loop
+      load_user_overhead
+      init_worker_queue
+      enter_testing_loop
 
     rescue Interrupt
       # allow user to break the loop
@@ -64,7 +65,7 @@ module Test
       reload_master_process
 
     ensure
-      kill_workers
+      stop_worker_queue
       notify 'Goodbye!'
     end
 
@@ -88,36 +89,34 @@ module Test
       print "#{ANSI_CLEAR_LINE}test-loop: #{message}\n"
     end
 
-    def initialize_vars
+    def pause_momentarily
+      sleep 1
+    end
+
+    def init_shared_vars
       @running_files = []
       @lines_by_file = {} # path => readlines
       @last_ran_at = @started_at = Time.now
       @worker_by_pid = {}
     end
 
-    def register_controls
+    def trap_user_signals
       trap(:INT) { raise Interrupt }
       trap(:TSTP) { forcibly_run_all_tests }
       trap(:QUIT) { reload_master_process }
     end
 
-    def kill_workers
-      notify 'Stopping tests...'
-      @worker_by_pid.each_key do |worker_pid|
-        begin
-          Process.kill :TERM, worker_pid
-        rescue SystemCallError
-          # worker is already terminated
-        end
-      end
-      Process.waitall
+    def forcibly_run_all_tests
+      notify 'Running all tests...'
+      @last_ran_at = Time.at(0)
+      @lines_by_file.clear
     end
 
     # The given test files are passed down (along with currently running
     # test files) to the next incarnation of test-loop for resumption.
     def reload_master_process test_files = []
       test_files.concat @running_files
-      kill_workers
+      stop_worker_queue
       ENV.replace MASTER_ENV.merge(RESUME_ENV_KEY => test_files.inspect)
       exec(*MASTER_EXECV)
     end
@@ -129,7 +128,7 @@ module Test
       end
     end
 
-    def absorb_overhead
+    def load_user_overhead
       notify 'Absorbing overhead...'
       $LOAD_PATH.unshift 'lib', 'test', 'spec'
       Dir[*overhead_file_globs].each do |file|
@@ -137,42 +136,10 @@ module Test
       end
     end
 
-    def pause_momentarily
-      sleep 1
-    end
-
-    def forcibly_run_all_tests
-      notify 'Running all tests...'
-      @last_ran_at = Time.at(0)
-      @lines_by_file.clear
-    end
-
-    def run_test_loop
+    def enter_testing_loop
       notify 'Ready for testing!'
-
-      # collect children (of which some may be workers) for reaping below
-      exited_children = []
-      trap :CHLD do
-        finished_at = Time.now
-        begin
-          while wait2_array = Process.wait2(-1, Process::WNOHANG)
-            exited_children.push [wait2_array, finished_at]
-          end
-        rescue SystemCallError
-          # raised by wait() when there are no child processes at all
-        end
-      end
-
       loop do
-        # reap finished workers from previous iterations of the loop
-        while info = exited_children.shift
-          (child_pid, exit_status), finished_at = info
-          if worker = @worker_by_pid.delete(child_pid)
-            worker.exit_status = exit_status
-            worker.finished_at = finished_at
-            reap_worker worker
-          end
-        end
+        reap_worker_queue
 
         # find test files that have been modified since the last run
         test_files = test_file_matchers.map do |source_glob, test_matcher|
@@ -207,6 +174,46 @@ module Test
       end
     end
 
+    def init_worker_queue
+      # collect children (of which some may be workers) for reaping below
+      @exited_child_infos = []
+      trap :CHLD do
+        finished_at = Time.now
+        begin
+          while wait2_array = Process.wait2(-1, Process::WNOHANG)
+            @exited_child_infos.push [wait2_array, finished_at]
+          end
+        rescue SystemCallError
+          # raised by wait() when there are no child processes at all
+        end
+      end
+    end
+
+    # reap finished workers from previous iterations of the loop
+    def reap_worker_queue
+      while info = @exited_child_infos.shift
+        (child_pid, exit_status), finished_at = info
+        if worker = @worker_by_pid.delete(child_pid)
+          worker.exit_status = exit_status
+          worker.finished_at = finished_at
+          reap_worker worker
+        end
+      end
+    end
+
+    def stop_worker_queue
+      notify 'Stopping tests...'
+      trap :CHLD, 'DEFAULT'
+      @worker_by_pid.each_key do |worker_pid|
+        begin
+          Process.kill :TERM, worker_pid
+        rescue SystemCallError
+          # worker is already terminated
+        end
+      end
+      Process.waitall
+    end
+
     def fork_worker worker
       notify "TEST #{worker.test_file}"
 
@@ -225,7 +232,7 @@ module Test
         Process.setsid
 
         # unregister signal handlers inherited from master process
-        [:CHLD, :INT, :TSTP, :QUIT].each {|sig| trap sig, 'DEFAULT' }
+        [:INT, :TSTP, :QUIT].each {|sig| trap sig, 'DEFAULT' }
 
         # detach worker from master's standard input stream
         STDIN.reopen IO.pipe.first
