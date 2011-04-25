@@ -94,7 +94,6 @@ module Test
     end
 
     def init_shared_vars
-      @running_files = []
       @lines_by_file = {} # path => readlines
       @last_ran_at = @started_at = Time.now
       @worker_by_pid = {}
@@ -115,7 +114,7 @@ module Test
     # The given test files are passed down (along with currently running
     # test files) to the next incarnation of test-loop for resumption.
     def reload_master_process test_files = []
-      test_files.concat @running_files
+      test_files.concat currently_running_test_files
       stop_worker_queue
       ENV.replace MASTER_ENV.merge(RESUME_ENV_KEY => test_files.inspect)
       exec(*MASTER_EXECV)
@@ -164,7 +163,7 @@ module Test
 
         # fork workers to run the test files in parallel,
         # excluding test files that are already running
-        test_files -= @running_files
+        test_files -= currently_running_test_files
         unless test_files.empty?
           @last_ran_at = Time.now
           test_files.each {|file| fork_worker Worker.new(file) }
@@ -172,6 +171,10 @@ module Test
 
         pause_momentarily
       end
+    end
+
+    def currently_running_test_files
+      @worker_by_pid.values.map(&:test_file)
     end
 
     def init_worker_queue
@@ -217,7 +220,6 @@ module Test
     def fork_worker worker
       notify "TEST #{worker.test_file}"
 
-      @running_files.push worker.test_file
       worker.log_file = worker.test_file + '.log'
 
       # cache the contents of the test file for diffing below
@@ -272,8 +274,6 @@ module Test
     end
 
     def reap_worker worker
-      @running_files.delete worker.test_file
-
       # report test results along with any failure logs
       if worker.exit_status.success?
         notify ANSI_GREEN % "PASS #{worker.test_file}"
