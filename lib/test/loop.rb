@@ -103,8 +103,13 @@ module Test
 
     def kill_workers
       notify 'Stopping tests...'
-      trap :TERM, 'IGNORE'
-      Process.kill :TERM, -$$
+      @worker_by_pid.each_key do |worker_pid|
+        begin
+          Process.kill :TERM, worker_pid
+        rescue SystemCallError
+          # worker is already terminated
+        end
+      end
       Process.waitall
     end
 
