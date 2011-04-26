@@ -209,7 +209,7 @@ module Test
       trap :CHLD, 'DEFAULT'
       @worker_by_pid.each_key do |worker_pid|
         begin
-          Process.kill :TERM, worker_pid
+          Process.kill :TERM, -worker_pid
         rescue SystemCallError
           # worker is already terminated
         end
