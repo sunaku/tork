@@ -1,4 +1,62 @@
 ------------------------------------------------------------------------------
+Version 12.0.3 (2011-04-25)
+------------------------------------------------------------------------------
+
+Bug fixes:
+
+  * Fix SIGCHLD handling and test completion reporting (Daniel Pittman).
+
+    We need to reap all ready children in SIGCHLD, not just the first, and
+    should not be reporting completion in the signal handler.
+
+    On a fast machine, or where there is a slow hook executed at the
+    completion of a test run, more than one test child can terminate before
+    the SIGCHLD handler is invoked, or while it is running.
+
+    In that event we will only get another SIGCHLD when a new child
+    terminates, not to signal that there was more than one current
+    termination.  We need to loop to collect all terminated children during
+    each invocation of the handler.
+
+    Since we don't know which child terminated, we wait on any terminated
+    child with NOHANG, until it informs us that there are no more zombies
+    hanging about.
+
+    Doing all the work of finishing the test case, cleaning up, and running
+    user hooks inside the SIGCHLD handler block was pretty slow.  This could
+    lead to a big pile-up of children that needed to be cleaned up, especially
+    if the user hook did something like run another external process to signal
+    completion.
+
+    Moving the heavy work of completion outside the signal handler makes the
+    whole thing a lot faster, and less likely to bump into the low limit for
+    per-user processes on Mac OS-X.
+
+  * Send SIGTERM to each worker PGID to kill workers (Brian D. Burns).
+
+    Using Process.setsid() in the workers establishes each process "as a new
+    session and process group leader".  So, the SIGTERM sent to the master's
+    process group was not recieved by the workers.  kill_workers was simply
+    waiting for the workers to finish.
+
+  * Revert "skip at_exit() handlers defined in master process".
+
+    This reverts commit 0a0837f0b7ec92810e1c81d7506f2c8309f25f62 which was
+    originally written to skip the reporting of an empty test suite (master
+    does not load test files, workers do) by Test::Unit and Minitest in the
+    master process.
+
+    Such a harmless annoyance should not warrant the crippling of at_exit in
+    the master process because that would inhibit its valid uses as well:
+
+    > "UNIX was not designed to stop you from doing stupid things, because
+    > that would also stop you from doing clever things." ~Doug Gwyn
+
+  * `Thread.new { system() }` is not really backgrounded so `fork()` instead!
+    Many thanks to Brian D. Burns and Daniel Pittman for helping solve [this
+    issue](https://github.com/sunaku/test-loop/issues/5).
+
+------------------------------------------------------------------------------
 Version 12.0.2 (2011-04-21)
 ------------------------------------------------------------------------------
 

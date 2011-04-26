@@ -32,7 +32,7 @@ Features
 
   * Configurable through a `.test-loop` file in your working directory.
 
-  * Implemented in less than 215 lines (SLOC) of pure Ruby code! :-)
+  * Implemented in less than 240 lines (SLOC) of pure Ruby code! :-)
 
 ------------------------------------------------------------------------------
 Prerequisites
@@ -89,7 +89,7 @@ Operation
   * Press Control-Z or send the SIGTSTP signal to forcibly run all
     tests, even if there are no changes in your Ruby application.
 
-  * Press Control-\ or send the SIGQUIT signal to forcibly reabsorb
+  * Press Control-\\ or send the SIGQUIT signal to forcibly reabsorb
     the test execution overhead, even if its sources have not changed.
 
   * Press Control-C or send the SIGINT signal to quit the test loop.
