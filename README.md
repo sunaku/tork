@@ -211,7 +211,7 @@ preset does this for you):
 
         message = test_file
 
-        Thread.new do # run in background
+        fork do # run in background
           system 'notify-send', '-i', 'dialog-error', title, message or
           system 'growlnotify', '-a', 'Xcode', '-m', message, title or
           system 'xmessage', '-timeout', '5', '-title', title, message
@@ -233,7 +233,7 @@ configuration file:
 
       message = test_file
 
-      Thread.new do # run in background
+      fork do # run in background
         system 'notify-send', '-i', "dialog-#{success ? 'information' : 'error'}", title, message or
         system 'growlnotify', '-a', 'Xcode', '-m', message, title or
         system 'xmessage', '-timeout', '5', '-title', title, message
