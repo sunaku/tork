@@ -1,4 +1,3 @@
 #!/usr/bin/env ruby
 require 'test/loop'
 Test::Loop.run
-exit! true # skip at_exit() handlers registered in the master process
