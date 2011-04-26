@@ -5,7 +5,7 @@ Test::Loop.after_each_test.push lambda {
   unless run_status.success? or run_status.signaled?
     title = 'FAIL at %s in %0.1fs' % [started_at.strftime('%r'), elapsed_time]
     message = test_file
-    fork do # run in background
+    Thread.new do # run in background
       system 'notify-send', '-i', 'dialog-error', title, message or
       system 'growlnotify', '-a', 'Xcode', '-m', message, title or
       system 'xmessage', '-timeout', '5', '-title', title, message
