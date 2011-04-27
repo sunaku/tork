@@ -124,6 +124,9 @@ module Test
       if File.exist? config_file = File.join(Dir.pwd, '.test-loop')
         notify 'Loading configuration...'
         load config_file
+
+        # ...and if the configuration file changes, reload everything.
+        reabsorb_file_globs.push config_file
       end
     end
 
