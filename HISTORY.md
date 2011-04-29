@@ -1,4 +1,17 @@
 ------------------------------------------------------------------------------
+Version 12.0.4 (2011-04-29)
+------------------------------------------------------------------------------
+
+Bug fixes:
+
+* Reabsorb overhead when user's configuration file changes.
+  (Brian D. Burns and Daniel Pittman)
+
+* `Thread.new { system() }` really is backgrounded, so `fork { system() }` is
+  not necessary!  [This issue](https://github.com/sunaku/test-loop/issues/5)
+  was solved by upgrading to the newer 2.6.38.4-1 Linux kernel on my system.
+
+------------------------------------------------------------------------------
 Version 12.0.3 (2011-04-25)
 ------------------------------------------------------------------------------
 
