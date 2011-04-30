@@ -4,6 +4,8 @@ require 'diff/lcs'
 module Test
   Loop = OpenStruct.new
 
+  Loop.delay_per_iteration = 1
+
   Loop.overhead_file_globs = ['{test,spec}/{test,spec}_helper.rb']
 
   Loop.reabsorb_file_globs = Loop.overhead_file_globs.dup
@@ -90,7 +92,7 @@ module Test
     end
 
     def pause_momentarily
-      sleep 1
+      sleep delay_per_iteration
     end
 
     def init_shared_vars

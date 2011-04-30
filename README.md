@@ -102,6 +102,10 @@ test-loop looks for a configuration file named `.test-loop` in the current
 working directory.  This configuration file is a normal Ruby script in which
 you can query and modify the `Test::Loop` OpenStruct configuration as follows:
 
+### Test::Loop.delay_per_iteration
+
+Number of seconds to wait after each loop iteration.  The default value is 1.
+
 ### Test::Loop.overhead_file_globs
 
 Array of file globbing patterns that describe a set of Ruby scripts that are
