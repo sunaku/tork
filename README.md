@@ -260,6 +260,10 @@ Shows on-screen-display notifications for test failures.
 
 Provides support for the Ruby on Rails web framework.
 
+### require 'test-loop/coco'
+
+Integrates the [coco](https://github.com/lkdjiin/coco) code coverage library.
+
 ------------------------------------------------------------------------------
 Known issues
 ------------------------------------------------------------------------------
