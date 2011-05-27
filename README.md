@@ -213,7 +213,8 @@ preset does this for you):
       unless run_status.success? or run_status.signaled?
         title = 'FAIL at %s in %0.1fs' % [started_at.strftime('%r'), elapsed_time]
 
-        message = test_file
+        statistics = File.readlines(log_file).grep(/^\d+ \w+,/)
+        message = test_file + "\n" + statistics.join
 
         Thread.new do # run in background
           system 'notify-send', '-i', 'dialog-error', title, message or
@@ -235,7 +236,8 @@ configuration file:
       title = '%s at %s in %0.1fs' %
         [success ? 'PASS' : 'FAIL', started_at.strftime('%X'), elapsed_time]
 
-      message = test_file
+      statistics = File.readlines(log_file).grep(/^\d+ \w+,/)
+      message = test_file + "\n" + statistics.join
 
       Thread.new do # run in background
         system 'notify-send', '-i', "dialog-#{success ? 'information' : 'error'}", title, message or
