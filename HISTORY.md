@@ -1,4 +1,16 @@
 ------------------------------------------------------------------------------
+Version 12.2.0 (2011-06-01)
+------------------------------------------------------------------------------
+
+* Prevent empty test suite run in master process. (Brian D. Burns)
+
+* Report test execution statistics in `test/loop/notify` preset as
+  requested by Juan G. Hurtado..
+
+* Add `test/loop/coco` preset for integrating the [Coco code coverage
+  library](http://lkdjiin.github.com/coco/).
+
+------------------------------------------------------------------------------
 Version 12.1.0 (2011-04-29)
 ------------------------------------------------------------------------------
 
