@@ -9,6 +9,12 @@ Test::Loop.reabsorb_file_globs.push(
 Test::Loop.test_file_matchers['{app,lib,test,spec}/**/*.rb'] =
   Test::Loop.test_file_matchers.delete('lib/**/*.rb')
 
+Test::Loop.test_file_matchers['{test,spec}/factories/**/*_factory.rb'] =
+  lambda do |path|
+    base = File.basename(path, '_factory.rb')
+    "{test,spec}/**/#{base}_{test,spec}.rb"
+  end
+
 require 'rails/railtie'
 Class.new Rails::Railtie do
   config.before_initialize do |app|
