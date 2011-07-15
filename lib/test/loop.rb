@@ -7,7 +7,7 @@ module Test
 
   Loop.delay_per_iteration = 1
 
-  Loop.max_workers = 4
+  Loop.max_concurrent_tests = 4
 
   Loop.overhead_file_globs = ['{test,spec}/{test,spec}_helper.rb']
 
@@ -175,7 +175,7 @@ module Test
         test_files.subtract currently_running_test_files
         unless test_files.empty?
           @last_ran_at = Time.now
-          num_workers = Loop.max_workers - @worker_by_pid.length
+          num_workers = Loop.max_concurrent_tests - @worker_by_pid.length
           test_files.to_a.first(num_workers).each do |file|
             fork_worker Worker.new(file)
             test_files.delete file
