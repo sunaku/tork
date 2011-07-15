@@ -1,3 +1,4 @@
+require 'set'
 require 'ostruct'
 require 'diff/lcs'
 
@@ -117,10 +118,10 @@ module Test
 
     # The given test files are passed down (along with currently running
     # test files) to the next incarnation of test-loop for resumption.
-    def reload_master_process test_files = []
-      test_files.concat currently_running_test_files
+    def reload_master_process test_files = Set.new
+      test_files.merge currently_running_test_files
       stop_worker_queue
-      ENV.replace MASTER_ENV.merge(RESUME_ENV_KEY => test_files.inspect)
+      ENV.replace MASTER_ENV.merge(RESUME_ENV_KEY => test_files.to_a.inspect)
       exec(*MASTER_EXECV)
     end
 
@@ -144,22 +145,22 @@ module Test
 
     def enter_testing_loop
       notify 'Ready for testing!'
-      test_files = []
+      test_files = Set.new
       loop do
         reap_worker_queue
 
         # find test files that have been modified since the last run
-        test_files.concat(test_file_matchers.map do |source_glob, test_matcher|
+        test_files.merge test_file_matchers.map {|source_glob, test_matcher|
           Dir[source_glob].select {|file| File.mtime(file) > @last_ran_at }.
           map {|path| Dir[test_matcher.call(path).to_s] }
-        end.flatten).uniq!
+        }.flatten
 
         # resume test files stopped by the previous incarnation of test-loop
         if ENV.key? RESUME_ENV_KEY
           resume_files = eval(ENV.delete(RESUME_ENV_KEY))
           unless resume_files.empty?
             notify 'Resuming tests...'
-            test_files.concat(resume_files).uniq!
+            test_files.merge resume_files
           end
         end
 
@@ -171,12 +172,13 @@ module Test
 
         # fork workers to run the test files in parallel,
         # excluding test files that are already running
-        test_files -= currently_running_test_files
+        test_files.subtract currently_running_test_files
         unless test_files.empty?
           @last_ran_at = Time.now
           num_workers = Loop.max_workers - @worker_by_pid.length
-          test_files.shift(num_workers).each do |file|
+          test_files.to_a.first(num_workers).each do |file|
             fork_worker Worker.new(file)
+            test_files.delete file
           end
         end
 
