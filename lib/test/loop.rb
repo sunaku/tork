@@ -144,16 +144,15 @@ module Test
 
     def enter_testing_loop
       notify 'Ready for testing!'
-      @worker_count = 0
       test_files = []
       loop do
         reap_worker_queue
 
         # find test files that have been modified since the last run
-        test_files += test_file_matchers.map do |source_glob, test_matcher|
+        test_files.concat(test_file_matchers.map do |source_glob, test_matcher|
           Dir[source_glob].select {|file| File.mtime(file) > @last_ran_at }.
           map {|path| Dir[test_matcher.call(path).to_s] }
-        end.flatten.uniq
+        end.flatten).uniq!
 
         # resume test files stopped by the previous incarnation of test-loop
         if ENV.key? RESUME_ENV_KEY
@@ -173,9 +172,12 @@ module Test
         # fork workers to run the test files in parallel,
         # excluding test files that are already running
         test_files -= currently_running_test_files
-        while !test_files.empty? and @worker_count < Loop.max_workers
+        unless test_files.empty?
           @last_ran_at = Time.now
-          fork_worker Worker.new(test_files.shift)
+          num_workers = Loop.max_workers - @worker_by_pid.length
+          test_files.shift(num_workers).each do |file|
+            fork_worker Worker.new(file)
+          end
         end
 
         pause_momentarily
@@ -206,7 +208,6 @@ module Test
       while info = @exited_child_infos.shift
         (child_pid, exit_status), finished_at = info
         if worker = @worker_by_pid.delete(child_pid)
-          @worker_count -= 1
           worker.exit_status = exit_status
           worker.finished_at = finished_at
           reap_worker worker
@@ -280,7 +281,6 @@ module Test
         load worker.test_file
       end
 
-      @worker_count += 1
       @worker_by_pid[pid] = worker
     end
 
