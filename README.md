@@ -246,6 +246,10 @@ configuration file:
       end
     }
 
+### Test::Loop.max_workers
+
+Maximum number of test files to run concurrently.  The default value is 4.
+
 ------------------------------------------------------------------------------
 Configuration presets
 ------------------------------------------------------------------------------
