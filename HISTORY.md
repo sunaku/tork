@@ -1,4 +1,25 @@
 ------------------------------------------------------------------------------
+Version 12.3.0 (2011-07-19)
+------------------------------------------------------------------------------
+
+New features:
+
+* Add `Test::Loop::max_concurrent_tests` configuration parameter to limit the
+  number of test files run concurrently (default 4).  Otherwise, with large
+  test suites, we could end up swamping the machine running the tests by
+  forking hundreds of test files at once.  (Jacob Helwig)
+
+* Rails: add matcher for test/factories/*_factory.rb.
+
+Housekeeping:
+
+* ENV returns a Hash with duplicate/frozen keys/values.  (Brian D. Burns)
+
+* Use Marshal to propagate resume_files to reabsorb.
+
+* Store test_files in a Set instead of an Array.
+
+------------------------------------------------------------------------------
 Version 12.2.0 (2011-06-01)
 ------------------------------------------------------------------------------
 
