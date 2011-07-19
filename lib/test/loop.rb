@@ -1,4 +1,5 @@
 require 'set'
+require 'base64'
 require 'ostruct'
 require 'diff/lcs'
 
@@ -121,7 +122,8 @@ module Test
     def reload_master_process test_files = Set.new
       test_files.merge currently_running_test_files
       stop_worker_queue
-      ENV.replace MASTER_ENV.merge(RESUME_ENV_KEY => Marshal.dump(test_files))
+      ENV.replace MASTER_ENV.merge(RESUME_ENV_KEY =>
+                                   Base64.encode64(Marshal.dump(test_files)))
       exec(*MASTER_EXECV)
     end
 
@@ -157,7 +159,9 @@ module Test
 
         # resume test files stopped by the previous incarnation of test-loop
         if ENV.key? RESUME_ENV_KEY
-          resume_files = Marshal.load(ENV.delete(RESUME_ENV_KEY))
+          resume_files =
+            Marshal.load(Base64.decode64(ENV.delete(RESUME_ENV_KEY)))
+
           unless resume_files.empty?
             notify 'Resuming tests...'
             test_files.merge resume_files
