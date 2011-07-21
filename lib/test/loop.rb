@@ -122,9 +122,8 @@ module Test
     def reload_master_process test_files = Set.new
       test_files.merge currently_running_test_files
       stop_worker_queue
-      ENV.replace MASTER_ENV.merge(RESUME_ENV_KEY =>
-                                   Base64.encode64(Marshal.dump(test_files)))
-      exec(*MASTER_EXECV)
+      resume_env = Base64.encode64(Marshal.dump(test_files))
+      exec MASTER_ENV.merge(RESUME_ENV_KEY => resume_env), *MASTER_EXECV
     end
 
     def load_user_config
