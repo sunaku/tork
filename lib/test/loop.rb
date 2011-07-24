@@ -34,7 +34,7 @@ module Test
   end
 
   Loop.before_each_test = [
-    lambda {|test_file, log_file, test_names|
+    lambda {|test_file, log_file, test_names, test_env_number|
       unless test_names.empty?
         test_name_pattern = test_names.map do |name|
           # sanitize string interpolations and invalid method name characters
@@ -86,7 +86,7 @@ module Test
     ANSI_RED = "\e[31m%s\e[0m".freeze
 
     Worker = Struct.new(:test_file, :log_file, :started_at, :finished_at,
-                        :exit_status)
+                        :exit_status, :test_env_number)
 
     def notify message
       # using print() because puts() is not an atomic operation.
@@ -180,7 +180,16 @@ module Test
           @last_ran_at = Time.now
           num_workers = Loop.max_concurrent_tests - @worker_by_pid.length
           test_files.to_a.first(num_workers).each do |file|
-            fork_worker Worker.new(file)
+            new_worker = Worker.new(file)
+            # select the first availabe test environment that is currently not
+            # in use by another test:
+            for i in 0...Loop.max_concurrent_tests
+              if !currently_used_test_envs.include?(i)  
+                new_worker.test_env_number = i
+                break
+              end
+            end
+            fork_worker new_worker 
             test_files.delete file
           end
         end
@@ -191,6 +200,10 @@ module Test
 
     def currently_running_test_files
       @worker_by_pid.values.map(&:test_file)
+    end
+
+    def currently_used_test_envs
+      @worker_by_pid.values.map{|v| v.test_env_number}
     end
 
     def init_worker_queue
@@ -274,7 +287,7 @@ module Test
 
         # tell the testing framework to run only the changed test blocks
         before_each_test.each do |hook|
-          hook.call worker.test_file, worker.log_file, test_names
+          hook.call worker.test_file, worker.log_file, test_names, worker.test_env_number
         end
 
         # make the process title Test::Unit friendly and ps(1) searchable
@@ -290,6 +303,10 @@ module Test
     end
 
     def reap_worker worker
+      # clear the test environment number, so it becomes available for other
+      # tests:
+      worker.test_env_number = nil
+
       # report test results along with any failure logs
       if worker.exit_status.success?
         notify ANSI_GREEN % "PASS #{worker.test_file}"
