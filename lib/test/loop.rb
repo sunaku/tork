@@ -292,8 +292,6 @@ module Test
     end
 
     def reap_worker worker
-      @worker_id_pool.push worker.id
-
       # report test results along with any failure logs
       if worker.exit_status.success?
         notify ANSI_GREEN % "PASS #{worker.test_file}"
@@ -304,8 +302,11 @@ module Test
 
       after_each_test.each do |hook|
         hook.call worker.test_file, worker.log_file, worker.exit_status,
-                  worker.started_at, worker.finished_at - worker.started_at
+                  worker.started_at, worker.finished_at - worker.started_at,
+                  worker.id
       end
+
+      @worker_id_pool.push worker.id
     end
   end
 end

@@ -166,7 +166,8 @@ These functions are passed (1) the path to the test file, (2) the path to the
 log file containing the live output of running the test file, (3) an array
 containing the names of tests (which were identified by
 `Test::Loop.test_name_parser`) inside the test file that have changed since
-the last run of the test file, and (4) the ID number of the worker process.
+the last run of the test file, and (4) a rotating sequence number of the
+worker process that will run the test file.
 
 For example, to print a worker process' ID and what work it will perform:
 
@@ -192,14 +193,15 @@ test has finished running.
 These functions are passed (1) the path to the test file, (2) the path to the
 log file containing the output of running the test file, (3) a
 `Process::Status` object describing the exit status of the worker process that
-ran the test file, (4) the time when test execution began, and (5) how many
-seconds it took for the overall test execution to complete.
+ran the test file, (4) the time when test execution began, (5) how many
+seconds it took for the overall test execution to complete, and (6) a rotating
+sequence number of the worker process that ran the test file.
 
 For example, to delete log files for successful tests, add the following to
 your configuration file:
 
     Test::Loop.after_each_test.push lambda {
-      |test_file, log_file, run_status, started_at, elapsed_time|
+      |test_file, log_file, run_status, started_at, elapsed_time, worker_id|
 
       File.delete(log_file) if run_status.success?
     }
@@ -209,7 +211,7 @@ add the following to your configuration file (**NOTE:** the `test/loop/notify`
 preset does this for you):
 
     Test::Loop.after_each_test.push lambda {
-      |test_file, log_file, run_status, started_at, elapsed_time|
+      |test_file, log_file, run_status, started_at, elapsed_time, worker_id|
 
       unless run_status.success? or run_status.signaled?
         title = 'FAIL at %s in %0.1fs' % [started_at.strftime('%r'), elapsed_time]
@@ -230,7 +232,7 @@ regardless of whether they passed or failed, add the following to your
 configuration file:
 
     Test::Loop.after_each_test.push lambda {
-      |test_file, log_file, run_status, started_at, elapsed_time|
+      |test_file, log_file, run_status, started_at, elapsed_time, worker_id|
 
       success = run_status.success?
 
