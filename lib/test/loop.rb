@@ -85,8 +85,8 @@ module Test
     ANSI_GREEN = "\e[32m%s\e[0m".freeze
     ANSI_RED = "\e[31m%s\e[0m".freeze
 
-    Worker = Struct.new(:id, :test_file, :log_file, :started_at, :finished_at,
-                        :exit_status)
+    Worker = Struct.new(:test_file, :log_file, :started_at, :finished_at,
+                        :exit_status, :id)
 
     def notify message
       # using print() because puts() is not an atomic operation.
@@ -180,7 +180,7 @@ module Test
           @last_ran_at = Time.now
           num_workers = Loop.max_concurrent_tests - @worker_by_pid.length
           test_files.to_a.first(num_workers).each do |file|
-            fork_worker Worker.new(@worker_id_pool.shift, file)
+            fork_worker Worker.new(file)
             test_files.delete file
           end
         end
@@ -238,6 +238,7 @@ module Test
     def fork_worker worker
       notify "TEST #{worker.test_file}"
 
+      worker.id = @worker_id_pool.shift
       worker.log_file = worker.test_file + '.log'
 
       # cache the contents of the test file for diffing below
