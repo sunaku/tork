@@ -162,18 +162,19 @@ name of the test being defined.
 Array of lambda functions that are executed inside the worker process before
 loading the test file.
 
-These functions are passed (1) the path to the test file, (2) the path to
-the log file containing the live output of running the test file, and (3) an
-array containing the names of tests (which were identified by
+These functions are passed (1) the path to the test file, (2) the path to the
+log file containing the live output of running the test file, (3) an array
+containing the names of tests (which were identified by
 `Test::Loop.test_name_parser`) inside the test file that have changed since
-the last run of the test file.
+the last run of the test file, and (4) the ID number of the worker process.
 
 For example, to print a worker process' ID and what work it will perform:
 
     Test::Loop.before_each_test.push lambda {
-      |test_file, log_file, test_names|
+     |test_file, log_file, test_names, worker_id|
 
       p :worker_pid => $$,
+        :worker_id => worker_id,
         :test_file => test_file,
         :log_file => log_file,
         :test_names => test_names
