@@ -1,8 +1,9 @@
+# encoding: utf-8
 Gem::Specification.new do |s|
   s.name        = 'test-loop'
   s.version     = '12.3.1'
   s.authors     = ['Suraj N. Kurapati', 'Brian D. Burns', 'Daniel Pittman',
-                   'Jacob Helwig']
+                   'Jacob Helwig', 'Corné Verbruggen']
   s.homepage    = 'http://github.com/sunaku/test-loop'
   s.summary     = 'Continuous testing for Ruby with fork/eval'
   s.files       = %w[
