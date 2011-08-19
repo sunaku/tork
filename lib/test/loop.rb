@@ -17,9 +17,8 @@ module Test
   Loop.test_file_matchers = {
     # source files that correspond to test files
     'lib/**/*.rb' => lambda do |path|
-      extn = File.extname(path)
-      base = File.basename(path, extn)
-      "{test,spec}/**/#{base}_{test,spec}#{extn}"
+      base = File.basename(path, '.rb')
+      "{test,spec}/**/#{base}_{test,spec}.rb"
     end,
 
     # the actual test files themselves

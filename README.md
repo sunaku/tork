@@ -133,9 +133,8 @@ by an underscore and the file name in reverse like this:
 Then you would add the following to your configuration file:
 
     Test::Loop.test_file_matchers['{lib,app}/**/*.rb'] = lambda do |path|
-      extn = File.extname(path)
-      name = File.basename(path, extn)
-      "{test,spec}/**/#{name}_#{name.reverse}#{extn}"
+      name = File.basename(path, '.rb')
+      "{test,spec}/**/#{name}_#{name.reverse}.rb"
     end
 
 In addition, these lambda functions can return `nil` if they do not wish for a
