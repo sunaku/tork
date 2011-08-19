@@ -1,4 +1,5 @@
 require 'test/loop'
+require 'active_support/inflector'
 
 Test::Loop.reabsorb_file_globs.push(
   'config/**/*.{rb,yml}',
@@ -7,12 +8,17 @@ Test::Loop.reabsorb_file_globs.push(
 )
 
 Test::Loop.test_file_matchers['{app,lib,test,spec}/**/*.rb'] =
-  Test::Loop.test_file_matchers.delete('lib/**/*.rb')
+  lambda do |path|
+    base = File.basename(path, '.rb')
+    poly = ActiveSupport::Inflector.pluralize(base)
+    "{test,spec}/**/{#{base},#{poly}_*}_{test,spec}.rb"
+  end
 
 Test::Loop.test_file_matchers['{test,spec}/factories/**/*_factory.rb'] =
   lambda do |path|
     base = File.basename(path, '_factory.rb')
-    "{test,spec}/**/#{base}_{test,spec}.rb"
+    poly = ActiveSupport::Inflector.pluralize(base)
+    "{test,spec}/**/{#{base},#{poly}_*}_{test,spec}.rb"
   end
 
 require 'rails/railtie'
