@@ -21,12 +21,17 @@ Test::Loop.test_file_matchers['{test,spec}/factories/**/*_factory.rb'] =
     "{test,spec}/**/{#{base},#{poly}_*}_{test,spec}.rb"
   end
 
-require 'rails/railtie'
-Class.new Rails::Railtie do
-  config.before_initialize do |app|
-    if app.config.cache_classes
-      warn "test-loop: Setting #{app.class}.config.cache_classes = false"
-      app.config.cache_classes = false
+begin
+  require 'rails/railtie'
+  Class.new Rails::Railtie do
+    config.before_initialize do |app|
+      if app.config.cache_classes
+        warn "test-loop: Setting #{app.class}.config.cache_classes = false"
+        app.config.cache_classes = false
+      end
     end
   end
+rescue LoadError
+  warn "test-loop: Railtie not available; please manually set:\n\t"\
+       "config.cache_classes = false"
 end
