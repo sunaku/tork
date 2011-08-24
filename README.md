@@ -100,7 +100,34 @@ Configuration
 
 test-loop looks for a configuration file named `.test-loop` in the current
 working directory.  This configuration file is a normal Ruby script in which
-you can query and modify the `Test::Loop` OpenStruct configuration as follows:
+you can query and modify the `Test::Loop` OpenStruct configuration object
+according to the configuration options listed below.
+
+------------------------------------------------------------------------------
+Configuration presets
+------------------------------------------------------------------------------
+
+The following sub-libraries provide "preset" configurations.  To use them,
+simply add the require() lines shown below to your `.test-loop` file or to
+your application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
+
+### require 'test/loop/notify'
+
+Shows on-screen-display notifications for test failures.
+
+### require 'test/loop/rails'
+
+Provides support for the Ruby on Rails web framework.
+
+### require 'test-loop/coco'
+
+Integrates the [coco](https://github.com/lkdjiin/coco) code coverage library.
+
+------------------------------------------------------------------------------
+Configuration options
+------------------------------------------------------------------------------
+
+The `Test::Loop` OpenStruct configuration object holds the following options:
 
 ### Test::Loop.delay_per_iteration
 
@@ -251,26 +278,6 @@ configuration file:
 ### Test::Loop.max_concurrent_tests
 
 Maximum number of test files to run concurrently.  The default value is 4.
-
-------------------------------------------------------------------------------
-Configuration presets
-------------------------------------------------------------------------------
-
-The following sub-libraries provide "preset" configurations.  To use them,
-simply add the require() lines shown below to your `.test-loop` file or to
-your application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
-
-### require 'test/loop/notify'
-
-Shows on-screen-display notifications for test failures.
-
-### require 'test/loop/rails'
-
-Provides support for the Ruby on Rails web framework.
-
-### require 'test-loop/coco'
-
-Integrates the [coco](https://github.com/lkdjiin/coco) code coverage library.
 
 ------------------------------------------------------------------------------
 Known issues
