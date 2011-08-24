@@ -1,4 +1,39 @@
 ------------------------------------------------------------------------------
+Version 13.0.0 (2011-08-24)
+------------------------------------------------------------------------------
+
+Incompatible changes:
+
+* Pass worker sequence number as the last argument to lambda functions in
+  `Test::Loop.before_each_test` and `Test::Loop.after_each_test` arrays.
+
+New features:
+
+* In the `test/loop/rails` configuration preset:
+
+  * Automatically test a controller when its model or factory is modified.
+
+  * Warn the user if Railtie (Rails 3) is not available for automatic
+    disabling of Rails' class caching mechanism under the test environment.
+
+* Add `test/loop/parallel_tests` configuration preset for parallel_tests gem.
+  ([Corné Verbruggen](https://github.com/sunaku/test-loop/issues/9))
+
+* Assign rotating sequence numbers to workers so that you can handle parallel
+  processes like connecting to separate databases better.  ([Corné
+  Verbruggen](https://github.com/sunaku/test-loop/pull/10))
+
+Housekeeping:
+
+* README: move configuration presets above options.
+
+* Eliminate 1 SLOC: .rb extension used in file glob.
+
+* Turn off executable bit on loop.rb file mode.
+
+* Pass child ENV directly to exec() for atomicity.
+
+------------------------------------------------------------------------------
 Version 12.3.1 (2011-07-19)
 ------------------------------------------------------------------------------
 
@@ -21,7 +56,7 @@ New features:
   test suites, we could end up swamping the machine running the tests by
   forking hundreds of test files at once.  (Jacob Helwig)
 
-* Rails: add matcher for test/factories/*_factory.rb.
+* Rails: add matcher for `test/factories/*_factory.rb`.
 
 Housekeeping:
 
