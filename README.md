@@ -123,6 +123,11 @@ Provides support for the Ruby on Rails web framework.
 
 Integrates the [coco](https://github.com/lkdjiin/coco) code coverage library.
 
+### require 'test-loop/parallel_tests'
+
+Integrates the [parallel_tests](https://github.com/grosser/parallel_tests)
+library.
+
 ------------------------------------------------------------------------------
 Configuration options
 ------------------------------------------------------------------------------
