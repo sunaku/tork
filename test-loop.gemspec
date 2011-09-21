@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
     README.md
     bin/test-loop
     lib/test/loop.rb
+    lib/test/loop/coco.rb
     lib/test/loop/notify.rb
     lib/test/loop/rails.rb
     lib/test/loop/parallel_tests.rb
