@@ -1,7 +1,7 @@
 # encoding: utf-8
 Gem::Specification.new do |s|
   s.name        = 'test-loop'
-  s.version     = '13.0.0'
+  s.version     = '13.0.1'
   s.authors     = ['Suraj N. Kurapati', 'Brian D. Burns', 'Daniel Pittman',
                    'Jacob Helwig', 'Corné Verbruggen']
   s.homepage    = 'http://github.com/sunaku/test-loop'
