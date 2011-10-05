@@ -5,8 +5,12 @@ Test::Loop.after_each_test.push lambda {
 
   unless run_status.success? or run_status.signaled?
     title = 'FAIL at %s in %0.1fs' % [started_at.strftime('%r'), elapsed_time]
-    statistics = File.readlines(log_file).grep(/^\d+ \w+,/)
-    message = test_file + "\n" + statistics.join
+
+    stats = File.readlines(log_file).grep(/^\d+ \w+,/).join.
+      gsub(/\e\[\d+(;\d+)?m/, '') # strip ANSI SGR escape codes
+
+    message = test_file + "\n" + stats
+
     Thread.new do # run in background
       system 'notify-send', '-i', 'dialog-error', title, message or
       system 'growlnotify', '-a', 'Xcode', '-m', message, title or
