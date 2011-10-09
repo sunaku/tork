@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'testr/driver'
+TestR::Driver.loop
+Process.waitall

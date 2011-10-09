@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'testr/client'
+
+@driver = TestR::Client::Transceiver.new('testr-driver') do |line|
+  event, *details = JSON.load(line)
+
+  case event = event.to_sym
+  when :load then warn 'testr: Overhead absorbed; Ready for testing!'
+  when :over then warn 'testr: Reabsorbing changed overhead files...'
+  else
+    test_file, test_names, *details = details
+    message = [event.upcase, test_file, test_names.inspect, details].join(' ')
+
+    color = case event
+            when :pass then "\e[32m%s\e[0m" # green
+            when :fail then "\e[31m%s\e[0m" # red
+            end
+    message = color % message if color and STDOUT.tty?
+    message = [message, File.read(test_file + '.log'), message] if event == :fail
+
+    puts message
+  end
+end
+
+COMMANDS = {
+  'r' => :run_all_test_files,
+  's' => :stop_running_test_files,
+  'p' => :rerun_passed_test_files,
+  'f' => :rerun_failed_test_files,
+  'o' => :reabsorb_overhead_files,
+  'q' => :quit,
+}
+
+def COMMANDS.show
+  each {|key, cmd| warn "testr: Type #{key} to #{cmd.to_s.tr('_', ' ')}." }
+end
+
+COMMANDS.show # instruct newbies
+
+while key = STDIN.gets.chomp
+  if command = COMMANDS[key]
+    if command == :quit
+      @driver.quit
+      break
+    else
+      @driver.send [command]
+    end
+  else
+    COMMANDS.show
+  end
+end
+
+Process.waitall

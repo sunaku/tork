@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'testr/master'
+TestR::Master.loop
+raise SystemExit # prevent empty test suite from running in the master process

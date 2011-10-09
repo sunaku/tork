@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+STDOUT.sync = true
+
+require 'guard'
+require 'guard/listener'
+
+listener = Guard::Listener.select_and_init
+listener.on_change {|files| puts files }
+listener.start
