@@ -1,4 +1,54 @@
 ------------------------------------------------------------------------------
+Version 14.0.0 (2011-10-09)
+------------------------------------------------------------------------------
+
+Incompatible changes:
+
+* Renamed this project and its resources from test-loop to TestR.
+
+* Renamed the `reabsorb_file_globs` configuration parameter to
+  `reabsorb_file_greps`.  It now contains regular expressions.
+
+* Renamed the `test_file_matchers` configuration parameter to
+  `test_file_globbers`.  Its keys are now regular expressions.
+
+* Renamed the `test_name_parser` configuration parameter to
+  `test_name_extractor`.
+
+* Renamed the `max_concurrent_tests` configuration parameter to
+  `max_forked_workers`.
+
+* Renamed the `before_each_test` configuration parameter to
+  `after_fork_hooks`.  Its function parameters have also changed.
+
+* Removed the `delay_per_iteration` and `after_each_test` configuration
+  parameters.
+
+* Removed the `test/loop/notify` and `test-loop/coco` libraries.
+
+New features:
+
+* The file system is no longer polled to detect modified files.  Instead, the
+  it is monitored for file modification events in a portable and efficient
+  manner using the [Guard](https://github.com/guard/guard) library.
+
+* The number of processors on your system is automatically detected for the
+  `max_forked_workers` configuration parameter.
+
+* Added `overhead_load_paths`, `all_test_file_globs`, and `before_fork_hooks`
+  configuration parameters.
+
+* Added ability to re-run passed and failed tests in the `testr` script.
+
+Housekeeping:
+
+* The monolithic `test-loop` script has been replaced by several smaller ones
+  that communicate with each other using single-line JSON messages via their
+  standard input & output streams.  See "Architecture" in README for details.
+
+* Now using Bundler to manage development dependencies and gem packaging.
+
+------------------------------------------------------------------------------
 Version 13.0.1 (2011-09-21)
 ------------------------------------------------------------------------------
 
