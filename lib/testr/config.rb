@@ -5,7 +5,13 @@ module TestR
 
   Config = OpenStruct.new
 
-  Config.max_concurrent_tests = 4
+  Config.max_concurrent_tests = [
+    # http://stackoverflow.com/questions/891537#6420817
+    'fgrep -c processor /proc/cpuinfo', # Linux
+    'sysctl -n hw.ncpu',                # BSD
+    'hwprefs cpu_count',                # Darwin 9
+    'hwprefs thread_count',             # Darwin 10
+  ].map {|cmd| `#{cmd} 2>/dev/null`.to_i }.push(1).max
 
   Config.overhead_load_paths = ['lib', 'test', 'spec']
 

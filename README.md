@@ -106,7 +106,8 @@ Configuration options
 
 ### TestR::Config.max_concurrent_tests
 
-Maximum number of test files to run concurrently.  The default value is 4.
+Maximum number of test files to run concurrently.  The default value is the
+number of detected processors on your system, or just 1 if detection fails.
 
 ### TestR::Config.overhead_load_paths
 
