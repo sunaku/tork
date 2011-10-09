@@ -104,10 +104,10 @@ configuration options listed below.
 Configuration options
 ------------------------------------------------------------------------------
 
-### TestR::Config.max_concurrent_tests
+### TestR::Config.max_forked_workers
 
-Maximum number of test files to run concurrently.  The default value is the
-number of detected processors on your system, or just 1 if detection fails.
+Maximum number of worker processes at any given time.  The default value is
+the number of processors detected on your system, or 1 if detection fails.
 
 ### TestR::Config.overhead_load_paths
 

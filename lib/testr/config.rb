@@ -5,7 +5,7 @@ module TestR
 
   Config = OpenStruct.new
 
-  Config.max_concurrent_tests = [
+  Config.max_forked_workers = [
     # http://stackoverflow.com/questions/891537#6420817
     'fgrep -c processor /proc/cpuinfo', # Linux
     'sysctl -n hw.ncpu',                # BSD
