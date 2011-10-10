@@ -46,13 +46,13 @@ module TestR
     # tell testing framework to only run the named tests inside the test file
     lambda do |worker_number, log_file, test_file, test_names|
       unless test_names.empty?
-        regexp = Regexp.union(test_names.map {|name|
+        regexp = test_names.map {|name|
           # sanitize string interpolations and invalid method name characters
           name.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
-        })
+        }.join('|')
 
         case File.basename(test_file)
-        when /(\b|_)test(\b|_)/ then ARGV.push '--name', regexp.inspect
+        when /(\b|_)test(\b|_)/ then ARGV.push '--name', "/#{regexp}/"
         when /(\b|_)spec(\b|_)/ then ARGV.push '--example', regexp.source
         end
       end
