@@ -1,4 +1,20 @@
 ------------------------------------------------------------------------------
+Version 14.0.1 (2011-10-10)
+------------------------------------------------------------------------------
+
+Bug fixes:
+
+* Use blue/red for pass/fail instead of green/red to accommodate the color
+  blind.
+
+* Incorrect test name regexp was passed down to Test::Unit.  This broke
+  focused testing, where only changed tests in a changed test file are run.
+
+Housekeeping:
+
+* Make `testr-master` wait for killed worker processes before exiting.
+
+------------------------------------------------------------------------------
 Version 14.0.0 (2011-10-09)
 ------------------------------------------------------------------------------
 
