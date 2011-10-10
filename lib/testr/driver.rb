@@ -38,12 +38,14 @@ module Driver
         @running_test_files.push file
 
       when :pass
-        @passed_test_files.push file unless @passed_test_files.include? file
         @running_test_files.delete file
+        @failed_test_files.delete file
+        @passed_test_files.push file unless @passed_test_files.include? file
 
       when :fail
-        @failed_test_files.push file unless @failed_test_files.include? file
         @running_test_files.delete file
+        @passed_test_files.delete file
+        @failed_test_files.push file unless @failed_test_files.include? file
       end
 
       @upstream.print line
