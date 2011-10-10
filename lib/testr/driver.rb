@@ -35,6 +35,7 @@ module Driver
 
       case event.to_sym
       when :test
+        @waiting_test_files.delete file
         @running_test_files.push file
 
       when :pass
@@ -89,6 +90,7 @@ private
     @master.quit
   end
 
+  @waiting_test_files = []
   @running_test_files = []
   @passed_test_files = []
   @failed_test_files = []
@@ -102,7 +104,10 @@ private
   end
 
   def run_test_file file
-    @master.send [:test, file, find_changed_test_names(file)]
+    unless @waiting_test_files.include? file
+      @waiting_test_files.push file
+      @master.send [:test, file, find_changed_test_names(file)]
+    end
   end
 
   @lines_by_file = {}
