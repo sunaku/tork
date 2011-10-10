@@ -14,7 +14,7 @@ require 'testr/client'
     message = [event.upcase, test_file, test_names.inspect, details].join(' ')
 
     color = case event
-            when :pass then "\e[32m%s\e[0m" # green
+            when :pass then "\e[34m%s\e[0m" # blue
             when :fail then "\e[31m%s\e[0m" # red
             end
     message = color % message if color and STDOUT.tty?
