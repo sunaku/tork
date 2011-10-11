@@ -8,10 +8,10 @@ module Client
     end
 
     def quit
-      kill # stop the receive loop
+      kill # stop receive loop
       Process.kill :SIGTERM, @io.pid
       Process.wait @io.pid # reap zombie
-      @io.close # prevent subsequent I/O
+      @io.close # prevent further I/O
     end
   end
 

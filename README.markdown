@@ -55,7 +55,6 @@ Prerequisites
 
         Process.respond_to? :fork  # must be true
         Signal.list.key? 'TERM'    # must be true
-        Signal.list.key? 'KILL'    # must be true
 
 ------------------------------------------------------------------------------
 Installation

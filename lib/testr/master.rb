@@ -53,7 +53,7 @@ module Master
       # after loading the user's test file, the at_exit() hook of the user's
       # testing framework will take care of running the tests and reflecting
       # any failures in the worker process' exit status, which will then be
-      # handled by the SIGCHLD trap registered in the master process (above)
+      # handled by the SIGCHLD trap registered in the master process (below)
       Kernel.load test_file
     end
 

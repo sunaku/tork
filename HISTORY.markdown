@@ -1,4 +1,19 @@
 ------------------------------------------------------------------------------
+Version 14.0.2 (2011-10-11)
+------------------------------------------------------------------------------
+
+Bug fixes:
+
+* Fix updating passed/failed test files bookkeeping.  Once a test file failed,
+  it was (incorrectly) always considered failed -- even if it passed later on.
+
+* Do not requeue test files that are waiting to run.
+
+Housekeeping:
+
+* Rename `*.md` files to `*.markdown` to avoid ambiguity.
+
+------------------------------------------------------------------------------
 Version 14.0.1 (2011-10-10)
 ------------------------------------------------------------------------------
 
