@@ -1,20 +1,20 @@
 require 'testr/config'
 require 'active_support/inflector'
 
-TestR::Config.reabsorb_file_globs.push(
-  'config/**/*.{rb,yml}',
-  'db/schema.rb',
-  'Gemfile.lock'
+TestR::Config.reabsorb_file_greps.push(
+  %r<^config/.+\.(rb|yml)$>,
+  %r<^db/schema\.rb$>,
+  %r<^Gemfile\.lock$>
 )
 
-TestR::Config.test_file_matchers[%r<^(app|lib|test|spec)/.+\.rb$>] =
+TestR::Config.test_file_globbers[%r<^(app|lib|test|spec)/.+\.rb$>] =
   lambda do |path|
     base = File.basename(path, '.rb')
     poly = ActiveSupport::Inflector.pluralize(base)
     "{test,spec}/**/{#{base},#{poly}_*}_{test,spec}.rb"
   end
 
-TestR::Config.test_file_matchers[%r<^(test|spec)/factories/.+_factory\.rb$>] =
+TestR::Config.test_file_globbers[%r<^(test|spec)/factories/.+_factory\.rb$>] =
   lambda do |path|
     base = File.basename(path, '_factory.rb')
     poly = ActiveSupport::Inflector.pluralize(base)
