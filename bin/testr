@@ -7,7 +7,7 @@ require 'testr/client'
   event, *details = JSON.load(line)
 
   case event = event.to_sym
-  when :load then warn 'testr: Overhead absorbed; Ready for testing!'
+  when :load then warn 'testr: Overhead absorbed. Ready for testing!'
   when :over then warn 'testr: Reabsorbing changed overhead files...'
   else
     test_file, test_names, *details = details
