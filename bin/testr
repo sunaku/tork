@@ -34,7 +34,9 @@ COMMANDS = {
 }
 
 def COMMANDS.show
-  each {|key, cmd| warn "testr: Type #{key} to #{cmd.to_s.tr('_', ' ')}." }
+  each do |key, cmd|
+    warn "testr: Type #{key} then ENTER to #{cmd.to_s.tr('_', ' ')}."
+  end
 end
 
 COMMANDS.show # instruct newbies
