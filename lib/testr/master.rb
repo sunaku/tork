@@ -22,8 +22,7 @@ module Master
 
   def test test_file, test_names
     # throttle forking rate to meet the maximum concurrent workers limit
-    # NOTE: the next SIGCHLD signal will wake us from this eternal sleep
-    sleep until @command_by_worker_pid.size < Config.max_forked_workers
+    sleep 1 until @command_by_worker_pid.size < Config.max_forked_workers
 
     log_file = test_file + '.log'
     worker_number = @worker_number_pool.shift
