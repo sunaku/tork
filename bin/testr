@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+$0 = File.basename(__FILE__)
 
 require 'json'
 require 'testr/client'

@@ -84,7 +84,7 @@ If installed as a Git clone:
 
 You can monitor your test processes in another terminal:
 
-    watch 'ps xuw | sed -n "1p; s/\(\/[^ ]* \)\?[^ ]*\(test[r]\)/\2/p"'
+    watch 'ps xuw | sed -n "1p; /test[r]/p" | fgrep -v sed'
 
 You can forcefully terminate TestR from another terminal:
 

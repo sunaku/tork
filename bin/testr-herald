@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
-STDOUT.sync = true
+$0 = File.basename(__FILE__)
 
 require 'guard'
 require 'guard/listener'
 
 listener = Guard::Listener.select_and_init
 listener.on_change {|files| puts files }
+STDOUT.sync = true # don't buffer puts()
 listener.start

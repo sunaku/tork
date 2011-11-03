@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
+$0 = File.basename(__FILE__)
+
 require 'testr/master'
 TestR::Master.loop
+
 Process.waitall
 raise SystemExit # prevent empty test suite from running in the master process

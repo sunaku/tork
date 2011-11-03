@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+$0 = File.basename(__FILE__)
+
 require 'testr/driver'
 TestR::Driver.loop
+
 Process.waitall
