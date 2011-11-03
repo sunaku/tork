@@ -1,5 +1,76 @@
 #!/usr/bin/env ruby
+=begin
+
+TESTR-MASTER 1 "2011-10-13" "1.0.0" "TestR User Manuals"
+========================================================
+
+NAME
+----
+
+testr-master - absorbs test execution overhead and forks to run your tests
+
+SYNOPSIS
+--------
+
+`testr-master` [*OPTION*]...
+
+DESCRIPTION
+-----------
+
+This program reads the following single-line commands (JSON arrays) from its
+standard input stream and performs the respective actions as described below.
+
+`["load",` *paths*`,` *files*`]`
+  Adds the given array of *paths* to Ruby's $LOAD_PATH, loads the given array
+  of *files* after removing their ".rb" file extension if present, and prints
+  the given command line to the standard output stream.
+
+`["test",` *test_file*`,` *test_names*`]`
+  Runs the given *test_file* in a forked child process while instructing your
+  chosen unit testing framework (loaded by your test execution overhead) to
+  only run those tests that are named in the given array of *test_names*.
+
+  Prints the given command line to the standard output stream immediately
+  after forking the child process.
+
+  Prints the given command line, modified with `"pass"` (if the test passed)
+  or `"fail"` (if the test failed) in place of `"test"`, to the standard
+  output stream after the forked child process finishes.
+
+  The standard output and error streams of the forked child process are
+  redirected to a file whose path and name are the same as that of the test
+  file being run by the forked child process but with ".log" appended.
+
+`["stop"]`
+  Stops all tests that are currently running and prints the given command line
+  to the standard output stream.
+
+`["quit"]`
+  Stops all tests that are currently running and exits.
+
+OPTIONS
+-------
+
+`-h`, `--help`
+  Display this help manual using man(1).
+
+FILES
+-----
+
+`.testr.rb`
+  Ruby script in the directory where testr(1) is run.
+
+SEE ALSO
+--------
+
+testr(1), testr-driver(1), testr-master(1), testr-herald(1)
+
+=end =========================================================================
+
 $0 = File.basename(__FILE__)
+
+require 'binman'
+BinMan.help
 
 require 'testr/master'
 TestR::Master.loop

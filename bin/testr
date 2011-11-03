@@ -1,5 +1,52 @@
 #!/usr/bin/env ruby
+=begin
+
+TESTR 1 "2011-10-13" "1.0.0" "TestR User Manuals"
+=================================================
+
+NAME
+----
+
+testr - Continuous testing tool for Ruby
+
+SYNOPSIS
+--------
+
+`testr` [*OPTION*]...
+
+DESCRIPTION
+-----------
+
+This program is a simple command-line user interface for testr-driver(1).  It
+demonstrates how the components of TestR work together and also serves as an
+example of how you can create your own TestR user interface.
+
+When run, it presents you with a menu of single-character commands that you
+can enter, loads the test execution overhead into testr-master(1), and
+finally notifies you when the master is ready to run test files.
+
+It also launches testr-herald(1) alongside testr-master(1).  When the herald
+reports a modified file that belongs to the test execution overhead, this
+program notifies you accordingly and then replaces the current master with a
+new one that will absorb the modified test execution overhead into itself.
+
+OPTIONS
+-------
+
+`-h`, `--help`
+  Display this help manual using man(1).
+
+SEE ALSO
+--------
+
+testr(1), testr-driver(1), testr-master(1), testr-herald(1)
+
+=end =========================================================================
+
 $0 = File.basename(__FILE__)
+
+require 'binman'
+BinMan.help
 
 require 'json'
 require 'testr/client'

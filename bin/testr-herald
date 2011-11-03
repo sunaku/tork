@@ -1,5 +1,42 @@
 #!/usr/bin/env ruby
+=begin
+
+TESTR-HERALD 1 "2011-10-13" "1.0.0" "TestR User Manuals"
+========================================================
+
+NAME
+----
+
+testr-herald - monitors current directory tree and reports modified files
+
+SYNOPSIS
+--------
+
+`testr-herald` [*OPTION*]...
+
+DESCRIPTION
+-----------
+
+This program monitors the current working directory and prints relative paths
+of modified files, one per line, to the standard output stream.
+
+OPTIONS
+-------
+
+`-h`, `--help`
+  Display this help manual using man(1).
+
+SEE ALSO
+--------
+
+testr(1), testr-driver(1), testr-master(1), testr-herald(1)
+
+=end =========================================================================
+
 $0 = File.basename(__FILE__)
+
+require 'binman'
+BinMan.help
 
 require 'guard'
 require 'guard/listener'

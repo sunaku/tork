@@ -1,5 +1,65 @@
 #!/usr/bin/env ruby
+=begin
+
+TESTR-DRIVER 1 "2011-10-13" "1.0.0" "TestR User Manuals"
+========================================================
+
+NAME
+----
+
+testr-driver - tells master to run tests and keeps track of test results
+
+SYNOPSIS
+--------
+
+`testr-driver` [*OPTION*]...
+
+DESCRIPTION
+-----------
+
+This program reads the following single-line commands (JSON arrays) from its
+standard input stream and performs the respective actions as described below.
+It also funnels the standard output stream of testr-master(1) into its own.
+
+`["run_all_test_files"]`
+  Runs all test files found within and beneath the current working directory.
+
+`["stop_running_test_files"]`
+  Stops any test files that are currently running.
+
+`["rerun_passed_test_files"]`
+  Runs all test files that have passed during their most recent run.
+
+`["reabsorb_overhead_files"]`
+  Stops any test files that are currently running, reabsorbs the test
+  execution overhead, and resumes running those interrupted test files.
+
+`["quit"]`
+  Stops all tests that are currently running and exits.
+
+OPTIONS
+-------
+
+`-h`, `--help`
+  Display this help manual using man(1).
+
+FILES
+-----
+
+`.testr.rb`
+  Ruby script in the directory where testr(1) is run.
+
+SEE ALSO
+--------
+
+testr(1), testr-driver(1), testr-master(1), testr-herald(1)
+
+=end =========================================================================
+
 $0 = File.basename(__FILE__)
+
+require 'binman'
+BinMan.help
 
 require 'testr/driver'
 TestR::Driver.loop
