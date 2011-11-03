@@ -28,5 +28,9 @@ module Server
     end
   end
 
+  def self.extended target
+    trap(:SIGTERM){ target.quit }
+  end
+
 end
 end

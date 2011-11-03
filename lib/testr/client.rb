@@ -28,11 +28,6 @@ module Client
         @io.puts JSON.dump(command)
       end
     end
-
-    def quit
-      send [:quit]
-      super
-    end
   end
 
 end
