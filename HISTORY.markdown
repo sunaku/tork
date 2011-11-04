@@ -1,4 +1,37 @@
 ------------------------------------------------------------------------------
+Version 14.1.0 (2011-11-03)
+------------------------------------------------------------------------------
+
+New features:
+
+* Make servers responsive to quit request (SIGTERM) from upstream.
+
+  This change lets the user quit testr-master(1) while it is loading
+  test execution overhead (which can be a lengthy, blocking operation).
+
+  By sending a signal to the server, we don't have to wait for it to
+  finish processing its current command before seeing our :quit command.
+
+* Add embedded BinMan manual pages to bin scripts.  All TestR scripts now
+  have a `--help` option which displays their UNIX manual page.  Try it!
+
+  The single-line JSON message protocol used by these scripts is now
+  documented in their manual pages, so you should have everything you
+  need to create *your own custom user interface to TestR* if you wish! :-)
+
+Bug fixes:
+
+* SIGCHLD does not awaken main thread in Ruby 1.9.3p0.
+
+Housekeeping:
+
+* Simplify watch(1) ps(1) process title monitoring.
+
+* Testr: tell user to press ENTER after command key.
+
+* README: add tip on loading factory_girl factories.
+
+------------------------------------------------------------------------------
 Version 14.0.3 (2011-10-11)
 ------------------------------------------------------------------------------
 
