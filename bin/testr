@@ -52,14 +52,15 @@ require 'json'
 require 'testr/client'
 
 @driver = TestR::Client::Transceiver.new('testr-driver') do |line|
-  event, *details = JSON.load(line)
+  evstr, *details = JSON.load(line)
+  event = evstr.to_sym
 
-  case event = event.to_sym
+  case event
   when :load then warn 'testr: Overhead absorbed. Ready for testing!'
   when :over then warn 'testr: Reabsorbing changed overhead files...'
   else
     test_file, test_names, *details = details
-    message = [event.upcase, test_file, test_names.inspect, details].join(' ')
+    message = [evstr.upcase, test_file, test_names.inspect, details].join(' ')
 
     color = case event
             when :pass then "\e[34m%s\e[0m" # blue
