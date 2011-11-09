@@ -44,6 +44,23 @@ Following UNIX philosophy, TestR is made of simple text-based programs:
 You can build your own custom TestR user interface by wrapping `testr-driver`!
 
 ------------------------------------------------------------------------------
+Usage and theory of operation
+------------------------------------------------------------------------------
+
+Run `testr` to launch the command-line user interface for `testr-driver`.  It
+will present a menu of commands and then wait for you to input a command while
+the driver waits for `testr-herald` to tell it about changes in your tests.
+
+When the driver hears about changes in your test files, it tells the master to
+fork a worker process to run the tests affected by those changes.  This is all
+performed automatically.  But what if you want to manually run a test file?
+
+You can re-run any test file by simply saving it!  When you do, TestR tries to
+figure out which tests inside your newly saved test file have changed (using
+diff and regexps) and then attempts to run just those.  To make it run *all*
+tests in your saved file, simply save the file *again* without changing it.
+
+------------------------------------------------------------------------------
 Prerequisites
 ------------------------------------------------------------------------------
 
