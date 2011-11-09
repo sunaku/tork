@@ -252,15 +252,15 @@ whenever you change an existing factory definition or create a new one.
 
 Instead, use `at_exit()` to wait until (1) after the master process has forked
 a worker process and (2) just before that worker process runs its test suite
-(whose execution is started by your test framework's own `at_exit()` handler).
+(whose execution is started by your test framework's own `at_exit()` handler):
+
+    require 'factory_girl'
+    at_exit { FactoryGirl.find_definitions unless $! }
 
 This way, worker processes will pick up changes in your factories "for free"
 whenever they (re)run your test files.  Also, don't load your factories or do
 anything else in your `at_exit()` handler if Ruby is exiting because of a
-raised exception (denoted by the `$!` global variable in the snippet below).
-
-    require 'factory_girl'
-    at_exit { FactoryGirl.find_definitions unless $! }
+raised exception (denoted by the `$!` global variable in the snippet above).
 
 ------------------------------------------------------------------------------
 Known issues
