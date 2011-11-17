@@ -104,7 +104,7 @@ private
   end
 
   def run_test_file file
-    unless @waiting_test_files.include? file
+    if File.exist? file and not @waiting_test_files.include? file
       @waiting_test_files.push file
       @master.send [:test, file, find_changed_test_names(file)]
     end
