@@ -294,11 +294,13 @@ Known issues
     Otherwise, TestR will appear to ignore source-code changes in your
     models, controllers, helpers, and other Ruby source files.
 
-  * SQLite3 [raises `SQLite3::BusyException: database is locked` errors](
-    https://github.com/sunaku/test-loop/issues/2 ) because TestR runs your
-    test files in parallel.  You can work around this by using an [in-memory
-    adapter for SQLite3]( https://github.com/mvz/memory_test_fix ) or by using
+  * If SQLite3 raises one of the following errors, try using an [in-memory
+    adapter for SQLite3]( https://github.com/mvz/memory_test_fix ) or use
     different database software (such as MySQL) for your test environment.
+
+    * SQLite3::BusyException: database is locked
+
+    * cannot start a transaction within a transaction
 
 ------------------------------------------------------------------------------
 License
