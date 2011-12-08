@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 =begin
 
-TESTR-HERALD 1 "2011-11-03" "14.1.0" "TestR User Manuals"
-=========================================================
+TESTR-HERALD 1 "2011-11-03" "14.1.0"
+====================================
 
 NAME
 ----
 
-testr-herald - monitors current directory tree and reports modified files
+testr-herald - reports modified files
 
 SYNOPSIS
 --------

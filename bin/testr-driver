@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 =begin
 
-TESTR-DRIVER 1 "2011-11-03" "14.1.0" "TestR User Manuals"
-=========================================================
+TESTR-DRIVER 1 "2011-11-03" "14.1.0"
+====================================
 
 NAME
 ----
 
-testr-driver - tells master to run tests and keeps track of test results
+testr-driver - drives testr-master(1) and does bookkeeping
 
 SYNOPSIS
 --------
@@ -46,8 +46,8 @@ OPTIONS
 FILES
 -----
 
-`.testr.rb`
-  Ruby script in the directory where testr(1) is run.
+*.testr.rb*
+  Optional Ruby script for configuring testr(1).
 
 SEE ALSO
 --------
