@@ -1,4 +1,35 @@
 ------------------------------------------------------------------------------
+Version 14.1.1 (2011-12-07)
+------------------------------------------------------------------------------
+
+Bug fixes:
+
+  * Do not fail when given test file no longer exists.
+
+  * Make xUnit `--name` option regexp case-insensitive.
+
+  * RSpec does not accept regexp for `--example` option;
+    see https://github.com/rspec/rspec-core/issues/445
+    and https://github.com/dchelimsky/rspec/issues/44
+
+  * Ruby 187 does not have Symbol#upcase() method.
+
+Housekeeping:
+
+  * README: add another SQLite3 error to known issues.
+    Thanks to Luke Wendling for contributing this patch.
+
+  * README: add a section explaining usage and theory.
+
+  * README: show example earlier in factory_girl tip.
+
+  * README: update lines of code statistic: 372 SLOC.
+
+  * Better variable naming for self-documentation.
+
+  * Upgrade to binman 2.0.0 for UNIX man pages.
+
+------------------------------------------------------------------------------
 Version 14.1.0 (2011-11-03)
 ------------------------------------------------------------------------------
 
