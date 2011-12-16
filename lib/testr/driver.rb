@@ -31,7 +31,7 @@ module Driver
     quit_herald_and_master unless very_first_time
 
     @master = Client::Transceiver.new('testr-master') do |line|
-      event, file = JSON.load(line)
+      event, file, tests = JSON.load(line)
 
       case event.to_sym
       when :test
@@ -41,7 +41,9 @@ module Driver
       when :pass
         @running_test_files.delete file
         @failed_test_files.delete file
-        @passed_test_files.push file unless @passed_test_files.include? file
+        if tests.empty? and not @passed_test_files.include? file
+          @passed_test_files.push file
+        end
 
       when :fail
         @running_test_files.delete file
