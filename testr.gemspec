@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
 require "testr/version"
-require "binman/gemspec"
 
 Gem::Specification.new do |s|
   s.name        = "testr"
@@ -12,7 +11,7 @@ Gem::Specification.new do |s|
   s.summary     = "Continuous testing tool for Ruby"
   s.description = nil
 
-  s.files         = `git ls-files`.split("\n") + Dir['man/**/*']
+  s.files         = `git ls-files`.split("\n") + Dir["man/**/*"]
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
@@ -20,6 +19,7 @@ Gem::Specification.new do |s|
   # specify any dependencies here; for example:
   # s.add_development_dependency "rspec"
   # s.add_runtime_dependency "rest-client"
+  s.add_runtime_dependency "binman", "~> 3"
   s.add_runtime_dependency "json", ">= 1.6.1"
   s.add_runtime_dependency "guard", ">= 0.8.4"
   s.add_runtime_dependency "diff-lcs", ">= 1.1.2"
