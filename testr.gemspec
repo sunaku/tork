@@ -18,6 +18,6 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency "binman", "~> 3"
   s.add_runtime_dependency "json", ">= 1.6.1"
-  s.add_runtime_dependency "guard", ">= 0.8.4"
+  s.add_runtime_dependency "guard", ">= 0.9.0"
   s.add_runtime_dependency "diff-lcs", ">= 1.1.2"
 end

@@ -41,7 +41,7 @@ BinMan.help
 require 'guard'
 require 'guard/listener'
 
-listener = Guard::Listener.select_and_init
+listener = Guard::Listener.select_and_init(:watch_all_modifications => true)
 listener.on_change {|files| puts files }
 STDOUT.sync = true # don't buffer puts()
 listener.start
