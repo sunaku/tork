@@ -51,6 +51,7 @@ BinMan.help
 require 'json'
 require 'testr/client'
 
+warn 'testr: Absorbing test execution overhead...'
 @driver = TestR::Client::Transceiver.new('testr-driver') do |line|
   evstr, *details = JSON.load(line)
   event = evstr.to_sym
