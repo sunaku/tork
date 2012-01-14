@@ -1,4 +1,15 @@
 ------------------------------------------------------------------------------
+Version 14.1.3 (2012-01-13)
+------------------------------------------------------------------------------
+
+Internal changes:
+
+* Add support Guard v0.9.0 and newer in `testr-herald`.  Thanks to Jose Pablo
+  Barrantes for [this contribution](https://github.com/sunaku/testr/pull/16).
+
+* Tighten version constraints for gem dependencies to avoid future breakages.
+
+------------------------------------------------------------------------------
 Version 14.1.2 (2012-01-09)
 ------------------------------------------------------------------------------
 
