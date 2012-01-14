@@ -17,18 +17,8 @@ SYNOPSIS
 DESCRIPTION
 -----------
 
-This program is a simple command-line user interface for testr-driver(1).  It
-demonstrates how the components of TestR work together and also serves as an
-example of how you can create your own TestR user interface.
-
-When run, it presents you with a menu of single-character commands that you
-can enter, loads the test execution overhead into testr-master(1), and
-finally notifies you when the master is ready to run test files.
-
-It also launches testr-herald(1) alongside testr-master(1).  When the herald
-reports a modified file that belongs to the test execution overhead, this
-program notifies you accordingly and then replaces the current master with a
-new one that will absorb the modified test execution overhead into itself.
+This program is a simple command-line user interface for testr-driver(1).
+Press the ENTER key to see a menu of commands that this program accepts.
 
 OPTIONS
 -------
@@ -47,6 +37,10 @@ $0 = File.basename(__FILE__)
 
 require 'binman'
 BinMan.help
+
+#-----------------------------------------------------------------------------
+# backend
+#-----------------------------------------------------------------------------
 
 require 'json'
 require 'testr/client'
@@ -74,6 +68,10 @@ warn 'testr: Absorbing test execution overhead...'
   end
 end
 
+#-----------------------------------------------------------------------------
+# frontend
+#-----------------------------------------------------------------------------
+
 COMMANDS = {
   'r' => :run_all_test_files,
   's' => :stop_running_test_files,
@@ -82,14 +80,6 @@ COMMANDS = {
   'o' => :reabsorb_overhead_files,
   'q' => :quit,
 }
-
-def COMMANDS.show
-  each do |key, cmd|
-    warn "testr: Type #{key} then ENTER to #{cmd.to_s.tr('_', ' ')}."
-  end
-end
-
-COMMANDS.show # instruct newbies
 
 begin
   while key = STDIN.gets.chomp
@@ -101,7 +91,9 @@ begin
         @driver.send [command]
       end
     else
-      COMMANDS.show
+      COMMANDS.each do |key, cmd|
+        warn "testr: Type #{key} then ENTER to #{cmd.to_s.tr('_', ' ')}."
+      end
     end
   end
 rescue Interrupt

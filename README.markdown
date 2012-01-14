@@ -34,22 +34,13 @@ Features
 Architecture
 ------------------------------------------------------------------------------
 
-Following UNIX philosophy, TestR is made of simple text-based programs:
+Following UNIX philosophy, TestR is made of simple text-based programs: thus
+you can build your own custom TestR user interface by wrapping `testr-driver`!
 
 * `testr` is an interactive command-line user interface (CLI) for driver
 * `testr-herald` monitors current directory tree and reports changed files
 * `testr-driver` tells master to run tests and keeps track of test results
 * `testr-master` absorbs test execution overhead and forks to run your tests
-
-You can build your own custom TestR user interface by wrapping `testr-driver`!
-
-------------------------------------------------------------------------------
-Usage and theory of operation
-------------------------------------------------------------------------------
-
-Run `testr` to launch the command-line user interface for `testr-driver`.  It
-will present a menu of commands and then wait for you to input a command while
-the driver waits for `testr-herald` to tell it about changes in your tests.
 
 When the driver hears about changes in your test files, it tells the master to
 fork a worker process to run the tests affected by those changes.  This is all

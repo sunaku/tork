@@ -21,6 +21,10 @@ This program reads the following single-line commands (JSON arrays) from its
 standard input stream and performs the respective actions as described below.
 It also funnels the standard output stream of testr-master(1) into its own.
 
+When testr-herald(1) reports that a file belonging to the test execution
+overhead has been modified, this program replaces testr-master(1) with a new
+instance, which then absorbs the modified test execution overhead into itself.
+
 `["run_all_test_files"]`
   Runs all test files found within and beneath the current working directory.
 
