@@ -91,17 +91,21 @@ end
 
 COMMANDS.show # instruct newbies
 
-while key = STDIN.gets.chomp
-  if command = COMMANDS[key]
-    if command == :quit
-      @driver.quit
-      break
+begin
+  while key = STDIN.gets.chomp
+    if command = COMMANDS[key]
+      if command == :quit
+        @driver.quit
+        break
+      else
+        @driver.send [command]
+      end
     else
-      @driver.send [command]
+      COMMANDS.show
     end
-  else
-    COMMANDS.show
   end
+rescue Interrupt
+  # forced quit
 end
 
 Process.waitall

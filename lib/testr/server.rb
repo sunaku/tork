@@ -26,6 +26,8 @@ module Server
         end
       end
     end
+  rescue Interrupt
+    # forced quit
   end
 
   def self.extended server
