@@ -21,10 +21,6 @@ This program reads the following single-line commands (JSON arrays) from its
 standard input stream and performs the respective actions as described below.
 It also funnels the standard output stream of testr-master(1) into its own.
 
-When testr-herald(1) reports that a file belonging to the test execution
-overhead has been modified, this program replaces testr-master(1) with a new
-instance, which then absorbs the modified test execution overhead into itself.
-
 `["run_all_test_files"]`
   Runs all test files found within and beneath the current working directory.
 
@@ -40,6 +36,17 @@ instance, which then absorbs the modified test execution overhead into itself.
 
 `["quit"]`
   Stops all tests that are currently running and exits.
+
+When testr-herald(1) reports that a file belonging to the test execution
+overhead has been modified, this program replaces testr-master(1) with a new
+instance, which then absorbs the modified test execution overhead into itself.
+
+This program emits the following single-line status messages (JSON arrays) on
+its standard output stream to notify any upstream processes of its activity:
+
+`["over",` *overhead_file*`]`
+  The test execution overhead is currently being reabsorbed, by replacing
+  testr-master(1) with a new instance, because *overhead_file* has changed.
 
 OPTIONS
 -------
