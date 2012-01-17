@@ -76,7 +76,7 @@ As a Git clone:
 
     git clone git://github.com/sunaku/testr
     cd testr
-    bundle install
+    rake install
 
 ------------------------------------------------------------------------------
 Invocation
@@ -90,7 +90,7 @@ If installed as a Git clone:
 
     bundle exec ruby -Ilib bin/testr
 
-You can test with built-in support for Ruby on Rails:
+You can test with built-in support for [Ruby on Rails]:
 
     testr rails
 
@@ -246,18 +246,17 @@ simply add the `require()` lines shown below to your configuration file
 
 ### require 'testr/config/rails' # testr rails
 
-Support for the [Ruby on Rails](http://rubyonrails.org) web framework.
+Support for the [Ruby on Rails] web framework.
 
 ### require 'testr/config/parallel_tests' # testr parallel_tests
 
-Support for the [parallel_tests](https://github.com/grosser/parallel_tests)
-library.
+Support for the [parallel_tests] library.
 
 ------------------------------------------------------------------------------
 Usage tips
 ------------------------------------------------------------------------------
 
-### [factory_girl](https://github.com/thoughtbot/factory_girl) factories
+### [factory_girl] factories
 
 Don't load your factories in master process (as part of your test execution
 overhead) because that would necessitate the reloading of said overhead
@@ -291,8 +290,8 @@ Known issues
     models, controllers, helpers, and other Ruby source files.
 
   * If SQLite3 raises one of the following errors, try using an [in-memory
-    adapter for SQLite3]( https://github.com/mvz/memory_test_fix ) or use
-    different database software (such as MySQL) for your test environment.
+    adapter for SQLite3][memory_test_fix] or use different database software
+    (such as MySQL) for your test environment.
 
     * SQLite3::BusyException: database is locked
 
@@ -303,3 +302,8 @@ License
 ------------------------------------------------------------------------------
 
 Released under the ISC license.  See the LICENSE file for details.
+
+[factory_girl]: https://github.com/thoughtbot/factory_girl
+[memory_test_fix]: https://github.com/mvz/memory_test_fix
+[parallel_tests]: https://github.com/grosser/parallel_tests
+[Ruby on Rails]: http://rubyonrails.org
