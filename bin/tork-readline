@@ -1,0 +1,69 @@
+#!/usr/bin/env ruby
+=begin =======================================================================
+
+# TORK-READLINE 1 2012-02-06 18.0.0
+
+## NAME
+
+tork-readline - readline wrapper for tork(1)
+
+## SYNOPSIS
+
+`tork-readline` [*OPTION*]... [*ARGUMENT*]...
+
+## DESCRIPTION
+
+This program wraps tork(1) inside a GNU readline command line interface to
+bring you advanced shell-like interactivity and command editing capabilities.
+It passes the given *ARGUMENT* list directly to tork(1) for further processing.
+
+## OPTIONS
+
+`-h`, `--help`
+  Show this help manual.
+
+## SEE ALSO
+
+tork(1)
+
+=end =========================================================================
+
+$0 = File.basename(__FILE__) # for easier identification in ps(1) output
+
+require 'binman'
+BinMan.help
+
+COMMANDS = {
+  'help'     => '',
+  'run'      => 't',
+  'stop'     => 's',
+  'absorb'   => 'o',
+  'passed'   => 'p',
+  'failed'   => 'f',
+  'quit'     => 'q',
+}
+
+require 'readline'
+Readline.completion_proc = lambda do |word|
+  COMMANDS.keys.grep(/^#{ Regexp.escape(word) }/)
+end
+
+require 'shellwords'
+IO.popen(Shellwords.shelljoin(['tork'] + ARGV), 'w') do |tork|
+  while line = Readline.readline("#{$0}> ").strip
+    next if line.empty?
+
+    # don't add duplicate lines into history
+    unless Readline::HISTORY.to_a[-1] == line
+      Readline::HISTORY.push line
+    end
+
+    # translate command and pass to tork(1)
+    if command = COMMANDS[line]
+      tork.puts command
+      break if command == 'q'
+    else
+      warn "#{$0}: unknown command: #{line.inspect}"
+    end
+  end
+end
