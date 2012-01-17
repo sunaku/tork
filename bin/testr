@@ -89,15 +89,11 @@ COMMANDS = {
 begin
   while key = STDIN.gets.chomp
     if command = COMMANDS[key]
-      if command == :quit
-        @driver.quit
-        break
-      else
-        @driver.send [command]
-      end
-    else
-      COMMANDS.each do |key, cmd|
-        warn "testr: Type #{key} then ENTER to #{cmd.to_s.tr('_', ' ')}."
+      @driver.send [command]
+      break if command == :quit
+    else # invalid command
+      COMMANDS.each do |key, command|
+        warn "testr: Type #{key} then ENTER to #{command.to_s.tr('_', ' ')}."
       end
     end
   end
