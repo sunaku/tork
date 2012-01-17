@@ -28,7 +28,7 @@ Features
 
   * Configurable through a Ruby script in your current working directory.
 
-  * Implemented in less than 380 lines (SLOC) of pure Ruby code! :-)
+  * Implemented in less than 400 lines (SLOC) of pure Ruby code! :-)
 
 ------------------------------------------------------------------------------
 Architecture

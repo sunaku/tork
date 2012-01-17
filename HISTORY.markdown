@@ -1,4 +1,20 @@
 ------------------------------------------------------------------------------
+Version 14.2.0 (2012-01-16)
+------------------------------------------------------------------------------
+
+New features:
+
+  * Add ability to run `testr rails` without needing a `.testr.rb` file.
+
+  * testr(1) no longer shows command menu at startup.  Press ENTER to see it.
+
+  * testr(1) now notifies you before absorbing overhead at startup.
+
+Bug fixes:
+
+  * testr(1) now accepts death silently when Control-C is pressed.
+
+------------------------------------------------------------------------------
 Version 14.1.3 (2012-01-13)
 ------------------------------------------------------------------------------
 
