@@ -90,6 +90,10 @@ If installed as a Git clone:
 
     bundle exec ruby -Ilib bin/testr
 
+You can test with built-in support for Ruby on Rails:
+
+    testr rails
+
 You can monitor your test processes in another terminal:
 
     watch 'ps xuw | sed -n "1p; /test[r]/p" | fgrep -v sed'
@@ -236,14 +240,15 @@ accelerates your test-driven development cycle and improves productivity!
 Configuration helpers
 ------------------------------------------------------------------------------
 
-The following libraries assist you with configuring TestR.  To use them,
-simply add the require() lines shown below to your configuration file.
+The following libraries assist you with configuring TestR. To use them,
+simply add the `require()` lines shown below to your configuration file
+*or* pass their basenames to the testr(1) command, also as shown below.
 
-### require 'testr/config/rails'
+### require 'testr/config/rails' # testr rails
 
 Support for the [Ruby on Rails](http://rubyonrails.org) web framework.
 
-### require 'testr/config/parallel_tests'
+### require 'testr/config/parallel_tests' # testr parallel_tests
 
 Support for the [parallel_tests](https://github.com/grosser/parallel_tests)
 library.

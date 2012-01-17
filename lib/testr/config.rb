@@ -5,6 +5,10 @@ module TestR
 
   Config = OpenStruct.new
 
+  #---------------------------------------------------------------------------
+  # defaults
+  #---------------------------------------------------------------------------
+
   Config.max_forked_workers = [
     # http://stackoverflow.com/questions/891537#6420817
     'fgrep -c processor /proc/cpuinfo', # Linux
@@ -60,6 +64,20 @@ module TestR
       end
     end
   ]
+
+  #---------------------------------------------------------------------------
+  # overrides
+  #---------------------------------------------------------------------------
+
+  if ENV.key? 'TESTR_CONFIGS'
+    JSON.load(ENV['TESTR_CONFIGS']).each do |config|
+      if File.exist? config
+        load File.expand_path(config)
+      else
+        require "testr/config/#{config}"
+      end
+    end
+  end
 
   load _user_config_file if File.exist? _user_config_file
 end

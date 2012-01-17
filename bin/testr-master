@@ -60,6 +60,14 @@ FILES
 *.testr.rb*
   Optional Ruby script for configuring testr(1).
 
+ENVIRONMENT
+-----------
+
+`TESTR_CONFIGS`
+  A single-line JSON array containing paths to actual files or names of
+  helper libraries in the testr/config/ namespace of Ruby's load path.
+  These configuration files are loaded just before *.testr.rb* is loaded.
+
 SEE ALSO
 --------
 

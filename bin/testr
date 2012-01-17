@@ -12,13 +12,16 @@ testr - Continuous testing tool for Ruby
 SYNOPSIS
 --------
 
-`testr` [*OPTION*]...
+`testr` [*OPTION*]... [*CONFIG*]...
 
 DESCRIPTION
 -----------
 
-This program is a simple command-line user interface for testr-driver(1).
-Press the ENTER key to see a menu of commands that this program accepts.
+This program is a simple command-line user interface for testr-driver(1).  It
+loads the given *CONFIG* files (which are either paths to actual files or
+names of helper libraries in the testr/config/ namespace of Ruby's load path)
+and then waits for you to supply interactive commands on its stdin.  You may
+press the ENTER key (supplying no command) to see a menu of accepted commands.
 
 OPTIONS
 -------
@@ -38,11 +41,13 @@ $0 = File.basename(__FILE__)
 require 'binman'
 BinMan.help
 
+require 'json'
+ENV['TESTR_CONFIGS'] = JSON.dump(ARGV)
+
 #-----------------------------------------------------------------------------
 # backend
 #-----------------------------------------------------------------------------
 
-require 'json'
 require 'testr/client'
 
 warn 'testr: Absorbing test execution overhead...'
