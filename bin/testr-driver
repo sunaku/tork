@@ -42,7 +42,7 @@ overhead has been modified, this program replaces testr-master(1) with a new
 instance, which then absorbs the modified test execution overhead into itself.
 
 This program emits the following single-line status messages (JSON arrays) on
-its standard output stream to notify any upstream processes of its activity:
+its standard output stream to provide notifications about its activity:
 
 `["over",` *overhead_file*`]`
   The test execution overhead is currently being reabsorbed, by replacing

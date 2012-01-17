@@ -8,7 +8,7 @@ module Server
   end
 
   def loop
-    (@upstream = STDOUT.dup).sync = true
+    (@client = STDOUT.dup).sync = true
     STDOUT.reopen(STDERR).sync = true
 
     catch :testr_server_quit do

@@ -51,7 +51,7 @@ module Driver
         @failed_test_files.push file unless @failed_test_files.include? file
       end
 
-      @upstream.print line
+      @client.print line
     end
 
     @master.send [:load, Config.overhead_load_paths,
@@ -76,7 +76,7 @@ module Driver
 
       # reabsorb text execution overhead if overhead files changed
       if Config.reabsorb_file_greps.any? {|r| r =~ changed_file }
-        @upstream.puts JSON.dump([:over, changed_file])
+        @client.puts JSON.dump([:over, changed_file])
         # NOTE: new thread because reabsorb_overhead_files will kill this one
         Thread.new { reabsorb_overhead_files }.join
       end

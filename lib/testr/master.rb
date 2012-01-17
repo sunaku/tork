@@ -17,7 +17,7 @@ module Master
       require file.sub(/\.rb$/, '')
     end
 
-    @upstream.print @command_line
+    @client.print @command_line
   end
 
   def test test_file, test_names
@@ -57,7 +57,7 @@ module Master
     end
 
     @command_by_worker_pid[worker_pid] = @command.push(worker_number)
-    @upstream.print @command_line
+    @client.print @command_line
   end
 
   def stop
@@ -77,7 +77,7 @@ private
   @worker_number_pool = (0 ... Config.max_forked_workers).to_a
   @command_by_worker_pid = {}
 
-  # process exited child processes and report finished workers to upstream
+  # process exited child processes and report finished workers to client
   trap :SIGCHLD do
     begin
       while wait2_array = Process.wait2(-1, Process::WNOHANG)
@@ -85,7 +85,7 @@ private
         if command = @command_by_worker_pid.delete(child_pid)
           @worker_number_pool.push command.pop
           command[0] = child_status.success? ? 'pass' : 'fail'
-          @upstream.puts JSON.dump(command.push(child_status))
+          @client.puts JSON.dump(command.push(child_status))
         else
           warn "testr-master: unknown child exited: #{wait2_array.inspect}"
         end
