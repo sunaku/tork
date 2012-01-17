@@ -27,8 +27,8 @@ module Driver
     run_test_files @failed_test_files
   end
 
-  def reabsorb_overhead_files very_first_time = false
-    quit_herald_and_master unless very_first_time
+  def reabsorb_overhead_files
+    @master.quit if defined? @master
 
     @master = Client::Transceiver.new('testr-master') do |line|
       event, file, tests = JSON.load(line)
@@ -57,6 +57,12 @@ module Driver
     @master.send [:load, Config.overhead_load_paths,
                   Dir[*Config.overhead_file_globs]]
 
+    rerun_running_test_files
+  end
+
+  def loop
+    reabsorb_overhead_files
+
     @herald = Client::Receiver.new('testr-herald') do |line|
       changed_file = line.chomp
       warn "testr-driver: herald: #{changed_file}" if $DEBUG
@@ -76,21 +82,13 @@ module Driver
       end
     end
 
-    rerun_running_test_files
-  end
-
-  def loop
-    reabsorb_overhead_files true
     super
-    quit_herald_and_master
-  end
 
-private
-
-  def quit_herald_and_master
     @herald.quit
     @master.quit
   end
+
+private
 
   @waiting_test_files = []
   @running_test_files = []
