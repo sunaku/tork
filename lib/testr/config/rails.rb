@@ -21,6 +21,14 @@ TestR::Config.test_file_globbers[%r<^(test|spec)/factories/.+_factory\.rb$>] =
     "{test,spec}/**/{#{base},#{poly}_*}_{test,spec}.rb"
   end
 
+TestR::Config.before_fork_hooks << proc do
+  ActiveRecord::Base.connection.disconnect!
+end
+
+TestR::Config.after_fork_hooks << proc do
+  ActiveRecord::Base.establish_connection
+end
+
 begin
   require 'rails/railtie'
   Class.new Rails::Railtie do
