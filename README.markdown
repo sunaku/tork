@@ -193,16 +193,14 @@ worker process is forked to run a test file.  These functions are given:
 
 For example, to see some real values:
 
-    TestR::Config.before_fork_hooks << lambda {
-      |worker_number, log_file, test_file, test_names|
-
+    TestR::Config.before_fork_hooks << lambda do |worker_number, log_file, test_file, test_names|
       p :before_fork_hooks => {
         :worker_number => worker_number,
         :log_file      => log_file,
         :test_file     => test_file,
         :test_names    => test_names,
       }
-    }
+    end
 
 ### TestR::Config.after_fork_hooks
 
@@ -220,9 +218,7 @@ by `testr-master`.  These functions are given:
 
 For example, to see some real values, including the worker process' PID:
 
-    TestR::Config.after_fork_hooks << lambda {
-      |worker_number, log_file, test_file, test_names|
-
+    TestR::Config.after_fork_hooks << lambda do |worker_number, log_file, test_file, test_names|
       p :after_fork_hooks => {
         :worker_pid    => $$,
         :worker_number => worker_number,
@@ -230,7 +226,7 @@ For example, to see some real values, including the worker process' PID:
         :test_file     => test_file,
         :test_names    => test_names,
       }
-    }
+    end
 
 The first function in this array instructs Test::Unit and RSpec to only run
 those tests that correspond to the given `test_names` values.  This
