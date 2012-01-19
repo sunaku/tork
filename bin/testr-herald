@@ -33,7 +33,7 @@ testr(1), testr-driver(1), testr-master(1), testr-herald(1)
 
 =end =========================================================================
 
-$0 = File.basename(__FILE__)
+$0 = File.basename(__FILE__) # for easier indentification in ps(1) output
 
 require 'binman'
 BinMan.help
