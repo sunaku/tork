@@ -22,7 +22,9 @@ TestR::Config.test_file_globbers[%r<^(test|spec)/factories/.+_factory\.rb$>] =
   end
 
 TestR::Config.after_fork_hooks << proc do
-  ActiveRecord::Base.connection.reconnect!
+  unless ActiveRecord::Base.connection_config[:database] == ':memory:'
+    ActiveRecord::Base.connection.reconnect!
+  end
 end
 
 begin
