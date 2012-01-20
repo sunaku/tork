@@ -89,6 +89,7 @@ COMMANDS = {
 begin
   while key = STDIN.gets.chomp
     if command = COMMANDS[key]
+      warn "testr: Sending #{command.to_s.inspect} command..."
       @driver.send [command]
       break if command == :quit
     else # invalid command
