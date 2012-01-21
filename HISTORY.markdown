@@ -1,4 +1,39 @@
 ------------------------------------------------------------------------------
+Version 14.3.0 (2012-01-20)
+------------------------------------------------------------------------------
+
+External changes:
+
+  * testr(1): notify user while dispatching their commands. This is especially
+    useful when the "rerun_passed_test_files" command has been dispatched but
+    there are no passed test files, so nothing happens and from the user's
+    perspective: TestR sucks because it's unresponsive.
+
+  * config/testr/rails: Reopen connections in forked workers to fix errors:
+
+        Mysql2::Error: MySQL server has gone away
+        PGError: connection not open
+
+    Thanks to Spencer Steffen for [contributing this solution](
+    https://github.com/sunaku/testr/issues/14#issuecomment-3539470).
+
+  * testr-driver(1): document the "over" status message in manual page.
+
+Internal changes:
+
+  * testr-driver(1): keep same herald; only replace master.
+
+  * testr(1): shorten code for loop break on quit command.
+
+  * server: rename `@upstream` to `@client` for coherence.
+
+  * Can pass lambda and proc with block to `<<` method.
+
+  * Explain `$0` override at the start of bin/ scripts.
+
+  * LICENSE: credit our most recent contributors.
+
+------------------------------------------------------------------------------
 Version 14.2.0 (2012-01-16)
 ------------------------------------------------------------------------------
 
