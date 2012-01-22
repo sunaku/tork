@@ -1,27 +1,27 @@
-require 'testr/config'
+require 'tork/config'
 require 'active_support/inflector'
 
-TestR::Config.reabsorb_file_greps.push(
+Tork::Config.reabsorb_file_greps.push(
   %r<^config/.+\.(rb|yml)$>,
   %r<^db/schema\.rb$>,
   %r<^Gemfile\.lock$>
 )
 
-TestR::Config.test_file_globbers[%r<^(app|lib|test|spec)/.+\.rb$>] =
+Tork::Config.test_file_globbers[%r<^(app|lib|test|spec)/.+\.rb$>] =
   lambda do |path|
     base = File.basename(path, '.rb')
     poly = ActiveSupport::Inflector.pluralize(base)
     "{test,spec}/**/{#{base},#{poly}_*}_{test,spec}.rb"
   end
 
-TestR::Config.test_file_globbers[%r<^(test|spec)/factories/.+_factory\.rb$>] =
+Tork::Config.test_file_globbers[%r<^(test|spec)/factories/.+_factory\.rb$>] =
   lambda do |path|
     base = File.basename(path, '_factory.rb')
     poly = ActiveSupport::Inflector.pluralize(base)
     "{test,spec}/**/{#{base},#{poly}_*}_{test,spec}.rb"
   end
 
-TestR::Config.after_fork_hooks << proc do
+Tork::Config.after_fork_hooks << proc do
   unless ActiveRecord::Base.connection_config[:database] == ':memory:'
     ActiveRecord::Base.connection.reconnect!
   end
@@ -32,12 +32,12 @@ begin
   Class.new Rails::Railtie do
     config.before_initialize do |app|
       if app.config.cache_classes
-        warn "testr/config/rails: Setting #{app.class}.config.cache_classes = false"
+        warn "tork/config/rails: Setting #{app.class}.config.cache_classes = false"
         app.config.cache_classes = false
       end
     end
   end
 rescue LoadError
-  warn "testr/config/rails: Railtie not available; please manually set:\n\t"\
+  warn "tork/config/rails: Railtie not available; please manually set:\n\t"\
        "config.cache_classes = false"
 end

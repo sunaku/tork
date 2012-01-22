@@ -1,38 +1,38 @@
 #!/usr/bin/env ruby
 =begin
 
-TESTR 1 "2012-01-20" "14.3.0"
-=============================
+TORK 1 2012-01-20 14.3.0
+==============================================================================
 
 NAME
-----
+------------------------------------------------------------------------------
 
-testr - Continuous testing tool for Ruby
+tork - Continuous testing tool for Ruby
 
 SYNOPSIS
---------
+------------------------------------------------------------------------------
 
-`testr` [*OPTION*]... [*CONFIG*]...
+`tork` [*OPTION*]... [*CONFIG*]...
 
 DESCRIPTION
------------
+------------------------------------------------------------------------------
 
-This program is a simple command-line user interface for testr-driver(1).  It
+This program is a simple command-line user interface for tork-driver(1).  It
 loads the given *CONFIG* files (which are either paths to actual files or
-names of helper libraries in the testr/config/ namespace of Ruby's load path)
+names of helper libraries in the tork/config/ namespace of Ruby's load path)
 and then waits for you to supply interactive commands on its stdin.  You may
 press the ENTER key (supplying no command) to see a menu of accepted commands.
 
 OPTIONS
--------
+------------------------------------------------------------------------------
 
 `-h`, `--help`
   Display this help manual using man(1).
 
 SEE ALSO
---------
+------------------------------------------------------------------------------
 
-testr(1), testr-driver(1), testr-master(1), testr-herald(1)
+tork(1), tork-driver(1), tork-master(1), tork-herald(1)
 
 =end =========================================================================
 
@@ -42,22 +42,22 @@ require 'binman'
 BinMan.help
 
 require 'json'
-ENV['TESTR_CONFIGS'] = JSON.dump(ARGV)
+ENV['TORK_CONFIGS'] = JSON.dump(ARGV)
 
 #-----------------------------------------------------------------------------
 # backend
 #-----------------------------------------------------------------------------
 
-require 'testr/client'
+require 'tork/client'
 
-warn 'testr: Absorbing test execution overhead...'
-@driver = TestR::Client::Transceiver.new('testr-driver') do |line|
+warn 'tork: Absorbing test execution overhead...'
+@driver = Tork::Client::Transceiver.new('tork-driver') do |line|
   evstr, *details = JSON.load(line)
   event = evstr.to_sym
 
   case event
-  when :load then warn 'testr: Overhead absorbed. Ready for testing!'
-  when :over then warn 'testr: Reabsorbing changed overhead files...'
+  when :load then warn 'tork: Overhead absorbed. Ready for testing!'
+  when :over then warn 'tork: Reabsorbing changed overhead files...'
   else
     test_file, test_names, *details = details
     message = [evstr.upcase, test_file, test_names.inspect, details].join(' ')
@@ -89,12 +89,12 @@ COMMANDS = {
 begin
   while key = STDIN.gets.chomp
     if command = COMMANDS[key]
-      warn "testr: Sending #{command.to_s.inspect} command..."
+      warn "tork: Sending #{command.to_s.inspect} command..."
       @driver.send [command]
       break if command == :quit
     else # invalid command
       COMMANDS.each do |key, command|
-        warn "testr: Type #{key} then ENTER to #{command.to_s.tr('_', ' ')}."
+        warn "tork: Type #{key} then ENTER to #{command.to_s.tr('_', ' ')}."
       end
     end
   end

@@ -1,17 +1,17 @@
 require 'json'
 
-module TestR
+module Tork
 module Server
 
   def quit
-    throw :testr_server_quit
+    throw :tork_server_quit
   end
 
   def loop
     (@client = STDOUT.dup).sync = true
     STDOUT.reopen(STDERR).sync = true
 
-    catch :testr_server_quit do
+    catch :tork_server_quit do
       while line = STDIN.gets
         warn "#{caller[2]} RECV #{line.chomp}" if $DEBUG
 

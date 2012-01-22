@@ -1,4 +1,4 @@
-module TestR
+module Tork
 module Client
 
   class Receiver < Thread

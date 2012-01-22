@@ -1,21 +1,21 @@
 #!/usr/bin/env ruby
 =begin
 
-TESTR-MASTER 1 "2012-01-20" "14.3.0"
-====================================
+TORK-MASTER 1 2012-01-20 14.3.0
+==============================================================================
 
 NAME
-----
+------------------------------------------------------------------------------
 
-testr-master - absorbs overhead and runs tests
+tork-master - absorbs overhead and runs tests
 
 SYNOPSIS
---------
+------------------------------------------------------------------------------
 
-`testr-master` [*OPTION*]...
+`tork-master` [*OPTION*]...
 
 DESCRIPTION
------------
+------------------------------------------------------------------------------
 
 This program reads the following single-line commands (JSON arrays) from its
 standard input stream and performs the respective actions as described below.
@@ -49,29 +49,29 @@ standard input stream and performs the respective actions as described below.
   Stops all tests that are currently running and exits.
 
 OPTIONS
--------
+------------------------------------------------------------------------------
 
 `-h`, `--help`
   Display this help manual using man(1).
 
 FILES
------
+------------------------------------------------------------------------------
 
-*.testr.rb*
-  Optional Ruby script for configuring testr(1).
+*.tork.rb*
+  Optional Ruby script for configuring tork(1).
 
 ENVIRONMENT
------------
+------------------------------------------------------------------------------
 
-`TESTR_CONFIGS`
+`TORK_CONFIGS`
   A single-line JSON array containing paths to actual files or names of
-  helper libraries in the testr/config/ namespace of Ruby's load path.
-  These configuration files are loaded just before *.testr.rb* is loaded.
+  helper libraries in the tork/config/ namespace of Ruby's load path.
+  These configuration files are loaded just before *.tork.rb* is loaded.
 
 SEE ALSO
---------
+------------------------------------------------------------------------------
 
-testr(1), testr-driver(1), testr-master(1), testr-herald(1)
+tork(1), tork-driver(1), tork-master(1), tork-herald(1)
 
 =end =========================================================================
 
@@ -80,8 +80,8 @@ $0 = File.basename(__FILE__) # for easier indentification in ps(1) output
 require 'binman'
 BinMan.help
 
-require 'testr/master'
-TestR::Master.loop
+require 'tork/master'
+Tork::Master.loop
 
 Process.waitall
 raise SystemExit # prevent empty test suite from running in the master process

@@ -1,8 +1,8 @@
 require 'json'
-require 'testr/server'
-require 'testr/config'
+require 'tork/server'
+require 'tork/config'
 
-module TestR
+module Tork
 module Master
 
   extend Server
@@ -33,7 +33,7 @@ module Master
 
     worker_pid = fork do
       # make the process title Test::Unit friendly and ps(1) searchable
-      $0 = "testr-worker[#{worker_number}] #{test_file}"
+      $0 = "tork-worker[#{worker_number}] #{test_file}"
 
       # detach worker process from master process' group for kill -pgrp
       Process.setsid
@@ -87,7 +87,7 @@ private
           command[0] = child_status.success? ? 'pass' : 'fail'
           @client.puts JSON.dump(command.push(child_status))
         else
-          warn "testr-master: unknown child exited: #{wait2_array.inspect}"
+          warn "tork-master: unknown child exited: #{wait2_array.inspect}"
         end
       end
     rescue SystemCallError

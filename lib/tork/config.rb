@@ -1,7 +1,7 @@
 require 'ostruct'
 
-module TestR
-  _user_config_file = '.testr.rb'
+module Tork
+  _user_config_file = '.tork.rb'
 
   Config = OpenStruct.new
 
@@ -69,12 +69,12 @@ module TestR
   # overrides
   #---------------------------------------------------------------------------
 
-  if ENV.key? 'TESTR_CONFIGS'
-    JSON.load(ENV['TESTR_CONFIGS']).each do |config|
+  if ENV.key? 'TORK_CONFIGS'
+    JSON.load(ENV['TORK_CONFIGS']).each do |config|
       if File.exist? config
         load File.expand_path(config)
       else
-        require "testr/config/#{config}"
+        require "tork/config/#{config}"
       end
     end
   end

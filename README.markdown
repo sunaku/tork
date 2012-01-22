@@ -1,12 +1,12 @@
-TestR - Continuous testing tool for Ruby
+Tork - Test with fork
 ==============================================================================
 
-TestR is a continuous testing tool for Ruby that automatically detects and
+Tork is a continuous testing tool for Ruby that automatically detects and
 tests changes in your Ruby application or test suite in an efficient manner:
 
-  1. Absorbs test execution overhead into the master Ruby process.
+  1. Absorbs your test execution overhead into a master process.
 
-  2. Forks to run your test files in parallel and without overhead.
+  2. Forks to run your test files in parallel, without overhead.
 
   3. Avoids running unchanged tests inside changed test files.
 
@@ -34,19 +34,19 @@ Features
 Architecture
 ------------------------------------------------------------------------------
 
-Following UNIX philosophy, TestR is made of simple text-based programs: thus
-you can build your own custom TestR user interface by wrapping `testr-driver`!
+Following UNIX philosophy, Tork is made of simple text-based programs: thus
+you can build your own custom Tork user interface by wrapping `tork-driver`!
 
-* `testr` is an interactive command-line user interface (CLI) for driver
-* `testr-herald` monitors current directory tree and reports changed files
-* `testr-driver` tells master to run tests and keeps track of test results
-* `testr-master` absorbs test execution overhead and forks to run your tests
+* `tork` is an interactive command-line user interface (CLI) for driver
+* `tork-herald` monitors current directory tree and reports changed files
+* `tork-driver` tells master to run tests and keeps track of test results
+* `tork-master` absorbs test execution overhead and forks to run your tests
 
 When the driver hears about changes in your test files, it tells the master to
 fork a worker process to run the tests affected by those changes.  This is all
 performed automatically.  But what if you want to manually run a test file?
 
-You can re-run any test file by simply saving it!  When you do, TestR tries to
+You can re-run any test file by simply saving it!  When you do, Tork tries to
 figure out which tests inside your newly saved test file have changed (using
 diff and regexps) and then attempts to run just those.  To make it run *all*
 tests in your saved file, simply save the file *again* without changing it.
@@ -70,12 +70,12 @@ Installation
 
 As a Ruby gem:
 
-    gem install testr
+    gem install tork
 
 As a Git clone:
 
-    git clone git://github.com/sunaku/testr
-    cd testr
+    git clone git://github.com/sunaku/tork
+    cd tork
     rake install
 
 ------------------------------------------------------------------------------
@@ -84,63 +84,63 @@ Invocation
 
 If installed as a Ruby gem:
 
-    testr
+    tork
 
 If installed as a Git clone:
 
-    bundle exec ruby -Ilib bin/testr
+    bundle exec ruby -Ilib bin/tork
 
 You can test with built-in support for [Ruby on Rails]:
 
-    testr rails
+    tork rails
 
 You can monitor your test processes in another terminal:
 
     watch 'ps xuw | sed -n "1p; /test[r]/p" | fgrep -v sed'
 
-You can forcefully terminate TestR from another terminal:
+You can forcefully terminate Tork from another terminal:
 
-    pkill -f testr
+    pkill -f tork
 
 ------------------------------------------------------------------------------
 Configuration
 ------------------------------------------------------------------------------
 
-TestR looks for a configuration file named `.testr.rb` in its current working
+Tork looks for a configuration file named `.tork.rb` in its current working
 directory.  The configuration file is a normal Ruby script.  Inside it, you
-can query and modify the `TestR::Config` object (OpenStruct) according to the
+can query and modify the `Tork::Config` object (OpenStruct) according to the
 configuration options listed below.
 
 ------------------------------------------------------------------------------
 Configuration options
 ------------------------------------------------------------------------------
 
-### TestR::Config.max_forked_workers
+### Tork::Config.max_forked_workers
 
 Maximum number of worker processes at any given time.  The default value is
 the number of processors detected on your system, or 1 if detection fails.
 
-### TestR::Config.overhead_load_paths
+### Tork::Config.overhead_load_paths
 
 Array of paths that are prepended to Ruby's `$LOAD_PATH` before the
-test execution overhead is loaded into `testr-master`.
+test execution overhead is loaded into `tork-master`.
 
-### TestR::Config.overhead_file_globs
+### Tork::Config.overhead_file_globs
 
 Array of file globbing patterns that describe a set of Ruby scripts that are
-loaded into `testr-master` as test execution overhead.
+loaded into `tork-master` as test execution overhead.
 
-### TestR::Config.reabsorb_file_greps
+### Tork::Config.reabsorb_file_greps
 
 Array of regular expressions that describe a set of file paths that cause the
-test execution overhead to be reabsorbed in `testr-master` when they change.
+test execution overhead to be reabsorbed in `tork-master` when they change.
 
-### TestR::Config.all_test_file_globs
+### Tork::Config.all_test_file_globs
 
 Array of file globbing patterns that describe the set of all test files in
 your Ruby application.
 
-### TestR::Config.test_file_globbers
+### Tork::Config.test_file_globbers
 
 Hash that maps (1) a regular expression describing a set of file paths to (2)
 a lambda function yielding a file globbing pattern describing a set of
@@ -156,7 +156,7 @@ by an underscore and the file name in reverse like this:
 
 Then you would add the following to your configuration file:
 
-    TestR::Config.test_file_globbers[%r<^(lib|app)/.+\.rb$>] = lambda do |path|
+    Tork::Config.test_file_globbers[%r<^(lib|app)/.+\.rb$>] = lambda do |path|
       name = File.basename(path, '.rb')
       "{test,spec}/**/#{name}_#{name.reverse}.rb"
     end
@@ -165,21 +165,21 @@ In addition, these lambda functions can return `nil` if they do not wish for a
 particular source file to be tested.  For example, to ignore tests for all
 source files except those within a `models/` directory, you would write:
 
-    TestR::Config.test_file_globbers[%r<^(lib|app)/.+\.rb$>] = lambda do |path|
+    Tork::Config.test_file_globbers[%r<^(lib|app)/.+\.rb$>] = lambda do |path|
       if path.include? '/models/'
         "{test,spec}/**/#{File.basename(path)}"
       end
     end
 
-### TestR::Config.test_name_extractor
+### Tork::Config.test_name_extractor
 
 Lambda function that is given a line of source code to determine whether it
 can be considered as a test definition.  In which case, the function must
 extract and return the name of the test being defined.
 
-### TestR::Config.before_fork_hooks
+### Tork::Config.before_fork_hooks
 
-Array of lambda functions that are executed inside `testr-master` before a
+Array of lambda functions that are executed inside `tork-master` before a
 worker process is forked to run a test file.  These functions are given:
 
 1. The sequence number of the worker process that will be forked shortly.
@@ -193,7 +193,7 @@ worker process is forked to run a test file.  These functions are given:
 
 For example, to see some real values:
 
-    TestR::Config.before_fork_hooks << lambda do |worker_number, log_file, test_file, test_names|
+    Tork::Config.before_fork_hooks << lambda do |worker_number, log_file, test_file, test_names|
       p :before_fork_hooks => {
         :worker_number => worker_number,
         :log_file      => log_file,
@@ -202,10 +202,10 @@ For example, to see some real values:
       }
     end
 
-### TestR::Config.after_fork_hooks
+### Tork::Config.after_fork_hooks
 
 Array of lambda functions that are executed inside a worker process forked
-by `testr-master`.  These functions are given:
+by `tork-master`.  These functions are given:
 
 1. The sequence number of the worker process.
 
@@ -218,7 +218,7 @@ by `testr-master`.  These functions are given:
 
 For example, to see some real values, including the worker process' PID:
 
-    TestR::Config.after_fork_hooks << lambda do |worker_number, log_file, test_file, test_names|
+    Tork::Config.after_fork_hooks << lambda do |worker_number, log_file, test_file, test_names|
       p :after_fork_hooks => {
         :worker_pid    => $$,
         :worker_number => worker_number,
@@ -236,15 +236,15 @@ accelerates your test-driven development cycle and improves productivity!
 Configuration helpers
 ------------------------------------------------------------------------------
 
-The following libraries assist you with configuring TestR. To use them,
+The following libraries assist you with configuring Tork. To use them,
 simply add the `require()` lines shown below to your configuration file
-*or* pass their basenames to the testr(1) command, also as shown below.
+*or* pass their basenames to the tork(1) command, also as shown below.
 
-### require 'testr/config/rails' # testr rails
+### require 'tork/config/rails' # tork rails
 
 Support for the [Ruby on Rails] web framework.
 
-### require 'testr/config/parallel_tests' # testr parallel_tests
+### require 'tork/config/parallel_tests' # tork parallel_tests
 
 Support for the [parallel_tests] library.
 
@@ -277,12 +277,12 @@ Known issues
 ### Ruby on Rails
 
   * Ensure that your `config/environments/test.rb` file disables class caching
-    as follows (**NOTE:** if you are using Rails 3, the `testr/config/rails`
+    as follows (**NOTE:** if you are using Rails 3, the `tork/config/rails`
     configuration helper can do this for you automatically):
 
         config.cache_classes = false
 
-    Otherwise, TestR will appear to ignore source-code changes in your
+    Otherwise, Tork will appear to ignore source-code changes in your
     models, controllers, helpers, and other Ruby source files.
 
   * If SQLite3 raises one of the following errors, try using an [in-memory

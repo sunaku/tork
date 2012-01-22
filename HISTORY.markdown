@@ -15,7 +15,7 @@ External changes:
         PGError: connection not open
 
     Thanks to Spencer Steffen for [contributing this solution](
-    https://github.com/sunaku/testr/issues/14#issuecomment-3539470).
+    https://github.com/sunaku/tork/issues/14#issuecomment-3539470).
 
   * testr-driver(1): document the "over" status message in manual page.
 
@@ -56,7 +56,7 @@ Version 14.1.3 (2012-01-13)
 Internal changes:
 
 * Add support Guard v0.9.0 and newer in `testr-herald`.  Thanks to Jose Pablo
-  Barrantes for [this contribution](https://github.com/sunaku/testr/pull/16).
+  Barrantes for [this contribution](https://github.com/sunaku/tork/pull/16).
 
 * Tighten version constraints for gem dependencies to avoid future breakages.
 

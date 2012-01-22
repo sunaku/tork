@@ -1,13 +1,13 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "testr/version"
+require "tork/version"
 
 Gem::Specification.new do |s|
-  s.name          = "testr"
-  s.version       = TestR::VERSION
+  s.name          = "tork"
+  s.version       = Tork::VERSION
   s.authors,
   s.email         = File.read('LICENSE').scan(/Copyright \d+ (.+) <(.+?)>/).transpose
-  s.homepage      = "http://github.com/sunaku/testr"
+  s.homepage      = "http://github.com/sunaku/tork"
   s.summary       = "Continuous testing tool for Ruby"
   s.description   = nil
 

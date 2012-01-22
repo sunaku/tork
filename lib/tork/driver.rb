@@ -1,10 +1,10 @@
 require 'json'
 require 'diff/lcs'
-require 'testr/client'
-require 'testr/server'
-require 'testr/config'
+require 'tork/client'
+require 'tork/server'
+require 'tork/config'
 
-module TestR
+module Tork
 module Driver
 
   extend Server
@@ -30,7 +30,7 @@ module Driver
   def reabsorb_overhead_files
     @master.quit if defined? @master
 
-    @master = Client::Transceiver.new('testr-master') do |line|
+    @master = Client::Transceiver.new('tork-master') do |line|
       event, file, tests = JSON.load(line)
 
       case event.to_sym
@@ -63,9 +63,9 @@ module Driver
   def loop
     reabsorb_overhead_files
 
-    @herald = Client::Receiver.new('testr-herald') do |line|
+    @herald = Client::Receiver.new('tork-herald') do |line|
       changed_file = line.chomp
-      warn "testr-driver: herald: #{changed_file}" if $DEBUG
+      warn "tork-driver: herald: #{changed_file}" if $DEBUG
 
       # find and run the tests that correspond to the changed file
       Config.test_file_globbers.each do |regexp, globber|

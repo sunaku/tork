@@ -1,25 +1,25 @@
 #!/usr/bin/env ruby
 =begin
 
-TESTR-DRIVER 1 "2012-01-20" "14.3.0"
-====================================
+TORK-DRIVER 1 2012-01-20 14.3.0
+==============================================================================
 
 NAME
-----
+------------------------------------------------------------------------------
 
-testr-driver - drives testr-master(1) and does bookkeeping
+tork-driver - drives tork-master(1) and does bookkeeping
 
 SYNOPSIS
---------
+------------------------------------------------------------------------------
 
-`testr-driver` [*OPTION*]...
+`tork-driver` [*OPTION*]...
 
 DESCRIPTION
------------
+------------------------------------------------------------------------------
 
 This program reads the following single-line commands (JSON arrays) from its
 standard input stream and performs the respective actions as described below.
-It also funnels the standard output stream of testr-master(1) into its own.
+It also funnels the standard output stream of tork-master(1) into its own.
 
 `["run_all_test_files"]`
   Runs all test files found within and beneath the current working directory.
@@ -37,8 +37,8 @@ It also funnels the standard output stream of testr-master(1) into its own.
 `["quit"]`
   Stops all tests that are currently running and exits.
 
-When testr-herald(1) reports that a file belonging to the test execution
-overhead has been modified, this program replaces testr-master(1) with a new
+When tork-herald(1) reports that a file belonging to the test execution
+overhead has been modified, this program replaces tork-master(1) with a new
 instance, which then absorbs the modified test execution overhead into itself.
 
 This program emits the following single-line status messages (JSON arrays) on
@@ -46,32 +46,32 @@ its standard output stream to provide notifications about its activity:
 
 `["over",` *overhead_file*`]`
   The test execution overhead is currently being reabsorbed, by replacing
-  testr-master(1) with a new instance, because *overhead_file* has changed.
+  tork-master(1) with a new instance, because *overhead_file* has changed.
 
 OPTIONS
--------
+------------------------------------------------------------------------------
 
 `-h`, `--help`
   Display this help manual using man(1).
 
 FILES
------
+------------------------------------------------------------------------------
 
-*.testr.rb*
-  Optional Ruby script for configuring testr(1).
+*.tork.rb*
+  Optional Ruby script for configuring tork(1).
 
 ENVIRONMENT
------------
+------------------------------------------------------------------------------
 
-`TESTR_CONFIGS`
+`TORK_CONFIGS`
   A single-line JSON array containing paths to actual files or names of
-  helper libraries in the testr/config/ namespace of Ruby's load path.
-  These configuration files are loaded just before *.testr.rb* is loaded.
+  helper libraries in the tork/config/ namespace of Ruby's load path.
+  These configuration files are loaded just before *.tork.rb* is loaded.
 
 SEE ALSO
---------
+------------------------------------------------------------------------------
 
-testr(1), testr-driver(1), testr-master(1), testr-herald(1)
+tork(1), tork-driver(1), tork-master(1), tork-herald(1)
 
 =end =========================================================================
 
@@ -80,7 +80,7 @@ $0 = File.basename(__FILE__) # for easier indentification in ps(1) output
 require 'binman'
 BinMan.help
 
-require 'testr/driver'
-TestR::Driver.loop
+require 'tork/driver'
+Tork::Driver.loop
 
 Process.waitall
