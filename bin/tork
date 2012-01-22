@@ -78,7 +78,7 @@ end
 #-----------------------------------------------------------------------------
 
 COMMANDS = {
-  'r' => :run_all_test_files,
+  't' => :run_all_test_files,
   's' => :stop_running_test_files,
   'p' => :rerun_passed_test_files,
   'f' => :rerun_failed_test_files,
