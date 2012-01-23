@@ -1,4 +1,17 @@
 ------------------------------------------------------------------------------
+Version 15.0.0 (2012-01-23)
+------------------------------------------------------------------------------
+
+Breaking changes:
+
+  * This project has been renamed from TestR to Tork (test with fork) in order
+    to better compete with rival projects, namely Spork! >:-)  Credit goes to
+    Brian D. Burns for thinking of this most succinct & awesome project name!
+    He also created the snazzy ASCII-art logo featured in the project README.
+
+  * tork(1): rename `r` command, which runs all tests, to `t`, for *t*ork.
+
+------------------------------------------------------------------------------
 Version 14.3.0 (2012-01-20)
 ------------------------------------------------------------------------------
 

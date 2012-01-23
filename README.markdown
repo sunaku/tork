@@ -49,11 +49,12 @@ you can build your own custom Tork user interface by wrapping `tork-driver`!
 * `tork-driver` tells master to run tests and keeps track of test results
 * `tork-master` absorbs test execution overhead and forks to run your tests
 
-When the driver hears about changes in your test files, it tells the master to
-fork a worker process to run the tests affected by those changes.  This is all
+When the herald observes that files in or beneath the current directory have
+been written to, it tells the driver, which then commands the master to fork a
+worker process to run the tests affected by those changed files.  This is all
 performed automatically.  But what if you want to manually run a test file?
 
-You can re-run any test file by simply saving it!  When you do, Tork tries to
+You can (re)run any test file by simply saving it!  When you do, Tork tries to
 figure out which tests inside your newly saved test file have changed (using
 diff and regexps) and then attempts to run just those.  To make it run *all*
 tests in your saved file, simply save the file *again* without changing it.
@@ -91,15 +92,11 @@ Invocation
 
 If installed as a Ruby gem:
 
-    tork
+    tork --help
 
 If installed as a Git clone:
 
-    bundle exec ruby -Ilib bin/tork
-
-You can test with built-in support for [Ruby on Rails]:
-
-    tork rails
+    bundle exec ruby -Ilib bin/tork --help
 
 You can monitor your test processes in another terminal:
 
@@ -117,10 +114,6 @@ Tork looks for a configuration file named `.tork.rb` in its current working
 directory.  The configuration file is a normal Ruby script.  Inside it, you
 can query and modify the `Tork::Config` object (OpenStruct) according to the
 configuration options listed below.
-
-------------------------------------------------------------------------------
-Configuration options
-------------------------------------------------------------------------------
 
 ### Tork::Config.max_forked_workers
 
