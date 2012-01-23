@@ -72,6 +72,12 @@ Prerequisites
         Process.respond_to? :fork  # must be true
         Signal.list.key? 'TERM'    # must be true
 
+  * To make the `tork-herald` program's filesystem monitoring more efficient:
+
+        gem install rb-inotify # linux
+        gem install rb-fsevent # macosx
+        gem install rb-fchange # windows
+
 ------------------------------------------------------------------------------
 Installation
 ------------------------------------------------------------------------------
