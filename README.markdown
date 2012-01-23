@@ -13,7 +13,7 @@ tests changes in your Ruby application or test suite in an efficient manner:
 
   1. Absorbs your test execution overhead into a master process.
 
-  2. Forks to run your test files in parallel, without overhead.
+  2. Forks to run your test files in parallel; overhead inherited.
 
   3. Avoids running unchanged tests inside changed test files.
 
@@ -21,19 +21,23 @@ tests changes in your Ruby application or test suite in an efficient manner:
 Features
 ------------------------------------------------------------------------------
 
-  * Executes test files in parallel, making full use of multi-core CPUs.
+  * No configuration needed: run `tork` for Ruby, `tork rails` for Rails.
 
-  * Tests *changes* in your Ruby application: avoids running (1) unchanged
-    test files and (2) unchanged tests inside changed test files.
+  * Runs test files in parallel using fork for multi-core/CPU utilization.
 
-  * Supports MiniTest, Test::Unit, RSpec, and any testing framework that (1)
-    reflects failures in the process' exit status and (2) is loaded by your
-    application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
+  * Tests *changes* your Ruby application for rapid TDD: avoids running (1)
+    unchanged test files and (2) unchanged tests inside changed test files.
+
+  * Supports MiniTest, Test::Unit, RSpec, and *any testing framework* that (1)
+    exits with a nonzero status to indicate test failures (2) is loaded by
+    your application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
 
   * Logs the output from your tests into separate files: one log per test.
     The path of a log file is simply the path of its test file plus ".log".
 
   * Configurable through a Ruby script in your current working directory.
+
+  * You can override the modular `tork*` programs with your own in $PATH.
 
   * Implemented in less than 400 lines (SLOC) of pure Ruby code! :-)
 
@@ -41,7 +45,7 @@ Features
 Architecture
 ------------------------------------------------------------------------------
 
-Following UNIX philosophy, Tork is made of simple text-based programs: thus
+Following UNIX philosophy, Tork is composed of simple text-based programs: so
 you can build your own custom Tork user interface by wrapping `tork-driver`!
 
 * `tork` is an interactive command-line user interface (CLI) for driver
@@ -66,7 +70,6 @@ Prerequisites
   * Ruby 1.8.7 or 1.9.2 or newer.
 
   * Operating system that supports POSIX signals and the `fork()` system call.
-
     To check if your system qualifies, launch `irb` and enter the following:
 
         Process.respond_to? :fork  # must be true
