@@ -106,7 +106,7 @@ If installed as a Git clone:
 
 You can monitor your test processes in another terminal:
 
-    watch 'ps xuw | sed -n "1p; /test[r]/p" | fgrep -v sed'
+    watch 'ps xuw | sed -n "1p; /tor[k]/p" | fgrep -v sed'
 
 You can forcefully terminate Tork from another terminal:
 
