@@ -1,12 +1,12 @@
-Tork - Test with fork
-==============================================================================
-
     _______      _______
      ___  /___________ /__
       _  __/ __ \  __/ /_/
       / /_/ /_/ / / / ,\
       \__/\____/_/ /_/|_\
                  >>>------>
+
+_Test with fork_
+==============================================================================
 
 Tork is a continuous testing tool for Ruby that automatically detects and
 tests changes in your Ruby application or test suite in an efficient manner:
