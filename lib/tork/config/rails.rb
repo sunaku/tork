@@ -29,7 +29,7 @@ end
 
 begin
   require 'rails/railtie'
-  Class.new Rails::Railtie do
+  class Tork::Railtie < Rails::Railtie
     config.before_initialize do |app|
       if app.config.cache_classes
         warn "tork/config/rails: Setting #{app.class}.config.cache_classes = false"
