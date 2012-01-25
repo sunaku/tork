@@ -25,10 +25,10 @@ standard input stream and performs the respective actions as described below.
   of *files* after removing their ".rb" file extension if present, and prints
   the given command line to the standard output stream.
 
-`["test",` *test_file*`,` *test_names*`]`
+`["test",` *test_file*`,` *line_numbers*`]`
   Runs the given *test_file* in a forked child process while instructing your
   chosen unit testing framework (loaded by your test execution overhead) to
-  only run those tests that are named in the given array of *test_names*.
+  only run those tests that are defined on the given array of *line_numbers*.
 
   Prints the given command line to the standard output stream immediately
   after forking the child process.

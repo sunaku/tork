@@ -170,12 +170,6 @@ source files except those within a `models/` directory, you would write:
       end
     end
 
-### Tork::Config.test_name_extractor
-
-Lambda function that is given a line of source code to determine whether it
-can be considered as a test definition.  In which case, the function must
-extract and return the name of the test being defined.
-
 ### Tork::Config.before_fork_hooks
 
 Array of lambda functions that are executed inside `tork-master` before a
@@ -192,12 +186,12 @@ worker process is forked to run a test file.  These functions are given:
 
 For example, to see some real values:
 
-    Tork::Config.before_fork_hooks << lambda do |worker_number, log_file, test_file, test_names|
+    Tork::Config.before_fork_hooks << lambda do |worker_number, log_file, test_file, line_numbers|
       p :before_fork_hooks => {
         :worker_number => worker_number,
         :log_file      => log_file,
         :test_file     => test_file,
-        :test_names    => test_names,
+        :line_numbers  => line_numbers,
       }
     end
 
@@ -217,19 +211,19 @@ by `tork-master`.  These functions are given:
 
 For example, to see some real values, including the worker process' PID:
 
-    Tork::Config.after_fork_hooks << lambda do |worker_number, log_file, test_file, test_names|
+    Tork::Config.after_fork_hooks << lambda do |worker_number, log_file, test_file, line_numbers|
       p :after_fork_hooks => {
         :worker_pid    => $$,
         :worker_number => worker_number,
         :log_file      => log_file,
         :test_file     => test_file,
-        :test_names    => test_names,
+        :line_numbers  => line_numbers,
       }
     end
 
 The first function in this array instructs Test::Unit and RSpec to only run
-those tests that correspond to the given `test_names` values.  This
-accelerates your test-driven development cycle and improves productivity!
+those tests that are defined on the given line numbers.  This accelerates your
+test-driven development cycle by only running tests you are currently editing.
 
 ------------------------------------------------------------------------------
 Configuration helpers

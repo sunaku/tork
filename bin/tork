@@ -59,8 +59,8 @@ warn 'tork: Absorbing test execution overhead...'
   when :load then warn 'tork: Overhead absorbed. Ready for testing!'
   when :over then warn 'tork: Reabsorbing changed overhead files...'
   else
-    test_file, test_names, *details = details
-    message = [evstr.upcase, test_file, test_names.inspect, details].join(' ')
+    test_file, line_numbers, *details = details
+    message = [evstr.upcase, test_file, line_numbers.inspect, details].join(' ')
 
     color = case event
             when :pass then "\e[34m%s\e[0m" # blue

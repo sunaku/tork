@@ -20,7 +20,7 @@ module Master
     @client.print @command_line
   end
 
-  def test test_file, test_names
+  def test test_file, line_numbers
     # throttle forking rate to meet the maximum concurrent workers limit
     sleep 1 until @command_by_worker_pid.size < Config.max_forked_workers
 
@@ -28,7 +28,7 @@ module Master
     worker_number = @worker_number_pool.shift
 
     Config.before_fork_hooks.each do |hook|
-      hook.call worker_number, log_file, test_file, test_names
+      hook.call worker_number, log_file, test_file, line_numbers
     end
 
     worker_pid = fork do
@@ -46,7 +46,7 @@ module Master
       STDERR.reopen(STDOUT.reopen(log_file, 'w')).sync = true
 
       Config.after_fork_hooks.each do |hook|
-        hook.call worker_number, log_file, test_file, test_names
+        hook.call worker_number, log_file, test_file, line_numbers
       end
 
       # after loading the user's test file, the at_exit() hook of the user's

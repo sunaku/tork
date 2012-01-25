@@ -12,9 +12,9 @@ Tork::Config.test_file_globbers.update(
   %r<^features/.+\.feature$> => lambda {|path, matches| path }
 )
 
-Tork::Config.after_fork_hooks << lambda do |worker_number, log_file, test_file, test_names|
+Tork::Config.after_fork_hooks << lambda do |worker_number, log_file, test_file, line_numbers|
   # pass test_file in ARGV to cucumber(1) for running
-  ARGV << test_file.dup
+  ARGV << [test_file, *line_numbers].join(':')
   require 'cucumber'
   require 'rubygems'
   cucumber_bin = Gem.bin_path('cucumber', 'cucumber')

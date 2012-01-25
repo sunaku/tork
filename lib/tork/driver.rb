@@ -106,30 +106,22 @@ private
   def run_test_file file
     if File.exist? file and not @waiting_test_files.include? file
       @waiting_test_files.push file
-      @master.send [:test, file, find_changed_test_names(file)]
+      @master.send [:test, file, find_changed_line_numbers(file)]
     end
   end
 
   @lines_by_file = {}
 
-  def find_changed_test_names test_file
+  def find_changed_line_numbers test_file
     # cache the contents of the test file for diffing below
     new_lines = File.readlines(test_file)
     old_lines = @lines_by_file[test_file] || new_lines
     @lines_by_file[test_file] = new_lines
 
-    # find which tests have changed inside the given test file
-    Diff::LCS.diff(old_lines, new_lines).flatten.map do |change|
-      catch :found do
-        # search backwards from the line that changed up to
-        # the first line in the file for test definitions
-        change.position.downto(0) do |i|
-          if test_name = Config.test_name_extractor.call(new_lines[i])
-            throw :found, test_name
-          end
-        end; nil # prevent unsuccessful search from returning an integer
-      end
-    end.compact.uniq
+    # find which line numbers have changed inside the test file
+    Diff::LCS.diff(old_lines, new_lines).flatten.
+      # +1 because line numbers start at 1, not 0
+      map {|change| change.position + 1 }.uniq
   end
 
 end

@@ -37,29 +37,38 @@ module Tork
     %r<^(test|spec)/.+_\1\.rb$> => lambda {|path, matches| path }
   }
 
-  Config.test_name_extractor = lambda do |line|
-    case line
-    when /^\s*def\s+test_(\w+)/ then $1
-    when /^\s*(test|context|should|describe|it)\b.+?(['"])(.*?)\2/ then $3
-    end
-  end
-
   Config.before_fork_hooks = []
 
   Config.after_fork_hooks = [
-    # tell testing framework to only run the named tests inside the test file
-    lambda do |worker_number, log_file, test_file, test_names|
-      unless test_names.empty?
-        case File.basename(test_file)
-        when /(\b|_)test(\b|_)/ # Test::Unit
-          ARGV.push '--name', "/(?i:#{
-            test_names.map do |name|
-              # elide string interpolation and invalid method name characters
-              name.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
-            end.join('|')
-          })/"
-        when /(\b|_)spec(\b|_)/ # RSpec
-          test_names.each {|name| ARGV.push '--example', name }
+    # instruct the testing framework to only run those
+    # tests that are defined on the given line numbers
+    lambda do |worker_number, log_file, test_file, line_numbers|
+      case File.basename(test_file)
+      when /(\b|_)spec(\b|_).*\.rb$/ # RSpec
+        line_numbers.each {|line| ARGV.push '--line_number', line.to_s }
+
+      when /(\b|_)test(\b|_).*\.rb$/ # Test::Unit
+        # find which tests have changed inside the test file
+        test_file_lines = File.readlines(test_file)
+        test_names = line_numbers.map do |line|
+          catch :found do
+            # search backwards from the line that changed up to
+            # the first line in the file for test definitions
+            line.downto(0) do |i|
+              test_name =
+                case test_file_lines[i]
+                when /^\s*def\s+test_(\w+)/ then $1
+                when /^\s*(test|context|should|describe|it)\b.+?(['"])(.*?)\2/
+                  # elide string interpolation and invalid method name characters
+                  $3.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
+                end \
+              and throw :found, test_name
+            end; nil # prevent unsuccessful search from returning an integer
+          end
+        end.compact.uniq
+
+        unless test_names.empty?
+          ARGV.push '--name', "/(?i:#{test_names.join('|')})/"
         end
       end
     end
