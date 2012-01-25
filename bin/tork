@@ -93,8 +93,8 @@ begin
       @driver.send [command]
       break if command == :quit
     else # invalid command
-      COMMANDS.each do |key, command|
-        warn "tork: Type #{key} then ENTER to #{command.to_s.tr('_', ' ')}."
+      COMMANDS.each do |k, cmd|
+        warn "tork: Type #{k} then ENTER to #{cmd.to_s.tr('_', ' ')}."
       end
     end
   end
