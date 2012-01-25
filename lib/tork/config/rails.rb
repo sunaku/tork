@@ -22,7 +22,9 @@ Tork::Config.test_file_globbers[%r<^(test|spec)/factories/.+_factory\.rb$>] =
   end
 
 Tork::Config.after_fork_hooks << proc do
-  unless ActiveRecord::Base.connection_config[:database] == ':memory:'
+  if defined? ActiveRecord::Base and
+    ActiveRecord::Base.connection_pool.spec.config[:database] != ':memory:'
+  then
     ActiveRecord::Base.connection.reconnect!
   end
 end
