@@ -1,28 +1,50 @@
 ------------------------------------------------------------------------------
+Version 15.1.0 (2012-01-25)
+------------------------------------------------------------------------------
+
+New features:
+
+  * GH-19: add support for running cucumber features.
+
+Bug fixes:
+
+  * tork/config/rails: support Rails 2 and don't assume AR is used.  (Benjamin
+    Quorning)
+
+  * tork/config: settings from configuration helpers specified in
+    $TORK_CONFIGS should override settings from the `.tork.rb` file.
+
+  * README: need to set $PATH to run this project from a git clone.
+
+  * LICENSE: give copyright to major contributors only.
+    See <http://stackoverflow.com/questions/1497756>.
+    Also added forgotten Luke Wendling to the list.
+
+------------------------------------------------------------------------------
 Version 15.0.1 (2012-01-24)
 ------------------------------------------------------------------------------
 
 Bug fixes:
 
-* GH-21: Ruby 1.9 class_eval() is smarter than 1.8.
+  * GH-21: Ruby 1.9 class_eval() is smarter than 1.8.
 
-* GH-20: forgot `require 'thread'` for Mutex class. [Jesse Cooke]
+  * GH-20: forgot `require 'thread'` for Mutex class.  (Jesse Cooke)
 
 Housekeeping:
 
-* tork(1): fix shadowed variable names. [Jose Pablo Barrantes]
+  * tork(1): fix shadowed variable names.  (Jose Pablo Barrantes)
 
-* GH-22: fix command to build & install gem from source.
+  * GH-22: fix command to build & install gem from source.
 
-* GH-22: add m2dman as development dependency in gemspec.
+  * GH-22: add m2dman as development dependency in gemspec.
 
-* GH-18: windows not supported; lacks fork & SIGCHLD.
+  * GH-18: windows not supported; lacks fork & SIGCHLD.
 
-* README: spruce up introduction and features list.
+  * README: spruce up introduction and features list.
 
-* README: missed a testr => tork rename in watch cmd.
+  * README: missed a testr => tork rename in watch cmd.
 
-* README: add tip about Guard's FS watching backends.
+  * README: add tip about Guard's FS watching backends.
 
 ------------------------------------------------------------------------------
 Version 15.0.0 (2012-01-23)
@@ -94,10 +116,11 @@ Version 14.1.3 (2012-01-13)
 
 Internal changes:
 
-* Add support Guard v0.9.0 and newer in `testr-herald`.  Thanks to Jose Pablo
-  Barrantes for [this contribution](https://github.com/sunaku/tork/pull/16).
+  * Add support Guard v0.9.0 and newer in `testr-herald`.  (Jose Pablo
+    Barrantes)
 
-* Tighten version constraints for gem dependencies to avoid future breakages.
+  * Tighten version constraints for gem dependencies to avoid future
+    breakages.
 
 ------------------------------------------------------------------------------
 Version 14.1.2 (2012-01-09)
@@ -105,11 +128,11 @@ Version 14.1.2 (2012-01-09)
 
 External changes:
 
-* Don't consider partial test file pass as full pass.
+  * Don't consider partial test file pass as full pass.
 
 Internal changes:
 
-* Upgrade to binman 3 for better bundler support.
+  * Upgrade to binman 3 for better bundler support.
 
 ------------------------------------------------------------------------------
 Version 14.1.1 (2011-12-07)
@@ -148,32 +171,32 @@ Version 14.1.0 (2011-11-03)
 
 New features:
 
-* Make servers responsive to quit request (SIGTERM) from upstream.
+  * Make servers responsive to quit request (SIGTERM) from upstream.
 
-  This change lets the user quit testr-master(1) while it is loading
-  test execution overhead (which can be a lengthy, blocking operation).
+    This change lets the user quit testr-master(1) while it is loading
+    test execution overhead (which can be a lengthy, blocking operation).
 
-  By sending a signal to the server, we don't have to wait for it to
-  finish processing its current command before seeing our :quit command.
+    By sending a signal to the server, we don't have to wait for it to
+    finish processing its current command before seeing our :quit command.
 
-* Add embedded BinMan manual pages to bin scripts.  All TestR scripts now
-  have a `--help` option which displays their UNIX manual page.  Try it!
+  * Add embedded BinMan manual pages to bin scripts.  All TestR scripts now
+    have a `--help` option which displays their UNIX manual page.  Try it!
 
-  The single-line JSON message protocol used by these scripts is now
-  documented in their manual pages, so you should have everything you
-  need to create *your own custom user interface to TestR* if you wish! :-)
+    The single-line JSON message protocol used by these scripts is now
+    documented in their manual pages, so you should have everything you
+    need to create *your own custom user interface to TestR* if you wish! :-)
 
 Bug fixes:
 
-* SIGCHLD does not awaken main thread in Ruby 1.9.3p0.
+  * SIGCHLD does not awaken main thread in Ruby 1.9.3p0.
 
 Housekeeping:
 
-* Simplify watch(1) ps(1) process title monitoring.
+  * Simplify watch(1) ps(1) process title monitoring.
 
-* Testr: tell user to press ENTER after command key.
+  * Testr: tell user to press ENTER after command key.
 
-* README: add tip on loading factory_girl factories.
+  * README: add tip on loading factory_girl factories.
 
 ------------------------------------------------------------------------------
 Version 14.0.3 (2011-10-11)
@@ -181,8 +204,8 @@ Version 14.0.3 (2011-10-11)
 
 Bug fixes:
 
-* Forgot to migrate the `testr/config/rails` configuration helper to use the
-  new TestR configuration parameter names.
+  * Forgot to migrate the `testr/config/rails` configuration helper to use the
+    new TestR configuration parameter names.
 
 ------------------------------------------------------------------------------
 Version 14.0.2 (2011-10-11)
@@ -190,14 +213,15 @@ Version 14.0.2 (2011-10-11)
 
 Bug fixes:
 
-* Fix updating passed/failed test files bookkeeping.  Once a test file failed,
-  it was (incorrectly) always considered failed -- even if it passed later on.
+  * Fix updating passed/failed test files bookkeeping.  Once a test file
+    failed, it was (incorrectly) always considered failed, even if it passed
+    later on.
 
-* Do not requeue test files that are waiting to run.
+  * Do not requeue test files that are waiting to run.
 
 Housekeeping:
 
-* Rename `*.md` files to `*.markdown` to avoid ambiguity.
+  * Rename `*.md` files to `*.markdown` to avoid ambiguity.
 
 ------------------------------------------------------------------------------
 Version 14.0.1 (2011-10-10)
@@ -205,15 +229,15 @@ Version 14.0.1 (2011-10-10)
 
 Bug fixes:
 
-* Use blue/red for pass/fail instead of green/red to accommodate the color
-  blind.
+  * Use blue/red for pass/fail instead of green/red to accommodate the color
+    blind.
 
-* Incorrect test name regexp was passed down to Test::Unit.  This broke
-  focused testing, where only changed tests in a changed test file are run.
+  * Incorrect test name regexp was passed down to Test::Unit.  This broke
+    focused testing, where only changed tests in a changed test file are run.
 
 Housekeeping:
 
-* Make `testr-master` wait for killed worker processes before exiting.
+  * Make `testr-master` wait for killed worker processes before exiting.
 
 ------------------------------------------------------------------------------
 Version 14.0.0 (2011-10-09)
@@ -221,49 +245,49 @@ Version 14.0.0 (2011-10-09)
 
 Incompatible changes:
 
-* Renamed this project and its resources from test-loop to TestR.
+  * Renamed this project and its resources from test-loop to TestR.
 
-* Renamed the `reabsorb_file_globs` configuration parameter to
-  `reabsorb_file_greps`.  It now contains regular expressions.
+  * Renamed the `reabsorb_file_globs` configuration parameter to
+    `reabsorb_file_greps`.  It now contains regular expressions.
 
-* Renamed the `test_file_matchers` configuration parameter to
-  `test_file_globbers`.  Its keys are now regular expressions.
+  * Renamed the `test_file_matchers` configuration parameter to
+    `test_file_globbers`.  Its keys are now regular expressions.
 
-* Renamed the `test_name_parser` configuration parameter to
-  `test_name_extractor`.
+  * Renamed the `test_name_parser` configuration parameter to
+    `test_name_extractor`.
 
-* Renamed the `max_concurrent_tests` configuration parameter to
-  `max_forked_workers`.
+  * Renamed the `max_concurrent_tests` configuration parameter to
+    `max_forked_workers`.
 
-* Renamed the `before_each_test` configuration parameter to
-  `after_fork_hooks`.  Its function parameters have also changed.
+  * Renamed the `before_each_test` configuration parameter to
+    `after_fork_hooks`.  Its function parameters have also changed.
 
-* Removed the `delay_per_iteration` and `after_each_test` configuration
-  parameters.
+  * Removed the `delay_per_iteration` and `after_each_test` configuration
+    parameters.
 
-* Removed the `test/loop/notify` and `test-loop/coco` libraries.
+  * Removed the `test/loop/notify` and `test-loop/coco` libraries.
 
 New features:
 
-* The file system is no longer polled to detect modified files.  Instead, the
-  it is monitored for file modification events in a portable and efficient
-  manner using the [Guard](https://github.com/guard/guard) library.
+  * The file system is no longer polled to detect modified files.  Instead, it
+    is monitored for file modification events in a portable and efficient
+    manner using the [Guard](https://github.com/guard/guard) library.
 
-* The number of processors on your system is automatically detected for the
-  `max_forked_workers` configuration parameter.
+  * The number of processors on your system is automatically detected for the
+    `max_forked_workers` configuration parameter.
 
-* Added `overhead_load_paths`, `all_test_file_globs`, and `before_fork_hooks`
-  configuration parameters.
+  * Added `overhead_load_paths`, `all_test_file_globs`, and
+    `before_fork_hooks` configuration parameters.
 
-* Added ability to re-run passed and failed tests in the `testr` script.
+  * Added ability to re-run passed and failed tests in the `testr` script.
 
 Housekeeping:
 
-* The monolithic `test-loop` script has been replaced by several smaller ones
-  that communicate with each other using single-line JSON messages via their
-  standard input & output streams.  See "Architecture" in README for details.
+  * The monolithic `test-loop` script has been replaced by several smaller
+    ones that communicate with each other using single-line JSON messages via
+    their standard input & output streams.  See "Architecture" in the README.
 
-* Now using Bundler to manage development dependencies and gem packaging.
+  * Now using Bundler to manage development dependencies and gem packaging.
 
 ------------------------------------------------------------------------------
 Version 13.0.1 (2011-09-21)
@@ -271,9 +295,9 @@ Version 13.0.1 (2011-09-21)
 
 Housekeeping:
 
-* Forgot to include `test/loop/coco` preset in gem package.
+  * Forgot to include `test/loop/coco` preset in gem package.
 
-* Forgot to mention `test/loop/parallel_tests` preset in README.
+  * Forgot to mention `test/loop/parallel_tests` preset in README.
 
 ------------------------------------------------------------------------------
 Version 13.0.0 (2011-08-24)
@@ -281,34 +305,34 @@ Version 13.0.0 (2011-08-24)
 
 Incompatible changes:
 
-* Pass worker sequence number as the last argument to lambda functions in
-  `Test::Loop.before_each_test` and `Test::Loop.after_each_test` arrays.
+  * Pass worker sequence number as the last argument to lambda functions in
+    `Test::Loop.before_each_test` and `Test::Loop.after_each_test` arrays.
 
 New features:
 
-* In the `test/loop/rails` configuration preset:
+  * In the `test/loop/rails` configuration preset:
 
-  * Automatically test a controller when its model or factory is modified.
+    * Automatically test a controller when its model or factory is modified.
 
-  * Warn the user if Railtie (Rails 3) is not available for automatic
-    disabling of Rails' class caching mechanism under the test environment.
+    * Warn the user if Railtie (Rails 3) is not available for automatic
+      disabling of Rails' class caching mechanism under the test environment.
 
-* Add `test/loop/parallel_tests` configuration preset for parallel_tests gem.
-  ([Corné Verbruggen](https://github.com/sunaku/test-loop/issues/9))
+  * Add `test/loop/parallel_tests` configuration preset for parallel_tests
+    gem.  (Corné Verbruggen)
 
-* Assign rotating sequence numbers to workers so that you can handle parallel
-  processes like connecting to separate databases better.  ([Corné
-  Verbruggen](https://github.com/sunaku/test-loop/pull/10))
+  * Assign rotating sequence numbers to workers so that you can handle parallel
+    processes like connecting to separate databases better.  (Corné
+    Verbruggen)
 
 Housekeeping:
 
-* README: move configuration presets above options.
+  * README: move configuration presets above options.
 
-* Eliminate 1 SLOC: .rb extension used in file glob.
+  * Eliminate 1 SLOC: .rb extension used in file glob.
 
-* Turn off executable bit on loop.rb file mode.
+  * Turn off executable bit on loop.rb file mode.
 
-* Pass child ENV directly to exec() for atomicity.
+  * Pass child ENV directly to exec() for atomicity.
 
 ------------------------------------------------------------------------------
 Version 12.3.1 (2011-07-19)
@@ -316,11 +340,11 @@ Version 12.3.1 (2011-07-19)
 
 Bug fixes:
 
-* Binary data could not be stored in environment variable values.
+  * Binary data could not be stored in environment variable values.
 
 Housekeeping:
 
-* Forgot to add Jacob Helwig to the gemspec's authors list.
+  * Forgot to add Jacob Helwig to the gemspec's authors list.
 
 ------------------------------------------------------------------------------
 Version 12.3.0 (2011-07-19)
@@ -328,32 +352,32 @@ Version 12.3.0 (2011-07-19)
 
 New features:
 
-* Add `Test::Loop::max_concurrent_tests` configuration parameter to limit the
-  number of test files run concurrently (default 4).  Otherwise, with large
-  test suites, we could end up swamping the machine running the tests by
-  forking hundreds of test files at once.  (Jacob Helwig)
+  * Add `Test::Loop::max_concurrent_tests` configuration parameter to limit
+    the number of test files run concurrently (default 4).  Otherwise, with
+    large test suites, we could end up swamping the machine running the tests
+    by forking hundreds of test files at once.  (Jacob Helwig)
 
-* Rails: add matcher for `test/factories/*_factory.rb`.
+  * Rails: add matcher for `test/factories/*_factory.rb`.
 
 Housekeeping:
 
-* ENV returns a Hash with duplicate/frozen keys/values.  (Brian D. Burns)
+  * ENV returns a Hash with duplicate/frozen keys/values.  (Brian D. Burns)
 
-* Use Marshal to propagate resume_files to reabsorb.
+  * Use Marshal to propagate resume_files to reabsorb.
 
-* Store test_files in a Set instead of an Array.
+  * Store test_files in a Set instead of an Array.
 
 ------------------------------------------------------------------------------
 Version 12.2.0 (2011-06-01)
 ------------------------------------------------------------------------------
 
-* Prevent empty test suite run in master process. (Brian D. Burns)
+  * Prevent empty test suite run in master process.  (Brian D. Burns)
 
-* Report test execution statistics in `test/loop/notify` preset as
-  requested by Juan G. Hurtado..
+  * Report test execution statistics in `test/loop/notify` preset as
+    requested by Juan G. Hurtado..
 
-* Add `test/loop/coco` preset for integrating the [Coco code coverage
-  library](http://lkdjiin.github.com/coco/).
+  * Add `test/loop/coco` preset for integrating the [Coco code coverage
+    library](http://lkdjiin.github.com/coco/).
 
 ------------------------------------------------------------------------------
 Version 12.1.0 (2011-04-29)
@@ -361,8 +385,8 @@ Version 12.1.0 (2011-04-29)
 
 New features:
 
-* Add `Test::Loop.delay_per_iteration` parameter to control the number of
-  seconds (or fractions thereof) to sleep in between test-loop iterations.
+  * Add `Test::Loop.delay_per_iteration` parameter to control the number of
+    seconds (or fractions thereof) to sleep in between test-loop iterations.
 
 ------------------------------------------------------------------------------
 Version 12.0.4 (2011-04-29)
@@ -370,12 +394,12 @@ Version 12.0.4 (2011-04-29)
 
 Bug fixes:
 
-* Reabsorb overhead when user's configuration file changes.
-  (Brian D. Burns and Daniel Pittman)
+  * Reabsorb overhead when user's configuration file changes.  (Brian D. Burns
+    and Daniel Pittman)
 
-* `Thread.new { system() }` really is backgrounded, so `fork { system() }` is
-  not necessary!  [This issue](https://github.com/sunaku/test-loop/issues/5)
-  was solved by upgrading to the newer 2.6.38.4-1 Linux kernel on my system.
+  * `Thread.new { system() }` really is backgrounded so `fork { system() }` is
+    not necessary!  [This issue](https://github.com/sunaku/test-loop/issues/5)
+    was solved by upgrading to the newer 2.6.38.4-1 Linux kernel on my system.
 
 ------------------------------------------------------------------------------
 Version 12.0.3 (2011-04-25)
@@ -556,8 +580,8 @@ Incompatible changes:
 New features:
 
   * If you are using Rails 3, test-loop will automatically set
-    `config.cache_classes = false` for your test environment.
-    (Brian D. Burns)
+    `config.cache_classes = false` for your test environment.  (Brian D.
+    Burns)
 
 Bug fixes:
 
@@ -603,8 +627,8 @@ Version 9.4.0 (2011-04-06)
 New features:
 
   * Allow lambda functions in `Test::Loop.test_file_matchers` to return `nil`
-    so that you can exclude certain tests from being executed.
-    (Brian D. Burns)
+    so that you can exclude certain tests from being executed.  (Brian D.
+    Burns)
 
   * Prefix worker process title with "test-loop" for easier ps(1)
     searchability.  The monitoring command in the README is now simplified to
@@ -616,7 +640,7 @@ Bug fixes:
 
   * Skip `at_exit()` when exiting master process.  This prevents an empty test
     from being run when exiting the loop after having processed a test/spec
-    helper that loads the Test::Unit library. (Brian D. Burns)
+    helper that loads the Test::Unit library.  (Brian D. Burns)
 
 Housekeeping:
 
@@ -635,37 +659,37 @@ Version 9.3.0 (2011-04-01)
 New features:
 
   * Resume currently running tests--as well as those currently needing to be
-    run--after reabsorbing test execution overhead. (Brian D. Burns)
+    run--after reabsorbing test execution overhead.  (Brian D. Burns)
 
   * Stop currently running tests (and wait for them to finish) before
     reabsorbing overhead.  This greatly improves responsiveness because worker
     processes are no longer there to compete with the new master process for
     system resources.
 
-  * Notify user when running all tests and when exiting. (Brian D. Burns)
+  * Notify user when running all tests and when exiting.  (Brian D. Burns)
 
   * Notify user when overhead changes instead of when restarting the loop.
 
   * Use ANSI clear line command to erase control-key combinations outputted by
-    shells such as BASH and ZSH in test-loop's output. (Brian D. Burns)
+    shells such as BASH and ZSH in test-loop's output.  (Brian D. Burns)
 
 Bug fixes:
 
   * `@last_ran_at` was being set during every iteration of the loop.  This is
     problematic when Ruby's `Time.now` is more precise than your filesystem's
     modification timestamp.  For example, in the ext3 filesystem under Linux,
-    file modification timestamps have a precision of 1 second.
-    (Brian D. Burns)
+    file modification timestamps have a precision of 1 second.  (Brian D.
+    Burns)
 
   * Exit gently on SIGINT by sending SIGTERM to all worker processes and then
     running waitall(), instead of sending SIGKILL to the entire process group.
     As a result, test-loop no longer exits with a non-zero status upon SIGINT.
 
-  * Remove 'ansi' gem dependency. (Brian D. Burns)
+  * Remove 'ansi' gem dependency.  (Brian D. Burns)
 
 Documentation:
 
-  * Add tip on deleting logs for passing tests. (Brian D. Burns)
+  * Add tip on deleting logs for passing tests.  (Brian D. Burns)
 
   * Add tip on monitoring test processes with watch(1) in README.
 
