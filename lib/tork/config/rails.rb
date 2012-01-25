@@ -7,19 +7,19 @@ Tork::Config.reabsorb_file_greps.push(
   %r<^Gemfile\.lock$>
 )
 
-Tork::Config.test_file_globbers[%r<^(app|lib|test|spec)/.+\.rb$>] =
-  lambda do |path, matches|
+Tork::Config.test_file_globbers.update(
+  %r<^(app|lib|test|spec)/.+\.rb$> => lambda do |path, matches|
     base = File.basename(path, '.rb')
     poly = ActiveSupport::Inflector.pluralize(base)
     "{test,spec}/**/{#{base},#{poly}_*}_{test,spec}.rb"
-  end
+  end,
 
-Tork::Config.test_file_globbers[%r<^(test|spec)/factories/.+_factory\.rb$>] =
-  lambda do |path, matches|
+  %r<^(test|spec)/factories/.+_factory\.rb$> => lambda do |path, matches|
     base = File.basename(path, '_factory.rb')
     poly = ActiveSupport::Inflector.pluralize(base)
     "{test,spec}/**/{#{base},#{poly}_*}_{test,spec}.rb"
   end
+)
 
 Tork::Config.after_fork_hooks << proc do
   if defined? ActiveRecord::Base and
