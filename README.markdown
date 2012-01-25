@@ -254,6 +254,10 @@ simply add the `require()` lines shown below to your configuration file
 
 Support for the [Ruby on Rails] web framework.
 
+### require 'tork/config/cucumber' # tork cucumber
+
+Support for the [Cucumber] testing framework.
+
 ### require 'tork/config/parallel_tests' # tork parallel_tests
 
 Support for the [parallel_tests] library.
@@ -313,3 +317,4 @@ Released under the ISC license.  See the LICENSE file for details.
 [memory_test_fix]: https://github.com/mvz/memory_test_fix
 [parallel_tests]: https://github.com/grosser/parallel_tests
 [Ruby on Rails]: http://rubyonrails.org
+[Cucumber]: https://cukes.info
