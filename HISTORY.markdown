@@ -1,4 +1,30 @@
 ------------------------------------------------------------------------------
+Version 15.0.1 (2012-01-24)
+------------------------------------------------------------------------------
+
+Bug fixes:
+
+* GH-21: Ruby 1.9 class_eval() is smarter than 1.8.
+
+* GH-20: forgot `require 'thread'` for Mutex class. [Jesse Cooke]
+
+Housekeeping:
+
+* tork(1): fix shadowed variable names. [Jose Pablo Barrantes]
+
+* GH-22: fix command to build & install gem from source.
+
+* GH-22: add m2dman as development dependency in gemspec.
+
+* GH-18: windows not supported; lacks fork & SIGCHLD.
+
+* README: spruce up introduction and features list.
+
+* README: missed a testr => tork rename in watch cmd.
+
+* README: add tip about Guard's FS watching backends.
+
+------------------------------------------------------------------------------
 Version 15.0.0 (2012-01-23)
 ------------------------------------------------------------------------------
 
