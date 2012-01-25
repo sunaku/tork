@@ -4,12 +4,12 @@ Tork::Config.all_test_file_globs << 'features/**/*.feature'
 
 Tork::Config.test_file_globbers.update(
   # source files that correspond to test files
-  %r<^features/(.+/)?step_definitions/.+\.rb$> => lambda do |path|
-    path.sub %r<step_definitions/.+$>, '*.feature'
+  %r<^(features/(.+/)?)step_definitions/.+\.rb$> => lambda do |path, matches|
+    matches[1] + '*.feature'
   end,
 
   # the actual test files themselves
-  %r<^features/.+\.feature$> => lambda {|path| path }
+  %r<^features/.+\.feature$> => lambda {|path, matches| path }
 )
 
 Tork::Config.after_fork_hooks << lambda do |worker_number, log_file, test_file, test_names|

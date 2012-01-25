@@ -8,14 +8,14 @@ Tork::Config.reabsorb_file_greps.push(
 )
 
 Tork::Config.test_file_globbers[%r<^(app|lib|test|spec)/.+\.rb$>] =
-  lambda do |path|
+  lambda do |path, matches|
     base = File.basename(path, '.rb')
     poly = ActiveSupport::Inflector.pluralize(base)
     "{test,spec}/**/{#{base},#{poly}_*}_{test,spec}.rb"
   end
 
 Tork::Config.test_file_globbers[%r<^(test|spec)/factories/.+_factory\.rb$>] =
-  lambda do |path|
+  lambda do |path, matches|
     base = File.basename(path, '_factory.rb')
     poly = ActiveSupport::Inflector.pluralize(base)
     "{test,spec}/**/{#{base},#{poly}_*}_{test,spec}.rb"

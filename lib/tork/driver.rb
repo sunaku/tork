@@ -69,7 +69,7 @@ module Driver
 
       # find and run the tests that correspond to the changed file
       Config.test_file_globbers.each do |regexp, globber|
-        if regexp =~ changed_file and glob = globber.call(changed_file)
+        if regexp =~ changed_file and glob = globber.call(changed_file, $~)
           run_test_files Dir[glob]
         end
       end

@@ -140,10 +140,12 @@ your Ruby application.
 ### Tork::Config.test_file_globbers
 
 Hash that maps (1) a regular expression describing a set of file paths to (2)
-a lambda function yielding a file globbing pattern describing a set of
-test files that need to be run.  In other words, whenever the source files
-(the hash key; left-hand side of the mapping) change, their associated test
-files (the hash value; right-hand side of the mapping) are run.
+a lambda function that accepts the path to a changed file and a `MatchData`
+object containing the results of the regular expression matching, and yields a
+file globbing pattern that describes a set of test files that need to be run.
+
+In other words, whenever the source files (the regular expression) change,
+their associated test files (result of calling the lambda function) are run.
 
 For example, if test files had the same names as their source files followed
 by an underscore and the file name in reverse like this:
@@ -153,7 +155,7 @@ by an underscore and the file name in reverse like this:
 
 Then you would add the following to your configuration file:
 
-    Tork::Config.test_file_globbers[%r<^(lib|app)/.+\.rb$>] = lambda do |path|
+    Tork::Config.test_file_globbers[%r<^(lib|app)/.+\.rb$>] = lambda do |path, matches|
       name = File.basename(path, '.rb')
       "{test,spec}/**/#{name}_#{name.reverse}.rb"
     end
@@ -162,7 +164,7 @@ In addition, these lambda functions can return `nil` if they do not wish for a
 particular source file to be tested.  For example, to ignore tests for all
 source files except those within a `models/` directory, you would write:
 
-    Tork::Config.test_file_globbers[%r<^(lib|app)/.+\.rb$>] = lambda do |path|
+    Tork::Config.test_file_globbers[%r<^(lib|app)/.+\.rb$>] = lambda do |path, matches|
       if path.include? '/models/'
         "{test,spec}/**/#{File.basename(path)}"
       end

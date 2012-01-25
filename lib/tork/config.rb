@@ -28,13 +28,13 @@ module Tork
 
   Config.test_file_globbers = {
     # source files that correspond to test files
-    %r<^lib/.+\.rb$> => lambda do |path|
+    %r<^lib/.+\.rb$> => lambda do |path, matches|
       base = File.basename(path, '.rb')
       "{test,spec}/**/#{base}_{test,spec}.rb"
     end,
 
     # the actual test files themselves
-    %r<^(test|spec)/.+_\1\.rb$> => lambda {|path| path }
+    %r<^(test|spec)/.+_\1\.rb$> => lambda {|path, matches| path }
   }
 
   Config.test_name_extractor = lambda do |line|
