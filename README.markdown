@@ -106,7 +106,7 @@ If installed as a Ruby gem:
 
 If installed as a Git clone:
 
-    bundle exec ruby -Ilib bin/tork --help
+    PATH=bin:$PATH bundle exec tork --help
 
 You can monitor your test processes in another terminal:
 
