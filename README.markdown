@@ -39,7 +39,7 @@ Features
 
   * You can override the modular `tork*` programs with your own in $PATH.
 
-  * Implemented in less than 400 lines (SLOC) of pure Ruby code! :-)
+  * Its core is written in less than 360 lines (SLOC) of pure Ruby code! :-)
 
 ------------------------------------------------------------------------------
 Architecture

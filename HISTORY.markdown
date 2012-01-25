@@ -4,7 +4,7 @@ Version 15.1.0 (2012-01-25)
 
 New features:
 
-  * GH-19: add support for running cucumber features.
+  * GH-19: add `tork cucumber` for running cucumber features.
 
 Bug fixes:
 
