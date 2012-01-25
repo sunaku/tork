@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'json', '>= 1.6.1', '< 2'
   s.add_runtime_dependency 'guard', '>= 0.9.0', '< 1'
   s.add_runtime_dependency 'diff-lcs', '>= 1.1.2', '< 2'
+  s.add_development_dependency 'md2man', '~> 1'
 end
