@@ -69,6 +69,8 @@ module Tork
   # overrides
   #---------------------------------------------------------------------------
 
+  load _user_config_file if File.exist? _user_config_file
+
   if ENV.key? 'TORK_CONFIGS'
     JSON.load(ENV['TORK_CONFIGS']).each do |config|
       if File.exist? config
@@ -78,6 +80,4 @@ module Tork
       end
     end
   end
-
-  load _user_config_file if File.exist? _user_config_file
 end
