@@ -36,7 +36,7 @@ tork(1), tork-driver(1), tork-master(1), tork-herald(1)
 
 =end =========================================================================
 
-$0 = File.basename(__FILE__) # for easier indentification in ps(1) output
+$0 = File.basename(__FILE__) # for easier identification in ps(1) output
 
 require 'binman'
 BinMan.help
