@@ -252,8 +252,8 @@ worker process is forked to run a test file.  These functions are given:
 
 3. The path of the test file that will be run by the worker process.
 
-4. An array of names of tests inside the test file that will be run.  If this
-   array is empty, then all tests in the test file will be run.
+4. An array of line numbers in the test file to run.  If this array is empty,
+   then the entire test file will be run.
 
 For example, to see some real values:
 
@@ -277,8 +277,8 @@ by `tork-master`.  These functions are given:
 
 3. The path of the test file that will be run by the worker process.
 
-4. An array of names of tests inside the test file that will be run.  If this
-   array is empty, then all tests in the test file will be run.
+4. An array of line numbers in the test file to run.  If this array is empty,
+   then the entire test file will be run.
 
 For example, to see some real values, including the worker process' PID:
 
