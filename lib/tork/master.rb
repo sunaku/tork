@@ -57,7 +57,7 @@ module Master
     end
 
     @command_by_worker_pid[worker_pid] = @command.push(worker_number)
-    @client.print @command_line
+    @client.send @command
   end
 
   def stop
@@ -85,7 +85,7 @@ private
         if command = @command_by_worker_pid.delete(child_pid)
           @worker_number_pool.push command.pop
           command[0] = child_status.success? ? 'pass' : 'fail'
-          @client.puts JSON.dump(command.push(child_status))
+          @client.send command.push(child_status)
         else
           warn "tork-master: unknown child exited: #{wait2_array.inspect}"
         end

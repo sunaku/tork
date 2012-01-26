@@ -3,6 +3,26 @@ require 'thread'
 module Tork
 module Client
 
+  class Transmitter < Thread
+    def initialize output_stream
+      @outbox = Queue.new
+      super do
+        while message = @outbox.deq
+          output_stream << message
+        end
+      end
+    end
+
+    def print string
+      @outbox.enq string
+    end
+
+    def send command
+      warn "#{caller[1]} SEND #{command.inspect}" if $DEBUG
+      print JSON.dump(command) + "\n"
+    end
+  end
+
   class Receiver < Thread
     def initialize *popen_args
       (@io = IO.popen(*popen_args)).sync = true
@@ -19,16 +39,13 @@ module Client
 
   class Transceiver < Receiver
     def initialize *popen_args
-      @io_write_lock = Mutex.new
       popen_args[1] = 'w+'
       super
+      @transmitter = Transmitter.new(@io)
     end
 
     def send command
-      @io_write_lock.synchronize do
-        warn "#{caller[2]} SEND #{command.inspect}" if $DEBUG
-        @io.puts JSON.dump(command)
-      end
+      @transmitter.send command
     end
   end
 

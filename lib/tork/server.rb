@@ -1,4 +1,5 @@
 require 'json'
+require 'tork/client'
 
 module Tork
 module Server
@@ -8,7 +9,8 @@ module Server
   end
 
   def loop
-    (@client = STDOUT.dup).sync = true
+    (output = STDOUT.dup).sync = true
+    @client = Tork::Client::Transmitter.new(output)
     STDOUT.reopen(STDERR).sync = true
 
     catch :tork_server_quit do

@@ -76,7 +76,7 @@ module Driver
 
       # reabsorb text execution overhead if overhead files changed
       if Config.reabsorb_file_greps.any? {|r| r =~ changed_file }
-        @client.puts JSON.dump([:over, changed_file])
+        @client.send [:over, changed_file]
         # NOTE: new thread because reabsorb_overhead_files will kill this one
         Thread.new { reabsorb_overhead_files }.join
       end
