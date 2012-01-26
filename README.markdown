@@ -41,17 +41,15 @@ Features
 
   * Its core is written in less than 360 lines (SLOC) of pure Ruby code! :-)
 
-------------------------------------------------------------------------------
-Architecture
-------------------------------------------------------------------------------
+### Architecture
 
 Following UNIX philosophy, Tork is composed of simple text-based programs: so
 you can build your own custom Tork user interface by wrapping `tork-driver`!
 
-* `tork` is an interactive command-line user interface (CLI) for driver
-* `tork-herald` monitors current directory tree and reports changed files
-* `tork-driver` tells master to run tests and keeps track of test results
-* `tork-master` absorbs test execution overhead and forks to run your tests
+  * `tork` is an interactive command-line user interface (CLI) for driver
+  * `tork-herald` monitors current directory tree and reports changed files
+  * `tork-driver` tells master to run tests and keeps track of test results
+  * `tork-master` absorbs test execution overhead and forks to run your tests
 
 When the herald observes that files in or beneath the current directory have
 been written to, it tells the driver, which then commands the master to fork a
@@ -64,8 +62,10 @@ diff and regexps) and then attempts to run just those.  To make it run *all*
 tests in your saved file, simply save the file *again* without changing it.
 
 ------------------------------------------------------------------------------
-Starting off
+Installation
 ------------------------------------------------------------------------------
+
+    gem install tork
 
 ### Prerequisites
 
@@ -83,18 +83,6 @@ Starting off
         gem install rb-inotify  # linux
         gem install rb-fsevent  # macosx
 
-### Installation
-
-    gem install tork
-
-### Invocation
-
-    tork --help
-
-### Monitoring
-
-    watch 'ps xuw | sed -n "1p; /tor[k]/p" | fgrep -v sed'
-
 ### Development
 
     git clone git://github.com/sunaku/tork
@@ -104,13 +92,96 @@ Starting off
     bundle exec rake -T     # packaging tasks
 
 ------------------------------------------------------------------------------
+Usage
+------------------------------------------------------------------------------
+
+### At the command line
+
+    tork --help
+
+You can monitor your test processes from another terminal:
+
+    watch 'ps xuw | sed -n "1p; /tor[k]/p" | fgrep -v sed'
+
+### With [Ruby on Rails]
+
+For Rails 3 or newer, use the rails configuration helper (see below).
+Otherwise, ensure that your `config/environments/test.rb` file contains:
+
+    config.cache_classes = false
+
+To use SQLite3 as your test database, install its [in-memory database
+adapter][memory_test_fix].  Otherwise, you *might* face these errors:
+
+> SQLite3::BusyException: database is locked
+
+> cannot start a transaction within a transaction
+
+### With [factory_girl]
+
+Do not load your factories into the master process as part of your test
+execution overhead in your test/spec helper because that would necessitate
+overhead reabsorption whenever you change or create factory definitions.
+
+Instead, use `at_exit()` to wait until (1) after the master process has forked
+a worker process and (2) just before that worker process runs its test suite
+(whose execution is started by your test framework's own `at_exit()` handler):
+
+    # in your test/spec helper
+    require 'factory_girl'
+    at_exit { FactoryGirl.find_definitions unless $! }
+
+This way, worker processes will pick up changes in your factories "for free"
+whenever they (re)run your test files.  Skip if Ruby is exiting because of a
+raised exception (denoted by the `$!` global variable in the snippet above).
+
+As a bonus, this arrangement also works when tests are run outside of Tork!
+
+------------------------------------------------------------------------------
 Configuration
 ------------------------------------------------------------------------------
 
 Tork looks for a configuration file named `.tork.rb` in its current working
-directory.  The configuration file is a normal Ruby script.  Inside it, you
-can query and modify the `Tork::Config` object (OpenStruct) according to the
-configuration options listed below.
+directory.  The configuration file is a normal Ruby script, inside which you
+can query and modify the `Tork::Config` object: an instance of OpenStruct.
+
+------------------------------------------------------------------------------
+Configuration helpers
+------------------------------------------------------------------------------
+
+### [Ruby on Rails]
+
+At the command line:
+
+    tork rails
+
+Or in your configuration file:
+
+    require 'tork/config/rails'
+
+### [Cucumber]
+
+At the command line:
+
+    tork cucumber
+
+Or in your configuration file:
+
+    require 'tork/config/cucumber'
+
+### [parallel_tests]
+
+At the command line:
+
+    tork parallel_tests
+
+Or in your configuration file:
+
+    require 'tork/config/parallel_tests'
+
+------------------------------------------------------------------------------
+Configuration options
+-----------------------------------------------------------------------------
 
 ### Tork::Config.max_forked_workers
 
@@ -224,71 +295,6 @@ For example, to see some real values, including the worker process' PID:
 The first function in this array instructs Test::Unit and RSpec to only run
 those tests that are defined on the given line numbers.  This accelerates your
 test-driven development cycle by only running tests you are currently editing.
-
-------------------------------------------------------------------------------
-Configuration helpers
-------------------------------------------------------------------------------
-
-The following libraries assist you with configuring Tork. To use them,
-simply add the `require()` lines shown below to your configuration file
-*or* pass their basenames to the tork(1) command, also as shown below.
-
-### require 'tork/config/rails' # tork rails
-
-Support for the [Ruby on Rails] web framework.
-
-### require 'tork/config/cucumber' # tork cucumber
-
-Support for the [Cucumber] testing framework.
-
-### require 'tork/config/parallel_tests' # tork parallel_tests
-
-Support for the [parallel_tests] library.
-
-------------------------------------------------------------------------------
-Usage tips
-------------------------------------------------------------------------------
-
-### [factory_girl] factories
-
-Don't load your factories in master process (as part of your test execution
-overhead) because that would necessitate the reloading of said overhead
-whenever you change an existing factory definition or create a new one.
-
-Instead, use `at_exit()` to wait until (1) after the master process has forked
-a worker process and (2) just before that worker process runs its test suite
-(whose execution is started by your test framework's own `at_exit()` handler):
-
-    require 'factory_girl'
-    at_exit { FactoryGirl.find_definitions unless $! }
-
-This way, worker processes will pick up changes in your factories "for free"
-whenever they (re)run your test files.  Also, don't load your factories or do
-anything else in your `at_exit()` handler if Ruby is exiting because of a
-raised exception (denoted by the `$!` global variable in the snippet above).
-
-------------------------------------------------------------------------------
-Known issues
-------------------------------------------------------------------------------
-
-### Ruby on Rails
-
-  * Ensure that your `config/environments/test.rb` file disables class caching
-    as follows (**NOTE:** if you are using Rails 3, the `tork/config/rails`
-    configuration helper can do this for you automatically):
-
-        config.cache_classes = false
-
-    Otherwise, Tork will appear to ignore source-code changes in your
-    models, controllers, helpers, and other Ruby source files.
-
-  * If SQLite3 raises one of the following errors, try using an [in-memory
-    adapter for SQLite3][memory_test_fix] or use different database software
-    (such as MySQL) for your test environment.
-
-    * SQLite3::BusyException: database is locked
-
-    * cannot start a transaction within a transaction
 
 ------------------------------------------------------------------------------
 License
