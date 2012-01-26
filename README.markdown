@@ -189,6 +189,16 @@ Or in your configuration file:
 
     require 'tork/config/dotlog'
 
+### Isolate log files into a separate `log/` directory
+
+At the command line:
+
+    tork logdir
+
+Or in your configuration file:
+
+    require 'tork/config/logdir'
+
 ------------------------------------------------------------------------------
 Configuration options
 -----------------------------------------------------------------------------
