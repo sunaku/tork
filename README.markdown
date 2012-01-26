@@ -179,6 +179,16 @@ Or in your configuration file:
 
     require 'tork/config/parallel_tests'
 
+### Hide log files by prefixing their names with a dot
+
+At the command line:
+
+    tork dotlog
+
+Or in your configuration file:
+
+    require 'tork/config/dotlog'
+
 ------------------------------------------------------------------------------
 Configuration options
 -----------------------------------------------------------------------------
