@@ -64,8 +64,10 @@ diff and regexps) and then attempts to run just those.  To make it run *all*
 tests in your saved file, simply save the file *again* without changing it.
 
 ------------------------------------------------------------------------------
-Prerequisites
+Starting off
 ------------------------------------------------------------------------------
+
+### Prerequisites
 
   * Ruby 1.8.7 or 1.9.2 or newer.
 
@@ -78,43 +80,28 @@ Prerequisites
 
   * To make the `tork-herald` program's filesystem monitoring more efficient:
 
-        gem install rb-inotify # linux
-        gem install rb-fsevent # macosx
+        gem install rb-inotify  # linux
+        gem install rb-fsevent  # macosx
 
-------------------------------------------------------------------------------
-Installation
-------------------------------------------------------------------------------
-
-As a Ruby gem:
+### Installation
 
     gem install tork
 
-As a Git clone:
-
-    git clone git://github.com/sunaku/tork
-    cd tork
-    bundle install
-    bundle exec rake install
-
-------------------------------------------------------------------------------
-Invocation
-------------------------------------------------------------------------------
-
-If installed as a Ruby gem:
+### Invocation
 
     tork --help
 
-If installed as a Git clone:
-
-    PATH=bin:$PATH bundle exec tork --help
-
-You can monitor your test processes in another terminal:
+### Monitoring
 
     watch 'ps xuw | sed -n "1p; /tor[k]/p" | fgrep -v sed'
 
-You can forcefully terminate Tork from another terminal:
+### Development
 
-    pkill -f tork
+    git clone git://github.com/sunaku/tork
+    cd tork
+    bundle install --binstubs=bundle_bin
+    bundle_bin/tork --help  # run it directly
+    bundle exec rake -T     # packaging tasks
 
 ------------------------------------------------------------------------------
 Configuration
