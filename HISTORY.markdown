@@ -1,4 +1,24 @@
 ------------------------------------------------------------------------------
+Version 16.0.0 (2012-01-25)
+------------------------------------------------------------------------------
+
+Breaking changes:
+
+  * Drop the `Tork::Config.test_name_extractor` configuration option.
+
+  * Pass line numbers instead of test names to before/after fork hooks.
+
+  * Pass $~ (MatchData) to `Tork::Config::test_file_globbers` functions.
+
+New features:
+
+  * tork/config/cucumber: only run changed scenarios in changed features.
+
+Housekeeping:
+
+  * README: update instructions on running Tork directly from Git clone.
+
+------------------------------------------------------------------------------
 Version 15.1.0 (2012-01-25)
 ------------------------------------------------------------------------------
 
