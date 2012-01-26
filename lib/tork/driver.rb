@@ -65,7 +65,7 @@ module Driver
 
     @herald = Client::Receiver.new('tork-herald') do |line|
       changed_file = line.chomp
-      warn "tork-driver: herald: #{changed_file}" if $DEBUG
+      warn "#{$0}(#{$$}): FILE #{changed_file}" if $DEBUG
 
       # find and run the tests that correspond to the changed file
       Config.test_file_globbers.each do |regexp, globber|

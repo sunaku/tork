@@ -18,7 +18,7 @@ module Client
     end
 
     def send command
-      warn "#{caller[1]} SEND #{command.inspect}" if $DEBUG
+      warn "#{$0}(#{$$}): SEND #{command.inspect}" if $DEBUG
       print JSON.dump(command) + "\n"
     end
   end

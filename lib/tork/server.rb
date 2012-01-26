@@ -15,7 +15,7 @@ module Server
 
     catch :tork_server_quit do
       while line = STDIN.gets
-        warn "#{caller[2]} RECV #{line.chomp}" if $DEBUG
+        warn "#{$0}(#{$$}): RECV #{line.chomp}" if $DEBUG
 
         command = JSON.load(line)
         method = command.first
