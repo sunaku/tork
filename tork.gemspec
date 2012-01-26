@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors,
   s.email         = File.read('LICENSE').scan(/Copyright \d+ (.+) <(.+?)>/).transpose
   s.homepage      = "http://github.com/sunaku/tork"
-  s.summary       = "Continuous testing tool for Ruby"
-  s.description   = nil
+  s.summary       = "Test with fork."
+  s.description   = "Continuous testing tool for Ruby."
 
   s.files         = `git ls-files`.split("\n") + Dir["man/**/*"]
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
