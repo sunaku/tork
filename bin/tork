@@ -85,7 +85,7 @@ COMMANDS = {
 }
 
 begin
-  while key = STDIN.gets.chomp
+  while key = STDIN.gets.strip
     if command = COMMANDS[key]
       warn "tork: Sending #{command.to_s.inspect} command..."
       @driver.send [command]
