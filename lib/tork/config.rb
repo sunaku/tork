@@ -42,7 +42,7 @@ module Tork
   Config.after_fork_hooks = [
     # instruct the testing framework to only run those
     # tests that are defined on the given line numbers
-    lambda do |worker_number, log_file, test_file, line_numbers|
+    lambda do |test_file, line_numbers, log_file, worker_number|
       case File.basename(test_file)
       when /(\b|_)spec(\b|_).*\.rb$/ # RSpec
         line_numbers.each {|line| ARGV.push '--line_number', line.to_s }

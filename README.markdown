@@ -277,14 +277,16 @@ worker process is forked to run a test file.  These functions are given:
 
 For example, to see some real values:
 
-    Tork::Config.before_fork_hooks << lambda do |worker_number, log_file, test_file, line_numbers|
+    Tork::Config.before_fork_hooks.push lambda {
+      |test_file, line_numbers, log_file, worker_number|
+
       p :before_fork_hooks => {
-        :worker_number => worker_number,
-        :log_file      => log_file,
         :test_file     => test_file,
         :line_numbers  => line_numbers,
+        :log_file      => log_file,
+        :worker_number => worker_number,
       }
-    end
+    }
 
 ### Tork::Config.after_fork_hooks
 
@@ -302,15 +304,17 @@ by `tork-master`.  These functions are given:
 
 For example, to see some real values, including the worker process' PID:
 
-    Tork::Config.after_fork_hooks << lambda do |worker_number, log_file, test_file, line_numbers|
+    Tork::Config.after_fork_hooks.push lambda {
+      |test_file, line_numbers, log_file, worker_number|
+
       p :after_fork_hooks => {
-        :worker_pid    => $$,
-        :worker_number => worker_number,
-        :log_file      => log_file,
         :test_file     => test_file,
         :line_numbers  => line_numbers,
+        :log_file      => log_file,
+        :worker_number => worker_number,
+        :worker_pid    => $$,
       }
-    end
+    }
 
 The first function in this array instructs Test::Unit and RSpec to only run
 those tests that are defined on the given line numbers.  This accelerates your

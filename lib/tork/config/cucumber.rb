@@ -12,7 +12,9 @@ Tork::Config.test_file_globbers.update(
   %r<^features/.+\.feature$> => lambda {|path, matches| path }
 )
 
-Tork::Config.after_fork_hooks << lambda do |worker_number, log_file, test_file, line_numbers|
+Tork::Config.after_fork_hooks.push lambda {
+  |test_file, line_numbers, log_file, worker_number|
+
   # pass test_file in ARGV to cucumber(1) for running
   ARGV << [test_file, *line_numbers].join(':')
   require 'cucumber'
@@ -24,4 +26,4 @@ Tork::Config.after_fork_hooks << lambda do |worker_number, log_file, test_file, 
   # because cucumber feature files are not Ruby scripts
   require 'tempfile'
   test_file.replace Tempfile.new('tork-cucumber').path
-end
+}
