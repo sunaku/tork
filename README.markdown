@@ -127,13 +127,18 @@ Instead, use `at_exit()` to wait until (1) after the master process has forked
 a worker process and (2) just before that worker process runs its test suite
 (whose execution is started by your test framework's own `at_exit()` handler):
 
-    # in your test/spec helper
+    # in your test or spec helper
     require 'factory_girl'
-    at_exit { FactoryGirl.find_definitions unless $! }
+    at_exit do
+      unless $!
+        FactoryGirl.factories.clear
+        FactoryGirl.find_definitions
+      end
+    end
 
 This way, worker processes will pick up changes in your factories "for free"
-whenever they (re)run your test files.  Skip if Ruby is exiting because of a
-raised exception (denoted by the `$!` global variable in the snippet above).
+whenever they (re)run your test files.  Except if Ruby is exiting because of
+a raised exception, denoted by the `$!` global variable in the snippet above.
 
 As a bonus, this arrangement also works when tests are run outside of Tork!
 
