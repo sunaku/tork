@@ -1,4 +1,52 @@
 ------------------------------------------------------------------------------
+Version 17.0.0 (2012-01-27)
+------------------------------------------------------------------------------
+
+Breaking changes:
+
+  * tork-herald(1) now emits batches of single-line JSON arrays instead of
+    printing one (raw) path per line.  This makes IPC uniform across Tork.
+
+  * tork-master(1) now emits log_file and worker_number in status messages.
+
+  * The order of parameters for before/after fork hooks has been changed to
+    better reflect the order of items in tork-master(1)'s status messages.
+
+    * The old order was: worker_number, log_file, test_file, line_numbers.
+
+    * The new order is:  test_file, line_numbers, log_file, worker_number.
+
+New features:
+
+  * GH-24: add `tork/config/dotlog` configuration helper to "hide" log files.
+    (Nicolas Fouché)
+
+  * GH-25: add `tork/config/logdir` configuration helper to isolate log files.
+    (Jose Pablo Barrantes)
+
+  * tork(1) now strips all whitespace from your input, in case you pressed
+    spacebar or tab a few times, by accident, before entering your command.
+
+Housekeeping:
+
+  * tork/client: Replace write lock with queue to support SIGCHLD handler.
+
+    The SIGCHLD handler in tork-master(1) can be triggered at any time, even
+    in the middle of writing to the standard output stream!  Locking access
+    to the output stream in normal code (outside the signal handler) would
+    freeze the program because the signal handler, waiting for the lock to
+    be released, would never return!
+
+    One solution is to maintain a thread-safe queue of outgoing items that
+    need to be written to the output stream.  Both normal code and the
+    signal handler can quickly push an outgoing item onto the queue and
+    proceed with their business.  A separate thread can then have the sole
+    responsibility of (and access to) continually writing those outgoing
+    items to the output stream.
+
+  * README: revise instructions, reorganize document, and other improvements.
+
+------------------------------------------------------------------------------
 Version 16.0.0 (2012-01-25)
 ------------------------------------------------------------------------------
 
