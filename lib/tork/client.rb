@@ -41,7 +41,8 @@ module Client
     end
 
     def quit
-      kill # stop receive loop
+      kill # stop transmit loop
+      @receiver.kill # stop receive loop
       Process.kill :SIGTERM, @popen_io.pid
       Process.wait @popen_io.pid # reap zombie
       @popen_io.close # prevent further I/O
