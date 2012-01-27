@@ -55,7 +55,7 @@ module Master
       Kernel.load test_file
     end
 
-    @command_by_worker_pid[worker_pid] = @command.push(worker_number)
+    @command_by_worker_pid[worker_pid] = @command.push(log_file, worker_number)
     @client.send @command
   end
 
@@ -82,7 +82,7 @@ private
       while wait2_array = Process.wait2(-1, Process::WNOHANG)
         child_pid, child_status = wait2_array
         if command = @command_by_worker_pid.delete(child_pid)
-          @worker_number_pool.push command.pop
+          @worker_number_pool.push command.last
           command[0] = child_status.success? ? 'pass' : 'fail'
           @client.send command.push(child_status)
         else

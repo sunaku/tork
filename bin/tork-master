@@ -30,16 +30,18 @@ standard input stream and performs the respective actions as described below.
   chosen unit testing framework (loaded by your test execution overhead) to
   only run those tests that are defined on the given array of *line_numbers*.
 
-  Prints the given command line to the standard output stream immediately
-  after forking the child process.
+  Prints the following status messages to the standard output stream.  The
+  standard output and error streams of the forked child process are captured
+  in the *log_file* specified in these status messages.
 
-  Prints the given command line, modified with `"pass"` (if the test passed)
-  or `"fail"` (if the test failed) in place of `"test"`, to the standard
-  output stream after the forked child process finishes.
+  * Test is running:
+    `["test",` *test_file*`,` *line_numbers*`,` *log_file*`,` *worker_number*`]`
 
-  The standard output and error streams of the forked child process are
-  redirected to a file whose path and name are the same as that of the test
-  file being run by the forked child process but with ".log" appended.
+  * Test has passed:
+    `["pass",` *test_file*`,` *line_numbers*`,` *log_file*`,` *worker_number*`,` *exit_status*`]`
+
+  * Test has failed:
+    `["fail",` *test_file*`,` *line_numbers*`,` *log_file*`,` *worker_number*`,` *exit_status*`]`
 
 `["stop"]`
   Stops all tests that are currently running and prints the given command line
