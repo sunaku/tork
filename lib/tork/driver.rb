@@ -1,4 +1,3 @@
-require 'json'
 require 'diff/lcs'
 require 'tork/client'
 require 'tork/server'
@@ -30,8 +29,8 @@ module Driver
   def reabsorb_overhead_files
     @master.quit if defined? @master
 
-    @master = Client::Transceiver.new('tork-master') do |line|
-      event, file, tests = JSON.load(line)
+    @master = Client::Transceiver.new('tork-master') do |message|
+      event, file, tests = message
 
       case event.to_sym
       when :test
@@ -51,7 +50,7 @@ module Driver
         @failed_test_files.push file unless @failed_test_files.include? file
       end
 
-      @client.print line
+      @client.send message
     end
 
     @master.send [:load, Config.overhead_load_paths,
@@ -63,22 +62,24 @@ module Driver
   def loop
     reabsorb_overhead_files
 
-    @herald = Client::Receiver.new('tork-herald') do |line|
-      changed_file = line.chomp
-      warn "#{$0}(#{$$}): FILE #{changed_file}" if $DEBUG
+    @herald = Client::Transceiver.new('tork-herald') do |changed_files|
+      warn "#{$0}(#{$$}): FILE BATCH #{changed_files.size}" if $DEBUG
+      changed_files.each do |changed_file|
+        warn "#{$0}(#{$$}): FILE #{changed_file}" if $DEBUG
 
-      # find and run the tests that correspond to the changed file
-      Config.test_file_globbers.each do |regexp, globber|
-        if regexp =~ changed_file and glob = globber.call(changed_file, $~)
-          run_test_files Dir[glob]
+        # find and run the tests that correspond to the changed file
+        Config.test_file_globbers.each do |regexp, globber|
+          if regexp =~ changed_file and glob = globber.call(changed_file, $~)
+            run_test_files Dir[glob]
+          end
         end
-      end
 
-      # reabsorb text execution overhead if overhead files changed
-      if Config.reabsorb_file_greps.any? {|r| r =~ changed_file }
-        @client.send [:over, changed_file]
-        # NOTE: new thread because reabsorb_overhead_files will kill this one
-        Thread.new { reabsorb_overhead_files }.join
+        # reabsorb text execution overhead if overhead files changed
+        if Config.reabsorb_file_greps.any? {|r| r =~ changed_file }
+          @client.send [:over, changed_file]
+          # NOTE: new thread because reabsorb_overhead_files will kill this one
+          Thread.new { reabsorb_overhead_files }.join
+        end
       end
     end
 

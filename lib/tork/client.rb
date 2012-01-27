@@ -1,51 +1,50 @@
 require 'thread'
+require 'json'
 
 module Tork
 module Client
 
   class Transmitter < Thread
     def initialize output_stream
+      output_stream.sync = true
       @outbox = Queue.new
-      super do
-        while message = @outbox.deq
-          output_stream << message
+      super() do
+        while command = @outbox.deq
+          warn "#{$0}(#{$$}): SEND #{command.inspect}" if $DEBUG
+          output_stream.puts JSON.dump(command)
         end
       end
     end
 
-    def print string
-      @outbox.enq string
-    end
-
     def send command
-      warn "#{$0}(#{$$}): SEND #{command.inspect}" if $DEBUG
-      print JSON.dump(command) + "\n"
+      @outbox.enq command
     end
   end
 
   class Receiver < Thread
-    def initialize *popen_args
-      (@io = IO.popen(*popen_args)).sync = true
-      super() { loop { yield @io.gets } }
+    def initialize input_stream
+      super() do
+        while command = JSON.load(input_stream.gets)
+          warn "#{$0}(#{$$}): RECV #{command.inspect}" if $DEBUG
+          yield command
+        end
+      end
+    end
+  end
+
+  class Transceiver < Transmitter
+    def initialize *popen_args, &receive_block
+      popen_args[1] = 'w+'
+      @popen_io = IO.popen(*popen_args)
+      @receiver = Receiver.new(@popen_io, &receive_block)
+      super @popen_io
     end
 
     def quit
       kill # stop receive loop
-      Process.kill :SIGTERM, @io.pid
-      Process.wait @io.pid # reap zombie
-      @io.close # prevent further I/O
-    end
-  end
-
-  class Transceiver < Receiver
-    def initialize *popen_args
-      popen_args[1] = 'w+'
-      super
-      @transmitter = Transmitter.new(@io)
-    end
-
-    def send command
-      @transmitter.send command
+      Process.kill :SIGTERM, @popen_io.pid
+      Process.wait @popen_io.pid # reap zombie
+      @popen_io.close # prevent further I/O
     end
   end
 

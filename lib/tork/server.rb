@@ -1,33 +1,25 @@
-require 'json'
 require 'tork/client'
 
 module Tork
 module Server
 
   def quit
-    throw :tork_server_quit
+    Thread.exit # kill Client::Receiver in loop()
   end
 
   def loop
-    (output = STDOUT.dup).sync = true
-    @client = Tork::Client::Transmitter.new(output)
+    @client = Client::Transmitter.new(STDOUT.dup)
     STDOUT.reopen(STDERR).sync = true
 
-    catch :tork_server_quit do
-      while line = STDIN.gets
-        warn "#{$0}(#{$$}): RECV #{line.chomp}" if $DEBUG
-
-        command = JSON.load(line)
-        method = command.first
-
-        if respond_to? method and method != __method__ # prevent loops
-          @command, @command_line = command, line
-          __send__(*command)
-        else
-          warn "#{self}: bad command: #{method}"
-        end
+    Client::Receiver.new(STDIN) do |command|
+      method = command.first
+      if respond_to? method and method != __method__ # prevent loops
+        @command = command
+        __send__(*command)
+      else
+        warn "#{self}: invalid command: #{method}"
       end
-    end
+    end.join
   rescue Interrupt
     # forced quit
   end

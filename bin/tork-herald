@@ -18,7 +18,8 @@ DESCRIPTION
 ------------------------------------------------------------------------------
 
 This program monitors the current working directory and prints relative paths
-of modified files, one per line, to the standard output stream.
+of modified files in batches of single-line JSON arrays to the standard output
+stream.
 
 OPTIONS
 ------------------------------------------------------------------------------
@@ -40,8 +41,9 @@ BinMan.help
 
 require 'guard'
 require 'guard/listener'
+require 'json'
 
 listener = Guard::Listener.select_and_init(:watch_all_modifications => true)
-listener.on_change {|files| puts files }
+listener.on_change {|files| puts JSON.dump(files) }
 STDOUT.sync = true # don't buffer puts()
 listener.start

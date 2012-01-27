@@ -1,4 +1,3 @@
-require 'json'
 require 'tork/server'
 require 'tork/config'
 
@@ -17,7 +16,7 @@ module Master
       require file.sub(/\.rb$/, '')
     end
 
-    @client.print @command_line
+    @client.send @command
   end
 
   def test test_file, line_numbers

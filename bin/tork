@@ -51,23 +51,20 @@ ENV['TORK_CONFIGS'] = JSON.dump(ARGV)
 require 'tork/client'
 
 warn 'tork: Absorbing test execution overhead...'
-@driver = Tork::Client::Transceiver.new('tork-driver') do |line|
-  evstr, *details = JSON.load(line)
-  event = evstr.to_sym
-
-  case event
+@driver = Tork::Client::Transceiver.new('tork-driver') do |event, *details|
+  case event_sym = event.to_sym
   when :load then warn 'tork: Overhead absorbed. Ready for testing!'
   when :over then warn 'tork: Reabsorbing changed overhead files...'
   else
     test_file, line_numbers, *details = details
-    message = [evstr.upcase, test_file, line_numbers.inspect, details].join(' ')
+    message = [event.upcase, test_file, line_numbers.inspect, details].join(' ')
 
-    color = case event
+    color = case event_sym
             when :pass then "\e[34m%s\e[0m" # blue
             when :fail then "\e[31m%s\e[0m" # red
             end
     message = color % message if color and STDOUT.tty?
-    message = [message, File.read(test_file + '.log'), message] if event == :fail
+    message = [message, File.read(test_file + '.log'), message] if event_sym == :fail
 
     puts message
   end

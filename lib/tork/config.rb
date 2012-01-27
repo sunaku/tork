@@ -81,6 +81,7 @@ module Tork
   load _user_config_file if File.exist? _user_config_file
 
   if ENV.key? 'TORK_CONFIGS'
+    require 'json'
     JSON.load(ENV['TORK_CONFIGS']).each do |config|
       if File.exist? config
         load File.expand_path(config)
