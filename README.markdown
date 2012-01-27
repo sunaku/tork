@@ -149,6 +149,9 @@ can query and modify the `Tork::Config` object: an instance of OpenStruct.
 Configuration helpers
 ------------------------------------------------------------------------------
 
+In case you did not read the `tork --help` manual page, please note that you
+can pass *multiple* configuration helpers to tork(1) at the command line!
+
 ### [Ruby on Rails]
 
 At the command line:
