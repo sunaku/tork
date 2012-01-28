@@ -266,7 +266,7 @@ source files except those within a `models/` directory, you would write:
 
 ### Tork::Config.before_fork_hooks
 
-Array of lambda functions that are executed inside `tork-master` before a
+Array of lambda functions that are invoked inside `tork-master` before a
 worker process is forked to run a test file.  These functions are given:
 
 1. The sequence number of the worker process that will be forked shortly.
@@ -293,7 +293,7 @@ For example, to see some real values:
 
 ### Tork::Config.after_fork_hooks
 
-Array of lambda functions that are executed inside a worker process forked
+Array of lambda functions that are invoked inside a worker process forked
 by `tork-master`.  These functions are given:
 
 1. The sequence number of the worker process.
@@ -322,6 +322,18 @@ For example, to see some real values, including the worker process' PID:
 The first function in this array instructs Test::Unit and RSpec to only run
 those tests that are defined on the given line numbers.  This accelerates your
 test-driven development cycle by only running tests you are currently editing.
+
+### Tork::Config.test_event_hooks
+
+Array of lambda functions that are invoked inside `tork-driver` whenever it
+receives a status message (passed into those functions) from `tork-master`.
+Run `tork-master --help` for more information about these status messages.
+
+For example, to see some real values:
+
+    Tork::Config.test_event_hooks.push lambda {|message_from_tork_master|
+      p :test_event_hooks => message_from_tork_master
+    }
 
 ------------------------------------------------------------------------------
 License

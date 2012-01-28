@@ -53,7 +53,8 @@ module Driver
         @passed_test_files.delete file
       end
 
-      @client.send message
+      @client.send message # propagate output downstream
+      Config.test_event_hooks.each {|hook| hook.call message }
     end
 
     @master.send [:load, Config.overhead_load_paths,
