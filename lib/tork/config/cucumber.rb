@@ -15,15 +15,17 @@ Tork::Config.test_file_globbers.update(
 Tork::Config.after_fork_hooks.push lambda {
   |test_file, line_numbers, log_file, worker_number|
 
-  # pass test_file in ARGV to cucumber(1) for running
-  ARGV << [test_file, *line_numbers].join(':')
-  require 'cucumber'
-  require 'rubygems'
-  cucumber_bin = Gem.bin_path('cucumber', 'cucumber')
-  at_exit { load cucumber_bin unless $! }
+  if File.extname(test_file) == '.feature'
+    # pass test_file in ARGV to cucumber(1) for running
+    ARGV << [test_file, *line_numbers].join(':')
+    require 'cucumber'
+    require 'rubygems'
+    cucumber_bin = Gem.bin_path('cucumber', 'cucumber')
+    at_exit { load cucumber_bin unless $! }
 
-  # noopify loading of test_file in Tork::Master#test()
-  # because cucumber feature files are not Ruby scripts
-  require 'tempfile'
-  test_file.replace Tempfile.new('tork-cucumber').path
+    # noopify loading of test_file in Tork::Master#test()
+    # because cucumber feature files are not Ruby scripts
+    require 'tempfile'
+    test_file.replace Tempfile.new('tork-cucumber').path
+  end
 }
