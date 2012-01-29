@@ -1,4 +1,24 @@
 ------------------------------------------------------------------------------
+Version 17.0.1 (2012-01-29)
+------------------------------------------------------------------------------
+
+Corrections:
+
+  * tork-herald(1) *sometimes* reported changed test files twice.
+
+  * tork/driver: only whole test file runs should qualify as pass.
+
+  * tork/config/cucumber: only set ARGV for `*.feature` test files.
+
+  * Tork::Client::Transceiver needs to stop both TX & RX loops.
+
+Housekeeping:
+
+  * tork/driver: store test file lists in Set, not Array.
+
+  * HISTORY: use single-word change-set descriptions.
+
+------------------------------------------------------------------------------
 Version 17.0.0 (2012-01-27)
 ------------------------------------------------------------------------------
 
