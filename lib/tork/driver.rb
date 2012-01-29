@@ -30,7 +30,7 @@ module Driver
     @master.quit if defined? @master
 
     @master = Client::Transceiver.new('tork-master') do |message|
-      event, file, tests = message
+      event, file, line_numbers = message
 
       case event.to_sym
       when :test
@@ -39,8 +39,10 @@ module Driver
 
       when :pass
         @running_test_files.delete file
-        @failed_test_files.delete file
-        if tests.empty? and not @passed_test_files.include? file
+
+        # only whole test file runs qualify as pass
+        if line_numbers.empty?
+          @failed_test_files.delete file
           @passed_test_files.push file
         end
 
