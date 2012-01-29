@@ -1,3 +1,4 @@
+require 'set'
 require 'diff/lcs'
 require 'tork/client'
 require 'tork/server'
@@ -35,7 +36,7 @@ module Driver
       case event.to_sym
       when :test
         @waiting_test_files.delete file
-        @running_test_files.push file
+        @running_test_files.add file
 
       when :pass
         @running_test_files.delete file
@@ -43,13 +44,13 @@ module Driver
         # only whole test file runs qualify as pass
         if line_numbers.empty?
           @failed_test_files.delete file
-          @passed_test_files.push file
+          @passed_test_files.add file
         end
 
       when :fail
         @running_test_files.delete file
+        @failed_test_files.add file
         @passed_test_files.delete file
-        @failed_test_files.push file unless @failed_test_files.include? file
       end
 
       @client.send message
@@ -93,10 +94,10 @@ module Driver
 
 private
 
-  @waiting_test_files = []
-  @running_test_files = []
-  @passed_test_files = []
-  @failed_test_files = []
+  @waiting_test_files = Set.new
+  @running_test_files = Set.new
+  @passed_test_files = Set.new
+  @failed_test_files = Set.new
 
   def rerun_running_test_files
     run_test_files @running_test_files
@@ -107,8 +108,7 @@ private
   end
 
   def run_test_file file
-    if File.exist? file and not @waiting_test_files.include? file
-      @waiting_test_files.push file
+    if File.exist? file and @waiting_test_files.add? file
       @master.send [:test, file, find_changed_line_numbers(file)]
     end
   end
