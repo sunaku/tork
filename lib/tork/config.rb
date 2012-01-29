@@ -22,19 +22,21 @@ module Tork
   Config.overhead_file_globs = ['{test,spec}/{test,spec}_helper.rb']
 
   Config.reabsorb_file_greps = [/^#{Regexp.quote(_user_config_file)}$/,
-                                %r<(test|spec)/\1_helper\.rb>]
+                                %r<^(test|spec)/\1_helper\.rb$>]
 
-  Config.all_test_file_globs = ['{test,spec}/**/*_{test,spec}.rb']
+  Config.all_test_file_globs = ['{test,spec}/**/*_{test,spec}.rb',
+                                '{test,spec}/**/{test,spec}_*.rb']
 
   Config.test_file_globbers = {
     # source files that correspond to test files
     %r<^lib/.+\.rb$> => lambda do |path, matches|
       base = File.basename(path, '.rb')
-      "{test,spec}/**/#{base}_{test,spec}.rb"
+      ["{test,spec}/**/#{base}_{test,spec}.rb",
+       "{test,spec}/**/{test,spec}_#{base}.rb"]
     end,
 
     # the actual test files themselves
-    %r<^(test|spec)/.+_\1\.rb$> => lambda {|path, matches| path }
+    %r<^(test|spec)/.*(\1_[^/]+|[^/]+_\1)\.rb$> => proc {|path| path }
   }
 
   Config.before_fork_hooks = []

@@ -235,8 +235,9 @@ your Ruby application.
 
 Hash that maps (1) a regular expression describing a set of file paths to (2)
 a lambda function that accepts the path to a changed file and a `MatchData`
-object containing the results of the regular expression matching, and yields a
-file globbing pattern that describes a set of test files that need to be run.
+object containing the results of the regular expression matching, and yields
+one or more file globbing patterns (a single string, or an array of strings)
+that describe a set of test files that need to be run.
 
 In other words, whenever the source files (the regular expression) change,
 their associated test files (result of calling the lambda function) are run.
@@ -254,6 +255,23 @@ Then you would add the following to your configuration file:
       "{test,spec}/**/#{name}_#{name.reverse}.rb"
     end
 
+Going further, if you suppose that test files could optionally have "test" or
+"spec" prefixed or appended to their already peculiar names, like so:
+
+  * `lib/hello.rb` => `test/hello_olleh_test.rb`
+  * `lib/hello.rb` => `test/test_hello_olleh.rb`
+  * `app/world.rb` => `spec/world_ldrow_spec.rb`
+  * `app/world.rb` => `spec/spec_world_ldrow.rb`
+
+Then you would add the following to your configuration file:
+
+    Tork::Config.test_file_globbers[%r<^(lib|app)/.+\.rb$>] = lambda do |path, matches|
+      name = File.basename(path, '.rb')
+      ["{test,spec}/**/#{name}_#{name.reverse}.rb",
+       "{test,spec}/**/#{name}_#{name.reverse}_{test,spec}.rb",
+       "{test,spec}/**/{test,spec}_#{name}_#{name.reverse}.rb"]
+    end
+
 In addition, these lambda functions can return `nil` if they do not wish for a
 particular source file to be tested.  For example, to ignore tests for all
 source files except those within a `models/` directory, you would write:
@@ -261,6 +279,8 @@ source files except those within a `models/` directory, you would write:
     Tork::Config.test_file_globbers[%r<^(lib|app)/.+\.rb$>] = lambda do |path, matches|
       if path.include? '/models/'
         "{test,spec}/**/#{File.basename(path)}"
+      #else     # implied by the Ruby language
+        #nil    # implied by the Ruby language
       end
     end
 
