@@ -43,7 +43,7 @@ require 'guard'
 require 'guard/listener'
 require 'json'
 
-listener = Guard::Listener.select_and_init(:watch_all_modifications => true)
+listener = Guard::Listener.select_and_init({})
 listener.on_change {|files| puts JSON.dump(files) }
 STDOUT.sync = true # don't buffer puts()
 listener.start
