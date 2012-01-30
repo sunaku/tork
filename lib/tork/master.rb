@@ -10,7 +10,7 @@ module Master
   def load paths, files
     $LOAD_PATH.unshift(*paths)
 
-    files.each do |file|
+    @overhead_files = files.each do |file|
       branch, leaf = File.split(file)
       file = leaf if paths.include? branch
       require file.sub(/\.rb$/, '')
@@ -20,6 +20,8 @@ module Master
   end
 
   def test test_file, line_numbers
+    return if @overhead_files.include? test_file
+
     # throttle forking rate to meet the maximum concurrent workers limit
     sleep 1 until @command_by_worker_pid.size < Config.max_forked_workers
 
