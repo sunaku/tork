@@ -1,4 +1,26 @@
 ------------------------------------------------------------------------------
+Version 17.1.0 (2012-01-30)
+------------------------------------------------------------------------------
+
+Improvements:
+
+  * Added `Tork::Config.test_event_hooks` configuration option.
+
+  * Added `tork/config/notify` configuration helper for receiving
+    edge-triggered notifications (via libnotify, growl, or
+    xmessage) about changes in test files' pass/fail status.
+
+  * Added `tork/config/factory_girl` configuration helper for properly
+    clearing factory definitions before forking and then finding them after
+    forking to avoid `FactoryGirl::DuplicateDefinitionError`.  (Mark Hayes)
+
+  * Lambda functions in `Tork::Config.test_file_globbers` can now return
+    multiple globs in an array, in addition to just a single glob or `nil`.
+
+  * Added support for the MiniTest convention of naming test files as
+    `test/**/test_*.rb` and `spec/**/spec_*.rb`. (Jose Pablo Barrantes)
+
+------------------------------------------------------------------------------
 Version 17.0.1 (2012-01-29)
 ------------------------------------------------------------------------------
 
