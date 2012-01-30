@@ -202,6 +202,16 @@ Or in your configuration file:
 
     require 'tork/config/logdir'
 
+### Receive notifications via libnotify, growl, or xmessage(1)
+
+At the command line:
+
+    tork notify
+
+Or in your configuration file:
+
+    require 'tork/config/notify'
+
 ------------------------------------------------------------------------------
 Configuration options
 -----------------------------------------------------------------------------
