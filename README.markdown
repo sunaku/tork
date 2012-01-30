@@ -105,7 +105,7 @@ You can monitor your test processes from another terminal:
 
 ### With [Ruby on Rails]
 
-For Rails 3 or newer, use the rails configuration helper (see below).
+For Rails 3 or newer, use the `tork/config/rails` configuration helper.
 Otherwise, ensure that your `config/environments/test.rb` file contains:
 
     config.cache_classes = false
@@ -116,31 +116,6 @@ adapter][memory_test_fix].  Otherwise, you *might* face these errors:
 > SQLite3::BusyException: database is locked
 
 > cannot start a transaction within a transaction
-
-### With [factory_girl]
-
-Do not load your factories into the master process as part of your test
-execution overhead in your test/spec helper because that would necessitate
-overhead reabsorption whenever you change or create factory definitions.
-
-Instead, use `at_exit()` to wait until (1) after the master process has forked
-a worker process and (2) just before that worker process runs its test suite
-(whose execution is started by your test framework's own `at_exit()` handler):
-
-    # in your test or spec helper
-    require 'factory_girl'
-    at_exit do
-      unless $!
-        FactoryGirl.factories.clear
-        FactoryGirl.find_definitions
-      end
-    end
-
-This way, worker processes will pick up changes in your factories "for free"
-whenever they (re)run your test files.  Except if Ruby is exiting because of
-a raised exception, denoted by the `$!` global variable in the snippet above.
-
-As a bonus, this arrangement also works when tests are run outside of Tork!
 
 ------------------------------------------------------------------------------
 Configuration
@@ -176,6 +151,16 @@ At the command line:
 Or in your configuration file:
 
     require 'tork/config/cucumber'
+
+### [factory_girl]
+
+At the command line:
+
+    tork factory_girl
+
+Or in your configuration file:
+
+    require 'tork/config/factory_girl'
 
 ### [parallel_tests]
 
