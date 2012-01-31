@@ -123,7 +123,7 @@ Configuration
 
 Tork looks for a configuration file named `.tork.rb` in its current working
 directory.  The configuration file is a normal Ruby script, inside which you
-can query and modify the `Tork::Config` object: an instance of OpenStruct.
+can query and modify the `Tork::Config` object, which is a kind of `Struct`.
 
 Note that Tork *does not* automatically reload changes in your configuration
 file.  So you must restart Tork accordingly if your configuration changes.

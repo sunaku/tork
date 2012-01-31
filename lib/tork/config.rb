@@ -1,8 +1,10 @@
-require 'ostruct'
-
 module Tork
 
-  Config = OpenStruct.new
+  Config = Struct.new(:max_forked_workers, :overhead_load_paths,
+                      :overhead_file_globs, :reabsorb_file_greps,
+                      :all_test_file_globs, :test_file_globbers,
+                      :before_fork_hooks, :after_fork_hooks,
+                      :test_event_hooks).new
 
   #---------------------------------------------------------------------------
   # defaults
