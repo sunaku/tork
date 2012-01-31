@@ -1,7 +1,6 @@
 require 'ostruct'
 
 module Tork
-  _user_config_file = '.tork.rb'
 
   Config = OpenStruct.new
 
@@ -21,8 +20,7 @@ module Tork
 
   Config.overhead_file_globs = ['{test,spec}/{test,spec}_helper.rb']
 
-  Config.reabsorb_file_greps = [/^#{Regexp.quote(_user_config_file)}$/,
-                                %r<^(test|spec)/\1_helper\.rb$>]
+  Config.reabsorb_file_greps = [%r<^(test|spec)/\1_helper\.rb$>]
 
   Config.all_test_file_globs = ['{test,spec}/**/*_{test,spec}.rb',
                                 '{test,spec}/**/{test,spec}_*.rb']
@@ -82,7 +80,9 @@ module Tork
   # overrides
   #---------------------------------------------------------------------------
 
-  load _user_config_file if File.exist? _user_config_file
+  if File.exist? user_config_file = '.tork.rb'
+    load user_config_file
+  end
 
   if ENV.key? 'TORK_CONFIGS'
     require 'json'
@@ -94,4 +94,5 @@ module Tork
       end
     end
   end
+
 end
