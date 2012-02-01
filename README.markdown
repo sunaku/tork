@@ -242,11 +242,16 @@ object containing the results of the regular expression matching, and yields
 one or more file globbing patterns (a single string, or an array of strings)
 that describe a set of test files that need to be run.
 
-In other words, whenever the source files (the regular expression) change,
-their associated test files (result of calling the lambda function) are run.
+The results of these functions are recursively expanded (fed back into them)
+to construct an entire dependency tree of test files that need to be run.  For
+instance, if one function returns a glob that yields files matched by another
+function, then that second function will be called to glob more test files.
+This process repeats until all dependent test files have been accounted for.
 
-For example, if test files had the same names as their source files followed
-by an underscore and the file name in reverse like this:
+#### Single glob expansion
+
+For example, if test files had the same names as their source files followed by an
+underscore and the file name in reverse like this:
 
   * `lib/hello.rb` => `test/hello_olleh.rb`
   * `app/world.rb` => `spec/world_ldrow.rb`
@@ -258,8 +263,10 @@ Then you would add the following to your configuration file:
       "{test,spec}/**/#{name}_#{name.reverse}.rb"
     end
 
-Going further, if you suppose that test files could optionally have "test" or
-"spec" prefixed or appended to their already peculiar names, like so:
+#### Multi-glob expansion
+
+For example, if test files could optionally have "test" or "spec" prefixed or
+appended to their already peculiar names, like so:
 
   * `lib/hello.rb` => `test/hello_olleh_test.rb`
   * `lib/hello.rb` => `test/test_hello_olleh.rb`
@@ -275,9 +282,22 @@ Then you would add the following to your configuration file:
        "{test,spec}/**/{test,spec}_#{name}_#{name.reverse}.rb"]
     end
 
-In addition, these lambda functions can return `nil` if they do not wish for a
-particular source file to be tested.  For example, to ignore tests for all
-source files except those within a `models/` directory, you would write:
+#### Recursive expansion
+
+For example, if you wanted to run test files associated with `lib/hello.rb`
+whenever the `app/world.rb` file changed, then you would write:
+
+    Tork::Config.test_file_globbers[%r<^app/world\.rb$>] = lambda do |path, matches|
+      'lib/hello.rb'
+    end
+
+This effectively aliases one file onto another, but not in both directions.
+
+#### Suppressing expansion
+
+These lambda functions can return `nil` if they do not wish for a particular
+source file to be tested.  For example, to ignore tests for all source files
+except those within a `models/` directory, you would write:
 
     Tork::Config.test_file_globbers[%r<^(lib|app)/.+\.rb$>] = lambda do |path, matches|
       if path.include? '/models/'

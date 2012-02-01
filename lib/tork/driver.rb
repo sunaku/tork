@@ -72,11 +72,20 @@ module Driver
         warn "#{$0}(#{$$}): FILE #{changed_file}" if $DEBUG
 
         # find and run the tests that correspond to the changed file
-        Config.test_file_globbers.each do |regexp, globber|
-          if regexp =~ changed_file and globs = globber.call(changed_file, $~)
-            run_test_files Dir[*globs]
+        visited = Set.new
+        visitor = lambda do |source_file|
+          Config.test_file_globbers.each do |regexp, globber|
+            if regexp =~ source_file and globs = globber.call(source_file, $~)
+              Dir[*globs].each do |test_file|
+                if visited.add? test_file
+                  run_test_file test_file
+                  visitor.call test_file
+                end
+              end
+            end
           end
         end
+        visitor.call changed_file
 
         # reabsorb text execution overhead if overhead files changed
         if Config.reabsorb_file_greps.any? {|r| r =~ changed_file }
