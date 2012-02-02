@@ -5,10 +5,16 @@ require 'tork/server'
 require 'tork/config'
 
 module Tork
-module Engine
+class Engine < Server
 
-  extend Server
-  extend self
+  def initialize
+    super
+    @waiting_test_files = Set.new
+    @running_test_files = Set.new
+    @passed_test_files = Set.new
+    @failed_test_files = Set.new
+    @lines_by_file = {}
+  end
 
   def absorb_overhead load_paths, overhead_files
     @master.quit
@@ -49,11 +55,6 @@ private
     files.each {|f| run_test_file f }
   end
 
-  @waiting_test_files = Set.new
-  @running_test_files = Set.new
-  @passed_test_files = Set.new
-  @failed_test_files = Set.new
-
   def create_master_process
     Client::Transceiver.new('tork-master') do |message|
       @client.send message # propagate output downstream
@@ -82,8 +83,6 @@ private
       Config.test_event_hooks.each {|hook| hook.call message }
     end
   end
-
-  @lines_by_file = {}
 
   def find_changed_line_numbers test_file
     # cache test file contents for diffing below

@@ -5,10 +5,21 @@ require 'tork/engine'
 require 'tork/config'
 
 module Tork
-module Driver
+class Driver < Server
 
-  extend Server
-  extend self
+  def initialize
+    super
+
+    # accept tork-engine(1) commands and delegate them accordingly
+    singleton_class.class_eval do
+      (Engine.instance_methods - instance_methods).each do |meth|
+        define_method meth do |*args|
+          @engine.send [meth, *args]
+        end
+      end
+    end
+  end
+
 
   def run_all_test_files
     Dir[*Config.all_test_file_globs].each {|f| @engine.send [:run_test_file, f] }
@@ -59,13 +70,6 @@ module Driver
 
     @herald.quit
     @engine.quit
-  end
-
-  # accept tork-engine(1) commands and delegate them accordingly
-  (Engine.instance_methods - instance_methods).each do |meth|
-    define_method meth do |*args|
-      @engine.send [meth, *args]
-    end
   end
 
 end

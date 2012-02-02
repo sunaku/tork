@@ -83,7 +83,7 @@ require 'binman'
 BinMan.help
 
 require 'tork/master'
-Tork::Master.loop
+Tork::Master.new.loop
 
 Process.waitall
 raise SystemExit # prevent empty test suite from running in the master process

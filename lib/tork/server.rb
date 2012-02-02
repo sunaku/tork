@@ -1,7 +1,11 @@
 require 'tork/client'
 
 module Tork
-module Server
+class Server
+
+  def initialize
+    trap(:SIGTERM){ quit }
+  end
 
   def quit
     Thread.exit # kill Client::Receiver in loop()
@@ -22,10 +26,6 @@ module Server
     end.join
   rescue Interrupt
     # forced quit
-  end
-
-  def self.extended server
-    trap(:SIGTERM){ server.quit }
   end
 
 end
