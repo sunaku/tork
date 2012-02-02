@@ -30,6 +30,9 @@ It also funnels the standard output stream of tork-master(1) into its own.
 `["rerun_passed_test_files"]`
   Runs all test files that have passed during their most recent run.
 
+`["rerun_failed_test_files"]`
+  Runs all test files that have failed during their most recent run.
+
 `["reabsorb_overhead_files"]`
   Stops any test files that are currently running, reabsorbs the test
   execution overhead, and resumes running those interrupted test files.
