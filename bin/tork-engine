@@ -78,5 +78,3 @@ BinMan.help
 
 require 'tork/engine'
 Tork::Engine.new.loop
-
-Process.waitall

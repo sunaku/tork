@@ -26,6 +26,8 @@ class Server
     end.join
   rescue Interrupt
     # forced quit
+  ensure
+    Process.waitall
   end
 
 end

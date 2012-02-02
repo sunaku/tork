@@ -76,5 +76,3 @@ BinMan.help
 
 require 'tork/driver'
 Tork::Driver.new.loop
-
-Process.waitall
