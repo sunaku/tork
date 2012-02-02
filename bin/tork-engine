@@ -1,46 +1,48 @@
 #!/usr/bin/env ruby
 =begin
 
-TORK-DRIVER 1 2012-01-30 17.1.0
+TORK-ENGINE 1 2012-01-30 17.1.0
 ==============================================================================
 
 NAME
 ------------------------------------------------------------------------------
 
-tork-driver - drives tork-engine(1) when files change
+tork-engine - wraps tork-master(1) with bookkeeping
 
 SYNOPSIS
 ------------------------------------------------------------------------------
 
-`tork-driver` [*OPTION*]...
+`tork-engine` [*OPTION*]...
 
 DESCRIPTION
 ------------------------------------------------------------------------------
 
 This program reads the following single-line commands (JSON arrays) from its
 standard input stream and performs the respective actions as described below.
-It also funnels the standard output stream of tork-engine(1) into its own.
+It also funnels the standard output stream of tork-master(1) into its own.
 
-`["run_all_test_files"]`
-  Runs all test files found within and beneath the current working directory.
+`["absorb_overhead",` *paths*`,` *files*`]`
+  Stops any test files that are currently running, reabsorbs the given test
+  execution overhead, and resumes running those interrupted test files.  See
+  the "load" command in tork-master(1) for more information.
 
-`["reabsorb_overhead_files"]`
-  Stops any test files that are currently running, reabsorbs the test
-  execution overhead, and resumes running those interrupted test files.
+`["run_test_file"`, *test_file*`,` *line_numbers*`]`
+  Runs tests that correspond to the given *line_numbers* array in the given
+  *test_file*.  If *line_numbers* is `null`, then only those lines that have
+  changed since the last time the *test_file* was run will be substituted.  If
+  *line_numbers* is an empty array, then the entire *test_file* will be run.
 
-*...*
-  This program accepts tork-engine(1) commands and delegates them accordingly.
+`["stop_running_test_files"]`
+  Stops any test files that are currently running.
 
-When tork-herald(1) reports that a file belonging to the test execution
-overhead has been modified, this program replaces tork-master(1) with a new
-instance, which then absorbs the modified test execution overhead into itself.
+`["rerun_passed_test_files"]`
+  Runs all test files that have passed during their most recent run.
 
-This program emits the following single-line status messages (JSON arrays) on
-its standard output stream to provide notifications about its activity:
+`["rerun_failed_test_files"]`
+  Runs all test files that have failed during their most recent run.
 
-`["over",` *overhead_file*`]`
-  The test execution overhead is currently being reabsorbed, by replacing
-  tork-master(1) with a new instance, because *overhead_file* has changed.
+`["quit"]`
+  Stops all tests that are currently running and exits.
 
 OPTIONS
 ------------------------------------------------------------------------------
@@ -74,7 +76,7 @@ $0 = File.basename(__FILE__) # for easier identification in ps(1) output
 require 'binman'
 BinMan.help
 
-require 'tork/driver'
-Tork::Driver.loop
+require 'tork/engine'
+Tork::Engine.loop
 
 Process.waitall

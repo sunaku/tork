@@ -46,9 +46,10 @@ Features
 Following UNIX philosophy, Tork is composed of simple text-based programs: so
 you can build your own custom Tork user interface by wrapping `tork-driver`!
 
-  * `tork` is an interactive command-line user interface (CLI) for driver
+  * `tork` is an interactive command-line user interface for `tork-driver`
   * `tork-herald` monitors current directory tree and reports changed files
-  * `tork-driver` tells master to run tests and keeps track of test results
+  * `tork-driver` drives the engine according to the herald's observations
+  * `tork-engine` tells master to run tests and keeps track of test results
   * `tork-master` absorbs test execution overhead and forks to run your tests
 
 When the herald observes that files in or beneath the current directory have
@@ -376,7 +377,7 @@ test-driven development cycle by only running tests you are currently editing.
 
 ### Tork::Config.test_event_hooks
 
-Array of lambda functions that are invoked inside `tork-driver` whenever it
+Array of lambda functions that are invoked inside `tork-engine` whenever it
 receives a status message (passed into those functions) from `tork-master`.
 Run `tork-master --help` for more information about these status messages.
 
