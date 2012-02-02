@@ -38,10 +38,10 @@ standard input stream and performs the respective actions as described below.
     `["test",` *test_file*`,` *line_numbers*`,` *log_file*`,` *worker_number*`]`
 
   * Test has passed:
-    `["pass",` *test_file*`,` *line_numbers*`,` *log_file*`,` *worker_number*`,` *exit_status*`]`
+    `["pass",` *test_file*`,` *line_numbers*`,` *log_file*`,` *worker_number*`,` *exit_code*`,` *exit_info*`]`
 
   * Test has failed:
-    `["fail",` *test_file*`,` *line_numbers*`,` *log_file*`,` *worker_number*`,` *exit_status*`]`
+    `["fail",` *test_file*`,` *line_numbers*`,` *log_file*`,` *worker_number*`,` *exit_code*`,` *exit_info*`]`
 
 `["stop"]`
   Stops all tests that are currently running and prints the given command line

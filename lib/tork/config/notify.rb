@@ -4,7 +4,7 @@ require 'set'
 failed_test_files = Set.new
 
 Tork::Config.test_event_hooks.push lambda {|message|
-  event, test_file, line_numbers, log_file, worker_number, exit_status = message
+  event, test_file, line_numbers, log_file = message
 
   # make notifications edge-triggered: pass => fail or vice versa.
   # we do not care about pass => pass or fail => fail transitions.

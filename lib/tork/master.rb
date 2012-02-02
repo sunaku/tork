@@ -86,7 +86,7 @@ private
         if command = @command_by_worker_pid.delete(child_pid)
           @worker_number_pool.push command.last
           command[0] = if child_status.success? then :pass else :fail end
-          @client.send command.push(child_status)
+          @client.send command.push(child_status.to_i, child_status.inspect)
         else
           warn "tork-master: unknown child exited: #{wait2_array.inspect}"
         end
