@@ -1,41 +1,16 @@
 require 'set'
 require 'tork/client'
-require 'tork/server'
 require 'tork/engine'
 require 'tork/config'
 
 module Tork
-class Driver < Server
+class Driver < Engine
 
   def initialize
     super
 
-    # accept tork-engine(1) commands and delegate them accordingly
-    singleton_class.class_eval do
-      (Engine.instance_methods - instance_methods).each do |meth|
-        define_method meth do |*args|
-          @engine.send [meth, *args]
-        end
-      end
-    end
-  end
-
-
-  def run_all_test_files
-    Dir[*Config.all_test_file_globs].each {|f| @engine.send [:run_test_file, f] }
-  end
-
-  def reabsorb_overhead_files
-    @engine.send [:absorb_overhead, Config.overhead_load_paths,
-                  Dir[*Config.overhead_file_globs]]
-  end
-
-  def loop
     @herald = Client::Transceiver.new('tork-herald') do |changed_files|
-      warn "#{$0}(#{$$}): FILE BATCH #{changed_files.size}" if $DEBUG
       changed_files.each do |changed_file|
-        warn "#{$0}(#{$$}): FILE #{changed_file}" if $DEBUG
-
         # find and run the tests that correspond to the changed file
         visited = Set.new
         visitor = lambda do |source_file|
@@ -60,16 +35,20 @@ class Driver < Server
       end
     end
 
-    @engine = Client::Transceiver.new('tork-engine') do |message|
-      @client.send message # propagate output downstream
-    end
-
     reabsorb_overhead_files
+  end
 
-    super
-
+  def quit
     @herald.quit
-    @engine.quit
+    super
+  end
+
+  def run_all_test_files
+    run_test_files Dir[*Config.all_test_file_globs]
+  end
+
+  def reabsorb_overhead_files
+    absorb_overhead Config.overhead_load_paths, Dir[*Config.overhead_file_globs]
   end
 
 end

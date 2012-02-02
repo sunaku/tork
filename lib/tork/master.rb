@@ -90,9 +90,9 @@ class Master < Server
     # some workers might have already exited before we sent them the signal
   end
 
-  def loop
-    super
+  def quit
     stop
+    super
   end
 
 end

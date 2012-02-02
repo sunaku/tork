@@ -14,6 +14,12 @@ class Engine < Server
     @passed_test_files = Set.new
     @failed_test_files = Set.new
     @lines_by_file = {}
+    @master = create_master_process
+  end
+
+  def quit
+    @master.quit
+    super
   end
 
   def absorb_overhead load_paths, overhead_files
@@ -43,17 +49,13 @@ class Engine < Server
     run_test_files @failed_test_files
   end
 
-  def loop
-    @master = create_master_process
-    super
-    @master.quit
-  end
-
-private
+protected
 
   def run_test_files files
     files.each {|f| run_test_file f }
   end
+
+private
 
   def create_master_process
     Client::Transceiver.new('tork-master') do |message|
