@@ -1,21 +1,17 @@
 #!/usr/bin/env ruby
-=begin
+=begin =======================================================================
 
-TORK-DRIVER 1 2012-01-30 17.1.0
-==============================================================================
+# TORK-DRIVER 1 2012-01-30 17.1.0
 
-NAME
-------------------------------------------------------------------------------
+## NAME
 
 tork-driver - drives tork-engine(1) when files change
 
-SYNOPSIS
-------------------------------------------------------------------------------
+## SYNOPSIS
 
 `tork-driver` [*OPTION*]...
 
-DESCRIPTION
-------------------------------------------------------------------------------
+## DESCRIPTION
 
 This program reads the following single-line commands (JSON arrays) from its
 standard input stream and performs the respective actions as described below.
@@ -42,28 +38,24 @@ its standard output stream to provide notifications about its activity:
   The test execution overhead is currently being reabsorbed, by replacing
   tork-master(1) with a new instance, because *overhead_file* has changed.
 
-OPTIONS
-------------------------------------------------------------------------------
+## OPTIONS
 
 `-h`, `--help`
-  Display this help manual using man(1).
+  Show this help manual.
 
-FILES
-------------------------------------------------------------------------------
+## FILES
 
 *.tork.rb*
   Optional Ruby script for configuring tork(1).
 
-ENVIRONMENT
-------------------------------------------------------------------------------
+## ENVIRONMENT
 
 `TORK_CONFIGS`
   A single-line JSON array containing paths to actual files or names of
   helper libraries in the tork/config/ namespace of Ruby's load path.
   These configuration files are loaded just before *.tork.rb* is loaded.
 
-SEE ALSO
-------------------------------------------------------------------------------
+## SEE ALSO
 
 tork(1), tork-herald(1), tork-driver(1), tork-engine(1), tork-master(1)
 

@@ -1,21 +1,17 @@
 #!/usr/bin/env ruby
-=begin
+=begin =======================================================================
 
-TORK 1 2012-01-30 17.1.0
-==============================================================================
+# TORK 1 2012-01-30 17.1.0
 
-NAME
-------------------------------------------------------------------------------
+## NAME
 
 tork - Continuous testing tool for Ruby
 
-SYNOPSIS
-------------------------------------------------------------------------------
+## SYNOPSIS
 
 `tork` [*OPTION*]... [*CONFIG*]...
 
-DESCRIPTION
-------------------------------------------------------------------------------
+## DESCRIPTION
 
 This program is a simple command-line user interface for tork-driver(1).  It
 loads the given *CONFIG* files (which are either paths to actual files or
@@ -23,14 +19,12 @@ names of helper libraries in the tork/config/ namespace of Ruby's load path)
 and then waits for you to supply interactive commands on its stdin.  You may
 press the ENTER key (supplying no command) to see a menu of accepted commands.
 
-OPTIONS
-------------------------------------------------------------------------------
+## OPTIONS
 
 `-h`, `--help`
-  Display this help manual using man(1).
+  Show this help manual.
 
-SEE ALSO
-------------------------------------------------------------------------------
+## SEE ALSO
 
 tork(1), tork-driver(1), tork-master(1), tork-herald(1)
 

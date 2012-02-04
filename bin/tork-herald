@@ -1,34 +1,28 @@
 #!/usr/bin/env ruby
-=begin
+=begin =======================================================================
 
-TORK-HERALD 1 2012-01-30 17.1.0
-==============================================================================
+# TORK-HERALD 1 2012-01-30 17.1.0
 
-NAME
-------------------------------------------------------------------------------
+## NAME
 
 tork-herald - reports modified files
 
-SYNOPSIS
-------------------------------------------------------------------------------
+## SYNOPSIS
 
 `tork-herald` [*OPTION*]...
 
-DESCRIPTION
-------------------------------------------------------------------------------
+## DESCRIPTION
 
 This program monitors the current working directory and prints relative paths
 of modified files in batches of single-line JSON arrays to the standard output
 stream.
 
-OPTIONS
-------------------------------------------------------------------------------
+## OPTIONS
 
 `-h`, `--help`
-  Display this help manual using man(1).
+  Show this help manual.
 
-SEE ALSO
-------------------------------------------------------------------------------
+## SEE ALSO
 
 tork(1), tork-herald(1), tork-driver(1), tork-engine(1), tork-master(1)
 

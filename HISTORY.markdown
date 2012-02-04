@@ -1,8 +1,6 @@
-------------------------------------------------------------------------------
-Version 17.1.0 (2012-01-30)
-------------------------------------------------------------------------------
+## Version 17.1.0 (2012-01-30)
 
-Improvements:
+Minor:
 
   * Added `Tork::Config.test_event_hooks` configuration option.
 
@@ -20,11 +18,9 @@ Improvements:
   * Added support for the MiniTest convention of naming test files as
     `test/**/test_*.rb` and `spec/**/spec_*.rb`. (Jose Pablo Barrantes)
 
-------------------------------------------------------------------------------
-Version 17.0.1 (2012-01-29)
-------------------------------------------------------------------------------
+## Version 17.0.1 (2012-01-29)
 
-Corrections:
+Patch:
 
   * tork-herald(1) *sometimes* reported changed test files twice.
 
@@ -34,17 +30,15 @@ Corrections:
 
   * Tork::Client::Transceiver needs to stop both TX & RX loops.
 
-Housekeeping:
+Other:
 
   * tork/driver: store test file lists in Set, not Array.
 
   * HISTORY: use single-word change-set descriptions.
 
-------------------------------------------------------------------------------
-Version 17.0.0 (2012-01-27)
-------------------------------------------------------------------------------
+## Version 17.0.0 (2012-01-27)
 
-Divergences:
+Major:
 
   * tork-herald(1) now emits batches of single-line JSON arrays instead of
     printing one (raw) path per line.  This makes IPC uniform across Tork.
@@ -58,7 +52,7 @@ Divergences:
 
     * The new order is:  test_file, line_numbers, log_file, worker_number.
 
-Improvements:
+Minor:
 
   * GH-24: add `tork/config/dotlog` configuration helper to "hide" log files.
     (Nicolas Fouché)
@@ -69,7 +63,7 @@ Improvements:
   * tork(1) now strips all whitespace from your input, in case you pressed
     spacebar or tab a few times, by accident, before entering your command.
 
-Housekeeping:
+Other:
 
   * tork/client: Replace write lock with queue to support SIGCHLD handler.
 
@@ -88,11 +82,9 @@ Housekeeping:
 
   * README: revise instructions, reorganize document, and other improvements.
 
-------------------------------------------------------------------------------
-Version 16.0.0 (2012-01-25)
-------------------------------------------------------------------------------
+## Version 16.0.0 (2012-01-25)
 
-Divergences:
+Major:
 
   * Drop the `Tork::Config.test_name_extractor` configuration option.
 
@@ -100,23 +92,21 @@ Divergences:
 
   * Pass $~ (MatchData) to `Tork::Config::test_file_globbers` functions.
 
-Improvements:
+Minor:
 
   * tork/config/cucumber: only run changed scenarios in changed features.
 
-Housekeeping:
+Other:
 
   * README: update instructions on running Tork directly from Git clone.
 
-------------------------------------------------------------------------------
-Version 15.1.0 (2012-01-25)
-------------------------------------------------------------------------------
+## Version 15.1.0 (2012-01-25)
 
-Improvements:
+Minor:
 
   * GH-19: add `tork cucumber` for running cucumber features.
 
-Corrections:
+Patch:
 
   * tork/config/rails: support Rails 2 and don't assume AR is used.  (Benjamin
     Quorning)
@@ -130,17 +120,15 @@ Corrections:
     See <http://stackoverflow.com/questions/1497756>.
     Also added forgotten Luke Wendling to the list.
 
-------------------------------------------------------------------------------
-Version 15.0.1 (2012-01-24)
-------------------------------------------------------------------------------
+## Version 15.0.1 (2012-01-24)
 
-Corrections:
+Patch:
 
   * GH-21: Ruby 1.9 class_eval() is smarter than 1.8.
 
   * GH-20: forgot `require 'thread'` for Mutex class.  (Jesse Cooke)
 
-Housekeeping:
+Other:
 
   * tork(1): fix shadowed variable names.  (Jose Pablo Barrantes)
 
@@ -156,11 +144,9 @@ Housekeeping:
 
   * README: add tip about Guard's FS watching backends.
 
-------------------------------------------------------------------------------
-Version 15.0.0 (2012-01-23)
-------------------------------------------------------------------------------
+## Version 15.0.0 (2012-01-23)
 
-Divergences:
+Major:
 
   * This project has been renamed from TestR to Tork (test with fork) in order
     to better compete with rival projects, namely Spork! >:-)  Credit goes to
@@ -169,11 +155,9 @@ Divergences:
 
   * tork(1): rename `r` command, which runs all tests, to `t`, for *t*ork.
 
-------------------------------------------------------------------------------
-Version 14.3.0 (2012-01-20)
-------------------------------------------------------------------------------
+## Version 14.3.0 (2012-01-20)
 
-Improvements:
+Minor:
 
   * testr(1): notify user while dispatching their commands. This is especially
     useful when the "rerun_passed_test_files" command has been dispatched but
@@ -190,7 +174,7 @@ Improvements:
 
   * testr-driver(1): document the "over" status message in manual page.
 
-Housekeeping:
+Other:
 
   * testr-driver(1): keep same herald; only replace master.
 
@@ -204,11 +188,9 @@ Housekeeping:
 
   * LICENSE: credit our most recent contributors.
 
-------------------------------------------------------------------------------
-Version 14.2.0 (2012-01-16)
-------------------------------------------------------------------------------
+## Version 14.2.0 (2012-01-16)
 
-Improvements:
+Minor:
 
   * Add ability to run `testr rails` without needing a `.testr.rb` file.
 
@@ -216,41 +198,35 @@ Improvements:
 
   * testr(1) now notifies you before absorbing overhead at startup.
 
-Corrections:
+Patch:
 
   * testr(1) now accepts death silently when Control-C is pressed.
 
-------------------------------------------------------------------------------
-Version 14.1.3 (2012-01-13)
-------------------------------------------------------------------------------
+## Version 14.1.3 (2012-01-13)
 
-Corrections:
+Patch:
 
   * Add support Guard v0.9.0 and newer in `testr-herald`.  (Jose Pablo
     Barrantes)
 
-Housekeeping:
+Other:
 
   * Tighten version constraints for gem dependencies to avoid future
     breakages.
 
-------------------------------------------------------------------------------
-Version 14.1.2 (2012-01-09)
-------------------------------------------------------------------------------
+## Version 14.1.2 (2012-01-09)
 
-Improvements:
+Minor:
 
   * Don't consider partial test file pass as full pass.
 
-Housekeeping:
+Other:
 
   * Upgrade to binman 3 for better bundler support.
 
-------------------------------------------------------------------------------
-Version 14.1.1 (2011-12-07)
-------------------------------------------------------------------------------
+## Version 14.1.1 (2011-12-07)
 
-Corrections:
+Patch:
 
   * Do not fail when given test file no longer exists.
 
@@ -262,7 +238,7 @@ Corrections:
 
   * Ruby 187 does not have Symbol#upcase() method.
 
-Housekeeping:
+Other:
 
   * README: add another SQLite3 error to known issues.
     Thanks to Luke Wendling for contributing this patch.
@@ -277,11 +253,9 @@ Housekeeping:
 
   * Upgrade to binman 2.0.0 for UNIX man pages.
 
-------------------------------------------------------------------------------
-Version 14.1.0 (2011-11-03)
-------------------------------------------------------------------------------
+## Version 14.1.0 (2011-11-03)
 
-Improvements:
+Minor:
 
   * Make servers responsive to quit request (SIGTERM) from upstream.
 
@@ -298,11 +272,11 @@ Improvements:
     documented in their manual pages, so you should have everything you
     need to create *your own custom user interface to TestR* if you wish! :-)
 
-Corrections:
+Patch:
 
   * SIGCHLD does not awaken main thread in Ruby 1.9.3p0.
 
-Housekeeping:
+Other:
 
   * Simplify watch(1) ps(1) process title monitoring.
 
@@ -310,20 +284,16 @@ Housekeeping:
 
   * README: add tip on loading factory_girl factories.
 
-------------------------------------------------------------------------------
-Version 14.0.3 (2011-10-11)
-------------------------------------------------------------------------------
+## Version 14.0.3 (2011-10-11)
 
-Corrections:
+Patch:
 
   * Forgot to migrate the `testr/config/rails` configuration helper to use the
     new TestR configuration parameter names.
 
-------------------------------------------------------------------------------
-Version 14.0.2 (2011-10-11)
-------------------------------------------------------------------------------
+## Version 14.0.2 (2011-10-11)
 
-Corrections:
+Patch:
 
   * Fix updating passed/failed test files bookkeeping.  Once a test file
     failed, it was (incorrectly) always considered failed, even if it passed
@@ -331,15 +301,13 @@ Corrections:
 
   * Do not requeue test files that are waiting to run.
 
-Housekeeping:
+Other:
 
   * Rename `*.md` files to `*.markdown` to avoid ambiguity.
 
-------------------------------------------------------------------------------
-Version 14.0.1 (2011-10-10)
-------------------------------------------------------------------------------
+## Version 14.0.1 (2011-10-10)
 
-Corrections:
+Patch:
 
   * Use blue/red for pass/fail instead of green/red to accommodate the color
     blind.
@@ -347,15 +315,13 @@ Corrections:
   * Incorrect test name regexp was passed down to Test::Unit.  This broke
     focused testing, where only changed tests in a changed test file are run.
 
-Housekeeping:
+Other:
 
   * Make `testr-master` wait for killed worker processes before exiting.
 
-------------------------------------------------------------------------------
-Version 14.0.0 (2011-10-09)
-------------------------------------------------------------------------------
+## Version 14.0.0 (2011-10-09)
 
-Divergences:
+Major:
 
   * Renamed this project and its resources from test-loop to TestR.
 
@@ -379,7 +345,7 @@ Divergences:
 
   * Removed the `test/loop/notify` and `test-loop/coco` libraries.
 
-Improvements:
+Minor:
 
   * The file system is no longer polled to detect modified files.  Instead, it
     is monitored for file modification events in a portable and efficient
@@ -393,7 +359,7 @@ Improvements:
 
   * Added ability to re-run passed and failed tests in the `testr` script.
 
-Housekeeping:
+Other:
 
   * The monolithic `test-loop` script has been replaced by several smaller
     ones that communicate with each other using single-line JSON messages via
@@ -401,26 +367,22 @@ Housekeeping:
 
   * Now using Bundler to manage development dependencies and gem packaging.
 
-------------------------------------------------------------------------------
-Version 13.0.1 (2011-09-21)
-------------------------------------------------------------------------------
+## Version 13.0.1 (2011-09-21)
 
-Housekeeping:
+Other:
 
   * Forgot to include `test/loop/coco` preset in gem package.
 
   * Forgot to mention `test/loop/parallel_tests` preset in README.
 
-------------------------------------------------------------------------------
-Version 13.0.0 (2011-08-24)
-------------------------------------------------------------------------------
+## Version 13.0.0 (2011-08-24)
 
-Divergences:
+Major:
 
   * Pass worker sequence number as the last argument to lambda functions in
     `Test::Loop.before_each_test` and `Test::Loop.after_each_test` arrays.
 
-Improvements:
+Minor:
 
   * In the `test/loop/rails` configuration preset:
 
@@ -436,7 +398,7 @@ Improvements:
     processes like connecting to separate databases better.  (Corné
     Verbruggen)
 
-Housekeeping:
+Other:
 
   * README: move configuration presets above options.
 
@@ -446,23 +408,19 @@ Housekeeping:
 
   * Pass child ENV directly to exec() for atomicity.
 
-------------------------------------------------------------------------------
-Version 12.3.1 (2011-07-19)
-------------------------------------------------------------------------------
+## Version 12.3.1 (2011-07-19)
 
-Corrections:
+Patch:
 
   * Binary data could not be stored in environment variable values.
 
-Housekeeping:
+Other:
 
   * Forgot to add Jacob Helwig to the gemspec's authors list.
 
-------------------------------------------------------------------------------
-Version 12.3.0 (2011-07-19)
-------------------------------------------------------------------------------
+## Version 12.3.0 (2011-07-19)
 
-Improvements:
+Minor:
 
   * Add `Test::Loop::max_concurrent_tests` configuration parameter to limit
     the number of test files run concurrently (default 4).  Otherwise, with
@@ -471,7 +429,7 @@ Improvements:
 
   * Rails: add matcher for `test/factories/*_factory.rb`.
 
-Housekeeping:
+Other:
 
   * ENV returns a Hash with duplicate/frozen keys/values.  (Brian D. Burns)
 
@@ -479,9 +437,7 @@ Housekeeping:
 
   * Store test_files in a Set instead of an Array.
 
-------------------------------------------------------------------------------
-Version 12.2.0 (2011-06-01)
-------------------------------------------------------------------------------
+## Version 12.2.0 (2011-06-01)
 
   * Prevent empty test suite run in master process.  (Brian D. Burns)
 
@@ -491,20 +447,16 @@ Version 12.2.0 (2011-06-01)
   * Add `test/loop/coco` preset for integrating the [Coco code coverage
     library](http://lkdjiin.github.com/coco/).
 
-------------------------------------------------------------------------------
-Version 12.1.0 (2011-04-29)
-------------------------------------------------------------------------------
+## Version 12.1.0 (2011-04-29)
 
-Improvements:
+Minor:
 
   * Add `Test::Loop.delay_per_iteration` parameter to control the number of
     seconds (or fractions thereof) to sleep in between test-loop iterations.
 
-------------------------------------------------------------------------------
-Version 12.0.4 (2011-04-29)
-------------------------------------------------------------------------------
+## Version 12.0.4 (2011-04-29)
 
-Corrections:
+Patch:
 
   * Reabsorb overhead when user's configuration file changes.  (Brian D. Burns
     and Daniel Pittman)
@@ -513,11 +465,9 @@ Corrections:
     not necessary!  [This issue](https://github.com/sunaku/test-loop/issues/5)
     was solved by upgrading to the newer 2.6.38.4-1 Linux kernel on my system.
 
-------------------------------------------------------------------------------
-Version 12.0.3 (2011-04-25)
-------------------------------------------------------------------------------
+## Version 12.0.3 (2011-04-25)
 
-Corrections:
+Patch:
 
   * Fix SIGCHLD handling and test completion reporting (Daniel Pittman).
 
@@ -571,11 +521,9 @@ Corrections:
     Many thanks to Brian D. Burns and Daniel Pittman for helping solve [this
     issue](https://github.com/sunaku/test-loop/issues/5).
 
-------------------------------------------------------------------------------
-Version 12.0.2 (2011-04-21)
-------------------------------------------------------------------------------
+## Version 12.0.2 (2011-04-21)
 
-Corrections:
+Patch:
 
   * Consider DB schema dump file as overhead in Rails.
 
@@ -583,11 +531,9 @@ Corrections:
 
   * Run test files when test factory files change in Rails.
 
-Housekeeping:
+Other:
 
   * Detach worker from master's terminal device sooner.
-
-Documentation:
 
   * All required signals must be present in irb check.
 
@@ -597,33 +543,27 @@ Documentation:
 
   * Begin parameter descriptions with the noun itself.
 
-------------------------------------------------------------------------------
-Version 12.0.1 (2011-04-20)
-------------------------------------------------------------------------------
+## Version 12.0.1 (2011-04-20)
 
-Corrections:
+Patch:
 
   * Restore support for Ruby 1.8.7.
 
   * Allow user's test execution overhead to fork.
 
-Housekeeping:
+Other:
 
   * Freeze master's ENV properly; keep resume key.
 
   * Remove completed test from running list sooner.
 
-Documentation:
-
   * Add instructions to check for POSIX prerequisites.
 
   * Support multiple test-loop instances in watch command.
 
-------------------------------------------------------------------------------
-Version 12.0.0 (2011-04-19)
-------------------------------------------------------------------------------
+## Version 12.0.0 (2011-04-19)
 
-Divergences:
+Major:
 
   * You must now explicitly `require 'test/loop/rails'` for Rails support
     because we can only *automatically* apply our Railtie (to disable class
@@ -633,7 +573,7 @@ Divergences:
   * Your tests can no longer read from the user's terminal (master's STDIN);
     instead they will read from an empty stream (the reading end of IO.popen).
 
-Corrections:
+Patch:
 
   * Replace threads with SIGCHLD for reporting test results.
 
@@ -646,7 +586,7 @@ Corrections:
 
   * Ctrl-C did not raise Interrupt in my Rails 3 test suite.
 
-Housekeeping:
+Other:
 
   * Ensure a clean ENV when reabsorbing overhead.  Environment variables set
     by your test execution overhead are not propagated to subsequent
@@ -664,38 +604,32 @@ Housekeeping:
 
   * Add LICENSE file to gem package.
 
-Documentation:
-
   * Add prerequisites section about POSIX environment.
 
   * Add tip about annihilating test-loop processes.
 
   * Fix markdown formatting.
 
-------------------------------------------------------------------------------
-Version 11.0.1 (2011-04-14)
-------------------------------------------------------------------------------
+## Version 11.0.1 (2011-04-14)
 
-Corrections:
+Patch:
 
   * Only attempt to define Railtie if the current Rails version supports it.
 
-------------------------------------------------------------------------------
-Version 11.0.0 (2011-04-14)
-------------------------------------------------------------------------------
+## Version 11.0.0 (2011-04-14)
 
-Divergences:
+Major:
 
   * The `test/loop/rails` preset has been internalized and is now applied
     automatically if your test execution overhead includes Ruby on Rails.
 
-Improvements:
+Minor:
 
   * If you are using Rails 3, test-loop will automatically set
     `config.cache_classes = false` for your test environment.  (Brian D.
     Burns)
 
-Corrections:
+Patch:
 
   * Avoid deadlock errors when printing output from Test::Unit and MiniTest.
     (Brian D. Burns)
@@ -707,11 +641,9 @@ Corrections:
 
   * Ignore SIGINT in workers; only master must honor it.
 
-------------------------------------------------------------------------------
-Version 10.0.1 (2011-04-08)
-------------------------------------------------------------------------------
+## Version 10.0.1 (2011-04-08)
 
-Corrections:
+Patch:
 
   * Workers must ignore SIGTSTP, otherwise master waits forever before
     exiting.
@@ -723,20 +655,16 @@ Corrections:
 
   * Simpler solution for terminating loop upon Ctrl-C.
 
-------------------------------------------------------------------------------
-Version 10.0.0 (2011-04-06)
-------------------------------------------------------------------------------
+## Version 10.0.0 (2011-04-06)
 
-Divergences:
+Major:
 
   * The `Test::Loop.before_each_test` and `Test::Loop.after_each_test`
     parameters are arrays now.
 
-------------------------------------------------------------------------------
-Version 9.4.0 (2011-04-06)
-------------------------------------------------------------------------------
+## Version 9.4.0 (2011-04-06)
 
-Improvements:
+Minor:
 
   * Allow lambda functions in `Test::Loop.test_file_matchers` to return `nil`
     so that you can exclude certain tests from being executed.  (Brian D.
@@ -748,13 +676,13 @@ Improvements:
 
         watch 'ps xf | grep test-loop | sed 1,3d'
 
-Corrections:
+Patch:
 
   * Skip `at_exit()` when exiting master process.  This prevents an empty test
     from being run when exiting the loop after having processed a test/spec
     helper that loads the Test::Unit library.  (Brian D. Burns)
 
-Housekeeping:
+Other:
 
   * Use throw/catch to break loop instead of raising SystemExit exception.
 
@@ -764,11 +692,9 @@ Housekeeping:
 
   * Separate configuration parameters into subsections in README.
 
-------------------------------------------------------------------------------
-Version 9.3.0 (2011-04-01)
-------------------------------------------------------------------------------
+## Version 9.3.0 (2011-04-01)
 
-Improvements:
+Minor:
 
   * Resume currently running tests--as well as those currently needing to be
     run--after reabsorbing test execution overhead.  (Brian D. Burns)
@@ -785,7 +711,7 @@ Improvements:
   * Use ANSI clear line command to erase control-key combinations outputted by
     shells such as BASH and ZSH in test-loop's output.  (Brian D. Burns)
 
-Corrections:
+Patch:
 
   * `@last_ran_at` was being set during every iteration of the loop.  This is
     problematic when Ruby's `Time.now` is more precise than your filesystem's
@@ -799,32 +725,26 @@ Corrections:
 
   * Remove 'ansi' gem dependency.  (Brian D. Burns)
 
-Documentation:
+Other:
 
   * Add tip on deleting logs for passing tests.  (Brian D. Burns)
 
   * Add tip on monitoring test processes with watch(1) in README.
 
-------------------------------------------------------------------------------
-Version 9.2.0 (2011-03-28)
-------------------------------------------------------------------------------
+## Version 9.2.0 (2011-03-28)
 
   * Extract Rails-specific configuration to 'test/loop/rails' sublibrary.
 
   * Add 'test/loop/notify' sublibrary for OSD notifications on failures.
 
-------------------------------------------------------------------------------
-Version 9.1.1 (2011-03-15)
-------------------------------------------------------------------------------
+## Version 9.1.1 (2011-03-15)
 
   * $0 does not work from RubyGems wrapper executable.
     Thanks to Brian D. Burns for reporting this issue.
 
   * Add information about sqlite3 errors & workaround in README.
 
-------------------------------------------------------------------------------
-Version 9.1.0 (2011-02-23)
-------------------------------------------------------------------------------
+## Version 9.1.0 (2011-02-23)
 
   * Print the status of completed tests in ANSI color.
 
@@ -832,9 +752,7 @@ Version 9.1.0 (2011-02-23)
 
   * `$?` is not defined when Errno::ECHILD is raised.
 
-------------------------------------------------------------------------------
-Version 9.0.1 (2011-02-18)
-------------------------------------------------------------------------------
+## Version 9.0.1 (2011-02-18)
 
   * Shield normal output from control-key combos printed into the terminal.
 
@@ -847,17 +765,13 @@ Version 9.0.1 (2011-02-18)
 
   * Add `after_each_test` example for failure-only notifications.
 
-------------------------------------------------------------------------------
-Version 9.0.0 (2011-02-15)
-------------------------------------------------------------------------------
+## Version 9.0.0 (2011-02-15)
 
   * Remove SIGUSR1 for killing worker processes.
 
   * Handle Ctrl-Z signal from the very beginning.
 
-------------------------------------------------------------------------------
-Version 8.0.0 (2011-02-12)
-------------------------------------------------------------------------------
+## Version 8.0.0 (2011-02-12)
 
   * Move configuration into `Test::Loop` object itself.
 
@@ -875,17 +789,13 @@ Version 8.0.0 (2011-02-12)
 
   * Freeze more constant values against modification.
 
-------------------------------------------------------------------------------
-Version 7.0.1 (2011-02-10)
-------------------------------------------------------------------------------
+## Version 7.0.1 (2011-02-10)
 
   * Fix minitest deadlock issues with I/O redirection.
 
   * Do not signal to restart loop when overhead changes.
 
-------------------------------------------------------------------------------
-Version 7.0.0 (2011-02-10)
-------------------------------------------------------------------------------
+## Version 7.0.0 (2011-02-10)
 
   * Switch from shell-script style to modular Ruby style in the source code.
     This yields more lines of code, but the result is much easier to read.
@@ -909,9 +819,7 @@ Version 7.0.0 (2011-02-10)
 
   * Break long lines at 80 characters in the source code.
 
-------------------------------------------------------------------------------
-Version 6.0.0 (2011-02-09)
-------------------------------------------------------------------------------
+## Version 6.0.0 (2011-02-09)
 
   * Only consider `{test,spec}_helper.rb` as overhead, not all `*_helper.rb`.
 
@@ -928,9 +836,7 @@ Version 6.0.0 (2011-02-09)
 
   * Add better explanation for the `test_file_matchers` example.
 
-------------------------------------------------------------------------------
-Version 5.0.3 (2011-01-25)
-------------------------------------------------------------------------------
+## Version 5.0.3 (2011-01-25)
 
   * Use "diff/lcs" library instead of "diff" for RSpec compatibility.
 
@@ -941,9 +847,7 @@ Version 5.0.3 (2011-01-25)
 
   * Reabsorb when bundler is run, not when Gemfile changes.
 
-------------------------------------------------------------------------------
-Version 5.0.2 (2011-01-19)
-------------------------------------------------------------------------------
+## Version 5.0.2 (2011-01-19)
 
   * Support string interpolations that yield empty strings in test names.
 
@@ -953,9 +857,7 @@ Version 5.0.2 (2011-01-19)
 
   * Mention that diff gem is necessary for manual git clone installation.
 
-------------------------------------------------------------------------------
-Version 5.0.1 (2011-01-18)
-------------------------------------------------------------------------------
+## Version 5.0.1 (2011-01-18)
 
   * Sanitize string interpolation in parsed test names.
 
@@ -965,9 +867,7 @@ Version 5.0.1 (2011-01-18)
 
   * DRY the mentioning of .test-loop file in README.
 
-------------------------------------------------------------------------------
-Version 5.0.0 (2011-01-17)
-------------------------------------------------------------------------------
+## Version 5.0.0 (2011-01-17)
 
   * The configuration file must now yield a Ruby
     hash instead of polluting the global Object
@@ -976,9 +876,7 @@ Version 5.0.0 (2011-01-17)
   * Shortened the `:source_file_glob_to_test_file_mapping`
     configuration parameter name to `:test_file_matchers`.
 
-------------------------------------------------------------------------------
-Version 4.0.1 (2011-01-14)
-------------------------------------------------------------------------------
+## Version 4.0.1 (2011-01-14)
 
   * Print how much time it took to run all tests.
 
@@ -993,9 +891,7 @@ Version 4.0.1 (2011-01-14)
 
   * Only prepend lib/, test/, and spec/ to $LOAD_PATH.
 
-------------------------------------------------------------------------------
-Version 4.0.0 (2011-01-13)
-------------------------------------------------------------------------------
+## Version 4.0.0 (2011-01-13)
 
   * Only run changed tests inside changed test files.
 
@@ -1008,17 +904,13 @@ Version 4.0.0 (2011-01-13)
 
   * Clean up implementation and improve documentation.
 
-------------------------------------------------------------------------------
-Version 3.0.2 (2011-01-11)
-------------------------------------------------------------------------------
+## Version 3.0.2 (2011-01-11)
 
   * Reabsorb overhead upon Gemfile changes (Rails 3).
 
   * Try to recover from all kinds of exceptions.
 
-------------------------------------------------------------------------------
-Version 3.0.1 (2011-01-05)
-------------------------------------------------------------------------------
+## Version 3.0.1 (2011-01-05)
 
   * Be resilient to $0 and ARGV being changed by tests.
 
@@ -1026,26 +918,20 @@ Version 3.0.1 (2011-01-05)
 
   * Beautify markdown formatting and revise the README.
 
-------------------------------------------------------------------------------
-Version 3.0.0 (2011-01-04)
-------------------------------------------------------------------------------
+## Version 3.0.0 (2011-01-04)
 
   * Replace Rake pathmap usage with lambda functions
     in the `@source_file_to_test_file_mapping` hash.
 
   * Be resilient to syntax errors from loaded files.
 
-------------------------------------------------------------------------------
-Version 2.0.2 (2011-01-02)
-------------------------------------------------------------------------------
+## Version 2.0.2 (2011-01-02)
 
   * Do not print stack trace when Control-C pressed.
 
   * Reduce the amount of notifications shown to user.
 
-------------------------------------------------------------------------------
-Version 2.0.1 (2011-01-01)
-------------------------------------------------------------------------------
+## Version 2.0.1 (2011-01-01)
 
   * Fix syntax error caused by a dangling comma. Thanks
     to darthdeus (Jakub Arnold) for reporting [this bug](
@@ -1053,9 +939,7 @@ Version 2.0.1 (2011-01-01)
 
   * Notify user before reabsorbing overhead.
 
-------------------------------------------------------------------------------
-Version 2.0.0 (2010-12-31)
-------------------------------------------------------------------------------
+## Version 2.0.0 (2010-12-31)
 
   * Add support for loading configuration file, which
     allows you to define additional test file globs
@@ -1068,38 +952,28 @@ Version 2.0.0 (2010-12-31)
 
   * Automatically retry when overhead absorption fails.
 
-------------------------------------------------------------------------------
-Version 1.2.0 (2010-11-23)
-------------------------------------------------------------------------------
+## Version 1.2.0 (2010-11-23)
 
   * Notify user when absorbing overhead initially.
 
   * DRY up the repetition of Time.at(0) calculation.
 
-------------------------------------------------------------------------------
-Version 1.1.0 (2010-11-22)
-------------------------------------------------------------------------------
+## Version 1.1.0 (2010-11-22)
 
   * All `*_{test,spec}_helper.rb` files inside `test/` and
     `spec/` are now considered to be absorable overhead.
 
-------------------------------------------------------------------------------
-Version 1.0.2 (2010-10-16)
-------------------------------------------------------------------------------
+## Version 1.0.2 (2010-10-16)
 
   * All *_helper.rb files inside test/ and spec/
     were absorbed as overhead instead of just
     the test_helper.rb and spec_helper.rb files.
 
-------------------------------------------------------------------------------
-Version 1.0.1 (2010-10-16)
-------------------------------------------------------------------------------
+## Version 1.0.1 (2010-10-16)
 
   * Ensure that $LOAD_PATH reflects `ruby -Ilib:test`.
 
-------------------------------------------------------------------------------
-Version 1.0.0 (2010-10-15)
-------------------------------------------------------------------------------
+## Version 1.0.0 (2010-10-15)
 
   * Remove ability to install as a Rails plugin.
 
@@ -1109,16 +983,12 @@ Version 1.0.0 (2010-10-15)
 
   * Display status messages for better user interactivity.
 
-------------------------------------------------------------------------------
-Version 0.0.2 (2010-10-11)
-------------------------------------------------------------------------------
+## Version 0.0.2 (2010-10-11)
 
   * Forgot to register `bin/test-loop` as gem executable.
 
   * Revise Usage section into Invocation and Operation.
 
-------------------------------------------------------------------------------
-Version 0.0.1 (2010-10-10)
-------------------------------------------------------------------------------
+## Version 0.0.1 (2010-10-10)
 
   * First public release.  Enjoy!

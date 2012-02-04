@@ -1,20 +1,20 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
-require "tork/version"
+$:.push File.expand_path('../lib', __FILE__)
+require 'tork/version'
 
 Gem::Specification.new do |s|
-  s.name          = "tork"
+  s.name          = 'tork'
   s.version       = Tork::VERSION
   s.authors,
   s.email         = File.read('LICENSE').scan(/Copyright \d+ (.+) <(.+?)>/).transpose
-  s.homepage      = "http://github.com/sunaku/tork"
-  s.summary       = "Test with fork."
-  s.description   = "Continuous testing tool for Ruby."
+  s.homepage      = 'http://github.com/sunaku/tork'
+  s.summary       = 'Test with fork.'
+  s.description   = 'Continuous testing tool for Ruby.'
 
-  s.files         = `git ls-files`.split("\n") + Dir["man/**/*"]
+  s.files         = `git ls-files`.split("\n") + Dir['man/**/*']
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.require_paths = ["lib"]
+  s.require_paths = ['lib']
 
   s.add_runtime_dependency 'binman', '~> 3'
   s.add_runtime_dependency 'json', '>= 1.6.1', '< 2'

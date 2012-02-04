@@ -5,8 +5,7 @@
       \__/\____/_/ /_/|_\
                  >>>------>
 
-_Test with fork_
-==============================================================================
+# _Test with fork_
 
 Tork is a continuous testing tool for Ruby that automatically detects and
 tests changes in your Ruby application or test suite in an efficient manner:
@@ -17,9 +16,7 @@ tests changes in your Ruby application or test suite in an efficient manner:
 
   3. Avoids running unchanged tests inside changed test files.
 
-------------------------------------------------------------------------------
-Features
-------------------------------------------------------------------------------
+## Features
 
   * No configuration needed: run `tork` for Ruby, `tork rails` for Rails.
 
@@ -62,9 +59,7 @@ figure out which tests inside your newly saved test file have changed (using
 diff and regexps) and then attempts to run just those.  To make it run *all*
 tests in your saved file, simply save the file *again* without changing it.
 
-------------------------------------------------------------------------------
-Installation
-------------------------------------------------------------------------------
+## Installation
 
     gem install tork
 
@@ -92,9 +87,7 @@ Installation
     bundle_bin/tork --help  # run it directly
     bundle exec rake -T     # packaging tasks
 
-------------------------------------------------------------------------------
-Usage
-------------------------------------------------------------------------------
+## Usage
 
 ### At the command line
 
@@ -126,9 +119,7 @@ adapter][memory_test_fix].  Otherwise, you *might* face these errors:
 
 > cannot start a transaction within a transaction
 
-------------------------------------------------------------------------------
-Configuration
-------------------------------------------------------------------------------
+## Configuration
 
 Tork looks for a configuration file named `.tork.rb` in its current working
 directory.  The configuration file is a normal Ruby script, inside which you
@@ -137,9 +128,7 @@ can query and modify the `Tork::Config` object, which is a kind of `Struct`.
 Note that Tork *does not* automatically reload changes in your configuration
 file.  So you must restart Tork accordingly if your configuration changes.
 
-------------------------------------------------------------------------------
-Configuration helpers
-------------------------------------------------------------------------------
+## Configuration helpers
 
 In case you did not read the `tork --help` manual page, please note that you
 can pass *multiple* configuration helpers to tork(1) at the command line!
@@ -204,7 +193,7 @@ Or in your configuration file:
 
     require 'tork/config/logdir'
 
-### Receive notifications via libnotify, growl, or xmessage(1)
+### Receive notifications via libnotify, growl, or xmessage
 
 At the command line:
 
@@ -214,9 +203,7 @@ Or in your configuration file:
 
     require 'tork/config/notify'
 
-------------------------------------------------------------------------------
-Configuration options
------------------------------------------------------------------------------
+## Configuration options
 
 ### Tork::Config.max_forked_workers
 
@@ -387,9 +374,7 @@ For example, to see some real values:
       p :test_event_hooks => message_from_tork_master
     }
 
-------------------------------------------------------------------------------
-License
-------------------------------------------------------------------------------
+## License
 
 Released under the ISC license.  See the LICENSE file for details.
 
