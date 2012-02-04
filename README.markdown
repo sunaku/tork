@@ -103,6 +103,14 @@ You can monitor your test processes from another terminal:
 
     watch 'ps xuw | sed -n "1p; /tor[k]/p" | fgrep -v sed'
 
+### With RSpec
+
+RSpec 2.8.0 and older contain [a bug](
+https://github.com/sunaku/tork/issues/31 ) where a nonzero exit status (caused
+by an uncaught exception) is overridden by RSpec's `Kernel#at_exit` handler to
+be zero, thereby falsely indicating that a spec had passed.  [This patch](
+https://github.com/rspec/rspec-core/pull/569/files ) fixes the problem.
+
 ### With [Ruby on Rails]
 
 For Rails 3 or newer, use the `tork/config/rails` configuration helper.
