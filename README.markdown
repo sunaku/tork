@@ -205,6 +205,16 @@ Or in your configuration file:
 
 ## Configuration options
 
+This table shows which configuration options affect which Tork components:
+
+| Affects `tork-driver` | Affects `tork-engine` | Affects `tork-master` |
+| --------------------- | --------------------- | --------------------- |
+| overhead_load_paths   | test_event_hooks      | max_forked_workers    |
+| overhead_file_globs   |                       | before_fork_hooks     |
+| reabsorb_file_greps   |                       | after_fork_hooks      |
+| all_test_file_globs   |                       |                       |
+| test_file_globbers    |                       |                       |
+
 ### Tork::Config.max_forked_workers
 
 Maximum number of worker processes at any given time.  The default value is
