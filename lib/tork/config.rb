@@ -29,14 +29,14 @@ module Tork
 
   Config.test_file_globbers = {
     # source files that correspond to test files
-    %r<^lib/.+\.rb$> => lambda do |path, matches|
-      base = File.basename(path, '.rb')
-      ["{test,spec}/**/#{base}_{test,spec}.rb",
-       "{test,spec}/**/{test,spec}_#{base}.rb"]
+    %r<^lib/.*?([^/]+)\.rb$> => lambda do |matches|
+      name = matches[1]
+      ["{test,spec}/**/#{name}_{test,spec}.rb",
+       "{test,spec}/**/{test,spec}_#{name}.rb"]
     end,
 
     # the actual test files themselves
-    %r<^(test|spec)/.*(\1_[^/]+|[^/]+_\1)\.rb$> => proc {|path| path }
+    %r<^(test|spec)/.*?(\1_[^/]+|[^/]+_\1)\.rb$> => lambda {|m| m[0] }
   }
 
   Config.before_fork_hooks = []

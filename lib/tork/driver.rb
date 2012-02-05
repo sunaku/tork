@@ -15,7 +15,7 @@ class Driver < Engine
         visited = Set.new
         visitor = lambda do |source_file|
           Config.test_file_globbers.each do |regexp, globber|
-            if regexp =~ source_file and globs = globber.call(source_file, $~)
+            if regexp =~ source_file and globs = globber.call($~)
               Dir[*globs].each do |test_file|
                 if visited.add? test_file
                   run_test_file test_file
