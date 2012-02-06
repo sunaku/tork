@@ -7,12 +7,11 @@
 
 # _Test with fork_
 
-Tork is a continuous testing tool for Ruby that automatically detects and
-tests changes in your Ruby application or test suite in an efficient manner:
+Tork runs your tests as they change, in parallel:
 
-  1. Absorbs your test execution overhead into a master process.
+  1. Absorbs test execution overhead into a master process.
 
-  2. Forks to run your test files in parallel; overhead inherited.
+  2. Forks to inherit overhead and run test files in parallel.
 
   3. Avoids running unchanged tests inside changed test files.
 
