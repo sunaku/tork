@@ -48,7 +48,7 @@ class Driver < Engine
   end
 
   def reabsorb_overhead_files
-    absorb_overhead Config.overhead_load_paths, Dir[*Config.overhead_file_globs]
+    reabsorb_overhead Config.overhead_load_paths, Dir[*Config.overhead_file_globs]
   end
 
 end

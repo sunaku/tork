@@ -17,7 +17,7 @@ This program reads the following single-line commands (JSON arrays) from its
 standard input stream and performs the respective actions as described below.
 It also funnels the standard output stream of tork-master(1) into its own.
 
-`["absorb_overhead",` *paths*`,` *files*`]`
+`["reabsorb_overhead",` *paths*`,` *files*`]`
   Stops any test files that are currently running, reabsorbs the given test
   execution overhead, and resumes running those interrupted test files.  See
   the "load" command in tork-master(1) for more information.

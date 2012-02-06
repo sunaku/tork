@@ -22,7 +22,7 @@ class Engine < Server
     super
   end
 
-  def absorb_overhead load_paths, overhead_files
+  def reabsorb_overhead load_paths, overhead_files
     @master.quit
     @master = create_master_process
     @master.send [:load, load_paths, overhead_files]
