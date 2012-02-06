@@ -35,12 +35,13 @@ Tork runs your tests as they change, in parallel:
 
   * You can override the modular `tork*` programs with your own in $PATH.
 
-  * Its core is written in about 370 lines (SLOC) of pure Ruby code! :-)
+  * Its core is written in about 410 lines (SLOC) of pure Ruby code! :-)
 
 ### Architecture
 
-Following UNIX philosophy, Tork is composed of simple text-based programs: so
-you can build your own custom Tork user interface by wrapping `tork-driver`!
+Following UNIX philosophy, Tork is composed of simple text-based programs that
+*do one thing well*.  As a result, you could even create your own Tork user
+interface by wrapping `tork-driver` appropriately!
 
   * `tork` is an interactive command-line user interface for `tork-driver`
   * `tork-herald` monitors current directory tree and reports changed files

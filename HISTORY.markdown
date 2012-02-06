@@ -1,3 +1,46 @@
+## Version 18.0.0 (2012-02-06)
+
+Alert:
+
+  * RSpec 2.8.0 and older contain [a bug](
+    https://github.com/sunaku/tork/issues/31 ) where a nonzero
+    exit status (caused by an uncaught exception) is overridden
+    by RSpec's `Kernel#at_exit` handler to be zero, thereby
+    falsely indicating that a spec had passed.  [This patch](
+    https://github.com/rspec/rspec-core/pull/569/files) fixes the
+    problem.  Thanks to Gumaro Melendez for reporting this issue.
+
+Major:
+
+  * Dropped first parameter to `Tork::Config::test_file_globbers`.
+
+  * GH-31: tork-master now emits separate exit code and info.
+    Update your `Tork::Config::test_event_hooks` accordingly.
+
+  * tork/server: switch from modules to class inheritance.
+
+  * tork/config: switch to Struct to prevent misspellings.
+
+Minor:
+
+  * tork-driver now recursively expands dependent test files while globbing.
+
+  * Extracted bookkeeping stuff from tork-driver into tork-engine component.
+
+Other:
+
+  * tork/config: do not reabsorb when .tork.rb
+    changes.  Since the configuration is loaded in
+    multiple processes, it is difficult to reload
+    the configuration on the fly without adding
+    significant complexity to Tork.  Instead, it's
+    easier to accept the limitation that you must
+    restart Tork if you change your configuration.
+
+  * GH-29: bump guard version requirement to v1 series.
+
+  * Improve documentation; revise markdown; clean up.
+
 ## Version 17.1.0 (2012-01-30)
 
 Minor:
