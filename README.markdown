@@ -318,14 +318,14 @@ except those within a `models/` directory, you would write:
 Array of lambda functions that are invoked inside `tork-master` before a
 worker process is forked to run a test file.  These functions are given:
 
-1. The sequence number of the worker process that will be forked shortly.
+1. The path of the test file that will be run by the worker process.
 
-2. The path of the log file containing the live output of the worker process.
-
-3. The path of the test file that will be run by the worker process.
-
-4. An array of line numbers in the test file to run.  If this array is empty,
+2. An array of line numbers in the test file to run.  If this array is empty,
    then the entire test file will be run.
+
+3. The path of the log file containing the live output of the worker process.
+
+4. The sequence number of the worker process that will be forked shortly.
 
 For example, to see some real values:
 
@@ -345,14 +345,14 @@ For example, to see some real values:
 Array of lambda functions that are invoked inside a worker process forked
 by `tork-master`.  These functions are given:
 
-1. The sequence number of the worker process.
+1. The path of the test file that will be run by the worker process.
 
-2. The path of the log file containing the live output of the worker process.
-
-3. The path of the test file that will be run by the worker process.
-
-4. An array of line numbers in the test file to run.  If this array is empty,
+2. An array of line numbers in the test file to run.  If this array is empty,
    then the entire test file will be run.
+
+3. The path of the log file containing the live output of the worker process.
+
+4. The sequence number of the worker process.
 
 For example, to see some real values, including the worker process' PID:
 
