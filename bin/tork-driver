@@ -13,9 +13,10 @@ tork-driver - drives tork-engine(1) when files change
 
 ## DESCRIPTION
 
-This program reads the following single-line commands (JSON arrays) from its
-standard input stream and performs the respective actions as described below.
-It also funnels the standard output stream of tork-engine(1) into its own.
+This program drives tork-engine(1) according to tork-herald(1)'s observations.
+It reads the following single-line commands (JSON arrays) from its standard
+input stream and performs the respective actions as described below.  It also
+funnels the standard output stream of tork-engine(1) into its own.
 
 `["run_all_test_files"]`
   Runs all test files found within and beneath the current working directory.

@@ -13,8 +13,9 @@ tork-master - absorbs overhead and runs tests
 
 ## DESCRIPTION
 
-This program reads the following single-line commands (JSON arrays) from its
-standard input stream and performs the respective actions as described below.
+This program absorbs the test execution overhead and forks to run your tests.
+It reads the following single-line commands (JSON arrays) from its standard
+input stream and performs the respective actions as described below.
 
 `["load",` *paths*`,` *files*`]`
   Adds the given array of *paths* to Ruby's $LOAD_PATH, loads the given array

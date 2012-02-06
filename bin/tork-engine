@@ -13,7 +13,8 @@ tork-engine - wraps tork-master(1) with bookkeeping
 
 ## DESCRIPTION
 
-This program reads the following single-line commands (JSON arrays) from its
+This program tells tork-master(1) to run your tests and keeps track of test
+results.  It reads the following single-line commands (JSON arrays) from its
 standard input stream and performs the respective actions as described below.
 It also funnels the standard output stream of tork-master(1) into its own.
 
