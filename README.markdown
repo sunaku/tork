@@ -144,9 +144,12 @@ Or in your configuration file:
     require 'tork/config/coverage'
 
 This configuration helper prints a coverage report at the end of your log file
-in YAML format.  The report contains the C0 code coverage percentage (grade)
-and the line numbers of source lines that were not exercised (holes) for all
-evaluated Ruby files that exist in or beneath the current working directory.
+in YAML format.  The report is a hash containing the following information per
+each loaded Ruby file that exist in or beneath the current working directory:
+
+  * :grade - percentage of C0 code coverage for source lines of code
+  * :nsloc - total number of source lines of code in the file
+  * :holes - line numbers of source lines that were not covered
 
 ### [Ruby on Rails]
 

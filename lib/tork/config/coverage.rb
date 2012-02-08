@@ -13,22 +13,22 @@ begin
     then
       report = {}
       coverage_by_file.each do |file, coverage|
-        # ignore files outside this project
-        next unless file.start_with? Dir.pwd
+        # ignore files outside working directory
+        if file.start_with? Dir.pwd
+          nsloc = 0
+          holes = []
+          coverage.each_with_index do |hits, index|
+            # ignore non-source lines of code
+            unless hits.nil?
+              nsloc += 1
+              # +1 because line numbers go 1..N
+              holes << index + 1 if hits.zero?
+            end
+          end
 
-        total = 0
-        holes = []
-        coverage.each_with_index do |hits, index|
-          # ignore non-source lines of code
-          next unless hits
-
-          total += 1
-          # +1 because line numbers go 1..N
-          holes << index + 1 if hits.zero?
+          grade = ((nsloc - holes.length) / nsloc.to_f) * 100
+          report[file] = { grade: grade, nsloc: nsloc, holes: holes }
         end
-
-        grade = ((total - holes.length) / total.to_f) * 100
-        report[file] = { grade: grade, holes: holes }
       end
 
       require 'yaml'
