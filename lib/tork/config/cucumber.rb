@@ -16,17 +16,17 @@ Tork::Config.after_fork_hooks.push lambda {
   |test_file, line_numbers, log_file, worker_number|
 
   if test_file.end_with? '.feature'
-    # pass the feature file to cucumber(1) in ARGV
-    ARGV.push [test_file, *line_numbers].join(':')
+    original_argv = ARGV.dup
     begin
+      # pass the feature file to cucumber(1) in ARGV
+      ARGV.push [test_file, *line_numbers].join(':')
       require 'rubygems'
       require 'cucumber'
       load Gem.bin_path('cucumber', 'cucumber')
     ensure
-      # Revert our changes to ARGV because other at_exit hooks might use
-      # it later.  In particular, RSpec will try to evaluate the feature
-      # file as a Ruby script (and fail) if we leave it behind in ARGV.
-      ARGV.pop
+      # Restore ARGV for other at_exit hooks.  Otherwise, RSpec's hook will
+      # try to load the non-Ruby feature file from ARGV and fail accordingly.
+      ARGV.replace original_argv
     end
   end
 }
