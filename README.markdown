@@ -85,7 +85,7 @@ tests in your saved file, simply save the file *again* without changing it.
     cd tork
     bundle install --binstubs=bundle_bin
     bundle_bin/tork --help  # run it directly
-    bundle exec rake -T     # packaging tasks
+    bundle_bin/rake --tasks # packaging tasks
 
 ## Usage
 
