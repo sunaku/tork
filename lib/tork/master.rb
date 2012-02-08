@@ -76,7 +76,7 @@ class Master < Server
       # testing framework will take care of running the tests and reflecting
       # any failures in the worker process' exit status, which will then be
       # handled by the SIGCHLD trap registered in the master process (below)
-      Kernel.load test_file
+      Kernel.load test_file if test_file.end_with? '.rb'
     end
 
     @command_by_worker_pid[worker_pid] = @command.push(log_file, worker_number)
