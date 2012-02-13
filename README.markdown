@@ -65,7 +65,7 @@ tests in your saved file, simply save the file *again* without changing it.
 
 ### Prerequisites
 
-  * Ruby 1.8.7 or 1.9.2 or newer.
+  * Ruby 1.8.7 or 1.9.3 or newer.
 
   * Operating system that supports POSIX signals and the `fork()` system call.
     To check if your system qualifies, launch `irb` and enter the following:
