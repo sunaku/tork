@@ -15,17 +15,18 @@ Tork::Config.test_file_globbers.update(
 Tork::Config.after_fork_hooks.push lambda {
   |test_file, line_numbers, log_file, worker_number|
 
-  if File.extname(test_file) == '.feature'
-    # pass test_file in ARGV to cucumber(1) for running
-    ARGV << [test_file, *line_numbers].join(':')
-    require 'cucumber'
-    require 'rubygems'
-    cucumber_bin = Gem.bin_path('cucumber', 'cucumber')
-    at_exit { load cucumber_bin unless $! }
-
-    # noopify loading of test_file in Tork::Master#test()
-    # because cucumber feature files are not Ruby scripts
-    require 'tempfile'
-    test_file.replace Tempfile.new('tork-cucumber').path
+  if test_file.end_with? '.feature'
+    original_argv = ARGV.dup
+    begin
+      # pass the feature file to cucumber(1) in ARGV
+      ARGV.push [test_file, *line_numbers].join(':')
+      require 'rubygems'
+      require 'cucumber'
+      load Gem.bin_path('cucumber', 'cucumber')
+    ensure
+      # Restore ARGV for other at_exit hooks.  Otherwise, RSpec's hook will
+      # try to load the non-Ruby feature file from ARGV and fail accordingly.
+      ARGV.replace original_argv
+    end
   end
 }
