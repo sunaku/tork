@@ -1,3 +1,19 @@
+## Version 18.0.1 (2012-02-13)
+
+Alert:
+
+  * If you're on Ruby 1.9, please use 1.9.3 or newer because 1.9.2 is
+    known to segfault under RSpec and Rails.  See GH-30 and GH-32.
+
+Patch:
+
+  * GH-27: Cucumber features now run correctly under RSpec.  Thanks to Scott
+    Radcliff for reporting this issue and to David Burrows for solving it!
+
+  * tork(1): fix undefined method `strip' for nil:NilClass error.
+
+  * tork/config: ignore directories given as configuration files.
+
 ## Version 18.0.0 (2012-02-06)
 
 Alert:
