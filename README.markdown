@@ -133,6 +133,24 @@ file.  So you must restart Tork accordingly if your configuration changes.
 In case you did not read the `tork --help` manual page, please note that you
 can pass *multiple* configuration helpers to tork(1) at the command line!
 
+### Code coverage (Ruby 1.9)
+
+At the command line:
+
+    tork coverage
+
+Or in your configuration file:
+
+    require 'tork/config/coverage'
+
+This configuration helper prints a coverage report at the end of your log file
+in YAML format.  The report is a hash containing the following information per
+each loaded Ruby file that exist in or beneath the current working directory:
+
+  * :grade - percentage of C0 code coverage for source lines of code
+  * :nsloc - total number of source lines of code in the file
+  * :holes - line numbers of source lines that were not covered
+
 ### [Ruby on Rails]
 
 At the command line:
