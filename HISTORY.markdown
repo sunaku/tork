@@ -1,3 +1,16 @@
+## Version 18.1.0 (2012-02-26)
+
+Minor:
+
+  * Add `tork/config/coverage` configuration helper for Ruby 1.9, which prints
+    a coverage report at the end of your log file in YAML format.  The report
+    is a hash containing the following information per each loaded Ruby file
+    that exist in or beneath the current working directory:
+
+      * :grade - percentage of C0 code coverage for source lines of code
+      * :nsloc - total number of source lines of code in the file
+      * :holes - line numbers of source lines that were not covered
+
 ## Version 18.0.1 (2012-02-13)
 
 Alert:
