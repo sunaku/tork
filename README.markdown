@@ -408,7 +408,7 @@ For example, to see some real values:
 Released under the ISC license.  See the LICENSE file for details.
 
 [factory_girl]: https://github.com/thoughtbot/factory_girl
-[memory_test_fix]: https://github.com/mvz/memory_test_fix
+[memory_test_fix]: https://github.com/stepahn/memory_test_fix
 [parallel_tests]: https://github.com/grosser/parallel_tests
 [Ruby on Rails]: http://rubyonrails.org
 [Cucumber]: https://cukes.info
