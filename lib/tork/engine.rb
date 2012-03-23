@@ -37,16 +37,28 @@ class Engine < Server
   end
 
   def stop_running_test_files
-    @master.send [:stop]
-    @running_test_files.clear
+    if @running_test_files.empty?
+      warn "#{$0}: There are no running test files to stop."
+    else
+      @master.send [:stop]
+      @running_test_files.clear
+    end
   end
 
   def rerun_passed_test_files
-    run_test_files @passed_test_files
+    if @passed_test_files.empty?
+      warn "#{$0}: There are no passed test files to re-run."
+    else
+      run_test_files @passed_test_files
+    end
   end
 
   def rerun_failed_test_files
-    run_test_files @failed_test_files
+    if @failed_test_files.empty?
+      warn "#{$0}: There are no failed test files to re-run."
+    else
+      run_test_files @failed_test_files
+    end
   end
 
 protected

@@ -44,7 +44,12 @@ class Driver < Engine
   end
 
   def run_all_test_files
-    run_test_files Dir[*Config.all_test_file_globs]
+    all_test_files = Dir[*Config.all_test_file_globs]
+    if all_test_files.empty?
+      warn "#{$0}: There are no test files to run."
+    else
+      run_test_files all_test_files
+    end
   end
 
   def reabsorb_overhead_files
