@@ -9,24 +9,6 @@ class Master < Server
 
     @worker_number_pool = (0 ... Config.max_forked_workers).to_a
     @command_by_worker_pid = {}
-
-    # process exited child processes and report finished workers to client
-    trap :SIGCHLD do
-      begin
-        while wait2_array = Process.wait2(-1, Process::WNOHANG)
-          child_pid, child_status = wait2_array
-          if command = @command_by_worker_pid.delete(child_pid)
-            @worker_number_pool.push command.last
-            command[0] = if child_status.success? then :pass else :fail end
-            @client.send command.push(child_status.to_i, child_status.inspect)
-          else
-            warn "tork-master: unknown child exited: #{wait2_array.inspect}"
-          end
-        end
-      rescue SystemCallError
-        # raised by wait2() when there are currently no child processes
-      end
-    end
   end
 
   def load paths, files
@@ -81,6 +63,15 @@ class Master < Server
 
     @command_by_worker_pid[worker_pid] = @command.push(log_file, worker_number)
     @client.send @command
+
+    # wait for the worker to finish and report its status to the client
+    Thread.new do
+      worker_status = Process.wait2(worker_pid).last
+      command = @command_by_worker_pid.delete(worker_pid)
+      @worker_number_pool.push command.last
+      command[0] = if worker_status.success? then :pass else :fail end
+      @client.send command.push(worker_status.to_i, worker_status.inspect)
+    end
   end
 
   def stop
