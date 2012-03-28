@@ -1,3 +1,22 @@
+## Version 18.2.0 (2012-03-27)
+
+Minor:
+
+  * Emit warnings when commands cannot be performed.  This improves the user
+    experience by giving them immediate feedback.  For example, if you issue
+    the "rerun_failed_tests" command and no tests have failed yet, you will
+    now see a warning message that explains the situation.  Thanks to
+    NagaChaitanya Vellanki (@chaitanyav) for suggesting this change.
+
+Patch:
+
+  * GH-32: Restore support for Selenium and Capybara by replacing the global
+    SIGCHLD handler in tork-master(1) with individual threads, one per forked
+    worker process.  Thanks to Bjørn Trondsen (@Sharagoz) for reporting this
+    issue and verifying the fix.
+
+  * README: Recommend a newer fork of the "memory_test_fix" Rails plugin.
+
 ## Version 18.1.0 (2012-02-26)
 
 Minor:
