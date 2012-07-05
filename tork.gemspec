@@ -17,10 +17,10 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ['lib']
 
-  s.add_runtime_dependency 'binman', '~> 3'
-  s.add_runtime_dependency 'json', '>= 1.6.1', '< 2'
-  s.add_runtime_dependency 'guard', '~> 1'
-  s.add_runtime_dependency 'diff-lcs', '>= 1.1.2', '< 2'
-  s.add_development_dependency 'md2man', '~> 1'
-  s.add_development_dependency 'rake', '>= 0.9.2.2', '< 1'
+  s.add_runtime_dependency 'binman', '~> 3.0'
+  s.add_runtime_dependency 'json', '>= 1.6.1', '< 2.0'
+  s.add_runtime_dependency 'guard', '~> 1.0'
+  s.add_runtime_dependency 'diff-lcs', '>= 1.1.2', '< 2.0'
+  s.add_development_dependency 'md2man', '~> 1.0'
+  s.add_development_dependency 'rake', '>= 0.9.2.2', '< 1.0'
 end
