@@ -1,3 +1,16 @@
+## Version 18.2.1 (2012-07-05)
+
+Patch:
+
+  * GH-37: switch from Guard::Listener to Listen gem.
+    Thanks to Jesse Cooke for reporting this issue.
+
+Other:
+
+  * gemspec: need to provide .0 suffix for ~> operator.
+
+  * gemspec: LICENSE file contains UTF-8 author names.
+
 ## Version 18.2.0 (2012-03-27)
 
 Minor:
