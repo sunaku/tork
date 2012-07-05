@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'binman', '~> 3.0'
   s.add_runtime_dependency 'json', '>= 1.6.1', '< 2.0'
-  s.add_runtime_dependency 'guard', '~> 1.0'
+  s.add_runtime_dependency 'listen', '~> 0.4.7'
   s.add_runtime_dependency 'diff-lcs', '>= 1.1.2', '< 2.0'
   s.add_development_dependency 'md2man', '~> 1.0'
   s.add_development_dependency 'rake', '>= 0.9.2.2', '< 1.0'

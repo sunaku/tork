@@ -33,11 +33,11 @@ $0 = File.basename(__FILE__) # for easier identification in ps(1) output
 require 'binman'
 BinMan.help
 
-require 'guard'
-require 'guard/listener'
 require 'json'
+STDOUT.sync = true # flush puts() output immediately after writing
 
-listener = Guard::Listener.select_and_init({})
-listener.on_change {|files| puts JSON.dump(files) }
-STDOUT.sync = true # don't buffer puts()
-listener.start
+require 'listen'
+Listen.to('.', :relative_paths => true) do |modified, added, removed|
+  files = modified + added
+  puts JSON.dump(files) unless files.empty?
+end.start
