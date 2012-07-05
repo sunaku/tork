@@ -9,8 +9,8 @@ class Engine < Server
 
   def initialize
     super
-    @waiting_test_files = Set.new
-    @running_test_files = Set.new
+    @waiting_test_files = Set.new # dispatched to master but not yet running
+    @running_test_files = Set.new # dispatched to master and started running
     @passed_test_files = Set.new
     @failed_test_files = Set.new
     @lines_by_file = {}
@@ -26,7 +26,11 @@ class Engine < Server
     @master.quit
     @master = create_master_process
     @master.send [:load, load_paths, overhead_files]
-    run_test_files @running_test_files # resume running them in the new master
+
+    # re-dispatch the previously dispatched files to the new master
+    dispatched_test_files = @running_test_files + @waiting_test_files
+    @waiting_test_files.clear
+    run_test_files dispatched_test_files
   end
 
   def run_test_file test_file, line_numbers=nil
