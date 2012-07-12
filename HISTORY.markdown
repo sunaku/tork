@@ -1,3 +1,15 @@
+## Version 18.2.2 (2012-07-11)
+
+Patch:
+
+  * GH-35: resume dispatched but not yet started tests.
+
+    After reabsorbing overhead, we need to resume previously dispatched test
+    files that have not yet finished running.  This includes the waiting set
+    (dispatched but not yet running) as well as the running set (dispatched
+    and already started running).  Otherwise, we encounter a bug where test
+    files in the waiting set can NEVER be run again!
+
 ## Version 18.2.1 (2012-07-05)
 
 Patch:
