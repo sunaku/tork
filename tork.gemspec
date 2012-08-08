@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.name          = 'tork'
   s.version       = Tork::VERSION
   s.authors,
-  s.email         = File.read('LICENSE').force_encoding('UTF-8').
+  s.email         = File.read('LICENSE').
                     scan(/Copyright \d+ (.+) <(.+?)>/).transpose
   s.homepage      = 'http://github.com/sunaku/tork'
   s.summary       = 'test with fork'
