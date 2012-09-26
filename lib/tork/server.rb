@@ -21,7 +21,7 @@ class Server
         @command = command
         __send__(*command)
       else
-        warn "#{self}: invalid command: #{method}"
+        warn "#{$0}: invalid command: #{method}"
       end
     end.join
   end

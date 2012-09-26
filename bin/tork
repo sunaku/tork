@@ -44,11 +44,11 @@ ENV['TORK_CONFIGS'] = JSON.dump(ARGV)
 
 require 'tork/client'
 
-warn 'tork: Absorbing test execution overhead...'
+warn "#{$0}: Absorbing test execution overhead..."
 @driver = Tork::Client::Transceiver.new('tork-driver') do |event, *details|
   case event_sym = event.to_sym
-  when :load then warn 'tork: Overhead absorbed. Ready for testing!'
-  when :over then warn 'tork: Reabsorbing changed overhead files...'
+  when :load then warn "#{$0}: Overhead absorbed. Ready for testing!"
+  when :over then warn "#{$0}: Reabsorbing changed overhead files..."
   else
     test_file, line_numbers, log_file, worker_number, exit_status = details
     message = [event.upcase, [test_file, *line_numbers].join(':'),
@@ -80,12 +80,12 @@ COMMANDS = {
 
 while key = STDIN.gets
   if command = COMMANDS[key.strip]
-    warn "tork: Sending #{command.to_s.inspect} command..."
+    warn "#{$0}: Sending #{command.to_s.inspect} command..."
     @driver.send [command]
     break if command == :quit
   else # invalid command
-    COMMANDS.each do |k, cmd|
-      warn "tork: Type #{k} then ENTER to #{cmd.to_s.tr('_', ' ')}."
+    COMMANDS.each do |key, cmd|
+      warn "#{$0}: Type #{key} then ENTER to #{cmd.to_s.tr('_', ' ')}."
     end
   end
 end
