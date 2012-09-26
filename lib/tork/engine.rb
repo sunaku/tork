@@ -53,10 +53,6 @@ class Engine < Server
     end
   end
 
-  def kill_running_test_files
-    stop_running_test_files :SIGKILL
-  end
-
   def rerun_passed_test_files
     if @passed_test_files.empty?
       warn "#{$0}: There are no passed test files to re-run."
