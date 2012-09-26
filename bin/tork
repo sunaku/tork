@@ -73,6 +73,7 @@ COMMANDS = {
   't' => :run_test_file,
   'a' => :run_all_test_files,
   's' => :stop_running_test_files,
+  'k' => :kill_running_test_files,
   'p' => :rerun_passed_test_files,
   'f' => :rerun_failed_test_files,
   'o' => :reabsorb_overhead_files,

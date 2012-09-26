@@ -74,9 +74,9 @@ class Master < Server
     end
   end
 
-  def stop
+  def stop signal=:SIGTERM
     # the reaping threads registered above will reap these killed workers
-    Process.kill :SIGTERM, *@command_by_worker_pid.keys.map {|pid| -pid }
+    Process.kill signal, *@command_by_worker_pid.keys.map {|pid| -pid }
   rescue ArgumentError, SystemCallError
     # some workers might have already exited before we sent them the signal
   end

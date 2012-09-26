@@ -28,8 +28,13 @@ It also funnels the standard output stream of tork-master(1) into its own.
   given *test_file*.  If no *line_numbers* are given, then only those lines
   that have changed since the last run of *test_file* will be substituted.
 
-`["stop_running_test_files"]`
-  Stops any test files that are currently running.
+`["stop_running_test_files"`, *signal*`]`
+  Stops any test files that are currently running by sending the given
+  *signal* (default `SIGTERM`) to their worker processes.
+
+`["kill_running_test_files"]`
+  Forcefully stops any test files that are currently running by sending the
+  unstoppable SIGKILL signal to instantly terminate their worker processes.
 
 `["rerun_passed_test_files"]`
   Runs all test files that have passed during their most recent run.
