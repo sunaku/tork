@@ -16,12 +16,14 @@ class Server
     STDOUT.reopen(STDERR).sync = true
 
     Client::Receiver.new(STDIN) do |command|
-      method = command.first
-      if respond_to? method and method != __method__ # prevent loops
+      if command.first != __method__ # prevent loops
         @command = command
-        __send__(*command)
-      else
-        warn "#{$0}: invalid command: #{method}"
+        begin
+          __send__(*command)
+        rescue => error
+          warn "#{$0}: #{error}"
+          warn error.backtrace.join("\n")
+        end
       end
     end.join
   end
