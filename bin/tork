@@ -78,20 +78,16 @@ COMMANDS = {
   'q' => :quit,
 }
 
-begin
-  while key = STDIN.gets
-    if command = COMMANDS[key.strip]
-      warn "tork: Sending #{command.to_s.inspect} command..."
-      @driver.send [command]
-      break if command == :quit
-    else # invalid command
-      COMMANDS.each do |k, cmd|
-        warn "tork: Type #{k} then ENTER to #{cmd.to_s.tr('_', ' ')}."
-      end
+while key = STDIN.gets
+  if command = COMMANDS[key.strip]
+    warn "tork: Sending #{command.to_s.inspect} command..."
+    @driver.send [command]
+    break if command == :quit
+  else # invalid command
+    COMMANDS.each do |k, cmd|
+      warn "tork: Type #{k} then ENTER to #{cmd.to_s.tr('_', ' ')}."
     end
   end
-rescue Interrupt
-  # forced quit
 end
 
 Process.waitall

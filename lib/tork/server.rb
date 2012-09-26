@@ -24,10 +24,6 @@ class Server
         warn "#{self}: invalid command: #{method}"
       end
     end.join
-  rescue Interrupt
-    # forced quit
-  ensure
-    Process.waitall
   end
 
 end
