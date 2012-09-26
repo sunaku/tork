@@ -6,8 +6,9 @@ Gem::Specification.new do |s|
   s.name          = 'tork'
   s.version       = Tork::VERSION
   s.authors,
-  s.email         = File.read('LICENSE').
-                    scan(/Copyright \d+ (.+) <(.+?)>/).transpose
+  s.email         = File.read(*['LICENSE',
+                      ({:encoding => 'utf-8'} if RUBY_VERSION >= '1.9')
+                    ].compact).scan(/Copyright \d+ (.+) <(.+?)>/).transpose
   s.homepage      = 'http://github.com/sunaku/tork'
   s.summary       = 'test with fork'
   s.description   = 'Runs your tests as they change, in parallel.'
