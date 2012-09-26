@@ -73,7 +73,7 @@ COMMANDS = {
   't' => :run_test_file,
   'a' => :run_all_test_files,
   's' => :stop_running_test_files,
-  'k' => :kill_running_test_files,
+  'k' => [:stop_running_test_files, :SIGKILL],
   'p' => :rerun_passed_test_files,
   'f' => :rerun_failed_test_files,
   'o' => :reabsorb_overhead_files,
@@ -84,7 +84,7 @@ while line = STDIN.gets
   key, *args = line.split
   key &&= key.lstrip[0,1].downcase
   if cmd = COMMANDS[key]
-    command = [cmd, *args]
+    command = Array(cmd) + args
     warn "#{$0}: Sending #{command.inspect} command..."
     @driver.send command
     break if cmd == :quit
