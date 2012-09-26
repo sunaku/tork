@@ -44,13 +44,17 @@ class Engine < Server
     end
   end
 
-  def stop_running_test_files
+  def stop_running_test_files signal=nil
     if @running_test_files.empty?
       warn "#{$0}: There are no running test files to stop."
     else
-      @master.send [:stop]
+      @master.send [:stop, signal].compact
       @running_test_files.clear
     end
+  end
+
+  def kill_running_test_files
+    stop_running_test_files :SIGKILL
   end
 
   def rerun_passed_test_files
