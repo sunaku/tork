@@ -30,11 +30,7 @@ It also funnels the standard output stream of tork-master(1) into its own.
 
 `["stop_running_test_files"`, *signal*`]`
   Stops any test files that are currently running by sending the given
-  *signal* (default `SIGTERM`) to their worker processes.
-
-`["kill_running_test_files"]`
-  Forcefully stops any test files that are currently running by sending the
-  unstoppable SIGKILL signal to instantly terminate their worker processes.
+  *signal* (default `SIGTERM`) to their respective worker processes.
 
 `["rerun_passed_test_files"]`
   Runs all test files that have passed during their most recent run.
