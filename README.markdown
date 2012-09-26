@@ -92,6 +92,10 @@ tests in your saved file, simply save the file *again* without changing it.
 
     tork --help
 
+You can add line editing, history, and filename completion:
+
+    rlwrap -c tork
+
 You can monitor your test processes from another terminal:
 
     watch 'ps xuw | sed -n "1p; /tor[k]/p" | fgrep -v sed'
