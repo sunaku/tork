@@ -23,11 +23,10 @@ It also funnels the standard output stream of tork-master(1) into its own.
   execution overhead, and resumes running those interrupted test files.  See
   the "load" command in tork-master(1) for more information.
 
-`["run_test_file"`, *test_file*`,` *line_numbers*`]`
-  Runs tests that correspond to the given *line_numbers* array in the given
-  *test_file*.  If *line_numbers* is `null`, then only those lines that have
-  changed since the last time the *test_file* was run will be substituted.  If
-  *line_numbers* is an empty array, then the entire *test_file* will be run.
+`["run_test_file"`, *test_file*`,` *line_numbers*...`]`
+  Runs tests that correspond to the given sequence of *line_numbers* in the
+  given *test_file*.  If no *line_numbers* are given, then only those lines
+  that have changed since the last run of *test_file* will be substituted.
 
 `["stop_running_test_files"]`
   Stops any test files that are currently running.
