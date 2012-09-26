@@ -33,9 +33,13 @@ class Engine < Server
     run_test_files dispatched_test_files
   end
 
-  def run_test_file test_file, line_numbers=nil
+  def run_test_file test_file, *line_numbers
     if File.exist? test_file and @waiting_test_files.add? test_file
-      line_numbers ||= find_changed_line_numbers(test_file)
+      if line_numbers.empty?
+        line_numbers = find_changed_line_numbers(test_file)
+      else
+        line_numbers.map!(&:to_i)
+      end
       @master.send [:test, test_file, line_numbers]
     end
   end
