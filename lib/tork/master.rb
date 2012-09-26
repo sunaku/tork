@@ -57,7 +57,7 @@ class Master < Server
       # after loading the user's test file, the at_exit() hook of the user's
       # testing framework will take care of running the tests and reflecting
       # any failures in the worker process' exit status, which will then be
-      # handled by the SIGCHLD trap registered in the master process (below)
+      # handled by the reaping thread registered in the master process (below)
       Kernel.load test_file if test_file.end_with? '.rb'
     end
 
@@ -65,7 +65,7 @@ class Master < Server
     @client.send @command
 
     # wait for the worker to finish and report its status to the client
-    Thread.new do
+    Thread.new do # the reaping thread
       worker_status = Process.wait2(worker_pid).last
       command = @command_by_worker_pid.delete(worker_pid)
       @worker_number_pool.push command.last
@@ -75,7 +75,7 @@ class Master < Server
   end
 
   def stop
-    # NOTE: the SIGCHLD handler will reap these killed worker processes
+    # the reaping threads registered above will reap these killed workers
     Process.kill :SIGTERM, *@command_by_worker_pid.keys.map {|pid| -pid }
   rescue ArgumentError, SystemCallError
     # some workers might have already exited before we sent them the signal
