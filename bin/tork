@@ -78,14 +78,18 @@ COMMANDS = {
   'q' => :quit,
 }
 
-while key = STDIN.gets
-  if command = COMMANDS[key.strip]
-    warn "#{$0}: Sending #{command.to_s.inspect} command..."
-    @driver.send [command]
-    break if command == :quit
+while line = STDIN.gets
+  key, *args = line.split
+  key &&= key.lstrip[0,1].downcase
+  if cmd = COMMANDS[key]
+    command = [cmd, *args]
+    warn "#{$0}: Sending #{command.inspect} command..."
+    @driver.send command
+    break if cmd == :quit
   else # invalid command
     COMMANDS.each do |key, cmd|
-      warn "#{$0}: Type #{key} then ENTER to #{cmd.to_s.tr('_', ' ')}."
+      desc = Array(cmd).first.to_s.tr('_', ' ')
+      warn "#{$0}: Type #{key} then ENTER to #{desc}."
     end
   end
 end
