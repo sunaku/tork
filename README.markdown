@@ -98,6 +98,17 @@ You can add line editing, history, and filename completion:
 
     rlwrap -c tork
 
+You can control tork(1) interactively from another terminal:
+
+    tork-client
+    # type your commands here, one per line.
+    # press Control-D to exit tork-client(1)
+
+You can also do the same non-interactively using a pipeline:
+
+    # run lines 4, 33, and 21 of test/some_test.rb
+    echo t test/some_test.rb 4 33 21 | tork-client
+
 You can monitor your test processes from another terminal:
 
     watch 'ps xuw | sed -n "1p; /tor[k]/p" | fgrep -v sed'
