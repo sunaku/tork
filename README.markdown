@@ -48,6 +48,8 @@ interface by wrapping `tork-driver` appropriately!
   * `tork-driver` drives the engine according to the herald's observations
   * `tork-engine` tells master to run tests and keeps track of test results
   * `tork-master` absorbs test execution overhead and forks to run your tests
+  * `tork-server` multiplexes its stdin with output from `tork-client` runs
+  * `tork-client` copies lines from its stdin to `tork-server` in same `pwd`
 
 When the herald observes that files in or beneath the current directory have
 been written to, it tells the driver, which then commands the master to fork a

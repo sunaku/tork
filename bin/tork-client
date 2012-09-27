@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+=begin =======================================================================
+
+# TORK-CLIENT 1 2012-09-26 18.2.3
+
+## NAME
+
+tork-client - copies stdin to tork-server(1)
+
+## SYNOPSIS
+
+`tork-client` [*OPTION*]...
+
+## DESCRIPTION
+
+This program continuously copies lines from its stdin to a tork-server(1)
+instance that is running in the same working directory as this program.
+
+## OPTIONS
+
+`-h`, `--help`
+  Show this help manual.
+
+## SEE ALSO
+
+tork-server(1)
+
+=end =========================================================================
+
+$0 = File.basename(__FILE__) # for easier identification in ps(1) output
+
+require 'binman'
+BinMan.help
+
+require 'socket'
+begin
+  UNIXSocket.open('.tork.us') do |client|
+    while line = STDIN.gets
+      client.puts line
+    end
+  end
+rescue Errno::ENOENT
+  warn "#{$0}: could not connect to tork-server(1)"
+  exit 1
+end
