@@ -94,10 +94,6 @@ tests in your saved file, simply save the file *again* without changing it.
 
     tork --help
 
-You can add line editing, history, and filename completion:
-
-    rlwrap -c tork
-
 You can control tork(1) interactively from another terminal:
 
     tork-client

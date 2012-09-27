@@ -32,6 +32,9 @@ Some interactive commands accept additional arguments, as described below.
   Stops any test files that are currently running by sending the given
   *signal* (default `SIGTERM`) to their respective worker processes.
 
+If available, rlwrap(1) will enhance interactivity by providing line editing,
+command history, and filename completion among other readline(3) features.
+
 ## OPTIONS
 
 `-h`, `--help`
@@ -39,7 +42,8 @@ Some interactive commands accept additional arguments, as described below.
 
 ## SEE ALSO
 
-tork(1), tork-driver(1), tork-master(1), tork-herald(1), tork-client(1)
+tork(1), tork-driver(1), tork-master(1), tork-herald(1), tork-client(1),
+rlwrap(1)
 
 =end =========================================================================
 
@@ -93,7 +97,9 @@ COMMANDS = {
   'q' => :quit,
 }
 
-IO.popen('tork-server') do |input|
+wrapper = 'tork-server'
+wrapper = "rlwrap -c #{wrapper}" if system 'which rlwrap >/dev/null 2>&1'
+IO.popen(wrapper) do |input|
   begin
     while line = input.gets
       key, *args = line.split
