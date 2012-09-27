@@ -1,0 +1,65 @@
+#!/usr/bin/env ruby
+=begin =======================================================================
+
+# TORK-SERVER 1 2012-09-26 18.2.3
+
+## NAME
+
+tork-server - multiplexes stdin with tork-client(1) output
+
+## SYNOPSIS
+
+`tork-server` [*OPTION*]...
+
+## DESCRIPTION
+
+This program multiplexes its stdin with output from remote tork-client(1)
+instances that are running in the same working directory as this program.
+It continuously copies lines from this multiplexed input to its stdout.
+
+## OPTIONS
+
+`-h`, `--help`
+  Show this help manual.
+
+## SEE ALSO
+
+tork-client(1)
+
+=end =========================================================================
+
+$0 = File.basename(__FILE__) # for easier identification in ps(1) output
+
+require 'binman'
+BinMan.help
+
+require 'socket'
+begin
+  UNIXServer.open('.tork.us') do |server|
+    begin
+      STDOUT.sync = true # flush puts() output immediately after writing
+      clients = [STDIN, server]
+      loop do
+        select(clients).first.each do |reader|
+          case reader
+          when UNIXServer
+            clients << reader.accept
+            next
+          when UNIXSocket
+            if reader.eof?
+              clients.delete reader
+              next
+            end
+          end
+          puts reader.gets
+        end
+      end
+    ensure
+      # socket file is not automatically deleted from filesystem upon close
+      File.delete server.path
+    end
+  end
+rescue Errno::EADDRINUSE
+  warn "#{$0}: another instance is already running"
+  exit 1
+end
