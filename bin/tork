@@ -20,6 +20,18 @@ and then waits for you to supply interactive commands either {1} directly on
 its stdin or {2} remotely through tork-client(1).  From then onward, you may
 press the ENTER key (supplying no command) to see a menu of accepted commands.
 
+Some interactive commands accept additional arguments, as described below.
+
+`t` *test_file* [*line_number*]...
+  Runs the given *test_file* while only running those tests that are defined
+  on the given list of *line_number*s.  If no *line_number*s are given, then
+  only those tests that have changed since the last run of the *test_file*
+  will now be run.
+
+`s` [*signal*]
+  Stops any test files that are currently running by sending the given
+  *signal* (default `SIGTERM`) to their respective worker processes.
+
 ## OPTIONS
 
 `-h`, `--help`
