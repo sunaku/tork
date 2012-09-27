@@ -35,7 +35,7 @@ Tork runs your tests as they change, in parallel:
 
   * You can override the modular `tork*` programs with your own in $PATH.
 
-  * Its core is written in about 410 lines (SLOC) of pure Ruby code! :-)
+  * Its core is written in about 420 lines (SLOC) of pure Ruby code! :-)
 
 ### Architecture
 
@@ -71,7 +71,6 @@ tests in your saved file, simply save the file *again* without changing it.
     To check if your system qualifies, launch `irb` and enter the following:
 
         Process.respond_to? :fork  # must be true
-        Signal.list.key? 'CHLD'    # must be true
         Signal.list.key? 'TERM'    # must be true
 
   * To make the `tork-herald` program's filesystem monitoring more efficient:

@@ -1,3 +1,23 @@
+## Version 18.2.3 (2012-09-26)
+
+Patch:
+
+  * Restored support for building Tork from its gemspec under Ruby 1.8.
+    Thanks to Ohno Shin'ichi for reporting this issue and contributing a
+    preliminary fix.
+
+  * Add resilience against failed command dispatch in `Tork::Server#loop()`.
+
+Other:
+
+  * It's not worth rescuing Interrupt only to exit silently.
+    Let the user see stack traces when they press Control-C.
+
+  * Update old comments about SIGCHLD handler, which was
+    replaced by reaping threads quite a few releases ago.
+
+  * Use $0 instead of hard-coding the program name.
+
 ## Version 18.2.2 (2012-07-11)
 
 Patch:
