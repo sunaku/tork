@@ -82,6 +82,23 @@ warn "#{$0}: Absorbing test execution overhead..."
   end
 end
 
+class << @driver
+  def send command
+    warn "#{$0}: Sending #{command.inspect} command..."
+    super
+  end
+
+  def quit
+    send [:quit]
+    super
+  end
+end
+
+at_exit do
+  @driver.quit
+  Process.waitall
+end
+
 #-----------------------------------------------------------------------------
 # frontend
 #-----------------------------------------------------------------------------
@@ -100,15 +117,18 @@ COMMANDS = {
 wrapper = 'tork-reader'
 wrapper = "rlwrap -c #{wrapper}" if system 'which rlwrap >/dev/null 2>&1'
 IO.popen(wrapper) do |input|
+  # user has chosen to quit by pressing Control-D
+  # which automatically terminates tork-reader(1)
+  # so we have to detect this and exit ourselves!
+  Thread.new { Process.waitpid(input.pid); exit }
+
   begin
     while line = input.gets
       key, *args = line.split
       key &&= key.lstrip[0,1].downcase
       if cmd = COMMANDS[key]
-        command = Array(cmd) + args
-        warn "#{$0}: Sending #{command.inspect} command..."
-        @driver.send command
-        break if cmd == :quit
+        exit if cmd == :quit
+        @driver.send Array(cmd) + args
       else # invalid command
         COMMANDS.each do |key, cmd|
           desc = Array(cmd).first.to_s.tr('_', ' ')
@@ -117,10 +137,9 @@ IO.popen(wrapper) do |input|
       end
     end
   ensure
-    # manually kill tork-reader(1) because it will continue blocking for more
-    # user input (even though the interaction loop above has been terminated)
-    Process.kill :SIGTERM, input.pid if input
+    # user has chosen to quit by entering the quit command
+    # which will NOT automatically terminate tork-reader(1)
+    # so we have to kill it here, before exiting ourselves!
+    Process.kill :SIGTERM, input.pid
   end
 end
-
-Process.waitall
