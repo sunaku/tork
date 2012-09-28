@@ -15,7 +15,8 @@ tork-reader - multiplexes stdin with tork-writer(1) output
 
 This program multiplexes its stdin with output from remote tork-writer(1)
 instances that are running in the same working directory as this program.
-It continuously copies lines from this multiplexed input to its stdout.
+It continuously copies lines from this multiplexed input to its stdout until
+its stdin is closed (by pressing Control-D if its stdin is your terminal).
 
 ## OPTIONS
 
@@ -39,7 +40,7 @@ begin
     begin
       STDOUT.sync = true # flush puts() output immediately after writing
       clients = [STDIN, server]
-      loop do
+      while clients.include? STDIN
         select(clients).first.each do |reader|
           if reader == server
             clients << reader.accept
