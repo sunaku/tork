@@ -48,8 +48,8 @@ interface by wrapping `tork-driver` appropriately!
   * `tork-driver` drives the engine according to the herald's observations
   * `tork-engine` tells master to run tests and keeps track of test results
   * `tork-master` absorbs test execution overhead and forks to run your tests
-  * `tork-server` multiplexes its stdin with output from `tork-client` runs
-  * `tork-client` copies lines from its stdin to `tork-server` in same `pwd`
+  * `tork-reader` multiplexes its stdin with output from `tork-writer` runs
+  * `tork-writer` copies its stdin to `tork-reader` running in the same `pwd`
 
 When the herald observes that files in or beneath the current directory have
 been written to, it tells the driver, which then commands the master to fork a
@@ -96,14 +96,14 @@ tests in your saved file, simply save the file *again* without changing it.
 
 You can control tork(1) interactively from another terminal:
 
-    tork-client
+    tork-writer
     # type your commands here, one per line.
-    # press Control-D to exit tork-client(1)
+    # press Control-D to exit tork-writer(1)
 
 You can also do the same non-interactively using a pipeline:
 
     # run lines 4, 33, and 21 of test/some_test.rb
-    echo t test/some_test.rb 4 33 21 | tork-client
+    echo t test/some_test.rb 4 33 21 | tork-writer
 
 You can monitor your test processes from another terminal:
 

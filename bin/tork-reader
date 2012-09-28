@@ -1,19 +1,19 @@
 #!/usr/bin/env ruby
 =begin =======================================================================
 
-# TORK-SERVER 1 2012-09-26 18.2.3
+# TORK-READER 1 2012-09-26 18.2.3
 
 ## NAME
 
-tork-server - multiplexes stdin with tork-client(1) output
+tork-reader - multiplexes stdin with tork-writer(1) output
 
 ## SYNOPSIS
 
-`tork-server` [*OPTION*]...
+`tork-reader` [*OPTION*]...
 
 ## DESCRIPTION
 
-This program multiplexes its stdin with output from remote tork-client(1)
+This program multiplexes its stdin with output from remote tork-writer(1)
 instances that are running in the same working directory as this program.
 It continuously copies lines from this multiplexed input to its stdout.
 
@@ -24,7 +24,7 @@ It continuously copies lines from this multiplexed input to its stdout.
 
 ## SEE ALSO
 
-tork-client(1)
+tork-writer(1)
 
 =end =========================================================================
 

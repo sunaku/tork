@@ -1,19 +1,19 @@
 #!/usr/bin/env ruby
 =begin =======================================================================
 
-# TORK-CLIENT 1 2012-09-26 18.2.3
+# TORK-WRITER 1 2012-09-26 18.2.3
 
 ## NAME
 
-tork-client - copies stdin to tork-server(1)
+tork-writer - copies stdin to tork-reader(1)
 
 ## SYNOPSIS
 
-`tork-client` [*OPTION*]...
+`tork-writer` [*OPTION*]...
 
 ## DESCRIPTION
 
-This program continuously copies lines from its stdin to a tork-server(1)
+This program continuously copies lines from its stdin to a tork-reader(1)
 instance that is running in the same working directory as this program.
 
 ## OPTIONS
@@ -23,7 +23,7 @@ instance that is running in the same working directory as this program.
 
 ## SEE ALSO
 
-tork-server(1)
+tork-reader(1)
 
 =end =========================================================================
 
@@ -34,12 +34,12 @@ BinMan.help
 
 require 'socket'
 begin
-  UNIXSocket.open('.tork.us') do |client|
+  UNIXSocket.open('.tork.us') do |socket|
     while line = STDIN.gets
-      client.puts line
+      socket.puts line
     end
   end
 rescue Errno::ENOENT
-  warn "#{$0}: could not connect to tork-server(1)"
+  warn "#{$0}: could not connect to tork-reader(1)"
   exit false
 end
