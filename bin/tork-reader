@@ -41,15 +41,12 @@ begin
       clients = [STDIN, server]
       loop do
         select(clients).first.each do |reader|
-          case reader
-          when UNIXServer
+          if reader == server
             clients << reader.accept
             next
-          when UNIXSocket
-            if reader.eof?
-              clients.delete reader
-              next
-            end
+          elsif reader.eof?
+            clients.delete reader
+            next
           end
           puts reader.gets
         end
