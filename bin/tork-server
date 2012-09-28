@@ -61,5 +61,5 @@ begin
   end
 rescue Errno::EADDRINUSE
   warn "#{$0}: another instance is already running"
-  exit 1
+  exit false
 end

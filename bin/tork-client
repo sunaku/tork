@@ -41,5 +41,5 @@ begin
   end
 rescue Errno::ENOENT
   warn "#{$0}: could not connect to tork-server(1)"
-  exit 1
+  exit false
 end
