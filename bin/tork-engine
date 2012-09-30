@@ -27,6 +27,7 @@ It also funnels the standard output stream of tork-master(1) into its own.
   Runs tests that correspond to the given sequence of *line_numbers* in the
   given *test_file*.  If no *line_numbers* are given, then only those lines
   that have changed since the last run of *test_file* will be substituted.
+  If any *line_numbers* are zero, then the entire *test_file* will be run.
 
 `["stop_running_test_files"`, *signal*`]`
   Stops any test files that are currently running by sending the given

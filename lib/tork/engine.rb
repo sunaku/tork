@@ -39,6 +39,7 @@ class Engine < Server
         line_numbers = find_changed_line_numbers(test_file)
       else
         line_numbers.map!(&:to_i)
+        line_numbers.clear if line_numbers.any?(&:zero?)
       end
       @master.send [:test, test_file, line_numbers]
     end
