@@ -1,0 +1,91 @@
+#!/usr/bin/env ruby
+=begin =======================================================================
+
+# TORK-REMOTE 1 2012-09-26 18.2.3
+
+## NAME
+
+tork-remote - controls tork(1) programs
+
+## SYNOPSIS
+
+`tork-remote` [*OPTION*]... *PROGRAM*
+
+## DESCRIPTION
+
+This program sends single-line JSON messages read from its stdin to the given
+*PROGRAM* which is already running in the same working directory as this one.
+It prints single-line JSON messages received from the *PROGRAM* to its stdout.
+
+If *PROGRAM* does not begin with "tork-" then that prefix is automatically
+supplied.  For example, if *PROGRAM* was "master" then it would be considered
+as "tork-master".
+
+### Handling non-JSON lines
+
+If lines read from its stdin are not single-line JSON messages, then it splits
+them into an array of words just like sh(1) does for command-line arguments,
+and sends that array as a single-line JSON message to the *PROGRAM*.
+
+If lines received from the *PROGRAM* are not single-line JSON messages, then
+it prints them to its stderr.
+
+## OPTIONS
+
+`-h`, `--help`
+  Show this help manual.
+
+## EXIT STATUS
+
+1
+  Could not connect to the *PROGRAM*.
+
+2
+  Lost connection to the *PROGRAM*.
+
+## SEE ALSO
+
+tork(1), sh(1)
+
+=end =========================================================================
+
+$0 = File.basename(__FILE__) # for easier identification in ps(1) output
+
+require 'binman'
+BinMan.help
+
+require 'socket'
+require 'shellwords'
+require 'tork/client'
+
+JSON_REGEXP = /\A\s*[\[\{]/.freeze
+
+program = ARGV.shift or raise ArgumentError, 'PROGRAM not given'
+program = "tork-#{program}" unless program.start_with? 'tork-'
+socket_file = Tork::Client.socket_file(program)
+
+begin
+  UNIXSocket.open(socket_file) do |socket|
+    # server => client
+    Thread.new do
+      while input = socket.gets
+        stream = input =~ JSON_REGEXP ? STDOUT : STDERR
+        stream.puts input
+        stream.flush
+      end
+      warn "#{$0}: lost connection to #{program}"
+      exit 2
+    end
+
+    # client => server
+    while output = STDIN.gets
+      output = JSON.dump(Shellwords.split(output)) if output !~ JSON_REGEXP
+      socket.puts output
+    end
+  end
+# ECONNREFUSED is for abstract namespace UNIXSocket
+rescue Errno::ENOENT, Errno::ECONNREFUSED => error
+  warn "#{$0}: could not connect to #{program}"
+  warn "#{error}#{socket_file.inspect}"
+  exit 1
+end

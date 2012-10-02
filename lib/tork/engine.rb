@@ -80,7 +80,7 @@ private
 
   def create_master_process
     Client::Transceiver.new('tork-master') do |message|
-      @client.send message # propagate output downstream
+      send message # propagate output downstream
 
       event, file, line_numbers = message
       case event.to_sym

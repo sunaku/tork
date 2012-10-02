@@ -20,7 +20,7 @@ class Master < Server
       require file.sub(/\.rb$/, '')
     end
 
-    @client.send @command
+    send @command
   end
 
   def test test_file, line_numbers
@@ -62,7 +62,7 @@ class Master < Server
     end
 
     @command_by_worker_pid[worker_pid] = @command.push(log_file, worker_number)
-    @client.send @command
+    send @command
 
     # wait for the worker to finish and report its status to the client
     Thread.new do # the reaping thread
@@ -70,7 +70,7 @@ class Master < Server
       command = @command_by_worker_pid.delete(worker_pid)
       @worker_number_pool.push command.last
       command[0] = if worker_status.success? then :pass else :fail end
-      @client.send command.push(worker_status.to_i, worker_status.inspect)
+      send command.push(worker_status.to_i, worker_status.inspect)
     end
   end
 

@@ -17,7 +17,7 @@ This program is a simple command-line user interface for tork-driver(1).  It
 loads the given *CONFIG* files (which are either paths to actual files or
 names of helper libraries in the tork/config/ namespace of Ruby's load path)
 and then waits for you to supply interactive commands either {1} directly on
-its stdin or {2} remotely through tork-writer(1).  From then onward, you may
+its stdin or {2} remotely through tork-remote(1).  From then onward, you may
 press the ENTER key (supplying no command) to see a menu of accepted commands.
 
 Some interactive commands accept additional arguments, as described below.
@@ -32,9 +32,6 @@ Some interactive commands accept additional arguments, as described below.
   Stops any test files that are currently running by sending the given
   *signal* (default `SIGTERM`) to their respective worker processes.
 
-If available, rlwrap(1) will enhance interactivity by providing line editing,
-command history, and filename completion among other readline(3) features.
-
 ## OPTIONS
 
 `-h`, `--help`
@@ -42,8 +39,7 @@ command history, and filename completion among other readline(3) features.
 
 ## SEE ALSO
 
-tork(1), tork-driver(1), tork-master(1), tork-herald(1), tork-writer(1),
-rlwrap(1)
+tork(1), tork-driver(1), tork-master(1), tork-herald(1), tork-remote(1)
 
 =end =========================================================================
 
@@ -114,32 +110,16 @@ COMMANDS = {
   'q' => :quit,
 }
 
-wrapper = 'tork-reader'
-wrapper = "rlwrap -c #{wrapper}" if system 'which rlwrap >/dev/null 2>&1'
-IO.popen(wrapper) do |input|
-  # user has chosen to quit by pressing Control-D
-  # which automatically terminates tork-reader(1)
-  # so we have to detect this and exit ourselves!
-  Thread.new { Process.waitpid(input.pid); exit }
-
-  begin
-    while line = input.gets
-      key, *args = line.split
-      key &&= key.lstrip[0,1].downcase
-      if cmd = COMMANDS[key]
-        exit if cmd == :quit
-        @driver.send Array(cmd) + args
-      else # invalid command
-        COMMANDS.each do |key, cmd|
-          desc = Array(cmd).first.to_s.tr('_', ' ')
-          warn "#{$0}: Type #{key} then ENTER to #{desc}."
-        end
-      end
+while line = STDIN.gets
+  key, *args = line.split
+  key &&= key.lstrip[0,1].downcase
+  if cmd = COMMANDS[key]
+    exit if cmd == :quit
+    @driver.send Array(cmd) + args
+  else # invalid command
+    COMMANDS.each do |key, cmd|
+      desc = Array(cmd).first.to_s.tr('_', ' ')
+      warn "#{$0}: Type #{key} then ENTER to #{desc}."
     end
-  ensure
-    # user has chosen to quit by entering the quit command
-    # which will NOT automatically terminate tork-reader(1)
-    # so we have to kill it here, before exiting ourselves!
-    Process.kill :SIGTERM, input.pid
   end
 end

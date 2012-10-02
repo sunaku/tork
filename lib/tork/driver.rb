@@ -29,7 +29,7 @@ class Driver < Engine
 
         # reabsorb text execution overhead if overhead files changed
         if Config.reabsorb_file_greps.any? {|r| r =~ changed_file }
-          @client.send [:over, changed_file]
+          send [:over, changed_file]
           reabsorb_overhead_files
         end
       end
