@@ -1,23 +1,14 @@
 require 'tork/config'
-require 'set'
-
-failed_test_files = Set.new
 
 Tork::Config.test_event_hooks.push lambda {|message|
   event, test_file, line_numbers, log_file = message
 
   # make notifications edge-triggered: pass => fail or vice versa.
   # we do not care about pass => pass or fail => fail transitions.
-  case event.to_sym
-  when :fail
-    if failed_test_files.add? test_file
-      icon = 'dialog-error'
-    end
-  when :pass
-    if line_numbers.empty? and failed_test_files.delete? test_file
-      icon = 'dialog-information'
-    end
-  end
+  icon = case event.to_sym
+         when :f2p then 'dialog-error'
+         when :p2f then 'dialog-information'
+         end
 
   if icon
     title = [event.upcase, test_file].join(' ')

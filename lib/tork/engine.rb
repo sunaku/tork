@@ -91,14 +91,16 @@ private
 
         # only whole test file runs qualify as pass
         if line_numbers.empty?
-          @failed_test_files.delete file
-          @passed_test_files.add file
+          was_fail = @failed_test_files.delete? file
+          now_pass = @passed_test_files.add? file
+          send [:f2p, file, message] if was_fail and now_pass
         end
 
       when :fail
         @running_test_files.delete file
-        @failed_test_files.add file
-        @passed_test_files.delete file
+        was_pass = @passed_test_files.delete? file
+        now_fail = @failed_test_files.add? file
+        send [:p2f, file, message] if was_pass and now_fail
       end
 
       Config.test_event_hooks.each {|hook| hook.call message }

@@ -42,6 +42,14 @@ It also funnels the standard output stream of tork-master(1) into its own.
 `["quit"]`
   Stops all tests that are currently running and exits.
 
+It prints the following status messages to the standard output stream.
+
+  * A previously passing *test_file* has failed with status *message*:
+    `["p2f",` *test_file*,` *message*`]`
+
+  * A previously failing *test_file* has passed with status *message*:
+    `["f2p",` *test_file*,` *message*`]`
+
 ## OPTIONS
 
 `-h`, `--help`
