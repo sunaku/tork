@@ -70,17 +70,15 @@ class Engine < Server
     end
   end
 
-protected
+private
 
   def run_test_files files
     files.each {|f| run_test_file f }
   end
 
-private
-
   def create_master_process
     Client::Transceiver.new('tork-master') do |message|
-      send message # propagate output downstream
+      send message # propagate downstream
 
       event, file, line_numbers = message
       case event.to_sym

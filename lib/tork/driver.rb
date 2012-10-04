@@ -1,13 +1,18 @@
 require 'set'
 require 'tork/client'
 require 'tork/engine'
+require 'tork/server'
 require 'tork/config'
 
 module Tork
-class Driver < Engine
+class Driver < Server
 
   def initialize
     super
+
+    @engine = Client::Transceiver.new('tork-engine') do |message|
+      send message # propagate downstream
+    end
 
     @herald = Client::Transceiver.new('tork-herald') do |changed_files|
       changed_files.each do |changed_file|
@@ -48,12 +53,20 @@ class Driver < Engine
     if all_test_files.empty?
       warn "#{$0}: There are no test files to run."
     else
-      run_test_files all_test_files
+      all_test_files.each {|f| run_test_file f }
     end
   end
 
   def reabsorb_overhead_files
     reabsorb_overhead Config.overhead_load_paths, Dir[*Config.overhead_file_globs]
+  end
+
+  Engine.public_instance_methods(false).each do |name|
+    unless method_defined? name
+      define_method name do |*args|
+        @engine.send [name, *args]
+      end
+    end
   end
 
 end
