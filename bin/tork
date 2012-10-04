@@ -48,8 +48,7 @@ $0 = File.basename(__FILE__) # for easier identification in ps(1) output
 require 'binman'
 BinMan.help
 
-require 'json'
-ENV['TORK_CONFIGS'] = JSON.dump(ARGV)
+ENV['TORK_CONFIGS'] = [ENV['TORK_CONFIGS'], *ARGV].join(':')
 
 #-----------------------------------------------------------------------------
 # backend
@@ -106,7 +105,7 @@ COMMANDS = {
   'k' => [:stop_running_test_files, :SIGKILL],
   'p' => :rerun_passed_test_files,
   'f' => :rerun_failed_test_files,
-  'o' => :reabsorb_overhead_files,
+  'o' => :reabsorb_overhead,
   'q' => :quit,
 }
 

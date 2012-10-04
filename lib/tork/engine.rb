@@ -8,13 +8,14 @@ module Tork
 class Engine < Server
 
   def initialize
+    Tork.config :engine
     super
     @waiting_test_files = Set.new # dispatched to master but not yet running
     @running_test_files = Set.new # dispatched to master and started running
     @passed_test_files = Set.new
     @failed_test_files = Set.new
     @lines_by_file = {}
-    @master = create_master_process
+    reabsorb_overhead
   end
 
   def quit
@@ -22,10 +23,9 @@ class Engine < Server
     super
   end
 
-  def reabsorb_overhead load_paths, overhead_files
-    @master.quit
+  def reabsorb_overhead
+    @master.quit if @master
     @master = create_master_process
-    @master.send [:load, load_paths, overhead_files]
 
     # re-dispatch the previously dispatched files to the new master
     dispatched_test_files = @running_test_files + @waiting_test_files
@@ -102,8 +102,6 @@ private
         now_fail = @failed_test_files.add? file
         send [:p2f, file, message] if was_pass and now_fail
       end
-
-      Config.test_event_hooks.each {|hook| hook.call message }
     end
   end
 

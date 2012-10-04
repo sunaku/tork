@@ -4,37 +4,36 @@ require 'tork/config'
 module Tork
 class Master < Server
 
+  # detect the number of CPUs available in the system
+  # http://stackoverflow.com/questions/891537#6420817
+  MAX_WORKERS = [
+    'fgrep -c processor /proc/cpuinfo', # Linux
+    'sysctl -n hw.ncpu',                # BSD
+    'hwprefs cpu_count',                # Darwin 9
+    'hwprefs thread_count',             # Darwin 10
+  ].
+  map {|cmd| `#{cmd} 2>/dev/null`.to_i }.push(1).max
+
   def initialize
+    Tork.config :master
     super
-
-    @worker_number_pool = (0 ... Config.max_forked_workers).to_a
+    @worker_number_pool = (0 ... MAX_WORKERS).to_a
     @command_by_worker_pid = {}
-  end
-
-  def load paths, files
-    $LOAD_PATH.unshift(*paths)
-
-    @overhead_files = files.each do |file|
-      branch, leaf = File.split(file)
-      file = leaf if paths.include? branch
-      require file.sub(/\.rb$/, '')
-    end
-
-    send @command
+    send [:load]
   end
 
   def test test_file, line_numbers
-    return if @overhead_files.include? test_file
-
     # throttle forking rate to meet the maximum concurrent workers limit
-    sleep 1 until @command_by_worker_pid.size < Config.max_forked_workers
+    sleep 1 until @command_by_worker_pid.size < @worker_number_pool.size
 
     log_file = test_file + '.log'
     worker_number = @worker_number_pool.shift
 
-    Config.before_fork_hooks.each do |hook|
-      hook.call test_file, line_numbers, log_file, worker_number
-    end
+    $tork_test_file = test_file
+    $tork_line_numbers = line_numbers
+    $tork_log_file = log_file
+    $tork_worker_number = worker_number
+    Tork.config :onfork
 
     worker_pid = fork do
       # make the process title Test::Unit friendly and ps(1) searchable
@@ -50,9 +49,7 @@ class Master < Server
       # which makes it difficult to understand interleaved output thereof
       STDERR.reopen(STDOUT.reopen(log_file, 'w')).sync = true
 
-      Config.after_fork_hooks.each do |hook|
-        hook.call test_file, line_numbers, log_file, worker_number
-      end
+      Tork.config :worker
 
       # after loading the user's test file, the at_exit() hook of the user's
       # testing framework will take care of running the tests and reflecting

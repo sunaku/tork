@@ -21,10 +21,6 @@ funnels the standard output stream of tork-engine(1) into its own.
 `["run_all_test_files"]`
   Runs all test files found within and beneath the current working directory.
 
-`["reabsorb_overhead_files"]`
-  Stops any test files that are currently running, reabsorbs the test
-  execution overhead, and resumes running those interrupted test files.
-
 *...*
   This program accepts tork-engine(1) commands and delegates them accordingly.
 
