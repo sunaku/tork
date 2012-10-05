@@ -1,6 +1,6 @@
-require 'tork/config'
+require 'tork/client'
 
-Tork::Config.test_event_hooks.push lambda {|message|
+Tork::Client::Receiver.new('tork-remote tork-engine') do |message|
   event, test_file, line_numbers, log_file = message
 
   # make notifications edge-triggered: pass => fail or vice versa.
@@ -22,4 +22,4 @@ Tork::Config.test_event_hooks.push lambda {|message|
       system 'xmessage', '-timeout', '5', '-title', title, statistics
     end
   end
-}
+end
