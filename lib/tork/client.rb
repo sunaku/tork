@@ -5,14 +5,6 @@ require 'json'
 module Tork
 module Client
 
-  SUPPORTS_ABSTRACT_NAMESPACE = RbConfig::CONFIG['host_os'] =~ /linux/i
-
-  def self.socket_file program=$0
-    # try using abstract namespace for UNIX domain sockets; see unix(7)
-    prefix = "\0#{Dir.pwd}/" if SUPPORTS_ABSTRACT_NAMESPACE
-    "#{prefix}.#{program}.sock"
-  end
-
   class Transmitter < Thread
     def initialize output_stream
       @outbox = Queue.new

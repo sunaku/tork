@@ -56,16 +56,16 @@ BinMan.help
 
 require 'socket'
 require 'shellwords'
-require 'tork/client'
+require 'tork/server'
 
 JSON_REGEXP = /\A\s*[\[\{]/.freeze
 
 program = ARGV.shift or raise ArgumentError, 'PROGRAM not given'
 program = "tork-#{program}" unless program.start_with? 'tork-'
-socket_file = Tork::Client.socket_file(program)
+address = Tork::Server.address(program)
 
 begin
-  UNIXSocket.open(socket_file) do |socket|
+  UNIXSocket.open(address) do |socket|
     # server => client
     Thread.new do
       while input = socket.gets
@@ -86,6 +86,6 @@ begin
 # ECONNREFUSED is for abstract namespace UNIXSocket
 rescue Errno::ENOENT, Errno::ECONNREFUSED => error
   warn "#{$0}: could not connect to #{program}"
-  warn "#{error}#{socket_file.inspect}"
+  warn "#{error}#{address.inspect}"
   exit 1
 end

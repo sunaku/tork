@@ -1,9 +1,17 @@
 require 'socket'
 require 'thread'
-require 'tork/client'
+require 'json'
 
 module Tork
 class Server
+
+  SUPPORTS_ABSTRACT_NAMESPACE = RbConfig::CONFIG['host_os'] =~ /linux/i
+
+  def self.address program=$0
+    # try using abstract namespace for UNIX domain sockets; see unix(7)
+    prefix = "\0#{Dir.pwd}/" if SUPPORTS_ABSTRACT_NAMESPACE
+    "#{prefix}.#{program}.sock"
+  end
 
   def initialize
     trap(:SIGTERM){ quit }
@@ -13,7 +21,7 @@ class Server
     @stdout = STDOUT.dup
     STDOUT.reopen(STDERR).sync = true
 
-    @server = UNIXServer.open(Client.socket_file)
+    @server = UNIXServer.open(Server.address)
     @clients = []
   end
 
