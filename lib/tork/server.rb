@@ -22,12 +22,11 @@ class Server
     STDOUT.reopen(STDERR).sync = true
 
     @server = UNIXServer.open(Server.address)
-    @clients = []
+    @clients = [STDIN]
   end
 
   def loop
     catch :quit do
-      @clients.unshift STDIN
       while @clients.include? STDIN
         IO.select([@server, *@clients]).first.each do |reader|
           if reader.equal? @server
