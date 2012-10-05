@@ -17,10 +17,6 @@ This program sends single-line JSON messages read from its stdin to the given
 *PROGRAM* which is already running in the same working directory as this one.
 It prints single-line JSON messages received from the *PROGRAM* to its stdout.
 
-If *PROGRAM* does not begin with "tork-" then that prefix is automatically
-supplied.  For example, if *PROGRAM* was "master" then it would be considered
-as "tork-master".
-
 ### Handling non-JSON lines
 
 If lines read from its stdin are not single-line JSON messages, then it splits
@@ -61,7 +57,6 @@ require 'tork/server'
 JSON_REGEXP = /\A\s*[\[\{]/.freeze
 
 program = ARGV.shift or raise ArgumentError, 'PROGRAM not given'
-program = "tork-#{program}" unless program.start_with? 'tork-'
 address = Tork::Server.address(program)
 
 begin
