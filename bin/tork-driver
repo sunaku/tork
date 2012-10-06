@@ -49,10 +49,6 @@ to stdout.
   Optional Ruby script that is loaded inside the driver process on startup.
   It can read and change the following variables.
 
-  > `Tork::Driver::OVERHEAD_FILE_GLOBS`
-  >   Array of file globbing patterns that describe a set of Ruby scripts that
-  >   are loaded into tork-master(1) as test execution overhead.
-  >
   > `Tork::Driver::REABSORB_FILE_GREPS`
   >   Array of regular expressions that describe a set of file paths that
   >   cause the test execution overhead to be reabsorbed in tork-master(1)

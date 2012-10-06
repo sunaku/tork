@@ -7,8 +7,6 @@ require 'tork/config'
 module Tork
 class Driver < Server
 
-  OVERHEAD_FILE_GLOBS = ['{test,spec}/{test,spec}_helper.rb']
-
   REABSORB_FILE_GREPS = [%r{^(test|spec)/\1_helper\.rb$}]
 
   ALL_TEST_FILE_GLOBS = ['{test,spec}/**/*_{test,spec}.rb',

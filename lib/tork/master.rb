@@ -6,7 +6,7 @@ class Master < Server
 
   # detect the number of CPUs available in the system
   # http://stackoverflow.com/questions/891537#6420817
-  MAX_WORKERS = [
+  MAX_CONCURRENT_WORKERS = [
     'fgrep -c processor /proc/cpuinfo', # Linux
     'sysctl -n hw.ncpu',                # BSD
     'hwprefs cpu_count',                # Darwin 9
@@ -14,15 +14,15 @@ class Master < Server
   ].
   map {|cmd| `#{cmd} 2>/dev/null`.to_i }.push(1).max
 
-  OVERHEAD_PATHS = ['lib', 'test', 'spec']
+  OVERHEAD_LOAD_PATHS = ['lib', 'test', 'spec']
 
-  OVERHEAD_GLOBS = ['{test,spec}/{test,spec}_helper.rb']
+  OVERHEAD_FILE_GLOBS = ['{test,spec}/{test,spec}_helper.rb']
 
   def initialize
     super
     Tork.config :master
 
-    @worker_number_pool = (0 ... MAX_WORKERS).to_a
+    @worker_number_pool = (0 ... MAX_CONCURRENT_WORKERS).to_a
     @command_by_worker_pid = {}
 
     absorb_overhead
@@ -94,11 +94,13 @@ private
 
   # Absorbs test execution overhead
   def absorb_overhead
-    $LOAD_PATH.unshift *OVERHEAD_PATHS
-    OVERHEAD_FILES.each do |file|
-      branch, leaf = File.split(file)
-      file = leaf if paths.include? branch
-      require file.sub(/\.rb$/, '')
+    $LOAD_PATH.unshift(*OVERHEAD_LOAD_PATHS)
+    OVERHEAD_FILE_GLOBS.each do |glob|
+      Dir[glob].each do |file|
+        branch, leaf = File.split(file)
+        file = leaf if OVERHEAD_LOAD_PATHS.include? branch
+        require file.sub(/\.rb$/, '')
+      end
     end
     send [:absorb]
   end
