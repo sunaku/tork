@@ -50,9 +50,6 @@ See tork-driver(1) and tork-master(1).
   Colon-separated (:) list of either paths to directories that contain
   configuration files or names of the following configuration helpers:
 
-  > `clear`
-  >   Clears the default configuration so you can start from scratch.
-  >
   > `dotlog`
   >   Hides log files by prefixing their names with a period (dot).
   >
@@ -74,11 +71,17 @@ See tork-driver(1) and tork-master(1).
   > > `:holes`
   > >   Line numbers of source lines that were not covered.
   >
-  > `rails`
-  >   Supports the [Ruby on Rails] web framework.
+  > `xunit`
+  >   Supports the Test::Unit standard library.
+  >
+  > `rspec`
+  >   Supports the [RSpec] testing framework.
   >
   > `cucumber`
   >   Supports the [Cucumber] testing framework.
+  >
+  > `rails`
+  >   Supports the [Ruby on Rails] web framework.
   >
   > `factory_girl`
   >   Supports the [factory_girl] testing library.
@@ -95,6 +98,7 @@ tork(1), tork-driver(1), tork-master(1)
 [parallel_tests]: https://github.com/grosser/parallel_tests
 [Ruby on Rails]: http://rubyonrails.org
 [Cucumber]: https://cukes.info
+[RSpec]: http://rspec.info
 
 =end =========================================================================
 
