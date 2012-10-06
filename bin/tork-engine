@@ -54,17 +54,9 @@ It prints the following status messages to the standard output stream.
 `-h`, `--help`
   Show this help manual.
 
-## FILES
-
-*.tork.rb*
-  Optional Ruby script for configuring tork(1).
-
 ## ENVIRONMENT
 
-`TORK_CONFIGS`
-  A single-line JSON array containing paths to actual files or names of
-  helper libraries in the tork/config/ namespace of Ruby's load path.
-  These configuration files are loaded just before *.tork.rb* is loaded.
+See tork(1).
 
 ## SEE ALSO
 

@@ -55,15 +55,50 @@ input stream and performs the respective actions as described below.
 
 ## FILES
 
-*.tork.rb*
-  Optional Ruby script for configuring tork(1).
+`.tork/master.rb`
+  Optional Ruby script that is loaded inside the master process on startup.
+  It can read and change the following variables.
+
+  > `Tork::Master::MAX_WORKERS`
+  >   Maximum number of worker processes to run on your system at any time.
+  >   The default value is the number of processors detected on your system,
+  >   or 1 if detection fails.
+
+`.tork/onfork.rb`
+  Optional Ruby script that is loaded inside the master process just before a
+  worker process is forked.  It can read and change the following variables.
+
+  > `$tork_test_file`
+  >   Path of the test file that will be run by the worker process.
+  >
+  > `$tork_line_numbers`
+  >   Array of line numbers in the test file that will be run (hopefully).
+  >
+  > `$tork_log_file`
+  >   Path of the log file that will hold the output of the worker process.
+  >
+  > `$tork_worker_number`
+  >   Sequence number of the worker process that will be forked shortly.
+
+`.tork/worker.rb`
+  Optional Ruby script that is loaded inside a worker process just after
+  it is forked.  It can read and change the following variables.
+
+  > `$tork_test_file`
+  >   Path of the test file that will be run by this worker process.
+  >
+  > `$tork_line_numbers`
+  >   Array of line numbers in the test file that will be run (hopefully).
+  >
+  > `$tork_log_file`
+  >   Path of the log file that will hold the output of this worker process.
+  >
+  > `$tork_worker_number`
+  >   Sequence number of this worker process.
 
 ## ENVIRONMENT
 
-`TORK_CONFIGS`
-  A single-line JSON array containing paths to actual files or names of
-  helper libraries in the tork/config/ namespace of Ruby's load path.
-  These configuration files are loaded just before *.tork.rb* is loaded.
+See tork(1).
 
 ## SEE ALSO
 
