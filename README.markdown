@@ -106,7 +106,7 @@ You can also do the same non-interactively using a pipeline:
 
 You can monitor your test processes from another terminal:
 
-    watch 'ps xuw | sed -n "1p; /tor[k]/p" | fgrep -v sed'
+    watch 'pgrep -f ^tork | xargs ps u'
 
 ### With RSpec
 
