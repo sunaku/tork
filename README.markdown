@@ -83,9 +83,9 @@ tests in your saved file, simply save the file *again* without changing it.
 
     git clone git://github.com/sunaku/tork
     cd tork
-    bundle install --binstubs=bundle_bin
-    bundle_bin/tork --help  # run it directly
-    bundle_bin/rake --tasks # packaging tasks
+    bundle install
+    bundle exec tork --help  # run it directly
+    bundle exec rake --tasks # packaging tasks
 
 ## Usage
 
