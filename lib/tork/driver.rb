@@ -7,10 +7,24 @@ require 'tork/config'
 module Tork
 class Driver < Server
 
-  OVERHEAD_FILE_GLOBS = []
-  REABSORB_FILE_GREPS = []
-  ALL_TEST_FILE_GLOBS = []
-  TEST_FILE_GLOBBERS = {}
+  OVERHEAD_FILE_GLOBS = ['{test,spec}/{test,spec}_helper.rb']
+
+  REABSORB_FILE_GREPS = [%r{^(test|spec)/\1_helper\.rb$}]
+
+  ALL_TEST_FILE_GLOBS = ['{test,spec}/**/*_{test,spec}.rb',
+                         '{test,spec}/**/{test,spec}_*.rb']
+
+  TEST_FILE_GLOBBERS = {
+    # source files that correspond to test files
+    %r{^lib/.*?([^/]+)\.rb$} => lambda do |matches|
+      name = matches[1]
+      ["{test,spec}/**/#{name}_{test,spec}.rb",
+       "{test,spec}/**/{test,spec}_#{name}.rb"]
+    end,
+
+    # the actual test files themselves
+    %r{^(test|spec)/.*?(\1_[^/]+|[^/]+_\1)\.rb$} => lambda {|m| m[0] }
+  }
 
   def initialize
     Tork.config :driver
