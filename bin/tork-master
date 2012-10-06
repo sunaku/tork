@@ -13,40 +13,44 @@ tork-master - absorbs overhead and runs tests
 
 ## DESCRIPTION
 
-This program absorbs the test execution overhead and forks to run your tests.
-It reads the following single-line commands (JSON arrays) from its standard
-input stream and performs the respective actions as described below.
+This program absorbs your test execution overhead once and, from then onward,
+simply forks to run your tests.  Forked child processes are called "workers".
 
-`["load",` *paths*`,` *files*`]`
-  Adds the given array of *paths* to Ruby's $LOAD_PATH, loads the given array
-  of *files* after removing their ".rb" file extension if present, and prints
-  the given command line to the standard output stream.
+### Input
+
+This program reads the following commands, which are single-line JSON arrays,
+from stdin and performs the actions described respectively.
 
 `["test",` *test_file*`,` *line_numbers*`]`
-  Runs the given *test_file* in a forked child process while instructing your
-  chosen unit testing framework (loaded by your test execution overhead) to
-  only run those tests that are defined on the given array of *line_numbers*.
-
-  Prints the following status messages to the standard output stream.  The
-  standard output and error streams of the forked child process are captured
-  in the *log_file* specified in these status messages.
-
-  * Test is running:
-    `["test",` *test_file*`,` *line_numbers*`,` *log_file*`,` *worker_number*`]`
-
-  * Test has passed:
-    `["pass",` *test_file*`,` *line_numbers*`,` *log_file*`,` *worker_number*`,` *exit_code*`,` *exit_info*`]`
-
-  * Test has failed:
-    `["fail",` *test_file*`,` *line_numbers*`,` *log_file*`,` *worker_number*`,` *exit_code*`,` *exit_info*`]`
+  Runs the given *test_file* in a worker process that tries to instruct your
+  chosen testing framework (loaded by your test execution overhead) to only
+  run tests that correspond to the given array of *line_numbers*.  However,
+  if *line_numbers* is empty, then the entire *test_file* will be run.
 
 `["stop",` *signal*`]`
   Stops all tests that are currently running by sending the given *signal*
-  (default `SIGTERM`) to their worker processes and then prints the given
-  command line to the standard output stream.
+  (optional; defaults to "SIGTERM") to their respective worker processes.
 
 `["quit"]`
   Stops all tests that are currently running and exits.
+
+### Output
+
+This program prints the following messages, which are single-line JSON arrays,
+to stdout.
+
+`["absorb"]`
+  Test execution overhead has been absorbed.  We are ready for testing!
+
+`["test",` *test_file*`,` *line_numbers*`,` *log_file*`,` *worker_number*`]`
+  Test has begun running.  Its output (both stdout and stderr) is being
+  captured into *log_file* in real time, so you can watch it with `tail -f`.
+
+`["pass",` *test_file*`,` *line_numbers*`,` *log_file*`,` *worker_number*`,` *exit_code*`,` *exit_info*`]`
+  Test has passed.
+
+`["fail",` *test_file*`,` *line_numbers*`,` *log_file*`,` *worker_number*`,` *exit_code*`,` *exit_info*`]`
+  Test has failed.
 
 ## OPTIONS
 
@@ -55,16 +59,16 @@ input stream and performs the respective actions as described below.
 
 ## FILES
 
-`.tork/master.rb`
+*.tork/master.rb*
   Optional Ruby script that is loaded inside the master process on startup.
   It can read and change the following variables.
 
   > `Tork::Master::MAX_WORKERS`
-  >   Maximum number of worker processes to run on your system at any time.
-  >   The default value is the number of processors detected on your system,
-  >   or 1 if detection fails.
+  >   Maximum number of worker processes that are allowed to be running
+  >   simultaneously at any given time.  The default value is either the
+  >   number of processors detected on your system or 1 if detection failed.
 
-`.tork/onfork.rb`
+*.tork/onfork.rb*
   Optional Ruby script that is loaded inside the master process just before a
   worker process is forked.  It can read and change the following variables.
 
@@ -72,7 +76,7 @@ input stream and performs the respective actions as described below.
   >   Path of the test file that will be run by the worker process.
   >
   > `$tork_line_numbers`
-  >   Array of line numbers in the test file that will be run (hopefully).
+  >   Array of line numbers in the test file that were requested to be run.
   >
   > `$tork_log_file`
   >   Path of the log file that will hold the output of the worker process.
@@ -80,7 +84,7 @@ input stream and performs the respective actions as described below.
   > `$tork_worker_number`
   >   Sequence number of the worker process that will be forked shortly.
 
-`.tork/worker.rb`
+*.tork/worker.rb*
   Optional Ruby script that is loaded inside a worker process just after
   it is forked.  It can read and change the following variables.
 
@@ -88,7 +92,7 @@ input stream and performs the respective actions as described below.
   >   Path of the test file that will be run by this worker process.
   >
   > `$tork_line_numbers`
-  >   Array of line numbers in the test file that will be run (hopefully).
+  >   Array of line numbers in the test file that were requested to be run.
   >
   > `$tork_log_file`
   >   Path of the log file that will hold the output of this worker process.
@@ -102,7 +106,7 @@ See tork(1).
 
 ## SEE ALSO
 
-tork(1), tork-herald(1), tork-driver(1), tork-engine(1), tork-master(1)
+tork(1)
 
 =end =========================================================================
 

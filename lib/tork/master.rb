@@ -14,18 +14,18 @@ class Master < Server
   ].
   map {|cmd| `#{cmd} 2>/dev/null`.to_i }.push(1).max
 
-  def initialize
-    $LOAD_PATH.unshift 'lib', 'test', 'spec'
-    Dir['{test,spec}/{test,spec}_helper.rb'].each do |file|
-      require File.basename(file, File.extname(file))
-    end
+  OVERHEAD_PATHS = ['lib', 'test', 'spec']
 
-    Tork.config :master
+  OVERHEAD_GLOBS = ['{test,spec}/{test,spec}_helper.rb']
+
+  def initialize
     super
+    Tork.config :master
 
     @worker_number_pool = (0 ... MAX_WORKERS).to_a
     @command_by_worker_pid = {}
-    send [:load]
+
+    absorb_overhead
   end
 
   def test test_file, line_numbers
@@ -55,43 +55,7 @@ class Master < Server
       # which makes it difficult to understand interleaved output thereof
       STDERR.reopen(STDOUT.reopen(log_file, 'w')).sync = true
 
-      # instruct the testing framework to only run those
-      # tests that are defined on the given line numbers
-      unless line_numbers.empty?
-        case File.basename(test_file)
-        when /(\b|_)spec(\b|_).*\.rb$/ # RSpec
-          line_numbers.each do |line|
-            ARGV.push '--line_number', line.to_s
-          end
-
-        when /(\b|_)test(\b|_).*\.rb$/ # Test::Unit
-          # find which tests have changed inside the test file
-          test_file_lines = File.readlines(test_file)
-          test_names = line_numbers.map do |line|
-            catch :found do
-              # search backwards from the line that changed up to
-              # the first line in the file for test definitions
-              line.downto(0) do |i|
-                test_name =
-                  case test_file_lines[i]
-                  when /^\s*def\s+test_(\w+)/ then $1
-                  when /^\s*(test|context|should|describe|it)\b.+?(['"])(.*?)\2/
-                    # elide string interpolation and invalid method name characters
-                    $3.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
-                  end \
-                and throw :found, test_name
-              end; nil # prevent unsuccessful search from returning an integer
-            end
-          end.compact.uniq
-
-          unless test_names.empty?
-            ARGV.push '--name', "/(?i:#{test_names.join('|')})/"
-          end
-        else
-          warn "#{$0}: could not limit test execution to given line numbers"
-        end
-      end
-
+      apply_line_numbers
       Tork.config :worker
 
       # after loading the user's test file, the at_exit() hook of the user's
@@ -124,6 +88,57 @@ class Master < Server
   def quit
     stop
     super
+  end
+
+private
+
+  # Absorbs test execution overhead
+  def absorb_overhead
+    $LOAD_PATH.unshift *OVERHEAD_PATHS
+    OVERHEAD_FILES.each do |file|
+      branch, leaf = File.split(file)
+      file = leaf if paths.include? branch
+      require file.sub(/\.rb$/, '')
+    end
+    send [:absorb]
+  end
+
+  # Instruct the testing framework to only run those
+  # tests that correspond to the given line numbers.
+  def apply_line_numbers
+    return if $tork_line_numbers.empty?
+
+    case File.basename($tork_test_file)
+    when /(\b|_)spec(\b|_).*\.rb$/ # RSpec
+      $tork_line_numbers.each do |line|
+        ARGV.push '--line_number', line.to_s
+      end
+
+    when /(\b|_)test(\b|_).*\.rb$/ # Test::Unit
+      test_file_lines = File.readlines($tork_test_file)
+      test_names = $tork_line_numbers.map do |line|
+        catch :found do
+          # search backwards from the desired line number to
+          # the first line in the file for test definitions
+          line.downto(0) do |i|
+            test_name =
+              case test_file_lines[i]
+              when /^\s*def\s+test_(\w+)/ then $1
+              when /^\s*(test|context|should|describe|it)\b.+?(['"])(.*?)\2/
+                # elide string interpolation and invalid method name characters
+                $3.gsub(/\#\{.*?\}/, ' ').strip.gsub(/\W+/, '.*')
+              end \
+            and throw :found, test_name
+          end; nil # prevent unsuccessful search from returning an integer
+        end
+      end.compact.uniq
+
+      unless test_names.empty?
+        ARGV.push '--name', "/(?i:#{test_names.join('|')})/"
+      end
+    else
+      warn "#{$0}: could not limit test execution to given line numbers"
+    end
   end
 
 end

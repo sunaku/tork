@@ -6,8 +6,8 @@ Tork::Client::Receiver.new('tork-remote tork-engine') do |message|
   # make notifications edge-triggered: pass => fail or vice versa.
   # we do not care about pass => pass or fail => fail transitions.
   icon = case event.to_sym
-         when :f2p then 'dialog-error'
-         when :p2f then 'dialog-information'
+         when :fail_now_pass then 'dialog-error'
+         when :pass_now_fail then 'dialog-information'
          end
 
   if icon

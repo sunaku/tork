@@ -13,27 +13,30 @@ tork-driver - drives tork-engine(1) when files change
 
 ## DESCRIPTION
 
-This program drives tork-engine(1) according to tork-herald(1)'s observations.
-It reads the following single-line commands (JSON arrays) from its standard
-input stream and performs the respective actions as described below.  It also
-funnels the standard output stream of tork-engine(1) into its own.
+This program drives tork-engine(1) when tork-herald(1) reports files changes.
+
+### Input
+
+This program reads the following commands, which are single-line JSON arrays,
+from stdin and performs the actions described respectively.
 
 `["run_all_test_files"]`
   Runs all test files found within and beneath the current working directory.
 
 *...*
-  This program accepts tork-engine(1) commands and delegates them accordingly.
+  Commands for tork-engine(1) are also accepted here.
 
-When tork-herald(1) reports that a file belonging to the test execution
-overhead has been modified, this program replaces tork-master(1) with a new
-instance, which then absorbs the modified test execution overhead into itself.
+### Output
 
-This program emits the following single-line status messages (JSON arrays) on
-its standard output stream to provide notifications about its activity:
+This program prints the following messages, which are single-line JSON arrays,
+to stdout.
 
-`["over",` *overhead_file*`]`
-  The test execution overhead is currently being reabsorbed, by replacing
-  tork-master(1) with a new instance, because *overhead_file* has changed.
+`["reabsorb",` *overhead_file*`]`
+  Test execution overhead is being reabsorbed because *overhead_file* has
+  changed.
+
+*...*
+  Messages from tork-engine(1) and tork-master(1) are also reproduced here.
 
 ## OPTIONS
 
@@ -48,12 +51,12 @@ its standard output stream to provide notifications about its activity:
 
   > `Tork::Driver::OVERHEAD_FILE_GLOBS`
   >   Array of file globbing patterns that describe a set of Ruby scripts that
-  >   are loaded into `tork-master` as test execution overhead.
+  >   are loaded into tork-master(1) as test execution overhead.
   >
   > `Tork::Driver::REABSORB_FILE_GREPS`
   >   Array of regular expressions that describe a set of file paths that
-  >   cause the test execution overhead to be reabsorbed in `tork-master` when
-  >   they change.
+  >   cause the test execution overhead to be reabsorbed in tork-master(1)
+  >   when they change.
   >
   > `Tork::Driver::ALL_TEST_FILE_GLOBS`
   >   Array of file globbing patterns that describe the set of all test files
@@ -151,7 +154,7 @@ See tork(1).
 
 ## SEE ALSO
 
-tork(1), tork-herald(1), tork-driver(1), tork-engine(1), tork-master(1)
+tork(1), tork-herald(1), tork-engine(1), tork-master(1)
 
 =end =========================================================================
 

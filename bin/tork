@@ -32,25 +32,29 @@ Some interactive commands accept additional arguments, described as follows.
   will now be run.
 
 `s` [*signal*]
-  Stops any test files that are currently running by sending the given
-  *signal* (default `SIGTERM`) to their respective worker processes.
+  Stops test files that are currently running by sending the given *signal*
+  (optional; defaults to `SIGTERM`) to their respective worker processes.
 
 ## OPTIONS
 
 `-h`, `--help`
   Show this help manual.
 
+## FILES
+
+See tork-driver(1) and tork-master(1).
+
 ## ENVIRONMENT
 
 `TORK_CONFIGS`
-  Colon-separated (:) list of either (1) paths to directories that contain
-  configuration files or (2) names of the following configuration helpers:
+  Colon-separated (:) list of either paths to directories that contain
+  configuration files or names of the following configuration helpers:
 
   > `dotlog`
-  >   Hides log files by prefixing their names with a period.
+  >   Hides log files by prefixing their names with a period (dot).
   >
   > `logdir`
-  >   Keeps log files in the `log/` directory, away from your tests.
+  >   Keeps log files away from your tests, in the `log/` directory.
   >
   > `coverage`
   >   Measures C0 code coverage under Ruby 1.9 and dumps a hash in YAML
@@ -81,7 +85,7 @@ Some interactive commands accept additional arguments, described as follows.
 
 ## SEE ALSO
 
-tork(1), tork-driver(1), tork-master(1), tork-herald(1), tork-remote(1)
+tork(1), tork-driver(1), tork-master(1)
 
 [factory_girl]: https://github.com/thoughtbot/factory_girl
 [memory_test_fix]: https://github.com/stepahn/memory_test_fix
@@ -107,9 +111,9 @@ require 'tork/client'
 warn "#{$0}: Absorbing test execution overhead..."
 @driver = Tork::Client::Transceiver.new('tork-driver') do |event, *details|
   case event_sym = event.to_sym
-  when :load then warn "#{$0}: Overhead absorbed. Ready for testing!"
-  when :over then warn "#{$0}: Reabsorbing changed overhead files..."
-  else
+  when :absorb   then warn "#{$0}: Overhead absorbed. Ready for testing!"
+  when :reabsorb then warn "#{$0}: Reabsorbing changed overhead files..."
+  when :test, :pass, :fail
     test_file, line_numbers, log_file, worker_number, exit_status = details
     message = [event.upcase, [test_file, *line_numbers].join(':'),
                exit_status].compact.join(' ')

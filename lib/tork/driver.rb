@@ -27,8 +27,8 @@ class Driver < Server
   }
 
   def initialize
-    Tork.config :driver
     super
+    Tork.config :driver
 
     @engine = Client::Transceiver.new('tork-engine') do |message|
       send message # propagate downstream
@@ -54,7 +54,7 @@ class Driver < Server
 
         # reabsorb text execution overhead if overhead files changed
         if REABSORB_FILE_GREPS.any? {|r| r =~ changed_file }
-          send [:over, changed_file]
+          send [:reabsorb, changed_file]
           reabsorb_overhead
         end
       end
@@ -75,6 +75,7 @@ class Driver < Server
     end
   end
 
+  # accept and delegate tork-engine(1) commands
   Engine.public_instance_methods(false).each do |name|
     unless method_defined? name
       define_method name do |*args|

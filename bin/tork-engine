@@ -13,14 +13,16 @@ tork-engine - wraps tork-master(1) with bookkeeping
 
 ## DESCRIPTION
 
-This program tells tork-master(1) to run your tests and keeps track of test
-results.  It reads the following single-line commands (JSON arrays) from its
-standard input stream and performs the respective actions as described below.
-It also funnels the standard output stream of tork-master(1) into its own.
+This program uses tork-master(1) to run tests and keeps track of the results.
+
+### Input
+
+This program reads the following commands, which are single-line JSON arrays,
+from stdin and performs the actions described respectively.
 
 `["reabsorb_overhead"]`
   Stops any test files that are currently running, reabsorbs the test
-  execution overhead, and resumes running those interrupted test files.
+  execution overhead, and then re-runs those stopped test files.
 
 `["run_test_file"`, *test_file*`,` *line_numbers*...`]`
   Runs tests that correspond to the given sequence of *line_numbers* in the
@@ -29,8 +31,8 @@ It also funnels the standard output stream of tork-master(1) into its own.
   If any *line_numbers* are zero, then the entire *test_file* will be run.
 
 `["stop_running_test_files"`, *signal*`]`
-  Stops any test files that are currently running by sending the given
-  *signal* (default `SIGTERM`) to their respective worker processes.
+  Stops test files that are currently running by sending the given *signal*
+  (optional; defaults to "SIGTERM") to their respective worker processes.
 
 `["rerun_passed_test_files"]`
   Runs all test files that have passed during their most recent run.
@@ -41,13 +43,19 @@ It also funnels the standard output stream of tork-master(1) into its own.
 `["quit"]`
   Stops all tests that are currently running and exits.
 
-It prints the following status messages to the standard output stream.
+### Output
 
-  * A previously passing *test_file* has failed with status *message*:
-    `["p2f",` *test_file*,` *message*`]`
+This program prints the following messages, which are single-line JSON arrays,
+to stdout.
 
-  * A previously failing *test_file* has passed with status *message*:
-    `["f2p",` *test_file*,` *message*`]`
+`["pass_now_fail",` *test_file*`,` *message*`]`
+  A previously passing *test_file* has now failed.  See *message* for details.
+
+`["fail_now_pass",` *test_file*`,` *message*`]`
+  A previously failing *test_file* has now passed.  See *message* for details.
+
+*...*
+  Messages from tork-master(1) are also reproduced here.
 
 ## OPTIONS
 
@@ -60,7 +68,7 @@ See tork(1).
 
 ## SEE ALSO
 
-tork(1), tork-herald(1), tork-driver(1), tork-engine(1), tork-master(1)
+tork(1), tork-master(1)
 
 =end =========================================================================
 

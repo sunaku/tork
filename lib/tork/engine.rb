@@ -8,13 +8,15 @@ module Tork
 class Engine < Server
 
   def initialize
-    Tork.config :engine
     super
+    Tork.config :engine
+
     @waiting_test_files = Set.new # dispatched to master but not yet running
     @running_test_files = Set.new # dispatched to master and started running
     @passed_test_files = Set.new
     @failed_test_files = Set.new
     @lines_by_file = {}
+
     reabsorb_overhead
   end
 
