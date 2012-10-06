@@ -34,6 +34,7 @@ class Master < Server
 
     log_file = test_file + '.log'
     worker_number = @worker_number_pool.shift
+    @command.push log_file, worker_number
 
     $tork_test_file = test_file
     $tork_line_numbers = line_numbers
@@ -65,16 +66,16 @@ class Master < Server
       Kernel.load test_file if test_file.end_with? '.rb'
     end
 
-    @command_by_worker_pid[worker_pid] = @command.push(log_file, worker_number)
+    @command_by_worker_pid[worker_pid] = @command
     send @command
 
     # wait for the worker to finish and report its status to the client
-    Thread.new do # the reaping thread
-      worker_status = Process.wait2(worker_pid).last
-      command = @command_by_worker_pid.delete(worker_pid)
+    Thread.new(worker_pid) do |pid| # the reaping thread
+      status = Process.wait2(pid).last
+      command = @command_by_worker_pid.delete(pid)
       @worker_number_pool.push command.last
-      command[0] = if worker_status.success? then :pass else :fail end
-      send command.push(worker_status.to_i, worker_status.inspect)
+      command[0] = status.success? && :pass || :fail
+      send command.push(status.to_i, status.inspect)
     end
   end
 
