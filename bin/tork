@@ -50,6 +50,9 @@ See tork-driver(1) and tork-master(1).
   Colon-separated (:) list of either paths to directories that contain
   configuration files or names of the following configuration helpers:
 
+  > `clear`
+  >   Clears the default configuration so you can start from scratch.
+  >
   > `dotlog`
   >   Hides log files by prefixing their names with a period (dot).
   >
