@@ -71,10 +71,10 @@ See tork-driver(1) and tork-master(1).
   > > `:holes`
   > >   Line numbers of source lines that were not covered.
   >
-  > `xunit`
+  > `test`
   >   Supports the Test::Unit standard library.
   >
-  > `rspec`
+  > `spec`
   >   Supports the [RSpec] testing framework.
   >
   > `cucumber`
