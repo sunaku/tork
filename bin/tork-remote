@@ -15,16 +15,13 @@ tork-remote - controls tork(1) programs
 
 This program sends single-line JSON messages read from its stdin to the given
 *PROGRAM* which is already running in the same working directory as this one.
-It prints single-line JSON messages received from the *PROGRAM* to its stdout.
 
-### Handling non-JSON lines
+If lines read from stdin are not single-line JSON messages, then they are
+split into an array of words, using the same word-splitting algorithm as
+sh(1), before being sent to the *PROGRAM* as a single-line JSON message.
 
-If lines read from its stdin are not single-line JSON messages, then it splits
-them into an array of words just like sh(1) does for command-line arguments,
-and sends that array as a single-line JSON message to the *PROGRAM*.
-
-If lines received from the *PROGRAM* are not single-line JSON messages, then
-it prints them to its stderr.
+If the *PROGRAM* sends any messages in response, then they are printed to
+stdout if they are valid single-line JSON messages or to stderr otherwise.
 
 ## OPTIONS
 
@@ -41,7 +38,7 @@ it prints them to its stderr.
 
 ## SEE ALSO
 
-tork(1), sh(1)
+tork(1), tork-driver(1), tork-engine(1), tork-master(1)
 
 =end =========================================================================
 

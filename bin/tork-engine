@@ -15,6 +15,8 @@ tork-engine - wraps tork-master(1) with bookkeeping
 
 This program uses tork-master(1) to run tests and keeps track of the results.
 
+This program can be controlled remotely by multiple tork-remote(1) instances.
+
 ### Input
 
 This program reads the following commands, which are single-line JSON arrays,
@@ -68,7 +70,7 @@ See tork(1).
 
 ## SEE ALSO
 
-tork(1), tork-master(1)
+tork(1), tork-remote(1), tork-master(1)
 
 =end =========================================================================
 

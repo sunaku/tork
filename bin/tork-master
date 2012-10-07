@@ -13,8 +13,12 @@ tork-master - absorbs overhead and runs tests
 
 ## DESCRIPTION
 
-This program absorbs your test execution overhead once and, from then onward,
-simply forks to run your tests.  Forked child processes are called "workers".
+This program absorbs your Ruby application's test execution overhead once and
+simply fork(3)s worker processses to run your tests thereafter.  As a result,
+your tests run faster because they no longer spend any time absorbing the test
+execution overhead: worker processes simply inherit the overhead when forked.
+
+This program can be controlled remotely by multiple tork-remote(1) instances.
 
 ### Input
 
@@ -105,7 +109,7 @@ See tork(1).
 
 ## SEE ALSO
 
-tork(1)
+tork(1), tork-remote(1)
 
 =end =========================================================================
 
