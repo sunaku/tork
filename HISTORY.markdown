@@ -1,3 +1,10 @@
+## Version 18.2.4 (2012-10-10)
+
+Other:
+
+  * GH-39: upgrade listen gem version to fix a bug in OSX.
+    Thanks to "harmon" on GitHub for reporting this issue.
+
 ## Version 18.2.3 (2012-09-26)
 
 Patch:
