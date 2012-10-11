@@ -9,25 +9,25 @@ module Client
     def initialize output_stream
       @outbox = Queue.new
       super() do
-        while command = @outbox.deq
-          warn "#{$0}(#{$$}): SEND #{command.inspect}" if $DEBUG
-          output_stream.puts JSON.dump(command)
+        while message = @outbox.deq
+          warn "#{$0}(#{$$}): SEND #{message.inspect}" if $DEBUG
+          output_stream.puts message
           output_stream.flush
         end
       end
     end
 
-    def send command
-      @outbox.enq command
+    def send message
+      @outbox.enq JSON.dump(message)
     end
   end
 
   class Receiver < Thread
     def initialize input_stream
       super() do
-        while command = JSON.load(input_stream.gets)
-          warn "#{$0}(#{$$}): RECV #{command.inspect}" if $DEBUG
-          yield command
+        while message = JSON.load(input_stream.gets)
+          warn "#{$0}(#{$$}): RECV #{message.inspect}" if $DEBUG
+          yield message
         end
       end
     end
