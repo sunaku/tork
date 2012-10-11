@@ -21,11 +21,11 @@ class Server
     @stdout = STDOUT.dup
     STDOUT.reopen(STDERR).sync = true
 
-    @server = UNIXServer.open(Server.address)
     @clients = [STDIN]
   end
 
   def loop
+    @server = UNIXServer.open(Server.address)
     catch :quit do
       while @clients.include? STDIN
         IO.select([@server, *@clients]).first.each do |reader|
@@ -60,6 +60,11 @@ class Server
           end
         end
       end
+    end
+  ensure
+    # UNIX domain socket files are not deleted automatically upon closing
+    if @server and socket_file = @server.path and File.socket? socket_file
+      File.delete socket_file
     end
   end
 
