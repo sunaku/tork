@@ -32,7 +32,7 @@ class Server
           if reader.equal? @server
             @clients << reader.accept
             next
-          elsif reader.eof?
+          elsif (reader.eof? rescue true)
             @clients.delete reader
             next
           end
