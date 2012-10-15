@@ -19,8 +19,13 @@ class Driver < Server
       send message # propagate downstream
     end
 
-    @herald = Client::Transceiver.new('tork-herald') do |changed_files|
-      changed_files.each do |changed_file|
+    @herald = IO.popen('tork-herald')
+    @clients << @herald
+  end
+
+  def serve client, command
+    if client == @herald
+      command.each do |changed_file|
         # find and run the tests that correspond to the changed file
         visited = Set.new
         visitor = lambda do |source_file|
@@ -50,11 +55,14 @@ class Driver < Server
           reabsorb_overhead
         end
       end
+    else
+      super
     end
   end
 
   def quit
-    @herald.quit
+    Process.kill :SIGTERM, @herald.pid
+    Process.wait @herald.pid # reap zombie
     super
   end
 

@@ -31,32 +31,15 @@ class Server
         IO.select([@server, *@clients]).first.each do |reader|
           if reader.equal? @server
             @clients << reader.accept
-            next
           elsif (reader.eof? rescue true)
             @clients.delete reader
-            next
-          end
-
-          begin
-            command = JSON.load(reader.gets)
-          rescue JSON::ParserError => error
-            send_error_to reader, "#{$0}: #{error.inspect}"
-            next
-          end
-
-          method = command.first
-          unless respond_to? method and method != __method__.to_s # prevent recursion
-            send_error_to reader, "#{$0}: illegal command: #{method}"
-            next
-          end
-
-          @command = command
-          @client = reader
-          begin
-            __send__(*command)
-          rescue => error
-            send_error_to reader, error.backtrace.
-              unshift("#{$0}: #{error.inspect}").join("\n")
+          else
+            begin
+              command = JSON.load(reader.gets)
+            rescue JSON::ParserError => error
+              send_error_to reader, "#{$0}: #{error.inspect}"
+            end
+            serve reader, command
           end
         end
       end
@@ -74,6 +57,23 @@ protected
 
   def send message
     send_raw JSON.dump(message)
+  end
+
+  def serve client, command
+    method = command.first
+    unless respond_to? method and method != __method__.to_s # prevent recursion
+      send_error_to client, "#{$0}: illegal command: #{method}"
+      return
+    end
+
+    @command = command
+    @client = client
+    begin
+      __send__(*command)
+    rescue => error
+      send_error_to reader, error.backtrace.
+        unshift("#{$0}: #{error.inspect}").join("\n")
+    end
   end
 
 private
