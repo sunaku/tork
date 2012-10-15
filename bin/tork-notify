@@ -1,25 +1,65 @@
-require 'tork/client'
+#!/usr/bin/env ruby
+=begin =======================================================================
 
-Tork::Client::Receiver.new('tork-remote tork-engine') do |message|
-  event, test_file, line_numbers, log_file = message
+# TORK-NOTIFY 1 2012-10-10 18.2.4
 
-  # make notifications edge-triggered: pass => fail or vice versa.
-  # we do not care about pass => pass or fail => fail transitions.
-  icon = case event.to_sym
-         when :fail_now_pass then 'dialog-error'
-         when :pass_now_fail then 'dialog-information'
-         end
+## NAME
 
-  if icon
-    title = [event.upcase, test_file].join(' ')
+tork-notify - notifies you of test status changes
 
-    statistics = File.readlines(log_file).grep(/^\d+ \w+,/).join.
-      gsub(/\e\[\d+(;\d+)?m/, '') # strip ANSI SGR escape codes
+## SYNOPSIS
 
-    Thread.new do # run in background
-      system 'notify-send', '-i', icon, title, statistics or
-      system 'growlnotify', '-a', 'Xcode', '-m', statistics, title or
-      system 'xmessage', '-timeout', '5', '-title', title, statistics
+`tork-notify` [*OPTION*]...
+
+## DESCRIPTION
+
+This program serves as an example of how to receive and process messages sent
+by the various programs in the tork(1) suite.  It notifies you when previously
+passing tests fail (or vice versa) through libnotify, xmessage, or growl.  If
+none are available on your system, then the notification is printed to stdout.
+
+## OPTIONS
+
+`-h`, `--help`
+  Show this help manual.
+
+## SEE ALSO
+
+tork-remote(1), tork-engine(1)
+
+=end =========================================================================
+
+$0 = File.basename(__FILE__) # for easier identification in ps(1) output
+
+require 'binman'
+BinMan.help
+
+require 'json'
+IO.popen('tork-remote tork-engine') do |remote|
+  while message = remote.gets
+    event, test_file, *details = JSON.load(message)
+
+    # make notifications edge-triggered: pass => fail or vice versa.
+    # we do not care about pass => pass or fail => fail transitions.
+    icon = case event.to_sym
+           when :fail_now_pass then 'dialog-information'
+           when :pass_now_fail then 'dialog-error'
+           end
+
+    if icon
+      _, _, line_numbers, log_file = details.first
+
+      title = [event.upcase, test_file].join(' ')
+
+      statistics = File.readlines(log_file).grep(/^\d+ \w+,/).join.
+        gsub(/\e\[\d+(;\d+)?m/, '') # strip ANSI SGR escape codes
+
+      Thread.new do # run in background
+        system 'notify-send', '-i', icon, title, statistics or
+        system 'growlnotify', '-a', 'Xcode', '-m', statistics, title or
+        system 'xmessage', '-timeout', '5', '-title', title, statistics or
+        puts title
+      end
     end
   end
 end
