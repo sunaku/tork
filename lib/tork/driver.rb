@@ -38,7 +38,14 @@ class Driver < Server
         visitor.call changed_file
 
         # reabsorb text execution overhead if overhead files changed
-        if REABSORB_FILE_GREPS.any? {|r| r =~ changed_file }
+        overhead_changed = REABSORB_FILE_GREPS.any? do |pattern|
+          if pattern.kind_of? Regexp
+            pattern =~ changed_file
+          else
+            pattern == changed_file
+          end
+        end
+        if overhead_changed
           send [:reabsorb, changed_file]
           reabsorb_overhead
         end

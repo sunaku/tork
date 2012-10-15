@@ -1,4 +1,4 @@
-Tork::Driver::REABSORB_FILE_GREPS.push Regexp.quote('spec/spec_helper.rb')
+Tork::Driver::REABSORB_FILE_GREPS.push 'spec/spec_helper.rb'
 
 Tork::Driver::ALL_TEST_FILE_GLOBS.push 'spec/**/{spec_*,*_spec}.rb'
 

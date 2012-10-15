@@ -1,4 +1,4 @@
-Tork::Driver::REABSORB_FILE_GREPS.push Regexp.quote('test/test_helper.rb')
+Tork::Driver::REABSORB_FILE_GREPS.push 'test/test_helper.rb'
 
 Tork::Driver::ALL_TEST_FILE_GLOBS.push 'test/**/{test_*,*_test}.rb'
 

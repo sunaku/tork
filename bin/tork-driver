@@ -52,9 +52,10 @@ to stdout.
   It can read and change the following variables.
 
   > `Tork::Driver::REABSORB_FILE_GREPS`
-  >   Array of regular expressions that describe a set of file paths that
-  >   cause the test execution overhead to be reabsorbed in tork-master(1)
-  >   when they change.
+  >   Array of strings or regular expressions that match the paths of overhead
+  >   files.  If any of these equal or match the path of a changed file
+  >   reported by tork-herald(1), then the test execution overhead will be
+  >   reabsorbed in tork-master(1).
   >
   > `Tork::Driver::ALL_TEST_FILE_GLOBS`
   >   Array of file globbing patterns that describe the set of all test files
