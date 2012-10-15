@@ -39,6 +39,10 @@ to stdout.
 `-h`, `--help`
   Show this help manual.
 
+## EXIT STATUS
+
+See tork-remote(1).
+
 ## SEE ALSO
 
 tork-remote(1), tork-engine(1)
@@ -83,3 +87,4 @@ IO.popen('tork-remote tork-engine') do |remote|
     end
   end
 end
+exit $?.exitstatus
