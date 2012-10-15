@@ -63,9 +63,7 @@ class Server
     end
   ensure
     # UNIX domain socket files are not deleted automatically upon closing
-    if @server and socket_file = @server.path and File.socket? socket_file
-      File.delete socket_file
-    end
+    File.delete @server.path if @server unless SUPPORTS_ABSTRACT_NAMESPACE
   end
 
   def quit
