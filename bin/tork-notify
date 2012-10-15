@@ -18,6 +18,22 @@ by the various programs in the tork(1) suite.  It notifies you when previously
 passing tests fail (or vice versa) through libnotify, xmessage, or growl.  If
 none are available on your system, then the notification is printed to stdout.
 
+### Input
+
+This program reads the following commands, which are single-line JSON arrays,
+from stdin and performs the actions described respectively.
+
+*...*
+  Commands for tork-engine(1) are also accepted here.
+
+### Output
+
+This program prints the following messages, which are single-line JSON arrays,
+to stdout.
+
+*...*
+  Messages from tork-engine(1) and tork-master(1) are also reproduced here.
+
 ## OPTIONS
 
 `-h`, `--help`
@@ -37,6 +53,10 @@ BinMan.help
 require 'json'
 IO.popen('tork-remote tork-engine') do |remote|
   while message = remote.gets
+    # pass message along to consumers of this program
+    STDOUT.puts message
+    STDOUT.flush
+
     event, test_file, *details = JSON.load(message)
 
     # make notifications edge-triggered: pass => fail or vice versa.
