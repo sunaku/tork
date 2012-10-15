@@ -95,14 +95,14 @@ private
         if line_numbers.empty?
           was_fail = @failed_test_files.delete? file
           now_pass = @passed_test_files.add? file
-          send [:f2p, file, message] if was_fail and now_pass
+          send [:fail_now_pass, file, message] if was_fail and now_pass
         end
 
       when :fail
         @running_test_files.delete file
         was_pass = @passed_test_files.delete? file
         now_fail = @failed_test_files.add? file
-        send [:p2f, file, message] if was_pass and now_fail
+        send [:pass_now_fail, file, message] if was_pass and now_fail
       end
     end
   end
