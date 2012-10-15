@@ -17,17 +17,17 @@ class Engine < Server
     @failed_test_files = Set.new
     @lines_by_file = {}
 
-    reabsorb_overhead
+    create_master
   end
 
   def quit
-    @master.quit
+    destroy_master
     super
   end
 
   def reabsorb_overhead
-    @master.quit if @master
-    @master = create_master_process
+    destroy_master
+    create_master
 
     # re-dispatch the previously dispatched files to the new master
     dispatched_test_files = @running_test_files + @waiting_test_files
@@ -72,14 +72,11 @@ class Engine < Server
     end
   end
 
-private
+protected
 
-  def run_test_files files
-    files.each {|f| run_test_file f }
-  end
-
-  def create_master_process
-    Client::Transceiver.new('tork-master') do |message|
+  def recv client, message
+    case client
+    when @master
       send message # propagate downstream
 
       event, file, line_numbers = message
@@ -104,7 +101,15 @@ private
         now_fail = @failed_test_files.add? file
         send [:pass_now_fail, file, message] if was_pass and now_fail
       end
+    else
+      super
     end
+  end
+
+private
+
+  def run_test_files files
+    files.each {|f| run_test_file f }
   end
 
   def find_changed_line_numbers test_file
@@ -117,6 +122,14 @@ private
     Diff::LCS.diff(old_lines, new_lines).flatten.
       # +1 because line numbers start at 1, not 0
       map {|change| change.position + 1 }.uniq
+  end
+
+  def create_master
+    @master = popen('tork-master')
+  end
+
+  def destroy_master
+    pclose @master
   end
 
 end

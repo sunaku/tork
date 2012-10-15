@@ -15,17 +15,16 @@ class Driver < Server
     super
     Tork.config :driver
 
-    @engine = Client::Transceiver.new('tork-engine') do |message|
-      send message # propagate downstream
-    end
-
-    @herald = IO.popen('tork-herald')
-    @clients << @herald
+    @herald = popen('tork-herald')
+    @engine = popen('tork-engine')
   end
 
-  def serve client, command
-    if client == @herald
-      command.each do |changed_file|
+  def recv client, message
+    case client
+    when @engine
+      send message # propagate downstream
+    when @herald
+      message.each do |changed_file|
         # find and run the tests that correspond to the changed file
         visited = Set.new
         visitor = lambda do |source_file|
@@ -61,8 +60,8 @@ class Driver < Server
   end
 
   def quit
-    Process.kill :SIGTERM, @herald.pid
-    Process.wait @herald.pid # reap zombie
+    pclose @herald
+    pclose @engine
     super
   end
 

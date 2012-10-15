@@ -33,13 +33,8 @@ class Server
             @clients << reader.accept
           elsif (reader.eof? rescue true)
             @clients.delete reader
-          else
-            begin
-              command = JSON.load(reader.gets)
-            rescue JSON::ParserError => error
-              send_error_to reader, "#{$0}: #{error.inspect}"
-            end
-            serve reader, command
+          elsif message = hear(client, reader.gets)
+            recv reader, message
           end
         end
       end
@@ -55,33 +50,45 @@ class Server
 
 protected
 
-  def send message
-    send_raw JSON.dump(message)
+  # On failure to decode the message, warns the sender and returns nil.
+  def hear sender, message
+    JSON.load message
+  rescue JSON::ParserError => error
+    tell sender, "#{$0}: #{error.inspect}", STDERR
+    nil
   end
 
-  def serve client, command
+  def recv client, command
     @command = command
     @client = client
     __send__(*command)
   rescue => error
-    send_error_to reader, error.backtrace.
-      unshift("#{$0}: #{error.inspect}").join("\n")
+    message = error.backtrace.unshift("#{$0}: #{error.inspect}").join("\n")
+    tell reader, message, STDERR
   end
 
-private
-
-  def send_raw message
-    @clients.each {|c| send_raw_to c, message }
+  # If client is nil, then message is sent to all clients.
+  def send client, message
+    tell client, JSON.dump(message)
   end
 
-  def send_raw_to client, message, output_for_STDIN=@stdout
-    client = output_for_STDIN if client == STDIN
-    client.puts message
-    client.flush
+  # If client is nil, then all clients are told.
+  def tell client, message, output_for_STDIN=@stdout
+    (client ? [client] : @clients).each do |target|
+      target = output_for_STDIN if target == STDIN
+      target.puts message
+      target.flush
+    end
   end
 
-  def send_error_to client, message
-    send_raw_to client, message, STDERR
+  def popen *args
+    child = IO.popen(*args)
+    @clients << child
+    child
+  end
+
+  def pclose child
+    @clients.delete child and child.close
   end
 
 end
