@@ -73,6 +73,7 @@ tests in your saved file, simply save the file *again* without changing it.
 
         Process.respond_to? :fork  # must be true
         Signal.list.key? 'TERM'    # must be true
+        Signal.list.key? 'KILL'    # must be true
 
   * To make the `tork-herald` program's filesystem monitoring more efficient:
 

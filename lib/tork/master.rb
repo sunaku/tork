@@ -81,7 +81,7 @@ class Master < Server
   end
 
   def quit
-    stop
+    stop :SIGKILL
     super
   end
 
