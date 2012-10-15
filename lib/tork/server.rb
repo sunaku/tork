@@ -60,20 +60,12 @@ protected
   end
 
   def serve client, command
-    method = command.first
-    unless respond_to? method and method != __method__.to_s # prevent recursion
-      send_error_to client, "#{$0}: illegal command: #{method}"
-      return
-    end
-
     @command = command
     @client = client
-    begin
-      __send__(*command)
-    rescue => error
-      send_error_to reader, error.backtrace.
-        unshift("#{$0}: #{error.inspect}").join("\n")
-    end
+    __send__(*command)
+  rescue => error
+    send_error_to reader, error.backtrace.
+      unshift("#{$0}: #{error.inspect}").join("\n")
   end
 
 private
