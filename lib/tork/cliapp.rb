@@ -56,7 +56,7 @@ protected
 
       if cmd = COMMANDS[key]
         quit if cmd == :quit
-        call = [cmd, *args]
+        call = Array(cmd) + args
         tell nil, "Sending #{call.inspect} command..."
         send @driver, call
       else
