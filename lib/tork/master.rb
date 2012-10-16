@@ -80,9 +80,10 @@ class Master < Server
     # some workers might have already exited before we sent them the signal
   end
 
-  def quit
-    stop :SIGKILL
+  def loop
     super
+  ensure
+    stop :SIGKILL
   end
 
 end

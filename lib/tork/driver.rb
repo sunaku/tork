@@ -58,10 +58,11 @@ class Driver < Server
     end
   end
 
-  def quit
+  def loop
+    super
+  ensure
     pclose @herald
     pclose @engine
-    super
   end
 
   def run_all_test_files

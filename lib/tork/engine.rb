@@ -19,9 +19,10 @@ class Engine < Server
     create_master
   end
 
-  def quit
-    destroy_master
+  def loop
     super
+  ensure
+    destroy_master
   end
 
   def reabsorb_overhead

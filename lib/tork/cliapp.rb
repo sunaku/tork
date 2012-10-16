@@ -20,10 +20,11 @@ class CLIApp < Server
     @driver = popen('tork-driver')
   end
 
-  def quit
+  def loop
+    super
+  ensure
     drive [:quit]
     pclose @driver
-    super
   end
 
 protected
