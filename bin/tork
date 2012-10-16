@@ -35,6 +35,8 @@ Some interactive commands accept additional arguments, described as follows.
   Stops test files that are currently running by sending the given *signal*
   (optional; defaults to `SIGTERM`) to their respective worker processes.
 
+This program can be controlled remotely by multiple tork-remote(1) instances.
+
 ## OPTIONS
 
 `-h`, `--help`

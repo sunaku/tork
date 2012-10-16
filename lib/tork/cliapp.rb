@@ -28,32 +28,9 @@ class CLIApp < Server
 
 protected
 
-  def hear sender, message
-    if sender == STDIN
-      key, *args = message.split
-      key &&= key.lstrip[0,1].downcase
-
-      if cmd = COMMANDS[key]
-        quit if cmd == :quit
-        call = [cmd, *args]
-        tell nil, "Sending #{call.inspect} command..."
-        send @driver, call
-      else
-        # user typed an invalid command so help them along
-        COMMANDS.each do |key, cmd|
-          desc = Array(cmd).join(' with ').to_s.tr('_', ' ')
-          tell @client, "Type #{key} then ENTER to #{desc}."
-        end
-      end
-
-      nil # don't process this message any further
-    else
-      super
-    end
-  end
-
   def recv client, message
-    if client == @driver
+    case client
+    when @driver
       event, *details = message
 
       case event_sym = event.to_sym
@@ -71,7 +48,23 @@ protected
         message = color % message if color and STDOUT.tty?
         message = [message, File.read(log_file), message] if event_sym == :fail
 
-        puts message
+        tell nil, message
+      end
+    else
+      key, *args = message
+      key &&= key.lstrip[0,1].downcase
+
+      if cmd = COMMANDS[key]
+        quit if cmd == :quit
+        call = [cmd, *args]
+        tell nil, "Sending #{call.inspect} command..."
+        send @driver, call
+      else
+        # user typed an invalid command so help them along
+        COMMANDS.each do |key, cmd|
+          desc = Array(cmd).join(' with ').to_s.tr('_', ' ')
+          tell @client, "Type #{key} then ENTER to #{desc}."
+        end
       end
     end
   end
