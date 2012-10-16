@@ -23,7 +23,6 @@ class CLIApp < Server
   def loop
     super
   ensure
-    drive [:quit]
     pclose @driver
   end
 
@@ -36,7 +35,9 @@ protected
 
       if cmd = COMMANDS[key]
         quit if cmd == :quit
-        drive [cmd, *args]
+        call = [cmd, *args]
+        warn "#{$0}: Sending #{call.inspect} command..."
+        send @driver, call
       else
         # user typed an invalid command so help them along
         COMMANDS.each do |key, cmd|
@@ -73,13 +74,6 @@ protected
         puts message
       end
     end
-  end
-
-private
-
-  def drive command
-    warn "#{$0}: Sending #{command.inspect} command..."
-    send @driver, command
   end
 
 end
