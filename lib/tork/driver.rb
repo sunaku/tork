@@ -1,5 +1,4 @@
 require 'set'
-require 'tork/client'
 require 'tork/engine'
 require 'tork/server'
 require 'tork/config'
@@ -22,7 +21,7 @@ class Driver < Server
   def recv client, message
     case client
     when @engine
-      send message # propagate downstream
+      send nil, message # propagate downstream
     when @herald
       message.each do |changed_file|
         # find and run the tests that correspond to the changed file
@@ -50,7 +49,7 @@ class Driver < Server
           end
         end
         if overhead_changed
-          send [:reabsorb, changed_file]
+          send nil, [:reabsorb, changed_file]
           reabsorb_overhead
         end
       end
@@ -78,7 +77,7 @@ class Driver < Server
   Engine.public_instance_methods(false).each do |name|
     unless method_defined? name
       define_method name do |*args|
-        @engine.send [name, *args]
+        send @engine, [name, *args]
       end
     end
   end

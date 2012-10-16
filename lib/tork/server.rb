@@ -18,22 +18,26 @@ class Server
 
     # only JSON messages are supposed to be emitted on STDOUT
     # so make puts() in the user code write to STDERR instead
-    @stdout = STDOUT.dup
-    STDOUT.reopen(STDERR).sync = true
+    stdout = STDOUT.dup
+    STDOUT.reopen STDERR
 
     @clients = [STDIN]
+    @readers = []
+    @pid_by_reader = {}
+    @writer_by_reader = {STDIN => stdout}
   end
 
   def loop
     @server = UNIXServer.open(Server.address)
     catch :quit do
+      @readers << @server
       while @clients.include? STDIN
-        IO.select([@server, *@clients]).first.each do |reader|
+        IO.select(@readers + @clients).first.each do |reader|
           if reader.equal? @server
             @clients << reader.accept
           elsif (reader.eof? rescue true)
             @clients.delete reader
-          elsif message = hear(client, reader.gets)
+          elsif message = hear(reader, reader.gets)
             recv reader, message
           end
         end
@@ -54,7 +58,7 @@ protected
   def hear sender, message
     JSON.load message
   rescue JSON::ParserError => error
-    tell sender, "#{$0}: #{error.inspect}", STDERR
+    tell sender, error
     nil
   end
 
@@ -63,8 +67,8 @@ protected
     @client = client
     __send__(*command)
   rescue => error
-    message = error.backtrace.unshift("#{$0}: #{error.inspect}").join("\n")
-    tell reader, message, STDERR
+    tell client, error
+    nil
   end
 
   # If client is nil, then message is sent to all clients.
@@ -73,22 +77,46 @@ protected
   end
 
   # If client is nil, then all clients are told.
-  def tell client, message, output_for_STDIN=@stdout
+  def tell client, message
     (client ? [client] : @clients).each do |target|
-      target = output_for_STDIN if target == STDIN
+      if message.kind_of? Exception
+        message = ["#{$0}: #{message.inspect}", *message.backtrace].join(?\n)
+        target = STDERR if target == STDIN
+      end
+
+      if @writer_by_reader.key? target
+        target = @writer_by_reader[target]
+      end
+
       target.puts message
       target.flush
     end
   end
 
-  def popen *args
-    child = IO.popen(*args)
-    @clients << child
-    child
+  def popen command
+    # the `writer` writes to child's STDIN
+    # the `reader` reads from child's STDOUT
+    child_stdin, writer = IO.pipe
+    reader, child_stdout = IO.pipe
+    pid = spawn(command, 0 => child_stdin, 1 => child_stdout)
+
+    @pid_by_reader[reader] = pid
+    @writer_by_reader[reader] = writer
+    @readers << reader
+
+    reader
   end
 
-  def pclose child
-    @clients.delete child and child.close
+  def pclose reader
+    return unless @readers.delete reader
+    reader.close
+
+    writer = @writer_by_reader.delete(reader)
+    writer.close
+
+    pid = @pid_by_reader.delete(reader)
+    Process.kill :SIGTERM, pid
+    Process.wait pid # reap zombie
   end
 
 end

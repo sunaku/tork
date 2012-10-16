@@ -1,6 +1,5 @@
 require 'set'
 require 'diff/lcs'
-require 'tork/client'
 require 'tork/server'
 require 'tork/config'
 
@@ -43,7 +42,7 @@ class Engine < Server
         line_numbers.map!(&:to_i)
         line_numbers.clear if line_numbers.any?(&:zero?)
       end
-      @master.send [:test, test_file, line_numbers]
+      send @master, [:test, test_file, line_numbers]
     end
   end
 
@@ -51,7 +50,7 @@ class Engine < Server
     if @running_test_files.empty?
       warn "#{$0}: There are no running test files to stop."
     else
-      @master.send [:stop, signal].compact
+      send @master, [:stop, signal].compact
       @running_test_files.clear
     end
   end
@@ -77,7 +76,7 @@ protected
   def recv client, message
     case client
     when @master
-      send message # propagate downstream
+      send nil, message # propagate downstream
 
       event, file, line_numbers = message
       case event.to_sym
@@ -92,14 +91,14 @@ protected
         if line_numbers.empty?
           was_fail = @failed_test_files.delete? file
           now_pass = @passed_test_files.add? file
-          send [:fail_now_pass, file, message] if was_fail and now_pass
+          send nil, [:fail_now_pass, file, message] if was_fail and now_pass
         end
 
       when :fail
         @running_test_files.delete file
         was_pass = @passed_test_files.delete? file
         now_fail = @failed_test_files.add? file
-        send [:pass_now_fail, file, message] if was_pass and now_fail
+        send nil, [:pass_now_fail, file, message] if was_pass and now_fail
       end
     else
       super
