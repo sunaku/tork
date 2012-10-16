@@ -17,32 +17,32 @@ class Server
     STDOUT.reopen STDERR
 
     @clients = [STDIN]
-    @readers = []
+    @servers = []
   end
 
   def loop
-    @server = UNIXServer.open(Server.address)
+    server = UNIXServer.open(Server.address)
+    @servers << server
     catch :quit do
-      @readers << @server
       while @clients.include? STDIN
-        IO.select(@readers + @clients).first.each do |reader|
-          @client = reader
-          if reader.equal? @server
-            @clients << reader.accept
-          elsif (reader.eof? rescue true)
-            @clients.delete reader
-          else
-            @message = reader.gets
-            if @command = hear(reader, @message)
-              recv reader, @command
-            end
+        IO.select(@servers + @clients).first.each do |stream|
+          @client = stream
+
+          if stream == server
+            @clients << stream.accept
+
+          elsif (stream.eof? rescue true)
+            @clients.delete stream
+
+          elsif @command = hear(stream, stream.gets)
+            recv stream, @command
           end
         end
       end
     end
   ensure
     # UNIX domain socket files are not deleted automatically upon closing
-    File.delete @server.path if @server
+    File.delete server.path if server
   end
 
   def quit
@@ -63,7 +63,7 @@ protected
       Shellwords.split message
 
     # forward tell() output from children to clients
-    elsif @readers.include? sender
+    elsif @servers.include? sender
       tell nil, message, false
       nil
     end
@@ -100,12 +100,12 @@ protected
 
   def popen command
     child = IO.popen(command, 'r+')
-    @readers << child
+    @servers << child
     child
   end
 
   def pclose child
-    return unless @readers.delete child
+    return unless @servers.delete child
 
     # this should be enough to stop programs that use Tork::Server#loop
     # because their IO.select() loop terminates on the closing of STDIN
