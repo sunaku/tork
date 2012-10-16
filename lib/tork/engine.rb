@@ -10,8 +10,7 @@ class Engine < Server
     super
     Tork.config :engine
 
-    @waiting_test_files = Set.new # dispatched to master but not yet running
-    @running_test_files = Set.new # dispatched to master and started running
+    @queued_test_files = Set.new
     @passed_test_files = Set.new
     @failed_test_files = Set.new
     @lines_by_file = {}
@@ -30,13 +29,13 @@ class Engine < Server
     create_master
 
     # re-dispatch the previously dispatched files to the new master
-    dispatched_test_files = @running_test_files + @waiting_test_files
-    @waiting_test_files.clear
-    run_test_files dispatched_test_files
+    previous = @queued_test_files.to_a
+    @queued_test_files.clear
+    run_test_files previous
   end
 
   def run_test_file test_file, *line_numbers
-    if File.exist? test_file and @waiting_test_files.add? test_file
+    if File.exist? test_file and @queued_test_files.add? test_file
       if line_numbers.empty?
         line_numbers = find_changed_line_numbers(test_file)
       else
@@ -48,11 +47,11 @@ class Engine < Server
   end
 
   def stop_running_test_files signal=nil
-    if @running_test_files.empty?
+    if @queued_test_files.empty?
       warn "#{$0}: There are no running test files to stop."
     else
       send @master, [:stop, signal].compact
-      @running_test_files.clear
+      @queued_test_files.clear
     end
   end
 
@@ -80,26 +79,24 @@ protected
       send nil, message # propagate downstream
 
       event, file, line_numbers = message
-      case event.to_sym
-      when :test
-        @waiting_test_files.delete file
-        @running_test_files.add file
+      case event_sym = event.to_sym
+      when :test, :pass, :fail
+        @queued_test_files.delete file
 
-      when :pass
-        @running_test_files.delete file
+        case event_sym
+        when :pass
+          # only whole test file runs qualify as pass
+          if line_numbers.empty?
+            was_fail = @failed_test_files.delete? file
+            now_pass = @passed_test_files.add? file
+            send nil, [:fail_now_pass, file, message] if was_fail and now_pass
+          end
 
-        # only whole test file runs qualify as pass
-        if line_numbers.empty?
-          was_fail = @failed_test_files.delete? file
-          now_pass = @passed_test_files.add? file
-          send nil, [:fail_now_pass, file, message] if was_fail and now_pass
+        when :fail
+          was_pass = @passed_test_files.delete? file
+          now_fail = @failed_test_files.add? file
+          send nil, [:pass_now_fail, file, message] if was_pass and now_fail
         end
-
-      when :fail
-        @running_test_files.delete file
-        was_pass = @passed_test_files.delete? file
-        now_fail = @failed_test_files.add? file
-        send nil, [:pass_now_fail, file, message] if was_pass and now_fail
       end
     else
       super
