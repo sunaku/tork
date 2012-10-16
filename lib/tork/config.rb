@@ -1,13 +1,14 @@
 module Tork
-  CONFIG_DIRS = ENV['TORK_CONFIGS'].to_s.strip.split(/:+/).reject(&:empty?).
-    uniq.map {|dir| [dir, __FILE__.sub(/\.rb$/, "/#{dir}")] }.flatten
-
-  # Loads the Ruby script having the given name from the first directory that
-  # contains it from among (1) the .tork/ directory, (2) the directories in
-  # the CONFIG_DIRS environment variable, and (3) the tork config/ directory.
+  # Loads all Ruby scripts found having the given name in (1) the directories
+  # specified in the TORK_CONFIGS environment variable, (2) the subdirectories
+  # of lib/tork/config/, and (3) the user's .tork/ directory; in that order.
+  #
+  # @return [Array] paths of Ruby scripts that were loaded
+  #
   def self.config name
-    Dir["{#{CONFIG_DIRS.join(',')},.tork}/#{name}.rb"].each do |script|
-      load script
-    end
+    dirs = ENV['TORK_CONFIGS'].to_s.strip.split(/:+/).reject(&:empty?).
+      uniq.map {|dir| [dir, __FILE__.sub(/\.rb$/, "/#{dir}")] }.flatten
+
+    Dir["{#{dirs.join(',')},.tork}/#{name}.rb"].each {|script| load script }
   end
 end
