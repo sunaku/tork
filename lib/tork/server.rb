@@ -5,12 +5,8 @@ require 'json'
 module Tork
 class Server
 
-  SUPPORTS_ABSTRACT_NAMESPACE = RbConfig::CONFIG['host_os'] =~ /linux/i
-
   def self.address program=$0
-    # try using abstract namespace for UNIX domain sockets; see unix(7)
-    prefix = "\0#{Dir.pwd}/" if SUPPORTS_ABSTRACT_NAMESPACE
-    "#{prefix}.#{program}.sock"
+    ".#{program}.sock"
   end
 
   def initialize
@@ -41,7 +37,7 @@ class Server
     end
   ensure
     # UNIX domain socket files are not deleted automatically upon closing
-    File.delete @server.path if @server unless SUPPORTS_ABSTRACT_NAMESPACE
+    File.delete @server.path if @server
   end
 
   def quit
