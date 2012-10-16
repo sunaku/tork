@@ -12,3 +12,5 @@ module Tork
     Dir["{#{dirs.join(',')},.tork}/#{name}.rb"].each {|script| load script }
   end
 end
+
+Tork.config :config

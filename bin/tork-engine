@@ -66,6 +66,10 @@ to stdout.
 
 ## FILES
 
+*.tork/config.rb*
+  Optional Ruby script that is loaded inside the driver process on startup.
+  It can read and change the `ENV['TORK_CONFIGS']` environment variable.
+
 *.tork/engine.rb*
   Optional Ruby script that is loaded inside the master process on startup.
 

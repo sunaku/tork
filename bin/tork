@@ -42,6 +42,10 @@ Some interactive commands accept additional arguments, described as follows.
 
 ## FILES
 
+*.tork/config.rb*
+  Optional Ruby script that is loaded inside the driver process on startup.
+  It can read and change the `ENV['TORK_CONFIGS']` environment variable.
+
 See tork-driver(1), tork-engine(1), and tork-master(1).
 
 ## ENVIRONMENT
@@ -108,6 +112,7 @@ require 'binman'
 BinMan.help
 
 ENV['TORK_CONFIGS'] = [ENV['TORK_CONFIGS'], *ARGV].join(':')
+require 'tork/config'
 
 require 'tork/cliapp'
 Tork::CLIApp.new.loop
