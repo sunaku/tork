@@ -89,7 +89,6 @@ protected
     (client ? [client] : @clients).each do |target|
       if message.kind_of? Exception
         message = [message.inspect, message.backtrace]
-        target = STDERR if target == STDIN
       end
 
       target = @stdout if target == STDIN
