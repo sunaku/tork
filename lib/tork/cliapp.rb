@@ -36,10 +36,11 @@ protected
 
       if cmd = COMMANDS[key]
         quit if cmd == :quit
-        drive Array(cmd) + args
-      else # invalid command
+        drive [cmd, *args]
+      else
+        # user typed an invalid command so help them along
         COMMANDS.each do |key, cmd|
-          desc = Array(cmd).first.to_s.tr('_', ' ')
+          desc = Array(cmd).join(' with ').to_s.tr('_', ' ')
           warn "#{$0}: Type #{key} then ENTER to #{desc}."
         end
       end
