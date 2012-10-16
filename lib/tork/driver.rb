@@ -68,7 +68,7 @@ class Driver < Server
   def run_all_test_files
     all_test_files = Dir[*ALL_TEST_FILE_GLOBS]
     if all_test_files.empty?
-      warn "#{$0}: There are no test files to run."
+      tell @client, 'There are no test files to run.'
     else
       all_test_files.each {|f| run_test_file f }
     end

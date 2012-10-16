@@ -25,12 +25,16 @@ class Server
       @readers << @server
       while @clients.include? STDIN
         IO.select(@readers + @clients).first.each do |reader|
+          @client = reader
           if reader.equal? @server
             @clients << reader.accept
           elsif (reader.eof? rescue true)
             @clients.delete reader
-          elsif message = hear(reader, reader.gets)
-            recv reader, message
+          else
+            @message = reader.gets
+            if @command = hear(reader, @message)
+              recv reader, @command
+            end
           end
         end
       end
@@ -55,8 +59,6 @@ protected
   end
 
   def recv client, command
-    @command = command
-    @client = client
     __send__(*command)
   rescue => error
     tell client, error
@@ -65,18 +67,19 @@ protected
 
   # If client is nil, then message is sent to all clients.
   def send client, message
-    tell client, JSON.dump(message)
+    tell client, JSON.dump(message), false
   end
 
   # If client is nil, then all clients are told.
-  def tell client, message
+  def tell client, message, prefix=true
     (client ? [client] : @clients).each do |target|
       if message.kind_of? Exception
-        message = ["#{$0}: #{message.inspect}", *message.backtrace].join(?\n)
+        message = [message.inspect, message.backtrace]
         target = STDERR if target == STDIN
       end
 
       target = @stdout if target == STDIN
+      target.print "#{$0}: " if prefix
       target.puts message
       target.flush
     end

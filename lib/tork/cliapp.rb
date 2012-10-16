@@ -16,7 +16,7 @@ class CLIApp < Server
 
   def initialize
     super
-    warn "#{$0}: Absorbing test execution overhead..."
+    tell nil, 'Absorbing test execution overhead...'
     @driver = popen('tork-driver')
   end
 
@@ -36,13 +36,13 @@ protected
       if cmd = COMMANDS[key]
         quit if cmd == :quit
         call = [cmd, *args]
-        warn "#{$0}: Sending #{call.inspect} command..."
+        tell nil, "Sending #{call.inspect} command..."
         send @driver, call
       else
         # user typed an invalid command so help them along
         COMMANDS.each do |key, cmd|
           desc = Array(cmd).join(' with ').to_s.tr('_', ' ')
-          warn "#{$0}: Type #{key} then ENTER to #{desc}."
+          tell @client, "Type #{key} then ENTER to #{desc}."
         end
       end
 
@@ -57,8 +57,8 @@ protected
       event, *details = message
 
       case event_sym = event.to_sym
-      when :absorb   then warn "#{$0}: Overhead absorbed. Ready for testing!"
-      when :reabsorb then warn "#{$0}: Reabsorbing changed overhead files..."
+      when :absorb   then tell nil, 'Overhead absorbed. Ready for testing!'
+      when :reabsorb then tell nil, 'Reabsorbing changed overhead files...'
       when :test, :pass, :fail
         test_file, line_numbers, log_file, worker_number, exit_status = details
         message = [event.upcase, [test_file, *line_numbers].join(':'),
