@@ -6,11 +6,12 @@ module Tork
   # @return [Array] paths of Ruby scripts that were loaded
   #
   def self.config name
-    dirs = ENV['TORK_CONFIGS'].to_s.strip.split(/:+/).reject(&:empty?).
-      uniq.map {|dir| [dir, __FILE__.sub(/\.rb$/, "/#{dir}")] }.flatten
+    dirs = ENV['TORK_CONFIGS'].strip.split(/:+/).reject(&:empty?).uniq.
+           map {|dir| [dir, __FILE__.sub(/\.rb$/, "/#{dir}")] }.flatten
 
     Dir["{#{dirs.join(',')},.tork}/#{name}.rb"].each {|script| load script }
   end
 end
 
+ENV['TORK_CONFIGS'] ||= String.new.freeze # ENV values are frozen by default
 Tork.config :config
