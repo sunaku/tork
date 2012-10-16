@@ -14,11 +14,10 @@ class Engine < Server
     @passed_test_files = Set.new
     @failed_test_files = Set.new
     @lines_by_file = {}
-
-    create_master
   end
 
   def loop
+    create_master
     super
   ensure
     destroy_master

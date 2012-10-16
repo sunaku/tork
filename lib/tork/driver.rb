@@ -13,10 +13,36 @@ class Driver < Server
   def initialize
     super
     Tork.config :driver
+  end
 
+  def loop
     @herald = popen('tork-herald')
     @engine = popen('tork-engine')
+    super
+  ensure
+    pclose @herald
+    pclose @engine
   end
+
+  def run_all_test_files
+    all_test_files = Dir[*ALL_TEST_FILE_GLOBS]
+    if all_test_files.empty?
+      tell @client, 'There are no test files to run.'
+    else
+      run_test_files all_test_files
+    end
+  end
+
+  # accept and delegate tork-engine(1) commands
+  Engine.public_instance_methods(false).each do |name|
+    unless method_defined? name
+      define_method name do |*args|
+        send @engine, [name, *args]
+      end
+    end
+  end
+
+protected
 
   def recv client, message
     case client
@@ -44,31 +70,6 @@ class Driver < Server
 
     else
       super
-    end
-  end
-
-  def loop
-    super
-  ensure
-    pclose @herald
-    pclose @engine
-  end
-
-  def run_all_test_files
-    all_test_files = Dir[*ALL_TEST_FILE_GLOBS]
-    if all_test_files.empty?
-      tell @client, 'There are no test files to run.'
-    else
-      run_test_files all_test_files
-    end
-  end
-
-  # accept and delegate tork-engine(1) commands
-  Engine.public_instance_methods(false).each do |name|
-    unless method_defined? name
-      define_method name do |*args|
-        send @engine, [name, *args]
-      end
     end
   end
 

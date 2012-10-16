@@ -14,13 +14,9 @@ class CLIApp < Server
     'q' => :quit,
   }
 
-  def initialize
-    super
+  def loop
     tell nil, 'Absorbing test execution overhead...'
     @driver = popen('tork-driver')
-  end
-
-  def loop
     super
   ensure
     pclose @driver
