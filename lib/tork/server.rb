@@ -57,8 +57,15 @@ protected
   def hear sender, message
     if message =~ JSON_REGEXP
       JSON.load message
-    else
+
+    # accept non-JSON "command lines" from clients
+    elsif @clients.include? sender
       Shellwords.split message
+
+    # forward tell() output from children to clients
+    elsif @readers.include? sender
+      tell nil, message, false
+      nil
     end
   rescue JSON::ParserError => error
     tell sender, error
