@@ -50,6 +50,8 @@ class Server
 
   def quit
     throw :quit
+  rescue ArgumentError
+    # ignore "uncaught throw :quit" (ArgumentError)
   end
 
 protected
