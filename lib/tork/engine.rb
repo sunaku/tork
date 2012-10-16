@@ -46,6 +46,10 @@ class Engine < Server
     end
   end
 
+  def run_test_files test_files_with_optional_line_numbers
+    test_files_with_optional_line_numbers.each {|f| run_test_file(*f) }
+  end
+
   def stop_running_test_files signal=nil
     if @queued_test_files.empty?
       tell @client, 'There are no running test files to stop.'
@@ -107,10 +111,6 @@ protected
   end
 
 private
-
-  def run_test_files files
-    files.each {|f| run_test_file f }
-  end
 
   def find_changed_line_numbers test_file
     # cache test file contents for diffing below

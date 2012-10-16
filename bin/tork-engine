@@ -32,6 +32,9 @@ from stdin and performs the actions described respectively.
   that have changed since the last run of *test_file* will be substituted.
   If any *line_numbers* are zero, then the entire *test_file* will be run.
 
+`["run_test_files"`, *test_files_with_optional_line_numbers*`]`
+  Calls the `run_test_file` command once for each item in the given array.
+
 `["stop_running_test_files"`, *signal*`]`
   Stops test files that are currently running by sending the given *signal*
   (optional; defaults to "SIGTERM") to their respective worker processes.

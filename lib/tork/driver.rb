@@ -70,7 +70,7 @@ class Driver < Server
     if all_test_files.empty?
       tell @client, 'There are no test files to run.'
     else
-      all_test_files.each {|f| run_test_file f }
+      run_test_files all_test_files
     end
   end
 
