@@ -14,8 +14,6 @@ class Server
   end
 
   def initialize
-    trap(:SIGTERM){ quit }
-
     # only JSON messages are supposed to be emitted on STDOUT
     # so make puts() in the user code write to STDERR instead
     stdout = STDOUT.dup
@@ -50,8 +48,6 @@ class Server
 
   def quit
     throw :quit
-  rescue ArgumentError
-    # ignore "uncaught throw :quit" (ArgumentError)
   end
 
 protected
