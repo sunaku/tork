@@ -39,7 +39,7 @@ require 'binman'
 BinMan.help
 
 require 'json'
-IO.popen('tork-remote tork-engine') do |remote|
+IO.popen('tork-remote tork-engine', 'r+') do |remote|
   while message = remote.gets
     event, test_file, *details = JSON.load(message)
 
