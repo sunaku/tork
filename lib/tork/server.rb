@@ -16,13 +16,11 @@ class Server
   def initialize
     # only JSON messages are supposed to be emitted on STDOUT
     # so make puts() in the user code write to STDERR instead
-    stdout = STDOUT.dup
+    @stdout = STDOUT.dup
     STDOUT.reopen STDERR
 
     @clients = [STDIN]
     @readers = []
-    @pid_by_reader = {}
-    @writer_by_reader = {STDIN => stdout}
   end
 
   def loop
@@ -82,39 +80,20 @@ protected
         target = STDERR if target == STDIN
       end
 
-      if @writer_by_reader.key? target
-        target = @writer_by_reader[target]
-      end
-
+      target = @stdout if target == STDIN
       target.puts message
       target.flush
     end
   end
 
   def popen command
-    # the `writer` writes to child's STDIN
-    # the `reader` reads from child's STDOUT
-    child_stdin, writer = IO.pipe
-    reader, child_stdout = IO.pipe
-    pid = spawn(command, 0 => child_stdin, 1 => child_stdout)
-
-    @pid_by_reader[reader] = pid
-    @writer_by_reader[reader] = writer
-    @readers << reader
-
-    reader
+    child = IO.popen(command, 'r+')
+    @readers << child
+    child
   end
 
-  def pclose reader
-    return unless @readers.delete reader
-    reader.close
-
-    writer = @writer_by_reader.delete(reader)
-    writer.close
-
-    pid = @pid_by_reader.delete(reader)
-    Process.kill :SIGTERM, pid
-    Process.wait pid # reap zombie
+  def pclose child
+    @readers.delete child and child.close
   end
 
 end
