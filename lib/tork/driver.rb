@@ -22,24 +22,9 @@ class Driver < Server
     case client
     when @engine
       send nil, message # propagate downstream
+
     when @herald
       message.each do |changed_file|
-        # find and run the tests that correspond to the changed file
-        visited = Set.new
-        visitor = lambda do |source_file|
-          TEST_FILE_GLOBBERS.each do |regexp, globber|
-            if regexp =~ source_file and globs = globber.call($~)
-              Dir[*globs].each do |test_file|
-                if visited.add? test_file
-                  run_test_file test_file
-                  visitor.call test_file
-                end
-              end
-            end
-          end
-        end
-        visitor.call changed_file
-
         # reabsorb text execution overhead if overhead files changed
         overhead_changed = REABSORB_FILE_GREPS.any? do |pattern|
           if pattern.kind_of? Regexp
@@ -48,11 +33,15 @@ class Driver < Server
             pattern == changed_file
           end
         end
+
         if overhead_changed
           send nil, [:reabsorb, changed_file]
           reabsorb_overhead
+        else
+          run_test_files find_dependent_test_files(changed_file).to_a
         end
       end
+
     else
       super
     end
@@ -81,6 +70,21 @@ class Driver < Server
         send @engine, [name, *args]
       end
     end
+  end
+
+private
+
+  def find_dependent_test_files source_file, results=Set.new
+    TEST_FILE_GLOBBERS.each do |regexp, globber|
+      if regexp =~ source_file and globs = globber.call($~)
+        Dir[*globs].each do |dependent_file|
+          if results.add? dependent_file
+            find_dependent_test_files dependent_file, results
+          end
+        end
+      end
+    end
+    results
   end
 
 end
