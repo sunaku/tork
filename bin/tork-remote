@@ -51,8 +51,6 @@ require 'socket'
 require 'shellwords'
 require 'tork/server'
 
-JSON_REGEXP = /\A\s*[\[\{]/.freeze
-
 program = ARGV.shift or raise ArgumentError, 'PROGRAM not given'
 address = Tork::Server.address(program)
 
@@ -61,7 +59,7 @@ begin
     # server => client
     Thread.new do
       while input = socket.gets
-        stream = input =~ JSON_REGEXP ? STDOUT : STDERR
+        stream = input =~ Tork::Server::JSON_REGEXP ? STDOUT : STDERR
         stream.puts input
         stream.flush
       end
@@ -71,7 +69,6 @@ begin
 
     # client => server
     while output = STDIN.gets
-      output = JSON.dump(Shellwords.split(output)) if output !~ JSON_REGEXP
       socket.puts output
     end
   end

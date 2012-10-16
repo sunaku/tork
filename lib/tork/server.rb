@@ -1,6 +1,7 @@
 require 'socket'
 require 'thread'
 require 'json'
+require 'shellwords'
 
 module Tork
 class Server
@@ -50,9 +51,15 @@ class Server
 
 protected
 
+  JSON_REGEXP = /\A\s*[\[\{]/.freeze
+
   # On failure to decode the message, warns the sender and returns nil.
   def hear sender, message
-    JSON.load message
+    if message =~ JSON_REGEXP
+      JSON.load message
+    else
+      Shellwords.split message
+    end
   rescue JSON::ParserError => error
     tell sender, error
     nil
