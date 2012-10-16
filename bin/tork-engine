@@ -64,6 +64,13 @@ to stdout.
 `-h`, `--help`
   Show this help manual.
 
+## FILES
+
+*.tork/engine.rb*
+  Optional Ruby script that is loaded inside the master process on startup.
+
+See tork-master(1).
+
 ## ENVIRONMENT
 
 See tork(1).

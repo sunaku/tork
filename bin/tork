@@ -42,7 +42,7 @@ Some interactive commands accept additional arguments, described as follows.
 
 ## FILES
 
-See tork-driver(1) and tork-master(1).
+See tork-driver(1), tork-engine(1), and tork-master(1).
 
 ## ENVIRONMENT
 
