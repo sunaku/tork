@@ -64,7 +64,7 @@ protected
 
     # forward tell() output from children to clients
     elsif @servers.include? sender
-      tell nil, message, false
+      tell @clients, message, false
       nil
     end
   rescue JSON::ParserError => error
@@ -79,18 +79,23 @@ protected
     nil
   end
 
-  # If client is nil, then message is sent to all clients.
-  def send client, message
-    tell client, JSON.dump(message), false
+  def send one_or_more_clients, message
+    tell one_or_more_clients, JSON.dump(message), false
   end
 
-  # If client is nil, then all clients are told.
-  def tell client, message, prefix=true
+  def tell one_or_more_clients, message, prefix=true
     if message.kind_of? Exception
       message = [message.inspect, message.backtrace]
     end
 
-    (client ? [client] : @clients).each do |target|
+    targets =
+      if one_or_more_clients.kind_of? IO
+        [one_or_more_clients]
+      else
+        Array(one_or_more_clients)
+      end
+
+    targets.each do |target|
       target = @stdout if target == STDIN
       target.print "#{$0}: " if prefix
       target.puts message

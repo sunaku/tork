@@ -79,7 +79,7 @@ protected
   def recv client, message
     case client
     when @master
-      send nil, message # propagate downstream
+      send @clients, message # propagate downstream
 
       event, file, line_numbers = message
       case event.to_sym
@@ -91,13 +91,13 @@ protected
         if line_numbers.empty?
           was_fail = @failed_test_files.delete? file
           now_pass = @passed_test_files.add? file
-          send nil, [:fail_now_pass, file, message] if was_fail and now_pass
+          send @clients, [:fail_now_pass, file, message] if was_fail and now_pass
         end
 
       when :fail
         was_pass = @passed_test_files.delete? file
         now_fail = @failed_test_files.add? file
-        send nil, [:pass_now_fail, file, message] if was_pass and now_fail
+        send @clients, [:pass_now_fail, file, message] if was_pass and now_fail
       end
 
     else

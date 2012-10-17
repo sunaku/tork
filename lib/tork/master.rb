@@ -17,7 +17,7 @@ class Master < Server
   def initialize
     super
     Tork.config :master
-    send nil, [:absorb]
+    send @clients, [:absorb]
 
     @worker_number_pool = (0 ... MAX_CONCURRENT_WORKERS).to_a
     @command_by_worker_pid = {}
@@ -61,7 +61,7 @@ class Master < Server
     end
 
     @command_by_worker_pid[worker_pid] = @command
-    send nil, @command
+    send @clients, @command
 
     # wait for the worker to finish and report its status to the client
     Thread.new(worker_pid) do |pid| # the reaping thread
@@ -69,7 +69,7 @@ class Master < Server
       command = @command_by_worker_pid.delete(pid)
       @worker_number_pool.push command.last
       command[0] = status.success? && :pass || :fail
-      send nil, command.push(status.to_i, status.inspect)
+      send @clients, command.push(status.to_i, status.inspect)
     end
   end
 

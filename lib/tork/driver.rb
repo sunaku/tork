@@ -47,7 +47,7 @@ protected
   def recv client, message
     case client
     when @engine
-      send nil, message # propagate downstream
+      send @clients, message # propagate downstream
 
     when @herald
       message.each do |changed_file|
@@ -61,7 +61,7 @@ protected
         end
 
         if overhead_changed
-          send nil, [:reabsorb, changed_file]
+          send @clients, [:reabsorb, changed_file]
           reabsorb_overhead
         else
           run_test_files find_dependent_test_files(changed_file).to_a

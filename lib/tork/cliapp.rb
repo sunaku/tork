@@ -15,7 +15,7 @@ class CLIApp < Server
   }
 
   def loop
-    tell nil, 'Absorbing test execution overhead...'
+    tell @clients, 'Absorbing test execution overhead...'
     @driver = popen('tork-driver')
     super
   ensure
@@ -30,8 +30,12 @@ protected
       event, *details = message
 
       case event_sym = event.to_sym
-      when :absorb   then tell nil, 'Overhead absorbed. Ready for testing!'
-      when :reabsorb then tell nil, 'Reabsorbing changed overhead files...'
+      when :absorb
+        tell @clients, 'Overhead absorbed. Ready for testing!'
+
+      when :reabsorb
+        tell @clients, 'Reabsorbing changed overhead files...'
+
       when :test, :pass, :fail
         test_file, line_numbers, log_file, worker_number, exit_status = details
         message = [event.upcase, [test_file, *line_numbers].join(':'),
@@ -44,7 +48,7 @@ protected
         message = color % message if color and STDOUT.tty?
         message = [message, File.read(log_file), message] if event_sym == :fail
 
-        tell nil, message
+        tell @clients, message
       end
     else
       key, *args = message
@@ -53,7 +57,7 @@ protected
       if cmd = COMMANDS[key]
         quit if cmd == :quit
         call = Array(cmd) + args
-        tell nil, "Sending #{call.inspect} command..."
+        tell @clients, "Sending #{call.inspect} command..."
         send @driver, call
       else
         # user typed an invalid command so help them along
