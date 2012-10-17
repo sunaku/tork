@@ -86,11 +86,11 @@ protected
 
   # If client is nil, then all clients are told.
   def tell client, message, prefix=true
-    (client ? [client] : @clients).each do |target|
-      if message.kind_of? Exception
-        message = [message.inspect, message.backtrace]
-      end
+    if message.kind_of? Exception
+      message = [message.inspect, message.backtrace]
+    end
 
+    (client ? [client] : @clients).each do |target|
       target = @stdout if target == STDIN
       target.print "#{$0}: " if prefix
       target.puts message
