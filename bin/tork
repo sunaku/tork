@@ -56,6 +56,17 @@ See tork-driver(1), tork-engine(1), and tork-master(1).
   Colon-separated (:) list of either paths to directories that contain
   configuration files or names of the following configuration helpers:
 
+  > `auto`
+  >   Loads the following configuration helpers (as appropriate) if your
+  >   current working directory appears to utilize what they configure.
+  >   See below for complete descriptions of these configuration helpers.
+  >
+  >   * rails
+  >   * test
+  >   * spec
+  >   * cucumber
+  >   * factory_girl
+  >
   > `dotlog`
   >   Hides log files by prefixing their names with a period (dot).
   >

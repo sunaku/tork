@@ -17,7 +17,7 @@ Tork runs your tests as they change, in parallel:
 
 ## Features
 
-  * No configuration needed: run `tork` for Ruby, `tork rails` for Rails.
+  * No configuration needed: simply run `tork auto` to start your testing!
 
   * Runs test files in parallel using fork for multi-core/CPU utilization.
 
