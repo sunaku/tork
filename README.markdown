@@ -25,7 +25,7 @@ Tork runs your tests as they change, in parallel:
     unchanged test files and (2) unchanged tests inside changed test files.
 
   * Supports MiniTest, Test::Unit, RSpec, and *any testing framework* that (1)
-    exits with a nonzero status to indicate test failures (2) is loaded by
+    exits with a nonzero status to indicate test failures and (2) is loaded by
     your application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
 
   * Logs the output from your tests into separate files: one log per test.
@@ -35,12 +35,12 @@ Tork runs your tests as they change, in parallel:
 
   * You can override the modular `tork*` programs with your own in $PATH.
 
-  * Its core is written in about 420 lines (SLOC) of pure Ruby code! :-)
+  * It is written in about 530 statement lines (SLOC) of pure Ruby code! :-)
 
 ### Architecture
 
-Following UNIX philosophy, Tork is composed of simple text-based programs that
-*do one thing well*.  As a result, you could even create your own Tork user
+Following UNIX philosophy, tork is composed of simple text-based programs that
+*do one thing well*.  As a result, you could even create your own tork user
 interface by wrapping `tork-driver` appropriately!
 
   * `tork` is an interactive command-line user interface for `tork-driver`
@@ -55,7 +55,7 @@ been written to, it tells the driver, which then commands the master to fork a
 worker process to run the tests affected by those changed files.  This is all
 performed automatically.  But what if you want to manually run a test file?
 
-You can (re)run any test file by simply saving it!  When you do, Tork tries to
+You can (re)run any test file by simply saving it!  When you do, tork tries to
 figure out which tests inside your newly saved test file have changed (using
 diff and regexps) and then attempts to run just those.  To make it run *all*
 tests in your saved file, simply save the file *again* without changing it.
@@ -94,16 +94,20 @@ tests in your saved file, simply save the file *again* without changing it.
 
     tork --help
 
+You can add line editing, history, and filename completion:
+
+    rlwrap -c tork
+
 You can control tork(1) interactively from another terminal:
 
-    tork-writer
+    tork-remote tork-engine
     # type your commands here, one per line.
-    # press Control-D to exit tork-writer(1)
+    # press Control-D to exit tork-remote(1)
 
 You can also do the same non-interactively using a pipeline:
 
     # run lines 4, 33, and 21 of test/some_test.rb
-    echo t test/some_test.rb 4 33 21 | tork-writer
+    echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
 
 You can monitor your test processes from another terminal:
 
@@ -119,8 +123,11 @@ https://github.com/rspec/rspec-core/pull/569/files ) fixes the problem.
 
 ### With [Ruby on Rails]
 
-For Rails 3 or newer, use the `tork/config/rails` configuration helper.
-Otherwise, ensure that your `config/environments/test.rb` file contains:
+For Rails 3 or newer, use the `rails` configuration helper *before* the `test`
+or `spec` helpers.  Otherwise Rails will be loaded *before* the `rails`
+configuration helper has a chance to disable class caching!
+
+For older Rails, make sure your `config/environments/test.rb` file contains:
 
     config.cache_classes = false
 
@@ -133,12 +140,13 @@ adapter][memory_test_fix].  Otherwise, you *might* face these errors:
 
 ## Configuration
 
-Tork looks for a configuration file named `.tork.rb` in its current working
-directory.  The configuration file is a normal Ruby script, inside which you
-can query and modify the `Tork::Config` object, which is a kind of `Struct`.
+Tork looks for a configuration directory named `.tork/` inside its working
+directory.  The configuration directory contains specially-named Ruby scripts,
+within which you can query and modify the settings for various tork programs.
+See the "FILES" sections in the manual pages of tork programs for details.
 
-Note that Tork *does not* automatically reload changes in your configuration
-file.  So you must restart Tork accordingly if your configuration changes.
+Note that tork *does not* automatically reload changes from your configuration
+directory.  You must restart tork accordingly if your configuration changes.
 
 ## License
 
