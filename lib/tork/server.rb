@@ -88,6 +88,10 @@ protected
       message = [message.inspect, message.backtrace]
     end
 
+    if prefix
+      message = Array(message).join("\n").gsub(/^/, "#{$0}: ")
+    end
+
     targets =
       if one_or_more_clients.kind_of? IO
         [one_or_more_clients]
@@ -97,7 +101,6 @@ protected
 
     targets.each do |target|
       target = @stdout if target == STDIN
-      target.print "#{$0}: " if prefix
       target.puts message
       target.flush
     end
