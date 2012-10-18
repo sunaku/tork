@@ -23,6 +23,12 @@ class Master < Server
     @command_by_worker_pid = {}
   end
 
+  def loop
+    super
+  ensure
+    stop :SIGKILL
+  end
+
   def test test_file, line_numbers
     # throttle forking rate to meet the maximum concurrent workers limit
     sleep 1 until @command_by_worker_pid.size < @worker_number_pool.size
@@ -78,12 +84,6 @@ class Master < Server
     Process.kill signal, *@command_by_worker_pid.keys.map {|pid| -pid }
   rescue ArgumentError, SystemCallError
     # some workers might have already exited before we sent them the signal
-  end
-
-  def loop
-    super
-  ensure
-    stop :SIGKILL
   end
 
 end
