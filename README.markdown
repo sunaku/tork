@@ -17,7 +17,7 @@ Tork runs your tests as they change, in parallel:
 
 ## Features
 
-  * No configuration needed: simply run `tork auto` to start your testing!
+  * No configuration necessary: simply run `tork` to start testing *now!*
 
   * Runs test files in parallel using fork for multi-core/CPU utilization.
 
