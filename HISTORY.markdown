@@ -1,3 +1,68 @@
+## Version 19.0.0 (2012-10-17)
+
+Major:
+
+  * The `.tork.rb` configuration file has been replaced by the `.tork/`
+    directory, which contains specially-named Ruby scripts.  Refer to the
+    `TORK_CONFIGS` environment variable in tork(1) for more information.
+
+  * The `Tork::Config` object has been replaced by various data structures in
+    the `Tork::` namespace.  See the "FILES" sections in the manual pages of
+    tork programs for information on the data structures that replaced it.
+
+  * `Tork::Config.test_event_hooks` has been removed.  Instead, you must now
+    monitor the STDOUT of tork-master(1) or tork-engine(1) either directly
+    or indirectly, via tork-remote(1), and react to their status messages.
+    See the tork-notify(1) program for an example of how to implement this.
+
+  * tork(1): 't' now runs a specified test, whereas 'a' runs all tests.
+
+  * tork-engine(1): the `run_test_file` command now takes line numbers as a
+    variable-length list of arguments (varargs) rather than as an array.
+
+  * tork-engine(1): the `run_test_file` command now runs an entire test file
+    when zero is given as one of the line numbers to be run.
+
+  * tork-master(1): the `load` command is no longer accepted.  Instead, you
+    must specify load paths and overhead files in the `.tork/master.rb` file.
+
+  * The `TORK_CONFIGS` env-var is now a colon delimited list of directories.
+
+  * The `tork/client` library has been removed.  The threaded IO and popen()
+    wrappers that it provided have been replaced by the powerful IO.select().
+
+Minor:
+
+  * tork(1): allow user to specify arguments after command key
+
+  * tork(1): add 'k' to stop all currently running tests with SIGKILL
+
+  * add tork-remote(1) to remotely control any tork program.  This feature is
+    made possible by the awesome power of IO.select() and UNIX domain sockets.
+
+  * add tork-notify(1) as example of using tork-remote(1) and tork-engine(1)
+
+  * tork-engine(1): add `["run_test_files"]` command to run multiple files
+
+  * tork-engine(1): emit edge-triggered `pass_now_fail` and `fail_now_pass`
+    events to notify you about changes in a test file's pass/fail status.
+
+  * typing Control-D now breaks tork programs out of `Tork::Server#loop()`
+
+Patch:
+
+  * tork-master(1): stop workers with SIGKILL when quitting
+
+Other:
+
+  * tork(1): document parameters for `t` and `s` commands
+
+  * README: add tip about rlwrap for better interactive
+
+  * README: simplify watch command using pgrep & xargs
+
+  * README: use standard bundle exec; no `--binstubs`
+
 ## Version 18.2.4 (2012-10-10)
 
 Other:

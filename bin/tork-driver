@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 =begin =======================================================================
 
-# TORK-DRIVER 1 2012-10-10 18.2.4
+# TORK-DRIVER 1 2012-10-17 19.0.0
 
 ## NAME
 
@@ -150,8 +150,6 @@ to stdout.
   > >         end
   > >       end
   > >     )
-
-See tork-engine(1) and tork-master(1).
 
 ## ENVIRONMENT
 

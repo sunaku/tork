@@ -29,13 +29,12 @@ Tork runs your tests as they change, in parallel:
     your application's `test/test_helper.rb` or `spec/spec_helper.rb` file.
 
   * Logs the output from your tests into separate files: one log per test.
-    The path of a log file is simply the path of its test file plus ".log".
 
-  * Configurable through a Ruby script in your current working directory.
+  * Configurable through Ruby scripts in your current working directory.
 
   * You can override the modular `tork*` programs with your own in $PATH.
 
-  * It is written in about 530 statement lines (SLOC) of pure Ruby code! :-)
+  * You can remotely control other `tork*` programs using `tork-remote`.
 
 ### Architecture
 
@@ -49,16 +48,33 @@ interface by wrapping `tork-driver` appropriately!
   * `tork-engine` tells master to run tests and keeps track of test results
   * `tork-master` absorbs test execution overhead and forks to run your tests
   * `tork-remote` remotely controls any tork program running in the same `pwd`
+  * `tork-notify` shows how to receive and process messages from tork programs
 
 When the herald observes that files in or beneath the current directory have
 been written to, it tells the driver, which then commands the master to fork a
 worker process to run the tests affected by those changed files.  This is all
-performed automatically.  But what if you want to manually run a test file?
+performed *automatically*.  However, to run a test file *manually*, you can:
 
-You can (re)run any test file by simply saving it!  When you do, tork tries to
-figure out which tests inside your newly saved test file have changed (using
-diff and regexps) and then attempts to run just those.  To make it run *all*
-tests in your saved file, simply save the file *again* without changing it.
+  1. Simply save the file!  When you do, tork tries to figure out which tests
+     inside your newly saved test file have changed (using diff and regexps)
+     and then attempts to run just those.  To make it run *all* tests in your
+     saved file, simply save the file *again* without changing it.
+
+  2. Type `t` followed by a space and the file you want to run into `tork`:
+
+        # run all of test/some_test.rb
+        t test/some_test.rb
+
+        # run lines 4, 33, and 21 of test/some_test.rb
+        t test/some_test.rb 4 33 21
+
+  3. Send a `["run_test_file"]` message to `tork-engine` using `tork-remote`:
+
+        # run all of test/some_test.rb
+        echo run_test_file test/some_test.rb | tork-remote tork-engine
+
+        # run lines 4, 33, and 21 of test/some_test.rb
+        echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
 
 ## Installation
 
@@ -124,8 +140,8 @@ https://github.com/rspec/rspec-core/pull/569/files ) fixes the problem.
 ### With [Ruby on Rails]
 
 For Rails 3 or newer, use the `rails` configuration helper *before* the `test`
-or `spec` helpers.  Otherwise Rails will be loaded *before* the `rails`
-configuration helper has a chance to disable class caching!
+or `spec` helpers.  Otherwise your test helper will load Rails *before* the
+specified `rails` configuration helper has a chance to disable class caching!
 
 For older Rails, make sure your `config/environments/test.rb` file contains:
 
@@ -146,7 +162,7 @@ within which you can query and modify the settings for various tork programs.
 See the "FILES" sections in the manual pages of tork programs for details.
 
 Note that tork *does not* automatically reload changes from your configuration
-directory.  You must restart tork accordingly if your configuration changes.
+directory.  Consequently, you must restart tork if your configuration changes.
 
 ## License
 

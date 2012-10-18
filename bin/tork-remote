@@ -56,7 +56,7 @@ address = Tork::Server.address(program)
 
 begin
   UNIXSocket.open(address) do |socket|
-    # server => client
+    # messages to remote from server
     Thread.new do
       while input = socket.gets
         stream = input =~ Tork::Server::JSON_REGEXP ? STDOUT : STDERR
@@ -67,7 +67,7 @@ begin
       exit 2
     end
 
-    # client => server
+    # messages from remote to server
     while output = STDIN.gets
       socket.puts output
     end

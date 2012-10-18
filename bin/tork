@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 =begin =======================================================================
 
-# TORK 1 2012-10-10 18.2.4
+# TORK 1 2012-10-17 19.0.0
 
 ## NAME
 
@@ -47,8 +47,6 @@ This program can be controlled remotely by multiple tork-remote(1) instances.
 *.tork/config.rb*
   Optional Ruby script that is loaded inside the driver process on startup.
   It can read and change the `ENV['TORK_CONFIGS']` environment variable.
-
-See tork-driver(1), tork-engine(1), and tork-master(1).
 
 ## ENVIRONMENT
 

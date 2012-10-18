@@ -13,15 +13,15 @@ Gem::Specification.new do |s|
   s.summary       = 'test with fork'
   s.description   = 'Runs your tests as they change, in parallel.'
 
-  s.files         = `git ls-files`.split("\n") + Dir['man/**/*']
+  s.files         = `git ls-files`.split("\n") + Dir['man/man?/*.?']
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ['lib']
 
   s.add_runtime_dependency 'binman', '~> 3.0'
-  s.add_runtime_dependency 'json', '>= 1.6.1', '< 2.0'
+  s.add_runtime_dependency 'json', '~> 1.6'
   s.add_runtime_dependency 'listen', '~> 0.5'
   s.add_runtime_dependency 'diff-lcs', '~> 1.1'
-  s.add_development_dependency 'md2man', '~> 1.0'
+  s.add_development_dependency 'md2man', '~> 1.4'
   s.add_development_dependency 'rake', '~> 0.9.2.2'
 end

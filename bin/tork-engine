@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 =begin =======================================================================
 
-# TORK-ENGINE 1 2012-10-10 18.2.4
+# TORK-ENGINE 1 2012-10-17 19.0.0
 
 ## NAME
 
@@ -75,8 +75,6 @@ to stdout.
 
 *.tork/engine.rb*
   Optional Ruby script that is loaded inside the master process on startup.
-
-See tork-master(1).
 
 ## ENVIRONMENT
 
