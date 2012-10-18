@@ -13,5 +13,5 @@ module Tork
   end
 end
 
-ENV['TORK_CONFIGS'] ||= 'auto'.freeze # ENV values come frozen by default
+ENV['TORK_CONFIGS'] ||= 'default'.freeze # ENV values come frozen by default
 Tork.config :config

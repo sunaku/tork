@@ -55,9 +55,9 @@ See tork-driver(1), tork-engine(1), and tork-master(1).
 `TORK_CONFIGS`
   Colon-separated (:) list of either paths to directories that contain
   configuration files or names of the following configuration helpers.
-  If this variable is not set, then its value is assumed to be "auto".
+  If this variable is not set, then its value is assumed to be "default".
 
-  > `auto`
+  > `default`
   >   Loads the following configuration helpers (as appropriate) if your
   >   current working directory appears to utilize what they configure.
   >   See below for complete descriptions of these configuration helpers.
