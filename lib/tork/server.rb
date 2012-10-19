@@ -52,21 +52,16 @@ class Server
 
 protected
 
-  # On failure to decode the message, warns the sender and returns nil.
+  # Returns nil if the message received was not meant for processing.
   def hear sender, message
     JSON.load message
   rescue JSON::ParserError => error
-    # accept non-JSON "command lines" from clients
     if @clients.include? sender
+      # accept non-JSON "command lines" from clients
       Shellwords.split message
-
-    # forward tell() output from servers to clients
-    elsif @servers.include? sender
-      tell @clients, message, false
-      nil
-
     else
-      tell sender, error
+      # forward tell() output from servers to clients
+      tell @clients, message, false
       nil
     end
   end
