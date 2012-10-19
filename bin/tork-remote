@@ -59,7 +59,13 @@ begin
     # messages to remote from server
     Thread.new do
       while input = socket.gets
-        stream = input =~ Tork::Server::JSON_REGEXP ? STDOUT : STDERR
+        stream =
+          begin
+            JSON.load input
+            STDOUT
+          rescue JSON::ParserError
+            STDERR
+          end
         stream.puts input
         stream.flush
       end

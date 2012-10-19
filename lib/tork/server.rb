@@ -51,25 +51,23 @@ class Server
 
 protected
 
-  JSON_REGEXP = /\A\s*[\[\{]/.freeze
-
   # On failure to decode the message, warns the sender and returns nil.
   def hear sender, message
-    if message =~ JSON_REGEXP
-      JSON.load message
-
+    JSON.load message
+  rescue JSON::ParserError => error
     # accept non-JSON "command lines" from clients
-    elsif @clients.include? sender
+    if @clients.include? sender
       Shellwords.split message
 
-    # forward tell() output from children to clients
+    # forward tell() output from servers to clients
     elsif @servers.include? sender
       tell @clients, message, false
       nil
+
+    else
+      tell sender, error
+      nil
     end
-  rescue JSON::ParserError => error
-    tell sender, error
-    nil
   end
 
   def recv client, command
