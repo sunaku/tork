@@ -2,6 +2,7 @@ require 'socket'
 require 'thread'
 require 'json'
 require 'shellwords'
+require 'set'
 
 module Tork
 class Server
@@ -16,20 +17,20 @@ class Server
     @stdout = STDOUT.dup
     STDOUT.reopen STDERR
 
-    @clients = [STDIN]
-    @servers = []
+    @clients = Set.new.add(STDIN)
+    @servers = Set.new
   end
 
   def loop
     server = UNIXServer.open(Server.address)
-    @servers << server
+    @servers.add server
     catch :quit do
       while @clients.include? STDIN
-        IO.select(@servers + @clients).first.each do |stream|
+        IO.select((@servers + @clients).to_a).first.each do |stream|
           @client = stream
 
           if stream == server
-            @clients << stream.accept
+            @clients.add stream.accept
 
           elsif (stream.eof? rescue true)
             @clients.delete stream
@@ -106,12 +107,12 @@ protected
 
   def popen command
     child = IO.popen(command, 'r+')
-    @servers << child
+    @servers.add child
     child
   end
 
   def pclose child
-    return unless @servers.delete child
+    return unless @servers.delete? child
 
     # this should be enough to stop programs that use Tork::Server#loop
     # because their IO.select() loop terminates on the closing of STDIN
