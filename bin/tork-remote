@@ -78,9 +78,7 @@ begin
       socket.puts output
     end
   end
-# ECONNREFUSED is for abstract namespace UNIXSocket
-rescue Errno::ENOENT, Errno::ECONNREFUSED => error
-  warn "#{$0}: could not connect to #{program}"
-  warn "#{error}#{address.inspect}"
+rescue Errno::ENOENT => error
+  warn "#{$0}: could not connect to #{program}: #{error}"
   exit 1
 end
