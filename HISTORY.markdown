@@ -1,3 +1,26 @@
+## Version 19.0.1 (2012-10-26)
+
+Patch:
+
+  * Support testing projects that have both test/ and spec/ directories.
+
+    I assumed that users would only have either test/ or spec/ but not both.
+    Do you know what happens when a test/ is run by RSpec or vice versa? :-)
+
+    Thanks to Kyle Peyton for reporting this issue.
+
+  * Automatically load the "autorun" helpers for RSpec and MiniTest.
+
+    RSpec users are accustomed to not having `require "rspec/autorun"` in
+    their spec/spec_helper.rb file because they use the rspec(1) executable
+    to run their tests.  This commit makes things Just Work for them again.
+
+Other:
+
+  * test whether input is JSON by actually parsing it
+
+  * server: use Set instead of Array for faster lookup
+
 ## Version 19.0.0 (2012-10-17)
 
 Major:
@@ -68,7 +91,7 @@ Other:
 Other:
 
   * GH-39: upgrade listen gem version to fix a bug in OSX.
-    Thanks to "harmon" on GitHub for reporting this issue.
+    Thanks to Adam Grant for reporting this issue.
 
 ## Version 18.2.3 (2012-09-26)
 

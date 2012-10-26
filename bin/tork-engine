@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 =begin =======================================================================
 
-# TORK-ENGINE 1 2012-10-17 19.0.0
+# TORK-ENGINE 1 2012-10-26 19.0.1
 
 ## NAME
 
@@ -32,7 +32,7 @@ from stdin and performs the actions described respectively.
   that have changed since the last run of *test_file* will be substituted.
   If any *line_numbers* are zero, then the entire *test_file* will be run.
 
-`["run_test_files"`, *test_files_with_optional_line_numbers*`]`
+`["run_test_files"`, *test\_files\_with\_optional\_line\_numbers*`]`
   Calls the `run_test_file` command once for each item in the given array.
 
 `["stop_running_test_files"`, *signal*`]`

@@ -1,5 +1,4 @@
 require 'socket'
-require 'thread'
 require 'json'
 require 'shellwords'
 require 'set'
@@ -70,7 +69,6 @@ protected
     __send__(*command)
   rescue => error
     tell client, error
-    nil
   end
 
   def send one_or_more_clients, message
@@ -114,7 +112,7 @@ protected
     child.close_write
 
     # but some programs like tork-herald(1) need to be killed explicitly
-    # because they do not follow this convention of exiting on STDIN close
+    # because they do not follow our convention of exiting on STDIN close
     Process.kill :SIGTERM, child.pid
     Process.waitpid child.pid
 
