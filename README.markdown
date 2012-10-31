@@ -131,6 +131,11 @@ You can monitor your test processes from another terminal:
 
 ### With RSpec
 
+RSpec 2.9.0 and newer contain a bug where RSpec's autorun helper won't run any
+specs if someone calls `Kernel#exit` explicitly or simply loads a library
+(such as Test::Unit) which makes the call implicitly.  [This patch](
+https://github.com/rspec/rspec-core/pull/720/files ) fixes the problem.
+
 RSpec 2.8.0 and older contain [a bug](
 https://github.com/sunaku/tork/issues/31 ) where a nonzero exit status (caused
 by an uncaught exception) is overridden by RSpec's `Kernel#at_exit` handler to
