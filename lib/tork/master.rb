@@ -88,3 +88,31 @@ class Master < Server
 
 end
 end
+
+# monkeypatch at_exit to fix RSpec and MiniTest
+# https://github.com/rspec/rspec-core/pull/720
+# https://github.com/seattlerb/minitest/pull/183
+module Kernel
+  alias _d20922b4_a7b3_48d6_ad66_3d23e7310cf0 at_exit
+  def at_exit &block
+    _d20922b4_a7b3_48d6_ad66_3d23e7310cf0 do
+      # prevent SystemExit from inhibiting testing libraries' autorun helpers:
+      # RSpec and MiniTest don't run any tests if $! is present during at_exit
+      if $! and $!.kind_of? SystemExit
+        begin
+          cleared_exit = $!
+          $! = nil # works in Ruby 1.8; raises NameError in Ruby 1.9
+        rescue NameError
+          # $! becomes nil after this rescue block ends in Ruby 1.9
+        end
+        raise NotImplementedError, 'tork/master: could not clear $!' if $!
+      end
+
+      block.call
+
+      # if calling the block didn't raise any exceptions, then restore the
+      # SystemExit exception that we cleared away above (if there was any)
+      raise cleared_exit if cleared_exit
+    end
+  end
+end
