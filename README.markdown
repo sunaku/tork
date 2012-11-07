@@ -129,6 +129,13 @@ You can monitor your test processes from another terminal:
 
     watch 'pgrep -f ^tork | xargs -r ps u'
 
+### With MiniTest
+
+MiniTest 1.3.2 and newer contain a bug where `minitest/autorun` won't run any
+tests if someone calls `Kernel#exit` explicitly or simply loads a library
+(such as RSpec) which makes the call implicitly.  [This patch](
+https://github.com/seattlerb/minitest/pull/183 ) fixes the problem.
+
 ### With RSpec
 
 RSpec 2.9.0 and newer contain a bug where RSpec's autorun helper won't run any
