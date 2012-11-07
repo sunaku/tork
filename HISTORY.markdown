@@ -1,3 +1,19 @@
+## Version 19.0.2 (2012-11-07)
+
+Patch:
+
+  * Monkeypatch `at_exit()` to fix RSpec and MiniTest:
+
+    https://github.com/rspec/rspec-core/pull/720
+
+    https://github.com/seattlerb/minitest/pull/183
+
+Other:
+
+  * README: document RSpec 2.9.0+ autorun skipping bug
+
+  * README: MiniTest 1.3.2+ also has autorun skip bug
+
 ## Version 19.0.1 (2012-10-26)
 
 Patch:
