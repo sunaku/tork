@@ -29,7 +29,7 @@ class Driver < Server
     if all_test_files.empty?
       tell @client, 'There are no test files to run.'
     else
-      run_test_files all_test_files
+      run_non_overhead_test_files all_test_files
     end
   end
 
@@ -52,19 +52,11 @@ protected
     when @herald
       message.each do |changed_file|
         # reabsorb text execution overhead if overhead files changed
-        overhead_changed = REABSORB_FILE_GREPS.any? do |pattern|
-          if pattern.kind_of? Regexp
-            pattern =~ changed_file
-          else
-            pattern == changed_file
-          end
-        end
-
-        if overhead_changed
+        if overhead_file? changed_file
           send @clients, [:reabsorb, changed_file]
           reabsorb_overhead
         else
-          run_test_files find_dependent_test_files(changed_file).to_a
+          run_non_overhead_test_files find_dependent_test_files(changed_file)
         end
       end
 
@@ -74,6 +66,20 @@ protected
   end
 
 private
+
+  def run_non_overhead_test_files test_files
+    run_test_files test_files.reject {|f| overhead_file? f }
+  end
+
+  def overhead_file? file
+    REABSORB_FILE_GREPS.any? do |pattern|
+      if pattern.kind_of? Regexp
+        pattern =~ file
+      else
+        pattern == file
+      end
+    end
+  end
 
   def find_dependent_test_files source_file, results=Set.new
     TEST_FILE_GLOBBERS.each do |regexp, globber|
