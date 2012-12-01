@@ -11,5 +11,11 @@ Tork::Driver::TEST_FILE_GLOBBERS.update(
     single = matches[2]
     plural = ActiveSupport::Inflector.pluralize(single)
     "{test,spec}/**/{#{single},#{plural}_*}_{test,spec}.rb"
+  end,
+
+  %r{^app/views/(.+)/} => lambda do |matches|
+    plural = File.basename(matches[1])
+    single = ActiveSupport::Inflector.singularize(plural)
+    "{test,spec}/**/{#{single},#{plural}_*}_{test,spec}.rb"
   end
 )
