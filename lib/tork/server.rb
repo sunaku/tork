@@ -18,12 +18,12 @@ class Server
 
     @clients = Set.new.add(STDIN)
     @servers = Set.new
+    @address = Server.address
   end
 
   def loop
-    server = UNIXServer.open(Server.address)
-    @servers.add server
     catch :quit do
+      @servers.add server = UNIXServer.open(@address)
       while @clients.include? STDIN
         IO.select((@servers + @clients).to_a).first.each do |stream|
           @client = stream
@@ -42,7 +42,7 @@ class Server
     end
   ensure
     # UNIX domain socket files are not deleted automatically upon closing
-    File.delete server.path
+    File.delete @address if File.socket? @address
   end
 
   def quit
