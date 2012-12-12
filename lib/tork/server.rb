@@ -42,7 +42,7 @@ class Server
     end
   ensure
     # UNIX domain socket files are not deleted automatically upon closing
-    File.delete server.path if server
+    File.delete server.path
   end
 
   def quit
