@@ -1,9 +1,9 @@
 require 'active_support/inflector'
 
 Tork::Driver::REABSORB_FILE_GREPS.push(
-  %r{^config/.+\.(rb|yml)$},
-  %r{^db/schema\.rb$},
-  %r{^Gemfile\.lock$}
+  %r{^config/.+\.(rb|ya?ml)$},
+  'db/schema.rb',
+  'Gemfile.lock'
 )
 
 Tork::Driver::TEST_FILE_GLOBBERS.update(

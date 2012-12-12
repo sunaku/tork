@@ -1,3 +1,17 @@
+## Version 19.1.0 (2012-12-12)
+
+Minor:
+
+  * tork-driver: don't run overhead files as test files
+
+Patch:
+
+  * rails: run dependent tests when `app/views/*` change
+
+  * Clear FactoryGirl sequences and traits on fork (Ryan Ahearn)
+
+  * server: fix clean up of socket files upon exit
+
 ## Version 19.0.2 (2012-11-07)
 
 Patch:
