@@ -61,6 +61,7 @@ This program can be controlled remotely by multiple tork-remote(1) instances.
   >   See below for complete descriptions of these configuration helpers.
   >
   >   * rails
+  >   * devise
   >   * test
   >   * spec
   >   * cucumber
@@ -99,6 +100,9 @@ This program can be controlled remotely by multiple tork-remote(1) instances.
   > `rails`
   >   Supports the [Ruby on Rails] web framework.
   >
+  > `devise`
+  >   Supports the [Devise] authentication framework.
+  >
   > `factory_girl`
   >   Supports the [factory_girl] testing library.
   >
@@ -115,6 +119,7 @@ tork(1), tork-driver(1), tork-master(1)
 [Ruby on Rails]: http://rubyonrails.org
 [Cucumber]: https://cukes.info
 [RSpec]: http://rspec.info
+[Devise]: https://github.com/plataformatec/devise
 
 =end =========================================================================
 
