@@ -134,8 +134,8 @@ You can monitor your test processes from another terminal:
 MiniTest 1.3.2 and newer contain a bug where `minitest/autorun` won't run any
 tests if someone calls `Kernel#exit` explicitly or simply loads a library
 (such as RSpec) which makes the call implicitly.  Use Tork 19.0.2+ to avoid
-this problem or [apply this patch to the rspec-core library](
-https://github.com/seattlerb/minitest/pull/183 ) to fix the problem.
+this problem or [apply this patch to the minitest library](
+https://github.com/seattlerb/minitest/pull/183/files ) to fix the problem.
 
 ### With RSpec
 

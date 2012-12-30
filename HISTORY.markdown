@@ -1,3 +1,19 @@
+## Version 19.2.0 (2012-12-30)
+
+Minor:
+
+  * Add "devise" configuration helper that adds support for testing Rails
+    applications that use the Devise authentication framework.  Thanks to Ryan
+    Ahearn for this contribution.
+
+Patch:
+
+  * gemspec: upgrade to *listen* 0.7.0 to fix issue #43.  Thanks to Ryan
+    Ahearn for reporting this issue and helping debug it, and to Thibaud
+    Guillaume-Gentil for fixing this issue upstream in the *listen* library.
+
+  * Fix `undefined method 'path' for nil` error on socket file removal.
+
 ## Version 19.1.0 (2012-12-12)
 
 Minor:
@@ -8,7 +24,8 @@ Patch:
 
   * rails: run dependent tests when `app/views/*` change
 
-  * Clear FactoryGirl sequences and traits on fork (Ryan Ahearn)
+  * Clear FactoryGirl sequences and traits on fork in the `factory_girl`
+    configuration helper.  Thanks to Ryan Ahearn for this contribution.
 
   * server: fix clean up of socket files upon exit
 

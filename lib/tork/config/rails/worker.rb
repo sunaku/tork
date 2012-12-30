@@ -14,8 +14,6 @@ if defined? ActiveRecord::Base
       {}
     end
 
-  # in-memory databases are an exception; they are simply fork()ed along
-  if info[:database] != ':memory:'
-    base.connection.reconnect!
-  end
+  # in-memory databases are private to each process so they're safely fork()ed
+  base.connection.reconnect! unless info[:database] == ':memory:'
 end
