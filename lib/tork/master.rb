@@ -33,19 +33,15 @@ class Master < Server
     # throttle forking rate to meet the maximum concurrent workers limit
     sleep 1 until @command_by_worker_pid.size < @worker_number_pool.size
 
-    log_file = test_file + '.log'
-    worker_number = @worker_number_pool.shift
-    @command.push log_file, worker_number
-
     $tork_test_file = test_file
     $tork_line_numbers = line_numbers
-    $tork_log_file = log_file
-    $tork_worker_number = worker_number
+    $tork_log_file = $tork_test_file + '.log'
+    $tork_worker_number = @worker_number_pool.shift
     Tork.config :onfork
 
     worker_pid = fork do
       # make the process title Test::Unit friendly and ps(1) searchable
-      $0 = "tork-worker[#{worker_number}] #{test_file}"
+      $0 = "tork-worker[#{$tork_worker_number}] #{$tork_test_file}"
 
       # detach worker process from master process' group for kill -pgrp
       Process.setsid
@@ -55,7 +51,7 @@ class Master < Server
 
       # capture test output in log file because tests are run in parallel
       # which makes it difficult to understand interleaved output thereof
-      STDERR.reopen(STDOUT.reopen(log_file, 'w')).sync = true
+      STDERR.reopen(STDOUT.reopen($tork_log_file, 'w')).sync = true
 
       Tork.config :worker
 
@@ -63,9 +59,10 @@ class Master < Server
       # testing framework will take care of running the tests and reflecting
       # any failures in the worker process' exit status, which will then be
       # handled by the reaping thread registered in the master process (below)
-      Kernel.load test_file if test_file.end_with? '.rb'
+      Kernel.load $tork_test_file if $tork_test_file.end_with? '.rb'
     end
 
+    @command.push $tork_log_file, $tork_worker_number
     @command_by_worker_pid[worker_pid] = @command
     send @clients, @command
 
