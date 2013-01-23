@@ -3,6 +3,7 @@ begin
   class Tork::Railtie < Rails::Railtie
     config.before_initialize do |app|
       app.config.cache_classes = false
+      ActiveSupport::Dependencies.mechanism = :load
     end
   end
 rescue LoadError => error
