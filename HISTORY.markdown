@@ -1,3 +1,14 @@
+## Version 19.2.1 (2013-02-08)
+
+Patch:
+
+  * GH-46: allow reassigning `$tork_*` variable values.  Thanks to Joe
+    Escalante for reminding me to fix this issue.
+
+  * GH-48: disable class caching at the ActiveSupport level for Devise.
+    Thanks to Ryan Ahearn for fixing this issue and to Jonathan Cairns for
+    reporting it.
+
 ## Version 19.2.0 (2012-12-30)
 
 Minor:
