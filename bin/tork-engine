@@ -53,6 +53,9 @@ from stdin and performs the actions described respectively.
 This program prints the following messages, which are single-line JSON arrays,
 to stdout.
 
+`["idle"]`
+  All tests have finished running and no tests are queued for running either.
+
 `["pass_now_fail",` *test_file*`,` *message*`]`
   A previously passing *test_file* has now failed.  See *message* for details.
 
