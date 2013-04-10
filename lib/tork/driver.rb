@@ -18,6 +18,7 @@ class Driver < Server
   def loop
     @herald = popen('tork-herald')
     @engine = popen('tork-engine')
+    @run_all_test_files = Set.new
     super
   ensure
     pclose @herald
@@ -49,6 +50,15 @@ protected
     when @engine
       send @clients, message # propagate downstream
 
+      # send ran_all_test_files when last all-test-file has finished running
+      event, test_file = message
+      case event.to_sym
+      when :pass, :fail
+        if @run_all_test_files.delete? test_file and @run_all_test_files.empty?
+          send @clients, [:ran_all_test_files]
+        end
+      end
+
     when @herald
       message.each do |changed_file|
         # reabsorb text execution overhead if overhead files changed
@@ -68,7 +78,9 @@ protected
 private
 
   def run_non_overhead_test_files test_files
-    run_test_files test_files.reject {|f| overhead_file? f }
+    non_overhead_test_files = test_files.reject {|f| overhead_file? f }
+    @run_all_test_files += non_overhead_test_files
+    run_test_files non_overhead_test_files
   end
 
   def overhead_file? file

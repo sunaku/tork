@@ -37,6 +37,10 @@ to stdout.
   Test execution overhead is being reabsorbed because *overhead_file* has
   changed.
 
+`["ran_all_test_files"]`
+  All test files that were queued for running by the `["run_all_test_files"]`
+  command have now finished running.
+
 *...*
   Messages from tork-engine(1) and tork-master(1) are also reproduced here.
 
