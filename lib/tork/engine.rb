@@ -87,6 +87,7 @@ protected
         @queued_test_files.delete file
 
       when :pass
+        finished = true
         # only whole test file runs should qualify as pass
         if line_numbers.empty?
           was_fail = @failed_test_files.delete? file
@@ -95,11 +96,13 @@ protected
         end
 
       when :fail
+        finished = true
         was_pass = @passed_test_files.delete? file
         now_fail = @failed_test_files.add? file
         send @clients, [:pass_now_fail, file, message] if was_pass and now_fail
       end
 
+      send @clients, [:idle] if finished and @queued_test_files.empty?
     else
       super
     end
