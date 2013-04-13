@@ -22,8 +22,16 @@ class Server
   end
 
   def loop
+    begin
+      server = UNIXServer.open(@address)
+    rescue SystemCallError => error
+      warn "#{$0}: #{error}; retrying in #{timeout = 1 + rand(10)} seconds..."
+      sleep timeout
+      retry
+    end
+
     catch :quit do
-      @servers.add server = UNIXServer.open(@address)
+      @servers.add server
       while @clients.include? STDIN
         IO.select((@servers + @clients).to_a).first.each do |stream|
           @client = stream
