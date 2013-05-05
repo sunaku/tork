@@ -1,3 +1,14 @@
+## Version 19.2.2 (2013-05-04)
+
+This release makes Tork resilient to `Errno::EADDRINUSE` errors that may occur
+sometimes, intermittently, when test execution overhead is being reabsorbed.
+
+Patch:
+
+  * server: retry until the socket opens successfully
+
+  * include md2man rake tasks in developer's rakefile
+
 ## Version 19.2.1 (2013-02-08)
 
 Patch:
