@@ -43,6 +43,7 @@ class Server
             @clients.delete stream
 
           elsif @command = hear(stream, stream.gets)
+            send @clients, [:echo, @command] unless @command.first == 'echo'
             recv stream, @command
           end
         end
