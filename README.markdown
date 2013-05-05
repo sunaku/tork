@@ -34,33 +34,33 @@ Tork runs your tests as they change, in parallel:
 
   * You can override the modular `tork*` programs with your own in $PATH.
 
-  * You can remotely control other `tork*` programs using `tork-remote`.
+  * You can remotely control other `tork*` programs using tork-remote(1).
 
 ### Architecture
 
-Following UNIX philosophy, tork is composed of simple text-based programs that
-*do one thing well*.  As a result, you could even create your own tork user
-interface by wrapping `tork-driver` appropriately!
+Following UNIX philosophy, Tork is composed of simple text-based programs that
+*do one thing well*.  As a result, you can even create your own user interface
+for Tork by wrapping the tork-driver(1) program appropriately!
 
-  * `tork` is an interactive command-line user interface for `tork-driver`
-  * `tork-herald` monitors current directory tree and reports changed files
-  * `tork-driver` drives the engine according to the herald's observations
-  * `tork-engine` tells master to run tests and keeps track of test results
-  * `tork-master` absorbs test execution overhead and forks to run your tests
-  * `tork-remote` remotely controls any tork program running in the same `pwd`
-  * `tork-notify` shows how to receive and process messages from tork programs
+* tork(1) is an interactive command-line user interface for tork-driver(1)
+* tork-herald(1) monitors current directory tree and reports changed files
+* tork-driver(1) drives the engine according to the herald's observations
+* tork-engine(1) tells master to run tests and keeps track of test results
+* tork-master(1) absorbs test execution overhead and forks to run your tests
+* tork-remote(1) remotely controls any Tork program running in the same `pwd`
+* tork-notify(1) shows how to receive and process messages from Tork programs
 
 When the herald observes that files in or beneath the current directory have
 been written to, it tells the driver, which then commands the master to fork a
 worker process to run the tests affected by those changed files.  This is all
 performed *automatically*.  However, to run a test file *manually*, you can:
 
-  1. Simply save the file!  When you do, tork tries to figure out which tests
+  1. Simply save the file!  When you do, Tork tries to figure out which tests
      inside your newly saved test file have changed (using diff and regexps)
      and then attempts to run just those.  To make it run *all* tests in your
      saved file, simply save the file *again* without changing it.
 
-  2. Type `t` followed by a space and the file you want to run into `tork`:
+  2. Type `t` followed by a space and the file you want to run into tork(1):
 
         # run all of test/some_test.rb
         t test/some_test.rb
@@ -68,7 +68,7 @@ performed *automatically*.  However, to run a test file *manually*, you can:
         # run lines 4, 33, and 21 of test/some_test.rb
         t test/some_test.rb 4 33 21
 
-  3. Send a `["run_test_file"]` message to `tork-engine` using `tork-remote`:
+  3. Send a `["run_test_file"]` message to tork-engine(1) using tork-remote(1):
 
         # run all of test/some_test.rb
         echo run_test_file test/some_test.rb | tork-remote tork-engine
@@ -85,13 +85,13 @@ performed *automatically*.  However, to run a test file *manually*, you can:
   * Ruby 1.8.7 or 1.9.3 or newer.
 
   * Operating system that supports POSIX signals and the `fork()` system call.
-    To check if your system qualifies, launch `irb` and enter the following:
+    To check if your system qualifies, launch irb(1) and enter the following:
 
         Process.respond_to? :fork  # must be true
         Signal.list.key? 'TERM'    # must be true
         Signal.list.key? 'KILL'    # must be true
 
-  * To make the `tork-herald` program's filesystem monitoring more efficient:
+  * To make the tork-herald(1) program's filesystem monitoring more efficient:
 
         gem install rb-inotify  # linux
         gem install rb-fsevent  # macosx
