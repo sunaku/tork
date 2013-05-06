@@ -1,3 +1,19 @@
+## Version 19.3.0 (2013-05-05)
+
+Minor:
+
+  * tork-engine(1) now emits `["idle"]` messages whenever all tests
+    have finished running and no more tests are queued for running.
+
+    Thanks to Jonathan Cairns for requesting this feature in GH-50:
+    https://github.com/sunaku/tork/issues/50
+
+Other:
+
+  * add man/man0 subdir containing README and VERSION
+
+  * README: use manpage xrefs for linking in HTML mans
+
 ## Version 19.2.2 (2013-05-04)
 
 This release makes Tork resilient to `Errno::EADDRINUSE` errors that may occur
