@@ -101,8 +101,14 @@ protected
 
     targets.each do |target|
       target = @stdout if target == STDIN
-      target.puts message
-      target.flush
+      begin
+        target.puts message
+        target.flush
+      rescue Errno::EPIPE
+        # the target closed itself asynchronously
+        # https://github.com/sunaku/tork/issues/53
+        next
+      end
     end
   end
 
