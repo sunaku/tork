@@ -1,3 +1,16 @@
+## Version 19.3.1 (2013-06-07)
+
+Patch:
+
+  * server: rescue from failed writes to asynchronously closed clients.
+
+    Thanks to Jonathan Cairns for reporting and fixing this bug in GH-53:
+    https://github.com/sunaku/tork/issues/53
+
+Other:
+
+  * Upgrade to md2man 2.0.
+
 ## Version 19.3.0 (2013-05-05)
 
 Minor:
