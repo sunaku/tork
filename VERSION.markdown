@@ -1,3 +1,12 @@
+## Version 19.3.2 (2013-10-29)
+
+Other:
+
+  * GH-55: upgrade listen & rake gem dependencies.
+
+    Thanks to Matthew Albright for reporting this issue in GH-55:
+    https://github.com/sunaku/tork/issues/55
+
 ## Version 19.3.1 (2013-06-07)
 
 Patch:
