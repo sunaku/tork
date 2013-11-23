@@ -5,6 +5,29 @@ begin
       app.config.cache_classes = false
       ActiveSupport::Dependencies.mechanism = :load
     end
+
+    # if using an sqlite3 database for the test environment, make
+    # it an in-memory database to support parallel test execution
+    config.after_initialize do
+      current = ActiveRecord::Base.connection_config
+      memory = {:adapter => 'sqlite3', :database => ':memory:'}
+
+      if current[:adapter] == memory[:adapter]
+        # ensure that the sqlite3 database is in-memory
+        unless current[:database] == memory[:database]
+          ActiveRecord::Base.establish_connection memory
+        end
+
+        # create application schema if it does not exist
+        unless File.exist? schema = "#{Rails.root}/db/schema.rb"
+          system 'rake', '--trace', 'db:schema:dump', 'RAILS_ENV=development'
+        end
+
+        # apply application schema to in-memory database
+        silence_stream(STDOUT) { load schema }
+        ActiveRecord::Base.connection.schema_cache.clear!
+      end
+    end
   end
 rescue LoadError => error
   warn "tork/config/rails/master: could not set configuration using railties;\n"\

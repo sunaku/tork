@@ -161,8 +161,8 @@ For older Rails, make sure your `config/environments/test.rb` file contains:
 
     config.cache_classes = false
 
-To use SQLite3 as your test database, install its [in-memory database
-adapter][memory_test_fix].  Otherwise, you *might* face these errors:
+For older Rails, to use SQLite3 as your test database, install the [in-memory
+database adapter][memory_test_fix].  Otherwise, you *might* face these errors:
 
 > SQLite3::BusyException: database is locked
 
