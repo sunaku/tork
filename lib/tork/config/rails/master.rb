@@ -34,7 +34,7 @@ begin
       end
     end
   end
-rescue LoadError => error
+rescue LoadError
   warn "tork/config/rails/master: could not set configuration using railties;\n"\
        "you will have to add the following to your test environment manually:\n\t"\
        'config.cache_classes = false'
