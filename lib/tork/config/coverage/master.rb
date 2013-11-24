@@ -19,6 +19,11 @@ at_exit do
         end
 
         grade = ((nsloc - holes.length) / nsloc.to_f) * 100
+        #
+        # NOTE: It's OK to use Ruby 1.9 hash syntax here because
+        #       the coverage library does not exist for Ruby 1.8
+        #       so we'd actually never get this far in Ruby 1.8!
+        #
         report[file] = { grade: grade, nsloc: nsloc, holes: holes }
       end
     end
