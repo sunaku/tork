@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.homepage      = 'http://github.com/sunaku/tork'
   s.summary       = 'test with fork'
   s.description   = 'Runs your tests as they change, in parallel.'
+  s.license       = 'ISC'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
