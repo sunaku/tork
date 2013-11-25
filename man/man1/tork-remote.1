@@ -1,0 +1,38 @@
+.TH TORK\-REMOTE 1 2012\-09\-26 18.2.3
+.SH NAME
+.PP
+tork\-remote \- controls 
+.BR tork (1) 
+programs
+.SH SYNOPSIS
+.PP
+\fB\fCtork-remote\fR [\fIOPTION\fP]... \fIPROGRAM\fP
+.SH DESCRIPTION
+.PP
+This program sends single\-line JSON messages read from its stdin to the given
+\fIPROGRAM\fP which is already running in the same working directory as this one.
+.PP
+If lines read from stdin are not single\-line JSON messages, then they are
+split into an array of words, using the same word\-splitting algorithm as
+.BR sh (1), 
+before being sent to the \fIPROGRAM\fP as a single\-line JSON message.
+.PP
+If the \fIPROGRAM\fP sends any messages in response, then they are printed to
+stdout if they are valid single\-line JSON messages or to stderr otherwise.
+.SH OPTIONS
+.TP
+\fB\fC-h\fR, \fB\fC--help\fR
+Show this help manual.
+.SH EXIT STATUS
+.TP
+1
+Could not connect to the \fIPROGRAM\fP\&.
+.TP
+2
+Lost connection to the \fIPROGRAM\fP\&.
+.SH SEE ALSO
+.PP
+.BR tork (1), 
+.BR tork-driver (1), 
+.BR tork-engine (1), 
+.BR tork-master (1)

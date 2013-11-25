@@ -1,0 +1,119 @@
+.TH TORK\-MASTER 1 2013\-11\-25 19.4.0
+.SH NAME
+.PP
+tork\-master \- absorbs overhead and runs tests
+.SH SYNOPSIS
+.PP
+\fB\fCtork-master\fR [\fIOPTION\fP]...
+.SH DESCRIPTION
+.PP
+This program absorbs your Ruby application's test execution overhead once and
+simply 
+.BR fork (3)s 
+worker processses to run your tests thereafter.  As a result,
+your tests run faster because they no longer spend any time absorbing the test
+execution overhead: worker processes simply inherit the overhead when forked.
+.PP
+This program can be controlled remotely by multiple 
+.BR tork-remote (1) 
+instances.
+.SS Input
+.PP
+This program reads the following commands, which are single\-line JSON arrays,
+from stdin and performs the actions described respectively.
+.TP
+\fB\fC["test",\fR \fItest_file\fP\fB\fC,\fR \fIline_numbers\fP\fB\fC]\fR
+Forks a worker process to run tests that correspond to the given
+\fIline_numbers\fP in the given \fItest_file\fP\&.  If \fIline_numbers\fP is empty, then
+the entire \fItest_file\fP will be run.
+.TP
+\fB\fC["stop",\fR \fIsignal\fP\fB\fC]\fR
+Stops all tests that are currently running by sending the given \fIsignal\fP
+(optional; defaults to "SIGTERM") to their respective worker processes.
+.TP
+\fB\fC["quit"]\fR
+Stops all tests that are currently running and exits.
+.SS Output
+.PP
+This program prints the following messages, which are single\-line JSON arrays,
+to stdout.
+.TP
+\fB\fC["absorb"]\fR
+Test execution overhead has been absorbed.  We are ready for testing!
+.TP
+\fB\fC["test",\fR \fItest_file\fP\fB\fC,\fR \fIline_numbers\fP\fB\fC,\fR \fIlog_file\fP\fB\fC,\fR \fIworker_number\fP\fB\fC]\fR
+Test has begun running.  Its output (both stdout and stderr) is being
+captured into \fIlog_file\fP in real time, so you can watch it with \fB\fCtail -f\fR\&.
+.TP
+\fB\fC["pass",\fR \fItest_file\fP\fB\fC,\fR \fIline_numbers\fP\fB\fC,\fR \fIlog_file\fP\fB\fC,\fR \fIworker_number\fP\fB\fC,\fR \fIexit_code\fP\fB\fC,\fR \fIexit_info\fP\fB\fC]\fR
+Test has passed.
+.TP
+\fB\fC["fail",\fR \fItest_file\fP\fB\fC,\fR \fIline_numbers\fP\fB\fC,\fR \fIlog_file\fP\fB\fC,\fR \fIworker_number\fP\fB\fC,\fR \fIexit_code\fP\fB\fC,\fR \fIexit_info\fP\fB\fC]\fR
+Test has failed.
+.SH OPTIONS
+.TP
+\fB\fC-h\fR, \fB\fC--help\fR
+Show this help manual.
+.SH FILES
+.TP
+\fI\&.tork/config.rb\fP
+Optional Ruby script that is loaded inside the driver process on startup.
+It can read and change the \fB\fCENV['TORK_CONFIGS']\fR environment variable.
+.TP
+\fI\&.tork/master.rb\fP
+Optional Ruby script that is loaded inside the master process on startup.
+It can read and change the following variables.
+.PP
+.RS
+.TP
+\fB\fCTork::Master::MAX_CONCURRENT_WORKERS\fR
+Maximum number of worker processes that are allowed to be running
+simultaneously at any given time.  The default value is either the
+number of processors detected on your system or 1 if detection failed.
+.RE
+.TP
+\fI\&.tork/onfork.rb\fP
+Optional Ruby script that is loaded inside the master process just before a
+worker process is forked.  It can read and change the following variables.
+.PP
+.RS
+.TP
+\fB\fC$tork_test_file\fR
+Path of the test file that will be run by the worker process.
+.TP
+\fB\fC$tork_line_numbers\fR
+Array of line numbers in the test file that were requested to be run.
+.TP
+\fB\fC$tork_log_file\fR
+Path of the log file that will hold the output of the worker process.
+.TP
+\fB\fC$tork_worker_number\fR
+Sequence number of the worker process that will be forked shortly.
+.RE
+.TP
+\fI\&.tork/worker.rb\fP
+Optional Ruby script that is loaded inside a worker process just after
+it is forked.  It can read and change the following variables.
+.PP
+.RS
+.TP
+\fB\fC$tork_test_file\fR
+Path of the test file that will be run by this worker process.
+.TP
+\fB\fC$tork_line_numbers\fR
+Array of line numbers in the test file that were requested to be run.
+.TP
+\fB\fC$tork_log_file\fR
+Path of the log file that will hold the output of this worker process.
+.TP
+\fB\fC$tork_worker_number\fR
+Sequence number of this worker process.
+.RE
+.SH ENVIRONMENT
+.PP
+See 
+.BR tork (1).
+.SH SEE ALSO
+.PP
+.BR tork (1), 
+.BR tork-remote (1)

@@ -1,0 +1,20 @@
+.TH TORK\-HERALD 1 2013\-11\-25 19.4.0
+.SH NAME
+.PP
+tork\-herald \- reports modified files
+.SH SYNOPSIS
+.PP
+\fB\fCtork-herald\fR [\fIOPTION\fP]...
+.SH DESCRIPTION
+.PP
+This program monitors the current working directory and all those below it
+recursively.  When any files therein are modified, it prints their relative
+paths in a single\-line JSON array to stdout.
+.SH OPTIONS
+.TP
+\fB\fC-h\fR, \fB\fC--help\fR
+Show this help manual.
+.SH SEE ALSO
+.PP
+.BR tork (1), 
+.BR tork-driver (1)

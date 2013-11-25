@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="md2man 2.0.2 https://github.com/sunaku/md2man" />
+  <title>README</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body><div class="navbar"><div class="navbar-inner"><span class="brand"><a href="../index.html#man0">man0</a>/README</span></div></div><div class="container-fluid"><pre><code>_______      _______
+ ___  /___________ /__
+  _  __/ __ \  __/ /_/
+  / /_/ /_/ / / / ,\
+  \__/\____/_/ /_/|_\
+             &gt;&gt;&gt;------>
+</code></pre>
+<h1 id="Test-with-fork"><em>Test with fork</em></h1><p>Tork runs your tests as they change, in parallel:</p>
+<ol>
+<li><p>Absorbs test execution overhead into a master process.</p></li>
+<li><p>Forks to inherit overhead and run test files in parallel.</p></li>
+<li><p>Avoids running unchanged tests inside changed test files.</p></li>
+</ol>
+<h2 id="Features">Features</h2>
+<ul>
+<li><p>No configuration necessary: simply run <code>tork</code> to start testing <em>now!</em></p></li>
+<li><p>Runs test files in parallel using fork for multi-core/CPU utilization.</p></li>
+<li><p>Tests <em>changes</em> your Ruby application for rapid TDD: avoids running (1)
+unchanged test files and (2) unchanged tests inside changed test files.</p></li>
+<li><p>Supports MiniTest, Test::Unit, RSpec, and <em>any testing framework</em> that (1)
+exits with a nonzero status to indicate test failures and (2) is loaded by
+your application&#39;s <code>test/test_helper.rb</code> or <code>spec/spec_helper.rb</code> file.</p></li>
+<li><p>Logs the output from your tests into separate files: one log per test.</p></li>
+<li><p>Configurable through Ruby scripts in your current working directory.</p></li>
+<li><p>You can override the modular <code>tork*</code> programs with your own in $PATH.</p></li>
+<li><p>You can remotely control other <code>tork*</code> programs using <a class="md2man-xref" href="../man1/tork-remote.1.html">tork-remote(1)</a>.</p></li>
+</ul>
+<h3 id="Architecture">Architecture</h3><p>Following UNIX philosophy, Tork is composed of simple text-based programs that
+<em>do one thing well</em>.  As a result, you can even create your own user interface
+for Tork by wrapping the <a class="md2man-xref" href="../man1/tork-driver.1.html">tork-driver(1)</a> program appropriately!</p>
+<ul>
+<li><a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a> is an interactive command-line user interface for <a class="md2man-xref" href="../man1/tork-driver.1.html">tork-driver(1)</a></li>
+<li><a class="md2man-xref" href="../man1/tork-herald.1.html">tork-herald(1)</a> monitors current directory tree and reports changed files</li>
+<li><a class="md2man-xref" href="../man1/tork-driver.1.html">tork-driver(1)</a> drives the engine according to the herald&#39;s observations</li>
+<li><a class="md2man-xref" href="../man1/tork-engine.1.html">tork-engine(1)</a> tells master to run tests and keeps track of test results</li>
+<li><a class="md2man-xref" href="../man1/tork-master.1.html">tork-master(1)</a> absorbs test execution overhead and forks to run your tests</li>
+<li><a class="md2man-xref" href="../man1/tork-remote.1.html">tork-remote(1)</a> remotely controls any Tork program running in the same <code>pwd</code></li>
+<li><a class="md2man-xref" href="../man1/tork-notify.1.html">tork-notify(1)</a> shows how to receive and process messages from Tork programs</li>
+</ul>
+<p>When the herald observes that files in or beneath the current directory have
+been written to, it tells the driver, which then commands the master to fork a
+worker process to run the tests affected by those changed files.  This is all
+performed <em>automatically</em>.  However, to run a test file <em>manually</em>, you can:</p>
+<ol>
+<li><p>Simply save the file!  When you do, Tork tries to figure out which tests
+ inside your newly saved test file have changed (using diff and regexps)
+ and then attempts to run just those.  To make it run <em>all</em> tests in your
+ saved file, simply save the file <em>again</em> without changing it.</p></li>
+<li><p>Type <code>t</code> followed by a space and the file you want to run into <a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a>:</p>
+<pre><code># run all of test/some_test.rb
+t test/some_test.rb
+
+# run lines 4, 33, and 21 of test/some_test.rb
+t test/some_test.rb 4 33 21
+</code></pre></li>
+<li><p>Send a <code>[&quot;run_test_file&quot;]</code> message to <a class="md2man-xref" href="../man1/tork-engine.1.html">tork-engine(1)</a> using <a class="md2man-xref" href="../man1/tork-remote.1.html">tork-remote(1)</a>:</p>
+<pre><code># run all of test/some_test.rb
+echo run_test_file test/some_test.rb | tork-remote tork-engine
+
+# run lines 4, 33, and 21 of test/some_test.rb
+echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
+</code></pre></li>
+</ol>
+<h2 id="Installation">Installation</h2>
+<pre><code>gem install tork
+</code></pre>
+<h3 id="Prerequisites">Prerequisites</h3>
+<ul>
+<li><p>Ruby 1.8.7 or 1.9.3 or newer.</p></li>
+<li><p>Operating system that supports POSIX signals and the <code>fork()</code> system call.
+To check if your system qualifies, launch <a class="md2man-xref">irb(1)</a> and enter the following:</p>
+<pre><code>Process.respond_to? :fork  # must be true
+Signal.list.key? &#39;TERM&#39;    # must be true
+Signal.list.key? &#39;KILL&#39;    # must be true
+</code></pre></li>
+<li><p>To make the <a class="md2man-xref" href="../man1/tork-herald.1.html">tork-herald(1)</a> program&#39;s filesystem monitoring more efficient:</p>
+<pre><code>gem install rb-inotify  # linux
+gem install rb-fsevent  # macosx
+</code></pre></li>
+</ul>
+<h3 id="Development">Development</h3>
+<pre><code>git clone git://github.com/sunaku/tork
+cd tork
+bundle install
+bundle exec tork --help  # run it directly
+bundle exec rake --tasks # packaging tasks
+</code></pre>
+<h2 id="Usage">Usage</h2><h3 id="At-the-command-line">At the command line</h3>
+<pre><code>tork --help
+</code></pre>
+<p>You can add line editing, history, and filename completion:</p>
+<pre><code>rlwrap -c tork
+</code></pre>
+<p>You can control <a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a> interactively from another terminal:</p>
+<pre><code>tork-remote tork-engine
+# type your commands here, one per line.
+# press Control-D to exit <a class="md2man-xref" href="../man1/tork-remote.1.html">tork-remote(1)</a>
+</code></pre>
+<p>You can also do the same non-interactively using a pipeline:</p>
+<pre><code># run lines 4, 33, and 21 of test/some_test.rb
+echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
+</code></pre>
+<p>You can monitor your test processes from another terminal:</p>
+<pre><code>watch &#39;pgrep -f ^tork | xargs -r ps u&#39;
+</code></pre>
+<h3 id="With-MiniTest">With MiniTest</h3><p>MiniTest 1.3.2 and newer contain a bug where <code>minitest/autorun</code> won&#39;t run any
+tests if someone calls <code>Kernel#exit</code> explicitly or simply loads a library
+(such as RSpec) which makes the call implicitly.  Use Tork 19.0.2+ to avoid
+this problem or <a href="https://github.com/seattlerb/minitest/pull/183/files">apply this patch to the minitest library</a> to fix the problem.</p><h3 id="With-RSpec">With RSpec</h3><p>RSpec 2.9.0 and newer contain a bug where RSpec&#39;s autorun helper won&#39;t run any
+specs if someone calls <code>Kernel#exit</code> explicitly or simply loads a library
+(such as Test::Unit) which makes the call implicitly.  Use Tork 19.0.2+ to
+avoid this problem or <a href="https://github.com/rspec/rspec-core/pull/720/files">apply this patch to the rspec-core library</a> to fix the problem.</p><p>RSpec 2.8.0 and older contain <a href="https://github.com/sunaku/tork/issues/31">a bug</a> where a nonzero exit status (caused
+by an uncaught exception) is overridden by RSpec&#39;s <code>Kernel#at_exit</code> handler to
+be zero, thereby falsely indicating that a spec had passed.  <a href="https://github.com/rspec/rspec-core/pull/569/files">This patch</a> fixes the problem.</p><h3 id="With-Ruby-on-Rails">With <a href="http://rubyonrails.org">Ruby on Rails</a></h3><p>For Rails 3 or newer, use the <code>rails</code> configuration helper <em>before</em> the <code>test</code>
+or <code>spec</code> helpers.  Otherwise your test helper will load Rails <em>before</em> the
+specified <code>rails</code> configuration helper has a chance to disable class caching!</p><p>For older Rails, make sure your <code>config/environments/test.rb</code> file contains:</p>
+<pre><code>config.cache_classes = false
+</code></pre>
+<p>For older Rails, to use SQLite3 as your test database, install the <a href="https://github.com/stepahn/memory_test_fix">in-memory
+database adapter</a>.  Otherwise, you <em>might</em> face these errors:</p>
+<blockquote>
+<p>SQLite3::BusyException: database is locked</p><p>cannot start a transaction within a transaction</p></blockquote>
+<h2 id="Configuration">Configuration</h2><p>Tork looks for a configuration directory named <code>.tork/</code> inside its working
+directory.  The configuration directory contains specially-named Ruby scripts,
+within which you can query and modify the settings for various tork programs.
+See the &quot;FILES&quot; sections in the manual pages of tork programs for details.</p><p>Note that tork <em>does not</em> automatically reload changes from your configuration
+directory.  Consequently, you must restart tork if your configuration changes.</p><h2 id="License">License</h2><p>Released under the ISC license.  See the LICENSE file for details.</p></div></body>
+</html>

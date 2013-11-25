@@ -1,0 +1,199 @@
+.TH TORK\-DRIVER 1 2013\-11\-25 19.4.0
+.SH NAME
+.PP
+tork\-driver \- drives 
+.BR tork-engine (1) 
+when files change
+.SH SYNOPSIS
+.PP
+\fB\fCtork-driver\fR [\fIOPTION\fP]...
+.SH DESCRIPTION
+.PP
+This program drives 
+.BR tork-engine (1) 
+when 
+.BR tork-herald (1) 
+reports files changes.
+.PP
+This program can be controlled remotely by multiple 
+.BR tork-remote (1) 
+instances.
+.SS Input
+.PP
+This program reads the following commands, which are single\-line JSON arrays,
+from stdin and performs the actions described respectively.
+.TP
+\fB\fC["run_all_test_files"]\fR
+Runs all test files found within and beneath the current working directory.
+.TP
+\fI\&...\fP
+Commands for 
+.BR tork-engine (1) 
+are also accepted here.
+.SS Output
+.PP
+This program prints the following messages, which are single\-line JSON arrays,
+to stdout.
+.TP
+\fB\fC["reabsorb",\fR \fIoverhead_file\fP\fB\fC]\fR
+Test execution overhead is being reabsorbed because \fIoverhead_file\fP has
+changed.
+.TP
+\fI\&...\fP
+Messages from 
+.BR tork-engine (1) 
+and 
+.BR tork-master (1) 
+are also reproduced here.
+.SH OPTIONS
+.TP
+\fB\fC-h\fR, \fB\fC--help\fR
+Show this help manual.
+.SH FILES
+.TP
+\fI\&.tork/config.rb\fP
+Optional Ruby script that is loaded inside the driver process on startup.
+It can read and change the \fB\fCENV['TORK_CONFIGS']\fR environment variable.
+.TP
+\fB\fC.tork/driver.rb\fR
+Optional Ruby script that is loaded inside the driver process on startup.
+It can read and change the following variables.
+.PP
+.RS
+.TP
+\fB\fCTork::Driver::REABSORB_FILE_GREPS\fR
+Array of strings or regular expressions that match the paths of overhead
+files.  If any of these equal or match the path of a changed file
+reported by 
+.BR tork-herald (1), 
+then the test execution overhead will be
+reabsorbed in 
+.BR tork-master (1).
+.TP
+\fB\fCTork::Driver::ALL_TEST_FILE_GLOBS\fR
+Array of file globbing patterns that describe the set of all test files
+in your Ruby application.
+.TP
+\fB\fCTork::Driver::TEST_FILE_GLOBBERS\fR
+Hash that maps (1) a regular expression describing a set of file paths
+to (2) a lambda function that accepts a \fB\fCMatchData\fR object containing
+the results of the regular expression matching against the path of a
+changed file, and yields one or more file globbing patterns (a single
+string, or an array of strings) that describe a set of test files that
+need to be run.
+.IP
+The results of these functions are recursively expanded (fed back into
+them) to construct an entire dependency tree of test files that need to
+be run.  For instance, if one function returns a glob that yields files
+matched by another function, then that second function will be called to
+glob more test files.  This process repeats until all dependent test
+files have been accounted for.
+.PP
+.RS
+\s+2\fBSingle glob expansion\fP\s-2
+.PP
+For example, if test files had the same names as their source files
+followed by an underscore and the file name in reverse like this:
+.RS
+.IP \(bu 2
+lib/hello.rb => test/hello_olleh.rb
+.IP \(bu 2
+app/world.rb => spec/world_ldrow.rb
+.RE
+.PP
+Then you would add the following to your configuration file:
+.PP
+.RS
+.nf
+Tork::Driver::TEST_FILE_GLOBBERS.update(
+  %r{^(lib|app)/.*?([^/]+?)\\.rb$} => lambda do |matches|
+    name = matches[2]
+    "{test,spec}/**/#{name}_#{name.reverse}.rb"
+  end
+)
+.fi
+.RE
+.PP
+\s+2\fBMulti\-glob expansion\fP\s-2
+.PP
+For example, if test files could optionally have "test" or "spec"
+prefixed or appended to their already peculiar names, like so:
+.RS
+.IP \(bu 2
+lib/hello.rb => test/hello_olleh_test.rb
+.IP \(bu 2
+lib/hello.rb => test/test_hello_olleh.rb
+.IP \(bu 2
+app/world.rb => spec/world_ldrow_spec.rb
+.IP \(bu 2
+app/world.rb => spec/spec_world_ldrow.rb
+.RE
+.PP
+Then you would add the following to your configuration file:
+.PP
+.RS
+.nf
+Tork::Driver::TEST_FILE_GLOBBERS.update(
+  %r{^(lib|app)/.*?([^/]+?)\\.rb$} => lambda do |matches|
+    name = matches[2]
+    ["{test,spec}/**/#{name}_#{name.reverse}.rb",
+     "{test,spec}/**/#{name}_#{name.reverse}_{test,spec}.rb",
+     "{test,spec}/**/{test,spec}_#{name}_#{name.reverse}.rb"]
+  end
+)
+.fi
+.RE
+.PP
+\s+2\fBRecursive expansion\fP\s-2
+.PP
+For example, if you wanted to run test files associated with
+\fB\fClib/hello.rb\fR whenever the \fB\fCapp/world.rb\fR file changed, then you would
+write:
+.PP
+.RS
+.nf
+Tork::Driver::TEST_FILE_GLOBBERS.update(
+  %r{^app/world\\.rb$} => lambda do |matches|
+    'lib/hello.rb'
+  end
+)
+.fi
+.RE
+.PP
+This effectively aliases one file onto another, but not in both
+directions.
+.PP
+\s+2\fBSuppressing expansion\fP\s-2
+.PP
+These lambda functions can return \fB\fCnil\fR if they do not wish for a
+particular source file to be tested.  For example, to ignore tests for
+all source files except those within a \fB\fCmodels/\fR directory, you would
+write:
+.PP
+.RS
+.nf
+Tork::Driver::TEST_FILE_GLOBBERS.update(
+  %r{^(lib|app)(/.*?)([^/]+?)\\.rb$} => lambda do |matches|
+    if matches[2].include? '/models/'
+      ["{test,spec}/**/#{matches[3]}_{test,spec}.rb",
+       "{test,spec}/**/{test,spec}_#{matches[3]}.rb"]
+    #else     # implied by the Ruby language
+      #nil    # implied by the Ruby language
+    end
+  end
+)
+.fi
+.RE
+.RE
+.RE
+.SH ENVIRONMENT
+.PP
+See 
+.BR tork (1).
+.SH SEE ALSO
+.PP
+.BR tork (1), 
+.BR tork-remote (1), 
+.BR tork-herald (1), 
+.BR tork-engine (1), 
+.BR tork-master (1)

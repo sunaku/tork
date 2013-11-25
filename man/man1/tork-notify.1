@@ -1,0 +1,27 @@
+.TH TORK\-NOTIFY 1 2013\-11\-25 19.4.0
+.SH NAME
+.PP
+tork\-notify \- notifies you of test status changes
+.SH SYNOPSIS
+.PP
+\fB\fCtork-notify\fR [\fIOPTION\fP]...
+.SH DESCRIPTION
+.PP
+This program serves as an example of how to receive and process messages sent
+by the various programs in the 
+.BR tork (1) 
+suite.  It notifies you when previously
+passing tests fail (or vice versa) through libnotify, xmessage, or growl.  If
+none are available on your system, then the notification is printed to stdout.
+.SH OPTIONS
+.TP
+\fB\fC-h\fR, \fB\fC--help\fR
+Show this help manual.
+.SH EXIT STATUS
+.PP
+See 
+.BR tork-remote (1).
+.SH SEE ALSO
+.PP
+.BR tork-remote (1), 
+.BR tork-engine (1)

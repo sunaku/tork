@@ -1,0 +1,142 @@
+.TH TORK 1 2013\-11\-25 19.4.0
+.SH NAME
+.PP
+tork \- Continuous testing tool for Ruby
+.SH SYNOPSIS
+.PP
+\fB\fCtork\fR [\fIOPTION\fP]... [\fICONFIG\fP]...
+.SH DESCRIPTION
+.PP
+This program is a simple command\-line user interface for 
+.BR tork-driver (1).
+.PP
+First, it applies the given \fICONFIG\fP values, which are either (1) paths to
+directories that contain configuration files or (2) names of configuration
+helpers listed in the description of the \fB\fCTORK_CONFIGS\fR environment variable.
+.PP
+Next, it waits for you to supply interactive commands either (1) directly on
+its stdin or (2) remotely through 
+.BR tork-remote (1).  
+From then onward, you may
+press the ENTER key (supplying no command) to see a menu of accepted commands.
+.PP
+Some interactive commands accept additional arguments, described as follows.
+.TP
+\fB\fCt\fR \fItest_file\fP [\fIline_number\fP]...
+Runs the given \fItest_file\fP while only running those tests that are defined
+on the given list of \fIline_number\fPs.  If no \fIline_number\fPs are given, then
+only those tests that have changed since the last run of the \fItest_file\fP
+will now be run.
+.TP
+\fB\fCs\fR [\fIsignal\fP]
+Stops test files that are currently running by sending the given \fIsignal\fP
+(optional; defaults to \fB\fCSIGTERM\fR) to their respective worker processes.
+.PP
+This program can be controlled remotely by multiple 
+.BR tork-remote (1) 
+instances.
+.SH OPTIONS
+.TP
+\fB\fC-h\fR, \fB\fC--help\fR
+Show this help manual.
+.SH FILES
+.TP
+\fI\&.tork/config.rb\fP
+Optional Ruby script that is loaded inside the driver process on startup.
+It can read and change the \fB\fCENV['TORK_CONFIGS']\fR environment variable.
+.SH ENVIRONMENT
+.TP
+\fB\fCTORK_CONFIGS\fR
+Colon\-separated (:) list of either paths to directories that contain
+configuration files or names of the following configuration helpers.
+If this variable is not set, then its value is assumed to be "default".
+.PP
+.RS
+.TP
+\fB\fCdefault\fR
+Loads the following configuration helpers (as appropriate) if your
+current working directory appears to utilize what they configure.
+See below for complete descriptions of these configuration helpers.
+.RS
+.IP \(bu 2
+rails
+.IP \(bu 2
+devise
+.IP \(bu 2
+test
+.IP \(bu 2
+spec
+.IP \(bu 2
+cucumber
+.IP \(bu 2
+factory_girl
+.RE
+.TP
+\fB\fCdotlog\fR
+Hides log files by prefixing their names with a period (dot).
+.TP
+\fB\fClogdir\fR
+Keeps log files away from your tests, in the \fB\fClog/\fR directory.
+.TP
+\fB\fCcoverage\fR
+Measures C0 code coverage under Ruby 1.9 and dumps a hash in YAML
+format at the end of your log file containing every Ruby script that
+was loaded from the current working directory or any of its descendant
+directories (the key) mapped to the following information (the value):
+.PP
+.RS
+.TP
+\fB\fC:grade\fR
+Percentage of source lines that were C0 covered.
+.TP
+\fB\fC:nsloc\fR
+Total number of source lines of code in the file.
+.TP
+\fB\fC:holes\fR
+Line numbers of source lines that were not covered.
+.RE
+.TP
+\fB\fCtest\fR
+Supports the Test::Unit standard library.
+.PP
+\fB\fCspec\fR
+  Supports the RSpec
+.UR http://rspec.info
+.UE
+testing framework.
+.PP
+\fB\fCcucumber\fR
+  Supports the Cucumber
+.UR https://cukes.info
+.UE
+testing framework.
+.PP
+\fB\fCrails\fR
+  Supports the Ruby on Rails
+.UR http://rubyonrails.org
+.UE
+web framework.
+.PP
+\fB\fCdevise\fR
+  Supports the Devise
+.UR https://github.com/plataformatec/devise
+.UE
+authentication framework.
+.PP
+\fB\fCfactory_girl\fR
+  Supports the factory_girl
+.UR https://github.com/thoughtbot/factory_girl
+.UE
+testing library.
+.PP
+\fB\fCparallel_tests\fR
+  Supports the parallel_tests
+.UR https://github.com/grosser/parallel_tests
+.UE
+testing library.
+.RE
+.SH SEE ALSO
+.PP
+.BR tork (1), 
+.BR tork-driver (1), 
+.BR tork-master (1)

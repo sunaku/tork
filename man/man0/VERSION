@@ -1,0 +1,1659 @@
+.SH Version 19.4.0 (2013\-11\-25)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+The "rails" configuration helper now automatically sets up your test
+database for Tork's parallel testing system if your test database is
+SQLite3 and you are using Rails 3 or newer.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+rails: remove unused capture of rescued exception
+.IP \(bu 2
+coverage: document the use of Ruby 1.9 hash syntax
+.IP \(bu 2
+rename \fB\fC*.markdown\fR file extension to shorter \fB\fC*.md\fR
+.RE
+.SH Version 19.3.2 (2013\-10\-29)
+.PP
+Other:
+.RS
+.IP \(bu 2
+GH\-55: upgrade listen & rake gem dependencies.
+.PP
+Thanks to Matthew Albright for reporting this issue in GH\-55:
+.UR https://github.com/sunaku/tork/issues/55
+.UE
+.RE
+.SH Version 19.3.1 (2013\-06\-07)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+server: rescue from failed writes to asynchronously closed clients.
+.PP
+Thanks to Jonathan Cairns for reporting and fixing this bug in GH\-53:
+.UR https://github.com/sunaku/tork/issues/53
+.UE
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+Upgrade to md2man 2.0.
+.RE
+.SH Version 19.3.0 (2013\-05\-05)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+.BR tork-engine (1) 
+now emits \fB\fC["idle"]\fR messages whenever all tests
+have finished running and no more tests are queued for running.
+.PP
+Thanks to Jonathan Cairns for requesting this feature in GH\-50:
+.UR https://github.com/sunaku/tork/issues/50
+.UE
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+add man/man0 subdir containing README and VERSION
+.IP \(bu 2
+README: use manpage xrefs for linking in HTML mans
+.RE
+.SH Version 19.2.2 (2013\-05\-04)
+.PP
+This release makes Tork resilient to \fB\fCErrno::EADDRINUSE\fR errors that may occur
+sometimes, intermittently, when test execution overhead is being reabsorbed.
+.PP
+Patch:
+.RS
+.IP \(bu 2
+server: retry until the socket opens successfully
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+include md2man rake tasks in developer's rakefile
+.RE
+.SH Version 19.2.1 (2013\-02\-08)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+GH\-46: allow reassigning \fB\fC$tork_*\fR variable values.  Thanks to Joe
+Escalante for reminding me to fix this issue.
+.IP \(bu 2
+GH\-48: disable class caching at the ActiveSupport level for Devise.
+Thanks to Ryan Ahearn for fixing this issue and to Jonathan Cairns for
+reporting it.
+.RE
+.SH Version 19.2.0 (2012\-12\-30)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+Add "devise" configuration helper that adds support for testing Rails
+applications that use the Devise authentication framework.  Thanks to Ryan
+Ahearn for this contribution.
+.RE
+.PP
+Patch:
+.RS
+.IP \(bu 2
+gemspec: upgrade to \fIlisten\fP 0.7.0 to fix issue #43.  Thanks to Ryan
+Ahearn for reporting this issue and helping debug it, and to Thibaud
+Guillaume\-Gentil for fixing this issue upstream in the \fIlisten\fP library.
+.IP \(bu 2
+Fix \fB\fCundefined method 'path' for nil\fR error on socket file removal.
+.RE
+.SH Version 19.1.0 (2012\-12\-12)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+tork\-driver: don't run overhead files as test files
+.RE
+.PP
+Patch:
+.RS
+.IP \(bu 2
+rails: run dependent tests when \fB\fCapp/views/*\fR change
+.IP \(bu 2
+Clear FactoryGirl sequences and traits on fork in the \fB\fCfactory_girl\fR
+configuration helper.  Thanks to Ryan Ahearn for this contribution.
+.IP \(bu 2
+server: fix clean up of socket files upon exit
+.RE
+.SH Version 19.0.2 (2012\-11\-07)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Monkeypatch \fB\fCat_exit()\fR to fix RSpec and MiniTest:
+.TP
+.UR https://github.com/rspec/rspec-core/pull/720
+.UE
+.TP
+.UR https://github.com/seattlerb/minitest/pull/183
+.UE
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+README: document RSpec 2.9.0+ autorun skipping bug
+.IP \(bu 2
+README: MiniTest 1.3.2+ also has autorun skip bug
+.RE
+.SH Version 19.0.1 (2012\-10\-26)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Support testing projects that have both test/ and spec/ directories.
+.PP
+I assumed that users would only have either test/ or spec/ but not both.
+Do you know what happens when a test/ is run by RSpec or vice versa? :\-)
+.PP
+Thanks to Kyle Peyton for reporting this issue.
+.IP \(bu 2
+Automatically load the "autorun" helpers for RSpec and MiniTest.
+.PP
+RSpec users are accustomed to not having \fB\fCrequire "rspec/autorun"\fR in
+their spec/spec_helper.rb file because they use the 
+.BR rspec (1) 
+executable
+to run their tests.  This commit makes things Just Work for them again.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+test whether input is JSON by actually parsing it
+.IP \(bu 2
+server: use Set instead of Array for faster lookup
+.RE
+.SH Version 19.0.0 (2012\-10\-17)
+.PP
+Major:
+.RS
+.IP \(bu 2
+The \fB\fC.tork.rb\fR configuration file has been replaced by the \fB\fC.tork/\fR
+directory, which contains specially\-named Ruby scripts.  Refer to the
+\fB\fCTORK_CONFIGS\fR environment variable in 
+.BR tork (1) 
+for more information.
+.IP \(bu 2
+The \fB\fCTork::Config\fR object has been replaced by various data structures in
+the \fB\fCTork::\fR namespace.  See the "FILES" sections in the manual pages of
+tork programs for information on the data structures that replaced it.
+.IP \(bu 2
+\fB\fCTork::Config.test_event_hooks\fR has been removed.  Instead, you must now
+monitor the STDOUT of 
+.BR tork-master (1) 
+or 
+.BR tork-engine (1) 
+either directly
+or indirectly, via 
+.BR tork-remote (1), 
+and react to their status messages.
+See the 
+.BR tork-notify (1) 
+program for an example of how to implement this.
+.IP \(bu 2
+.BR tork (1): 
+'t' now runs a specified test, whereas 'a' runs all tests.
+.IP \(bu 2
+.BR tork-engine (1): 
+the \fB\fCrun_test_file\fR command now takes line numbers as a
+variable\-length list of arguments (varargs) rather than as an array.
+.IP \(bu 2
+.BR tork-engine (1): 
+the \fB\fCrun_test_file\fR command now runs an entire test file
+when zero is given as one of the line numbers to be run.
+.IP \(bu 2
+.BR tork-master (1): 
+the \fB\fCload\fR command is no longer accepted.  Instead, you
+must specify load paths and overhead files in the \fB\fC.tork/master.rb\fR file.
+.IP \(bu 2
+The \fB\fCTORK_CONFIGS\fR env\-var is now a colon delimited list of directories.
+.IP \(bu 2
+The \fB\fCtork/client\fR library has been removed.  The threaded IO and popen()
+wrappers that it provided have been replaced by the powerful IO.select().
+.RE
+.PP
+Minor:
+.RS
+.IP \(bu 2
+.BR tork (1): 
+allow user to specify arguments after command key
+.IP \(bu 2
+.BR tork (1): 
+add 'k' to stop all currently running tests with SIGKILL
+.IP \(bu 2
+add 
+.BR tork-remote (1) 
+to remotely control any tork program.  This feature is
+made possible by the awesome power of IO.select() and UNIX domain sockets.
+.IP \(bu 2
+add 
+.BR tork-notify (1) 
+as example of using 
+.BR tork-remote (1) 
+and 
+.BR tork-engine (1)
+.IP \(bu 2
+.BR tork-engine (1): 
+add \fB\fC["run_test_files"]\fR command to run multiple files
+.IP \(bu 2
+.BR tork-engine (1): 
+emit edge\-triggered \fB\fCpass_now_fail\fR and \fB\fCfail_now_pass\fR
+events to notify you about changes in a test file's pass/fail status.
+.IP \(bu 2
+typing Control\-D now breaks tork programs out of \fB\fCTork::Server#loop()\fR
+.RE
+.PP
+Patch:
+.RS
+.IP \(bu 2
+.BR tork-master (1): 
+stop workers with SIGKILL when quitting
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+.BR tork (1): 
+document parameters for \fB\fCt\fR and \fB\fCs\fR commands
+.IP \(bu 2
+README: add tip about rlwrap for better interactive
+.IP \(bu 2
+README: simplify watch command using pgrep & xargs
+.IP \(bu 2
+README: use standard bundle exec; no \fB\fC--binstubs\fR
+.RE
+.SH Version 18.2.4 (2012\-10\-10)
+.PP
+Other:
+.RS
+.IP \(bu 2
+GH\-39: upgrade listen gem version to fix a bug in OSX.
+Thanks to Adam Grant for reporting this issue.
+.RE
+.SH Version 18.2.3 (2012\-09\-26)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Restored support for building Tork from its gemspec under Ruby 1.8.
+Thanks to Ohno Shin'ichi for reporting this issue and contributing a
+preliminary fix.
+.IP \(bu 2
+Add resilience against failed command dispatch in \fB\fCTork::Server#loop()\fR\&.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+It's not worth rescuing Interrupt only to exit silently.
+Let the user see stack traces when they press Control\-C.
+.IP \(bu 2
+Update old comments about SIGCHLD handler, which was
+replaced by reaping threads quite a few releases ago.
+.IP \(bu 2
+Use $0 instead of hard\-coding the program name.
+.RE
+.SH Version 18.2.2 (2012\-07\-11)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+GH\-35: resume dispatched but not yet started tests.
+.PP
+After reabsorbing overhead, we need to resume previously dispatched test
+files that have not yet finished running.  This includes the waiting set
+(dispatched but not yet running) as well as the running set (dispatched
+and already started running).  Otherwise, we encounter a bug where test
+files in the waiting set can NEVER be run again!
+.RE
+.SH Version 18.2.1 (2012\-07\-05)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+GH\-37: switch from Guard::Listener to Listen gem.
+Thanks to Jesse Cooke for reporting this issue.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+gemspec: need to provide .0 suffix for ~> operator.
+.IP \(bu 2
+gemspec: LICENSE file contains UTF\-8 author names.
+.RE
+.SH Version 18.2.0 (2012\-03\-27)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+Emit warnings when commands cannot be performed.  This improves the user
+experience by giving them immediate feedback.  For example, if you issue
+the "rerun\fIfailed\fPtests" command and no tests have failed yet, you will
+now see a warning message that explains the situation.  Thanks to
+NagaChaitanya Vellanki (@chaitanyav) for suggesting this change.
+.RE
+.PP
+Patch:
+.RS
+.IP \(bu 2
+GH\-32: Restore support for Selenium and Capybara by replacing the global
+SIGCHLD handler in 
+.BR tork-master (1) 
+with individual threads, one per forked
+worker process.  Thanks to Bjørn Trondsen (@Sharagoz) for reporting this
+issue and verifying the fix.
+.IP \(bu 2
+README: Recommend a newer fork of the "memory\fItest\fPfix" Rails plugin.
+.RE
+.SH Version 18.1.0 (2012\-02\-26)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+Add \fB\fCtork/config/coverage\fR configuration helper for Ruby 1.9, which prints
+a coverage report at the end of your log file in YAML format.  The report
+is a hash containing the following information per each loaded Ruby file
+that exist in or beneath the current working directory:
+.RS
+.IP \(bu 2
+:grade \- percentage of C0 code coverage for source lines of code
+.IP \(bu 2
+:nsloc \- total number of source lines of code in the file
+.IP \(bu 2
+:holes \- line numbers of source lines that were not covered
+.RE
+.RE
+.SH Version 18.0.1 (2012\-02\-13)
+.PP
+Alert:
+.RS
+.IP \(bu 2
+If you're on Ruby 1.9, please use 1.9.3 or newer because 1.9.2 is
+known to segfault under RSpec and Rails.  See GH\-30 and GH\-32.
+.RE
+.PP
+Patch:
+.RS
+.IP \(bu 2
+GH\-27: Cucumber features now run correctly under RSpec.  Thanks to Scott
+Radcliff for reporting this issue and to David Burrows for solving it!
+.IP \(bu 2
+.BR tork (1): 
+fix undefined method `strip' for nil:NilClass error.
+.IP \(bu 2
+tork/config: ignore directories given as configuration files.
+.RE
+.SH Version 18.0.0 (2012\-02\-06)
+.PP
+Alert:
+.RS
+.IP \(bu 2
+RSpec 2.8.0 and older contain a bug
+.UR https://github.com/sunaku/tork/issues/31
+.UE
+where a nonzero
+exit status (caused by an uncaught exception) is overridden
+by RSpec's \fB\fCKernel#at_exit\fR handler to be zero, thereby
+falsely indicating that a spec had passed.  This patch
+.UR https://github.com/rspec/rspec-core/pull/569/files
+.UE
+fixes the
+problem.  Thanks to Gumaro Melendez for reporting this issue.
+.RE
+.PP
+Major:
+.RS
+.IP \(bu 2
+Dropped first parameter to \fB\fCTork::Config::test_file_globbers\fR\&.
+.IP \(bu 2
+GH\-31: tork\-master now emits separate exit code and info.
+Update your \fB\fCTork::Config::test_event_hooks\fR accordingly.
+.IP \(bu 2
+tork/server: switch from modules to class inheritance.
+.IP \(bu 2
+tork/config: switch to Struct to prevent misspellings.
+.RE
+.PP
+Minor:
+.RS
+.IP \(bu 2
+tork\-driver now recursively expands dependent test files while globbing.
+.IP \(bu 2
+Extracted bookkeeping stuff from tork\-driver into tork\-engine component.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+tork/config: do not reabsorb when .tork.rb
+changes.  Since the configuration is loaded in
+multiple processes, it is difficult to reload
+the configuration on the fly without adding
+significant complexity to Tork.  Instead, it's
+easier to accept the limitation that you must
+restart Tork if you change your configuration.
+.IP \(bu 2
+GH\-29: bump guard version requirement to v1 series.
+.IP \(bu 2
+Improve documentation; revise markdown; clean up.
+.RE
+.SH Version 17.1.0 (2012\-01\-30)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+Added \fB\fCTork::Config.test_event_hooks\fR configuration option.
+.IP \(bu 2
+Added \fB\fCtork/config/notify\fR configuration helper for receiving
+edge\-triggered notifications (via libnotify, growl, or
+xmessage) about changes in test files' pass/fail status.
+.IP \(bu 2
+Added \fB\fCtork/config/factory_girl\fR configuration helper for properly
+clearing factory definitions before forking and then finding them after
+forking to avoid \fB\fCFactoryGirl::DuplicateDefinitionError\fR\&.  (Mark Hayes)
+.IP \(bu 2
+Lambda functions in \fB\fCTork::Config.test_file_globbers\fR can now return
+multiple globs in an array, in addition to just a single glob or \fB\fCnil\fR\&.
+.IP \(bu 2
+Added support for the MiniTest convention of naming test files as
+\fB\fCtest/**/test_*.rb\fR and \fB\fCspec/**/spec_*.rb\fR\&. (Jose Pablo Barrantes)
+.RE
+.SH Version 17.0.1 (2012\-01\-29)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+.BR tork-herald (1) 
+\fIsometimes\fP reported changed test files twice.
+.IP \(bu 2
+tork/driver: only whole test file runs should qualify as pass.
+.IP \(bu 2
+tork/config/cucumber: only set ARGV for \fB\fC*.feature\fR test files.
+.IP \(bu 2
+Tork::Client::Transceiver needs to stop both TX & RX loops.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+tork/driver: store test file lists in Set, not Array.
+.IP \(bu 2
+HISTORY: use single\-word change\-set descriptions.
+.RE
+.SH Version 17.0.0 (2012\-01\-27)
+.PP
+Major:
+.RS
+.IP \(bu 2
+.BR tork-herald (1) 
+now emits batches of single\-line JSON arrays instead of
+printing one (raw) path per line.  This makes IPC uniform across Tork.
+.IP \(bu 2
+.BR tork-master (1) 
+now emits log\fIfile and worker\fPnumber in status messages.
+.IP \(bu 2
+The order of parameters for before/after fork hooks has been changed to
+better reflect the order of items in 
+.BR tork-master (1)'s 
+status messages.
+.RS
+.IP \(bu 2
+The old order was: worker\fInumber, log\fPfile, test\fIfile, line\fPnumbers.
+.IP \(bu 2
+The new order is:  test\fIfile, line\fPnumbers, log\fIfile, worker\fPnumber.
+.RE
+.RE
+.PP
+Minor:
+.RS
+.IP \(bu 2
+GH\-24: add \fB\fCtork/config/dotlog\fR configuration helper to "hide" log files.
+(Nicolas Fouché)
+.IP \(bu 2
+GH\-25: add \fB\fCtork/config/logdir\fR configuration helper to isolate log files.
+(Jose Pablo Barrantes)
+.IP \(bu 2
+.BR tork (1) 
+now strips all whitespace from your input, in case you pressed
+spacebar or tab a few times, by accident, before entering your command.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+tork/client: Replace write lock with queue to support SIGCHLD handler.
+.PP
+The SIGCHLD handler in 
+.BR tork-master (1) 
+can be triggered at any time, even
+in the middle of writing to the standard output stream!  Locking access
+to the output stream in normal code (outside the signal handler) would
+freeze the program because the signal handler, waiting for the lock to
+be released, would never return!
+.PP
+One solution is to maintain a thread\-safe queue of outgoing items that
+need to be written to the output stream.  Both normal code and the
+signal handler can quickly push an outgoing item onto the queue and
+proceed with their business.  A separate thread can then have the sole
+responsibility of (and access to) continually writing those outgoing
+items to the output stream.
+.IP \(bu 2
+README: revise instructions, reorganize document, and other improvements.
+.RE
+.SH Version 16.0.0 (2012\-01\-25)
+.PP
+Major:
+.RS
+.IP \(bu 2
+Drop the \fB\fCTork::Config.test_name_extractor\fR configuration option.
+.IP \(bu 2
+Pass line numbers instead of test names to before/after fork hooks.
+.IP \(bu 2
+Pass $~ (MatchData) to \fB\fCTork::Config::test_file_globbers\fR functions.
+.RE
+.PP
+Minor:
+.RS
+.IP \(bu 2
+tork/config/cucumber: only run changed scenarios in changed features.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+README: update instructions on running Tork directly from Git clone.
+.RE
+.SH Version 15.1.0 (2012\-01\-25)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+GH\-19: add \fB\fCtork cucumber\fR for running cucumber features.
+.RE
+.PP
+Patch:
+.RS
+.IP \(bu 2
+tork/config/rails: support Rails 2 and don't assume AR is used.  (Benjamin
+Quorning)
+.IP \(bu 2
+tork/config: settings from configuration helpers specified in
+$TORK_CONFIGS should override settings from the \fB\fC.tork.rb\fR file.
+.IP \(bu 2
+README: need to set $PATH to run this project from a git clone.
+.IP \(bu 2
+LICENSE: give copyright to major contributors only.
+See 
+.UR http://stackoverflow.com/questions/1497756
+.UE \&.
+Also added forgotten Luke Wendling to the list.
+.RE
+.SH Version 15.0.1 (2012\-01\-24)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+GH\-21: Ruby 1.9 class_eval() is smarter than 1.8.
+.IP \(bu 2
+GH\-20: forgot \fB\fCrequire 'thread'\fR for Mutex class.  (Jesse Cooke)
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+.BR tork (1): 
+fix shadowed variable names.  (Jose Pablo Barrantes)
+.IP \(bu 2
+GH\-22: fix command to build & install gem from source.
+.IP \(bu 2
+GH\-22: add m2dman as development dependency in gemspec.
+.IP \(bu 2
+GH\-18: windows not supported; lacks fork & SIGCHLD.
+.IP \(bu 2
+README: spruce up introduction and features list.
+.IP \(bu 2
+README: missed a testr => tork rename in watch cmd.
+.IP \(bu 2
+README: add tip about Guard's FS watching backends.
+.RE
+.SH Version 15.0.0 (2012\-01\-23)
+.PP
+Major:
+.RS
+.IP \(bu 2
+This project has been renamed from TestR to Tork (test with fork) in order
+to better compete with rival projects, namely Spork! >:\-)  Credit goes to
+Brian D. Burns for thinking of this most succinct & awesome project name!
+He also created the snazzy ASCII\-art logo featured in the project README.
+.IP \(bu 2
+.BR tork (1): 
+rename \fB\fCr\fR command, which runs all tests, to \fB\fCt\fR, for \fIt\fPork.
+.RE
+.SH Version 14.3.0 (2012\-01\-20)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+.BR testr (1): 
+notify user while dispatching their commands. This is especially
+useful when the "rerun\fIpassed\fPtest_files" command has been dispatched but
+there are no passed test files, so nothing happens and from the user's
+perspective: TestR sucks because it's unresponsive.
+.IP \(bu 2
+config/testr/rails: Reopen connections in forked workers to fix errors:
+.PP
+.RS
+.nf
+Mysql2::Error: MySQL server has gone away
+PGError: connection not open
+.fi
+.RE
+.PP
+Thanks to Spencer Steffen for contributing this solution
+.UR https://github.com/sunaku/tork/issues/14#issuecomment-3539470
+.UE \&.
+.IP \(bu 2
+.BR testr-driver (1): 
+document the "over" status message in manual page.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+.BR testr-driver (1): 
+keep same herald; only replace master.
+.IP \(bu 2
+.BR testr (1): 
+shorten code for loop break on quit command.
+.IP \(bu 2
+server: rename \fB\fC@upstream\fR to \fB\fC@client\fR for coherence.
+.IP \(bu 2
+Can pass lambda and proc with block to \fB\fC<<\fR method.
+.IP \(bu 2
+Explain \fB\fC$0\fR override at the start of bin/ scripts.
+.IP \(bu 2
+LICENSE: credit our most recent contributors.
+.RE
+.SH Version 14.2.0 (2012\-01\-16)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+Add ability to run \fB\fCtestr rails\fR without needing a \fB\fC.testr.rb\fR file.
+.IP \(bu 2
+.BR testr (1) 
+no longer shows command menu at startup.  Press ENTER to see it.
+.IP \(bu 2
+.BR testr (1) 
+now notifies you before absorbing overhead at startup.
+.RE
+.PP
+Patch:
+.RS
+.IP \(bu 2
+.BR testr (1) 
+now accepts death silently when Control\-C is pressed.
+.RE
+.SH Version 14.1.3 (2012\-01\-13)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Add support Guard v0.9.0 and newer in \fB\fCtestr-herald\fR\&.  (Jose Pablo
+Barrantes)
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+Tighten version constraints for gem dependencies to avoid future
+breakages.
+.RE
+.SH Version 14.1.2 (2012\-01\-09)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+Don't consider partial test file pass as full pass.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+Upgrade to binman 3 for better bundler support.
+.RE
+.SH Version 14.1.1 (2011\-12\-07)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Do not fail when given test file no longer exists.
+.IP \(bu 2
+Make xUnit \fB\fC--name\fR option regexp case\-insensitive.
+.IP \(bu 2
+RSpec does not accept regexp for \fB\fC--example\fR option;
+see 
+.UR https://github.com/rspec/rspec-core/issues/445
+.UE
+and 
+.UR https://github.com/dchelimsky/rspec/issues/44
+.UE
+.IP \(bu 2
+Ruby 187 does not have Symbol#upcase() method.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+README: add another SQLite3 error to known issues.
+Thanks to Luke Wendling for contributing this patch.
+.IP \(bu 2
+README: add a section explaining usage and theory.
+.IP \(bu 2
+README: show example earlier in factory_girl tip.
+.IP \(bu 2
+README: update lines of code statistic: 372 SLOC.
+.IP \(bu 2
+Better variable naming for self\-documentation.
+.IP \(bu 2
+Upgrade to binman 2.0.0 for UNIX man pages.
+.RE
+.SH Version 14.1.0 (2011\-11\-03)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+Make servers responsive to quit request (SIGTERM) from upstream.
+.PP
+This change lets the user quit 
+.BR testr-master (1) 
+while it is loading
+test execution overhead (which can be a lengthy, blocking operation).
+.PP
+By sending a signal to the server, we don't have to wait for it to
+finish processing its current command before seeing our :quit command.
+.IP \(bu 2
+Add embedded BinMan manual pages to bin scripts.  All TestR scripts now
+have a \fB\fC--help\fR option which displays their UNIX manual page.  Try it!
+.PP
+The single\-line JSON message protocol used by these scripts is now
+documented in their manual pages, so you should have everything you
+need to create \fIyour own custom user interface to TestR\fP if you wish! :\-)
+.RE
+.PP
+Patch:
+.RS
+.IP \(bu 2
+SIGCHLD does not awaken main thread in Ruby 1.9.3p0.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+Simplify 
+.BR watch (1) 
+.BR ps (1) 
+process title monitoring.
+.IP \(bu 2
+Testr: tell user to press ENTER after command key.
+.IP \(bu 2
+README: add tip on loading factory_girl factories.
+.RE
+.SH Version 14.0.3 (2011\-10\-11)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Forgot to migrate the \fB\fCtestr/config/rails\fR configuration helper to use the
+new TestR configuration parameter names.
+.RE
+.SH Version 14.0.2 (2011\-10\-11)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Fix updating passed/failed test files bookkeeping.  Once a test file
+failed, it was (incorrectly) always considered failed, even if it passed
+later on.
+.IP \(bu 2
+Do not requeue test files that are waiting to run.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+Rename \fB\fC*.md\fR files to \fB\fC*.markdown\fR to avoid ambiguity.
+.RE
+.SH Version 14.0.1 (2011\-10\-10)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Use blue/red for pass/fail instead of green/red to accommodate the color
+blind.
+.IP \(bu 2
+Incorrect test name regexp was passed down to Test::Unit.  This broke
+focused testing, where only changed tests in a changed test file are run.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+Make \fB\fCtestr-master\fR wait for killed worker processes before exiting.
+.RE
+.SH Version 14.0.0 (2011\-10\-09)
+.PP
+Major:
+.RS
+.IP \(bu 2
+Renamed this project and its resources from test\-loop to TestR.
+.IP \(bu 2
+Renamed the \fB\fCreabsorb_file_globs\fR configuration parameter to
+\fB\fCreabsorb_file_greps\fR\&.  It now contains regular expressions.
+.IP \(bu 2
+Renamed the \fB\fCtest_file_matchers\fR configuration parameter to
+\fB\fCtest_file_globbers\fR\&.  Its keys are now regular expressions.
+.IP \(bu 2
+Renamed the \fB\fCtest_name_parser\fR configuration parameter to
+\fB\fCtest_name_extractor\fR\&.
+.IP \(bu 2
+Renamed the \fB\fCmax_concurrent_tests\fR configuration parameter to
+\fB\fCmax_forked_workers\fR\&.
+.IP \(bu 2
+Renamed the \fB\fCbefore_each_test\fR configuration parameter to
+\fB\fCafter_fork_hooks\fR\&.  Its function parameters have also changed.
+.IP \(bu 2
+Removed the \fB\fCdelay_per_iteration\fR and \fB\fCafter_each_test\fR configuration
+parameters.
+.IP \(bu 2
+Removed the \fB\fCtest/loop/notify\fR and \fB\fCtest-loop/coco\fR libraries.
+.RE
+.PP
+Minor:
+.RS
+.IP \(bu 2
+The file system is no longer polled to detect modified files.  Instead, it
+is monitored for file modification events in a portable and efficient
+manner using the Guard
+.UR https://github.com/guard/guard
+.UE
+library.
+.IP \(bu 2
+The number of processors on your system is automatically detected for the
+\fB\fCmax_forked_workers\fR configuration parameter.
+.IP \(bu 2
+Added \fB\fCoverhead_load_paths\fR, \fB\fCall_test_file_globs\fR, and
+\fB\fCbefore_fork_hooks\fR configuration parameters.
+.IP \(bu 2
+Added ability to re\-run passed and failed tests in the \fB\fCtestr\fR script.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+The monolithic \fB\fCtest-loop\fR script has been replaced by several smaller
+ones that communicate with each other using single\-line JSON messages via
+their standard input & output streams.  See "Architecture" in the README.
+.IP \(bu 2
+Now using Bundler to manage development dependencies and gem packaging.
+.RE
+.SH Version 13.0.1 (2011\-09\-21)
+.PP
+Other:
+.RS
+.IP \(bu 2
+Forgot to include \fB\fCtest/loop/coco\fR preset in gem package.
+.IP \(bu 2
+Forgot to mention \fB\fCtest/loop/parallel_tests\fR preset in README.
+.RE
+.SH Version 13.0.0 (2011\-08\-24)
+.PP
+Major:
+.RS
+.IP \(bu 2
+Pass worker sequence number as the last argument to lambda functions in
+\fB\fCTest::Loop.before_each_test\fR and \fB\fCTest::Loop.after_each_test\fR arrays.
+.RE
+.PP
+Minor:
+.RS
+.IP \(bu 2
+In the \fB\fCtest/loop/rails\fR configuration preset:
+.RS
+.IP \(bu 2
+Automatically test a controller when its model or factory is modified.
+.IP \(bu 2
+Warn the user if Railtie (Rails 3) is not available for automatic
+disabling of Rails' class caching mechanism under the test environment.
+.RE
+.IP \(bu 2
+Add \fB\fCtest/loop/parallel_tests\fR configuration preset for parallel_tests
+gem.  (Corné Verbruggen)
+.IP \(bu 2
+Assign rotating sequence numbers to workers so that you can handle parallel
+processes like connecting to separate databases better.  (Corné
+Verbruggen)
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+README: move configuration presets above options.
+.IP \(bu 2
+Eliminate 1 SLOC: .rb extension used in file glob.
+.IP \(bu 2
+Turn off executable bit on loop.rb file mode.
+.IP \(bu 2
+Pass child ENV directly to exec() for atomicity.
+.RE
+.SH Version 12.3.1 (2011\-07\-19)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Binary data could not be stored in environment variable values.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+Forgot to add Jacob Helwig to the gemspec's authors list.
+.RE
+.SH Version 12.3.0 (2011\-07\-19)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+Add \fB\fCTest::Loop::max_concurrent_tests\fR configuration parameter to limit
+the number of test files run concurrently (default 4).  Otherwise, with
+large test suites, we could end up swamping the machine running the tests
+by forking hundreds of test files at once.  (Jacob Helwig)
+.IP \(bu 2
+Rails: add matcher for \fB\fCtest/factories/*_factory.rb\fR\&.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+ENV returns a Hash with duplicate/frozen keys/values.  (Brian D. Burns)
+.IP \(bu 2
+Use Marshal to propagate resume_files to reabsorb.
+.IP \(bu 2
+Store test_files in a Set instead of an Array.
+.RE
+.SH Version 12.2.0 (2011\-06\-01)
+.RS
+.IP \(bu 2
+Prevent empty test suite run in master process.  (Brian D. Burns)
+.IP \(bu 2
+Report test execution statistics in \fB\fCtest/loop/notify\fR preset as
+requested by Juan G. Hurtado..
+.IP \(bu 2
+Add \fB\fCtest/loop/coco\fR preset for integrating the Coco code coverage
+library
+.UR http://lkdjiin.github.com/coco/
+.UE \&.
+.RE
+.SH Version 12.1.0 (2011\-04\-29)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+Add \fB\fCTest::Loop.delay_per_iteration\fR parameter to control the number of
+seconds (or fractions thereof) to sleep in between test\-loop iterations.
+.RE
+.SH Version 12.0.4 (2011\-04\-29)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Reabsorb overhead when user's configuration file changes.  (Brian D. Burns
+and Daniel Pittman)
+.IP \(bu 2
+\fB\fCThread.new { system() }\fR really is backgrounded so \fB\fCfork { system() }\fR is
+not necessary!  This issue
+.UR https://github.com/sunaku/test-loop/issues/5
+.UE
+was solved by upgrading to the newer 2.6.38.4\-1 Linux kernel on my system.
+.RE
+.SH Version 12.0.3 (2011\-04\-25)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Fix SIGCHLD handling and test completion reporting (Daniel Pittman).
+.PP
+We need to reap all ready children in SIGCHLD, not just the first, and
+should not be reporting completion in the signal handler.
+.PP
+On a fast machine, or where there is a slow hook executed at the
+completion of a test run, more than one test child can terminate before
+the SIGCHLD handler is invoked, or while it is running.
+.PP
+In that event we will only get another SIGCHLD when a new child
+terminates, not to signal that there was more than one current
+termination.  We need to loop to collect all terminated children during
+each invocation of the handler.
+.PP
+Since we don't know which child terminated, we wait on any terminated
+child with NOHANG, until it informs us that there are no more zombies
+hanging about.
+.PP
+Doing all the work of finishing the test case, cleaning up, and running
+user hooks inside the SIGCHLD handler block was pretty slow.  This could
+lead to a big pile\-up of children that needed to be cleaned up, especially
+if the user hook did something like run another external process to signal
+completion.
+.PP
+Moving the heavy work of completion outside the signal handler makes the
+whole thing a lot faster, and less likely to bump into the low limit for
+per\-user processes on Mac OS\-X.
+.IP \(bu 2
+Send SIGTERM to each worker PGID to kill workers (Brian D. Burns).
+.PP
+Using Process.setsid() in the workers establishes each process "as a new
+session and process group leader".  So, the SIGTERM sent to the master's
+process group was not recieved by the workers.  kill_workers was simply
+waiting for the workers to finish.
+.IP \(bu 2
+Revert "skip at_exit() handlers defined in master process".
+.PP
+This reverts commit 0a0837f0b7ec92810e1c81d7506f2c8309f25f62 which was
+originally written to skip the reporting of an empty test suite (master
+does not load test files, workers do) by Test::Unit and Minitest in the
+master process.
+.PP
+Such a harmless annoyance should not warrant the crippling of at_exit in
+the master process because that would inhibit its valid uses as well:
+.PP
+.RS
+"UNIX was not designed to stop you from doing stupid things, because
+that would also stop you from doing clever things." ~Doug Gwyn
+.RE
+.IP \(bu 2
+\fB\fCThread.new { system() }\fR is not really backgrounded so \fB\fCfork()\fR instead!
+Many thanks to Brian D. Burns and Daniel Pittman for helping solve this
+issue
+.UR https://github.com/sunaku/test-loop/issues/5
+.UE \&.
+.RE
+.SH Version 12.0.2 (2011\-04\-21)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Consider DB schema dump file as overhead in Rails.
+.IP \(bu 2
+Do not consider test factories as overhead in Rails.
+.IP \(bu 2
+Run test files when test factory files change in Rails.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+Detach worker from master's terminal device sooner.
+.IP \(bu 2
+All required signals must be present in irb check.
+.IP \(bu 2
+Prevent 
+.BR ps (1) 
+from truncating lines to $TERM width.
+.IP \(bu 2
+Retain 
+.BR ps (1) 
+column header in watch command output.
+.IP \(bu 2
+Begin parameter descriptions with the noun itself.
+.RE
+.SH Version 12.0.1 (2011\-04\-20)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Restore support for Ruby 1.8.7.
+.IP \(bu 2
+Allow user's test execution overhead to fork.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+Freeze master's ENV properly; keep resume key.
+.IP \(bu 2
+Remove completed test from running list sooner.
+.IP \(bu 2
+Add instructions to check for POSIX prerequisites.
+.IP \(bu 2
+Support multiple test\-loop instances in watch command.
+.RE
+.SH Version 12.0.0 (2011\-04\-19)
+.PP
+Major:
+.RS
+.IP \(bu 2
+You must now explicitly \fB\fCrequire 'test/loop/rails'\fR for Rails support
+because we can only \fIautomatically\fP apply our Railtie (to disable class
+caching) after the overhead has been loaded, and by then it's too late:
+your models are already loaded & cached by the Rails environment.
+.IP \(bu 2
+Your tests can no longer read from the user's terminal (master's STDIN);
+instead they will read from an empty stream (the reading end of IO.popen).
+.RE
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Replace threads with SIGCHLD for reporting test results.
+.PP
+This fixes deadlock errors that sometimes occurred when the user's chosen
+test library tried to print something to STDOUT/STDERR (even though those
+streams were redirected to a log file in the worker process).
+.PP
+Thanks to Brian D. Burns for suggesting and verifying that the use of
+threads to monitor workers was the culprit behind the deadlocks errors.
+.IP \(bu 2
+Ctrl\-C did not raise Interrupt in my Rails 3 test suite.
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+Ensure a clean ENV when reabsorbing overhead.  Environment variables set
+by your test execution overhead are not propagated to subsequent
+reabsorptions.  (Brian D. Burns)
+.IP \(bu 2
+Call \fB\fCsetsid()\fR to detach worker from master's terminal.
+.UR http://stackoverflow.com/questions/1740308#1740314
+.UE
+.IP \(bu 2
+Mutex is not needed since we only use GIL'ed array methods.
+.UR http://www.ruby-forum.com/topic/174086#762788
+.UE
+.IP \(bu 2
+Remove redundant STDOUT coercion after loading user's testing library.
+.IP \(bu 2
+Further simplify \fB\fCTest::Loop.run()\fR by higher\-order programming.
+.IP \(bu 2
+Add LICENSE file to gem package.
+.IP \(bu 2
+Add prerequisites section about POSIX environment.
+.IP \(bu 2
+Add tip about annihilating test\-loop processes.
+.IP \(bu 2
+Fix markdown formatting.
+.RE
+.SH Version 11.0.1 (2011\-04\-14)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Only attempt to define Railtie if the current Rails version supports it.
+.RE
+.SH Version 11.0.0 (2011\-04\-14)
+.PP
+Major:
+.RS
+.IP \(bu 2
+The \fB\fCtest/loop/rails\fR preset has been internalized and is now applied
+automatically if your test execution overhead includes Ruby on Rails.
+.RE
+.PP
+Minor:
+.RS
+.IP \(bu 2
+If you are using Rails 3, test\-loop will automatically set
+\fB\fCconfig.cache_classes = false\fR for your test environment.  (Brian D.
+Burns)
+.RE
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Avoid deadlock errors when printing output from Test::Unit and MiniTest.
+(Brian D. Burns)
+.PP
+.RS
+.nf
+`write': deadlock detected (fatal)
+.fi
+.RE
+.IP \(bu 2
+Signaled worker termination is neither pass nor fail.
+Do not treat it as a failure by printing the log file.
+.IP \(bu 2
+Ignore SIGINT in workers; only master must honor it.
+.RE
+.SH Version 10.0.1 (2011\-04\-08)
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Workers must ignore SIGTSTP, otherwise master waits forever before
+exiting.
+.IP \(bu 2
+Unregister trap in workers upon first reception instead of racing to
+unregister the trap handlers inherited from the master process.
+.IP \(bu 2
+Prevent uncaught throw error on subsequent Ctrl\-C.
+.IP \(bu 2
+Simpler solution for terminating loop upon Ctrl\-C.
+.RE
+.SH Version 10.0.0 (2011\-04\-06)
+.PP
+Major:
+.RS
+.IP \(bu 2
+The \fB\fCTest::Loop.before_each_test\fR and \fB\fCTest::Loop.after_each_test\fR
+parameters are arrays now.
+.RE
+.SH Version 9.4.0 (2011\-04\-06)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+Allow lambda functions in \fB\fCTest::Loop.test_file_matchers\fR to return \fB\fCnil\fR
+so that you can exclude certain tests from being executed.  (Brian D.
+Burns)
+.IP \(bu 2
+Prefix worker process title with "test\-loop" for easier 
+.BR ps (1)
+searchability.  The monitoring command in the README is now simplified to
+the following:
+.PP
+.RS
+.nf
+watch 'ps xf | grep test-loop | sed 1,3d'
+.fi
+.RE
+.RE
+.PP
+Patch:
+.RS
+.IP \(bu 2
+Skip \fB\fCat_exit()\fR when exiting master process.  This prevents an empty test
+from being run when exiting the loop after having processed a test/spec
+helper that loads the Test::Unit library.  (Brian D. Burns)
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+Use throw/catch to break loop instead of raising SystemExit exception.
+.IP \(bu 2
+Trap SIGTERM with IGNORE/DEFAULT instead of using a closure in master.
+.IP \(bu 2
+Unregister master's custom signal handlers inside worker processes.
+.IP \(bu 2
+Separate configuration parameters into subsections in README.
+.RE
+.SH Version 9.3.0 (2011\-04\-01)
+.PP
+Minor:
+.RS
+.IP \(bu 2
+Resume currently running tests\-\-as well as those currently needing to be
+run\-\-after reabsorbing test execution overhead.  (Brian D. Burns)
+.IP \(bu 2
+Stop currently running tests (and wait for them to finish) before
+reabsorbing overhead.  This greatly improves responsiveness because worker
+processes are no longer there to compete with the new master process for
+system resources.
+.IP \(bu 2
+Notify user when running all tests and when exiting.  (Brian D. Burns)
+.IP \(bu 2
+Notify user when overhead changes instead of when restarting the loop.
+.IP \(bu 2
+Use ANSI clear line command to erase control\-key combinations outputted by
+shells such as BASH and ZSH in test\-loop's output.  (Brian D. Burns)
+.RE
+.PP
+Patch:
+.RS
+.IP \(bu 2
+\fB\fC@last_ran_at\fR was being set during every iteration of the loop.  This is
+problematic when Ruby's \fB\fCTime.now\fR is more precise than your filesystem's
+modification timestamp.  For example, in the ext3 filesystem under Linux,
+file modification timestamps have a precision of 1 second.  (Brian D.
+Burns)
+.IP \(bu 2
+Exit gently on SIGINT by sending SIGTERM to all worker processes and then
+running waitall(), instead of sending SIGKILL to the entire process group.
+As a result, test\-loop no longer exits with a non\-zero status upon SIGINT.
+.IP \(bu 2
+Remove 'ansi' gem dependency.  (Brian D. Burns)
+.RE
+.PP
+Other:
+.RS
+.IP \(bu 2
+Add tip on deleting logs for passing tests.  (Brian D. Burns)
+.IP \(bu 2
+Add tip on monitoring test processes with 
+.BR watch (1) 
+in README.
+.RE
+.SH Version 9.2.0 (2011\-03\-28)
+.RS
+.IP \(bu 2
+Extract Rails\-specific configuration to 'test/loop/rails' sublibrary.
+.IP \(bu 2
+Add 'test/loop/notify' sublibrary for OSD notifications on failures.
+.RE
+.SH Version 9.1.1 (2011\-03\-15)
+.RS
+.IP \(bu 2
+$0 does not work from RubyGems wrapper executable.
+Thanks to Brian D. Burns for reporting this issue.
+.IP \(bu 2
+Add information about sqlite3 errors & workaround in README.
+.RE
+.SH Version 9.1.0 (2011\-02\-23)
+.RS
+.IP \(bu 2
+Print the status of completed tests in ANSI color.
+.IP \(bu 2
+Print the failure log of failing tests to STDERR.
+.IP \(bu 2
+\fB\fC$?\fR is not defined when Errno::ECHILD is raised.
+.RE
+.SH Version 9.0.1 (2011\-02\-18)
+.RS
+.IP \(bu 2
+Shield normal output from control\-key combos printed into the terminal.
+.IP \(bu 2
+Do not print worker PID in status messages because every test file has
+exactly one worker anyway.
+.IP \(bu 2
+Reabsorb on any \fB\fC*.{rb,yml}\fR changes beneath the \fB\fCconfig/\fR directory.
+.IP \(bu 2
+Do not reabsorb overhead when the configuration file changes.
+.IP \(bu 2
+Add \fB\fCafter_each_test\fR example for failure\-only notifications.
+.RE
+.SH Version 9.0.0 (2011\-02\-15)
+.RS
+.IP \(bu 2
+Remove SIGUSR1 for killing worker processes.
+.IP \(bu 2
+Handle Ctrl\-Z signal from the very beginning.
+.RE
+.SH Version 8.0.0 (2011\-02\-12)
+.RS
+.IP \(bu 2
+Move configuration into \fB\fCTest::Loop\fR object itself.
+.IP \(bu 2
+Allow loading \fB\fCbin/test-loop\fR into IRB for testing.
+.IP \(bu 2
+Simplify initialization of default configuration.
+.IP \(bu 2
+Revise README: delete needless cruft; add examples.
+.IP \(bu 2
+Add example on extending \fB\fCbefore_each_test\fR function.
+.IP \(bu 2
+DRY \fB\fCsleep 1\fR commands into higher order function.
+.IP \(bu 2
+Accept > 80 character lines in some cases.
+.IP \(bu 2
+Freeze more constant values against modification.
+.RE
+.SH Version 7.0.1 (2011\-02\-10)
+.RS
+.IP \(bu 2
+Fix minitest deadlock issues with I/O redirection.
+.IP \(bu 2
+Do not signal to restart loop when overhead changes.
+.RE
+.SH Version 7.0.0 (2011\-02\-10)
+.RS
+.IP \(bu 2
+Switch from shell\-script style to modular Ruby style in the source code.
+This yields more lines of code, but the result is much easier to read.
+.RS
+.IP \(bu 2
+Replace the \fB\fC$test_loop_config\fR global variable with the
+\fB\fCTest::Loop::Config\fR constant.
+.RE
+.IP \(bu 2
+Do not wait for all test runs to finish before detecting more changes.
+.RS
+.IP \(bu 2
+Replace the \fB\fCafter_all_tests\fR parameter with \fB\fCafter_each_test\fR\&.
+.RE
+.IP \(bu 2
+Capture test run output into separate log files; one log per test file.
+.RS
+.IP \(bu 2
+The \fB\fCbefore_each_test\fR function is now passed the path to a log file.
+.RE
+.IP \(bu 2
+Register signal handlers at the earliest and act upon signals immediately.
+.RS
+.IP \(bu 2
+Previously, SIGQUIT did not work if there were no test helpers.
+.RE
+.IP \(bu 2
+Send the SIGUSR1 signal to terminate workers and their subprocesses.
+.IP \(bu 2
+Break long lines at 80 characters in the source code.
+.RE
+.SH Version 6.0.0 (2011\-02\-09)
+.RS
+.IP \(bu 2
+Only consider \fB\fC{test,spec}_helper.rb\fR as overhead, not all \fB\fC*_helper.rb\fR\&.
+.IP \(bu 2
+Give the user freedom to inspect and change the default configuration by
+storing it in a \fB\fC$test_loop_config\fR global variable instead of returning
+the user's desired configuration as a hash from the user's configuration
+file.
+.IP \(bu 2
+Change the method signature of the \fB\fCafter_all_tests\fR lambda function.
+.IP \(bu 2
+Add support for growl and xmessage in the \fB\fCafter_all_tests\fR example.
+.IP \(bu 2
+Add note about disabling class caching in Rails test environment.
+.IP \(bu 2
+Add better explanation for the \fB\fCtest_file_matchers\fR example.
+.RE
+.SH Version 5.0.3 (2011\-01\-25)
+.RS
+.IP \(bu 2
+Use "diff/lcs" library instead of "diff" for RSpec compatibility.
+.PP
+Thanks to millisami for reporting this bug:
+.UR https://github.com/sunaku/test-loop/issues/3
+.UE
+.IP \(bu 2
+Terminate worker processes when user presses Control\-C.
+.IP \(bu 2
+Reabsorb when bundler is run, not when Gemfile changes.
+.RE
+.SH Version 5.0.2 (2011\-01\-19)
+.RS
+.IP \(bu 2
+Support string interpolations that yield empty strings in test names.
+.IP \(bu 2
+Accept extra characters before test name in test definition:
+.RS
+.IP \(bu 2
+Whitespace between \fB\fCdef\fR and \fB\fCtest_\fR in traditional test methods.
+.IP \(bu 2
+Opening parenthesis between test name and test definition keyword.
+.RE
+.IP \(bu 2
+Mention that diff gem is necessary for manual git clone installation.
+.RE
+.SH Version 5.0.1 (2011\-01\-18)
+.RS
+.IP \(bu 2
+Sanitize string interpolation in parsed test names.
+.IP \(bu 2
+Remove useless use of #map; result is not reused.
+.IP \(bu 2
+Mention parallelism and revise the introduction.
+.IP \(bu 2
+DRY the mentioning of .test\-loop file in README.
+.RE
+.SH Version 5.0.0 (2011\-01\-17)
+.RS
+.IP \(bu 2
+The configuration file must now yield a Ruby
+hash instead of polluting the global Object
+private environment with instance variables.
+.IP \(bu 2
+Shortened the \fB\fC:source_file_glob_to_test_file_mapping\fR
+configuration parameter name to \fB\fC:test_file_matchers\fR\&.
+.RE
+.SH Version 4.0.1 (2011\-01\-14)
+.RS
+.IP \(bu 2
+Print how much time it took to run all tests.
+.IP \(bu 2
+Do not print test file before loading because it
+is hard to follow parallel test execution anyway.
+.IP \(bu 2
+Print rescued top\-level exceptions to STDERR.
+.IP \(bu 2
+Strip surrounding spaces from parsed test names.
+.IP \(bu 2
+Use long options when passing test names in ARGV.
+.IP \(bu 2
+Only prepend lib/, test/, and spec/ to $LOAD_PATH.
+.RE
+.SH Version 4.0.0 (2011\-01\-13)
+.RS
+.IP \(bu 2
+Only run changed tests inside changed test files.
+.IP \(bu 2
+Run tests in parallel: one worker per test file.
+.IP \(bu 2
+Print the status of each test file after execution.
+.IP \(bu 2
+Rename \fB\fC@after_test_execution\fR to \fB\fC@after_all_tests\fR
+and change its function signature.
+.IP \(bu 2
+Clean up implementation and improve documentation.
+.RE
+.SH Version 3.0.2 (2011\-01\-11)
+.RS
+.IP \(bu 2
+Reabsorb overhead upon Gemfile changes (Rails 3).
+.IP \(bu 2
+Try to recover from all kinds of exceptions.
+.RE
+.SH Version 3.0.1 (2011\-01\-05)
+.RS
+.IP \(bu 2
+Be resilient to $0 and ARGV being changed by tests.
+.IP \(bu 2
+Reduce pollution by making \fB\fCnotify()\fR into lambda.
+.IP \(bu 2
+Beautify markdown formatting and revise the README.
+.RE
+.SH Version 3.0.0 (2011\-01\-04)
+.RS
+.IP \(bu 2
+Replace Rake pathmap usage with lambda functions
+in the \fB\fC@source_file_to_test_file_mapping\fR hash.
+.IP \(bu 2
+Be resilient to syntax errors from loaded files.
+.RE
+.SH Version 2.0.2 (2011\-01\-02)
+.RS
+.IP \(bu 2
+Do not print stack trace when Control\-C pressed.
+.IP \(bu 2
+Reduce the amount of notifications shown to user.
+.RE
+.SH Version 2.0.1 (2011\-01\-01)
+.RS
+.IP \(bu 2
+Fix syntax error caused by a dangling comma. Thanks
+to darthdeus (Jakub Arnold) for reporting this bug
+.UR https://github.com/sunaku/test-loop/issues#issue/1
+.UE \&.
+.IP \(bu 2
+Notify user before reabsorbing overhead.
+.RE
+.SH Version 2.0.0 (2010\-12\-31)
+.RS
+.IP \(bu 2
+Add support for loading configuration file, which
+allows you to define additional test file globs
+and mappings, from the current working directory.
+.IP \(bu 2
+Add support for executing arbitrary logic after every test run
+via the \fB\fC@after_test_execution\fR hook in the configuration file.
+.IP \(bu 2
+Before running tests, print out their file paths.
+.IP \(bu 2
+Automatically retry when overhead absorption fails.
+.RE
+.SH Version 1.2.0 (2010\-11\-23)
+.RS
+.IP \(bu 2
+Notify user when absorbing overhead initially.
+.IP \(bu 2
+DRY up the repetition of 
+.BR Time.at (0) 
+calculation.
+.RE
+.SH Version 1.1.0 (2010\-11\-22)
+.RS
+.IP \(bu 2
+All \fB\fC*_{test,spec}_helper.rb\fR files inside \fB\fCtest/\fR and
+\fB\fCspec/\fR are now considered to be absorable overhead.
+.RE
+.SH Version 1.0.2 (2010\-10\-16)
+.RS
+.IP \(bu 2
+All *\fIhelper.rb files inside test/ and spec/
+were absorbed as overhead instead of just
+the test\fPhelper.rb and spec_helper.rb files.
+.RE
+.SH Version 1.0.1 (2010\-10\-16)
+.RS
+.IP \(bu 2
+Ensure that $LOAD_PATH reflects \fB\fCruby -Ilib:test\fR\&.
+.RE
+.SH Version 1.0.0 (2010\-10\-15)
+.RS
+.IP \(bu 2
+Remove ability to install as a Rails plugin.
+.IP \(bu 2
+Move logic from \fB\fClib/\fR into \fB\fCbin/\fR to keep it simple.
+.IP \(bu 2
+Rely on $LOAD_PATH in \fB\fCbin/\fR instead of relative paths.
+.IP \(bu 2
+Display status messages for better user interactivity.
+.RE
+.SH Version 0.0.2 (2010\-10\-11)
+.RS
+.IP \(bu 2
+Forgot to register \fB\fCbin/test-loop\fR as gem executable.
+.IP \(bu 2
+Revise Usage section into Invocation and Operation.
+.RE
+.SH Version 0.0.1 (2010\-10\-10)
+.RS
+.IP \(bu 2
+First public release.  Enjoy!
+.RE

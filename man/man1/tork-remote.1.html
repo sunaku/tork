@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="md2man 2.0.2 https://github.com/sunaku/md2man" />
+  <title>tork-remote(1) &mdash; controls tork(1) programs</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body><div class="navbar"><div class="navbar-inner"><span class="brand"><a href="../index.html#man1">man1</a>/tork-remote.1</span></div></div><div class="container-fluid"><h1 id="TORK-REMOTE-1-2012-09-26-18-2-3">TORK-REMOTE 1 2012-09-26 18.2.3</h1><h2 id="NAME">NAME</h2><p>tork-remote - controls <a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a> programs</p><h2 id="SYNOPSIS">SYNOPSIS</h2><p><code>tork-remote</code> [<em>OPTION</em>]... <em>PROGRAM</em></p><h2 id="DESCRIPTION">DESCRIPTION</h2><p>This program sends single-line JSON messages read from its stdin to the given
+<em>PROGRAM</em> which is already running in the same working directory as this one.</p><p>If lines read from stdin are not single-line JSON messages, then they are
+split into an array of words, using the same word-splitting algorithm as
+<a class="md2man-xref">sh(1)</a>, before being sent to the <em>PROGRAM</em> as a single-line JSON message.</p><p>If the <em>PROGRAM</em> sends any messages in response, then they are printed to
+stdout if they are valid single-line JSON messages or to stderr otherwise.</p><h2 id="OPTIONS">OPTIONS</h2><dl><dt><code>-h</code>, <code>--help</code></dt><dd>Show this help manual.</dd></dl><h2 id="EXIT-STATUS">EXIT STATUS</h2><dl><dt>1</dt><dd>Could not connect to the <em>PROGRAM</em>.</dd></dl><dl><dt>2</dt><dd>Lost connection to the <em>PROGRAM</em>.</dd></dl><h2 id="SEE-ALSO">SEE ALSO</h2><p><a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a>, <a class="md2man-xref" href="../man1/tork-driver.1.html">tork-driver(1)</a>, <a class="md2man-xref" href="../man1/tork-engine.1.html">tork-engine(1)</a>, <a class="md2man-xref" href="../man1/tork-master.1.html">tork-master(1)</a></p></div></body>
+</html>

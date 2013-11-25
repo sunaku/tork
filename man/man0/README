@@ -1,0 +1,275 @@
+.PP
+.RS
+.nf
+_______      _______
+ ___  /___________ /__
+  _  __/ __ \\  __/ /_/
+  / /_/ /_/ / / / ,\\
+  \\__/\\____/_/ /_/|_\\
+             >>>------>
+.fi
+.RE
+.TH \fITest with fork\fP
+.PP
+Tork runs your tests as they change, in parallel:
+.nr step0 0 1
+.RS
+.IP \n+[step0]
+Absorbs test execution overhead into a master process.
+.IP \n+[step0]
+Forks to inherit overhead and run test files in parallel.
+.IP \n+[step0]
+Avoids running unchanged tests inside changed test files.
+.RE
+.SH Features
+.RS
+.IP \(bu 2
+No configuration necessary: simply run \fB\fCtork\fR to start testing \fInow!\fP
+.IP \(bu 2
+Runs test files in parallel using fork for multi\-core/CPU utilization.
+.IP \(bu 2
+Tests \fIchanges\fP your Ruby application for rapid TDD: avoids running (1)
+unchanged test files and (2) unchanged tests inside changed test files.
+.IP \(bu 2
+Supports MiniTest, Test::Unit, RSpec, and \fIany testing framework\fP that (1)
+exits with a nonzero status to indicate test failures and (2) is loaded by
+your application's \fB\fCtest/test_helper.rb\fR or \fB\fCspec/spec_helper.rb\fR file.
+.IP \(bu 2
+Logs the output from your tests into separate files: one log per test.
+.IP \(bu 2
+Configurable through Ruby scripts in your current working directory.
+.IP \(bu 2
+You can override the modular \fB\fCtork*\fR programs with your own in $PATH.
+.IP \(bu 2
+You can remotely control other \fB\fCtork*\fR programs using 
+.BR tork-remote (1).
+.RE
+.SS Architecture
+.PP
+Following UNIX philosophy, Tork is composed of simple text\-based programs that
+\fIdo one thing well\fP\&.  As a result, you can even create your own user interface
+for Tork by wrapping the 
+.BR tork-driver (1) 
+program appropriately!
+.RS
+.IP \(bu 2
+.BR tork (1) 
+is an interactive command\-line user interface for 
+.BR tork-driver (1)
+.IP \(bu 2
+.BR tork-herald (1) 
+monitors current directory tree and reports changed files
+.IP \(bu 2
+.BR tork-driver (1) 
+drives the engine according to the herald's observations
+.IP \(bu 2
+.BR tork-engine (1) 
+tells master to run tests and keeps track of test results
+.IP \(bu 2
+.BR tork-master (1) 
+absorbs test execution overhead and forks to run your tests
+.IP \(bu 2
+.BR tork-remote (1) 
+remotely controls any Tork program running in the same \fB\fCpwd\fR
+.IP \(bu 2
+.BR tork-notify (1) 
+shows how to receive and process messages from Tork programs
+.RE
+.PP
+When the herald observes that files in or beneath the current directory have
+been written to, it tells the driver, which then commands the master to fork a
+worker process to run the tests affected by those changed files.  This is all
+performed \fIautomatically\fP\&.  However, to run a test file \fImanually\fP, you can:
+.nr step1 0 1
+.RS
+.IP \n+[step1]
+Simply save the file!  When you do, Tork tries to figure out which tests
+ inside your newly saved test file have changed (using diff and regexps)
+ and then attempts to run just those.  To make it run \fIall\fP tests in your
+ saved file, simply save the file \fIagain\fP without changing it.
+.IP \n+[step1]
+Type \fB\fCt\fR followed by a space and the file you want to run into 
+.BR tork (1):
+.PP
+.RS
+.nf
+# run all of test/some_test.rb
+t test/some_test.rb
+# run lines 4, 33, and 21 of test/some_test.rb
+t test/some_test.rb 4 33 21
+.fi
+.RE
+.IP \n+[step1]
+Send a \fB\fC["run_test_file"]\fR message to 
+.BR tork-engine (1) 
+using 
+.BR tork-remote (1):
+.PP
+.RS
+.nf
+# run all of test/some_test.rb
+echo run_test_file test/some_test.rb | tork-remote tork-engine
+# run lines 4, 33, and 21 of test/some_test.rb
+echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
+.fi
+.RE
+.RE
+.SH Installation
+.PP
+.RS
+.nf
+gem install tork
+.fi
+.RE
+.SS Prerequisites
+.RS
+.IP \(bu 2
+Ruby 1.8.7 or 1.9.3 or newer.
+.IP \(bu 2
+Operating system that supports POSIX signals and the \fB\fCfork()\fR system call.
+To check if your system qualifies, launch 
+.BR irb (1) 
+and enter the following:
+.PP
+.RS
+.nf
+Process.respond_to? :fork  # must be true
+Signal.list.key? 'TERM'    # must be true
+Signal.list.key? 'KILL'    # must be true
+.fi
+.RE
+.IP \(bu 2
+To make the 
+.BR tork-herald (1) 
+program's filesystem monitoring more efficient:
+.PP
+.RS
+.nf
+gem install rb-inotify  # linux
+gem install rb-fsevent  # macosx
+.fi
+.RE
+.RE
+.SS Development
+.PP
+.RS
+.nf
+git clone git://github.com/sunaku/tork
+cd tork
+bundle install
+bundle exec tork --help  # run it directly
+bundle exec rake --tasks # packaging tasks
+.fi
+.RE
+.SH Usage
+.SS At the command line
+.PP
+.RS
+.nf
+tork --help
+.fi
+.RE
+.PP
+You can add line editing, history, and filename completion:
+.PP
+.RS
+.nf
+rlwrap -c tork
+.fi
+.RE
+.PP
+You can control 
+.BR tork (1) 
+interactively from another terminal:
+.PP
+.RS
+.nf
+tork-remote tork-engine
+# type your commands here, one per line.
+# press Control-D to exit 
+.BR tork-remote (1)
+.fi
+.RE
+.PP
+You can also do the same non\-interactively using a pipeline:
+.PP
+.RS
+.nf
+# run lines 4, 33, and 21 of test/some_test.rb
+echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
+.fi
+.RE
+.PP
+You can monitor your test processes from another terminal:
+.PP
+.RS
+.nf
+watch 'pgrep -f ^tork | xargs -r ps u'
+.fi
+.RE
+.SS With MiniTest
+.PP
+MiniTest 1.3.2 and newer contain a bug where \fB\fCminitest/autorun\fR won't run any
+tests if someone calls \fB\fCKernel#exit\fR explicitly or simply loads a library
+(such as RSpec) which makes the call implicitly.  Use Tork 19.0.2+ to avoid
+this problem or apply this patch to the minitest library
+.UR https://github.com/seattlerb/minitest/pull/183/files
+.UE
+to fix the problem.
+.SS With RSpec
+.PP
+RSpec 2.9.0 and newer contain a bug where RSpec's autorun helper won't run any
+specs if someone calls \fB\fCKernel#exit\fR explicitly or simply loads a library
+(such as Test::Unit) which makes the call implicitly.  Use Tork 19.0.2+ to
+avoid this problem or apply this patch to the rspec\-core library
+.UR https://github.com/rspec/rspec-core/pull/720/files
+.UE
+to fix the problem.
+.PP
+RSpec 2.8.0 and older contain a bug
+.UR https://github.com/sunaku/tork/issues/31
+.UE
+where a nonzero exit status (caused
+by an uncaught exception) is overridden by RSpec's \fB\fCKernel#at_exit\fR handler to
+be zero, thereby falsely indicating that a spec had passed.  This patch
+.UR https://github.com/rspec/rspec-core/pull/569/files
+.UE
+fixes the problem.
+.SS With Ruby on Rails
+.UR http://rubyonrails.org
+.UE
+.PP
+For Rails 3 or newer, use the \fB\fCrails\fR configuration helper \fIbefore\fP the \fB\fCtest\fR
+or \fB\fCspec\fR helpers.  Otherwise your test helper will load Rails \fIbefore\fP the
+specified \fB\fCrails\fR configuration helper has a chance to disable class caching!
+.PP
+For older Rails, make sure your \fB\fCconfig/environments/test.rb\fR file contains:
+.PP
+.RS
+.nf
+config.cache_classes = false
+.fi
+.RE
+.PP
+For older Rails, to use SQLite3 as your test database, install the in\-memory
+database adapter
+.UR https://github.com/stepahn/memory_test_fix
+.UE \&.  Otherwise, you \fImight\fP face these errors:
+.PP
+.RS
+SQLite3::BusyException: database is locked
+.PP
+cannot start a transaction within a transaction
+.RE
+.SH Configuration
+.PP
+Tork looks for a configuration directory named \fB\fC.tork/\fR inside its working
+directory.  The configuration directory contains specially\-named Ruby scripts,
+within which you can query and modify the settings for various tork programs.
+See the "FILES" sections in the manual pages of tork programs for details.
+.PP
+Note that tork \fIdoes not\fP automatically reload changes from your configuration
+directory.  Consequently, you must restart tork if your configuration changes.
+.SH License
+.PP
+Released under the ISC license.  See the LICENSE file for details.

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="md2man 2.0.2 https://github.com/sunaku/md2man" />
+  <title>tork-driver(1) &mdash; drives tork-engine(1) when files change</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body><div class="navbar"><div class="navbar-inner"><span class="brand"><a href="../index.html#man1">man1</a>/tork-driver.1</span></div></div><div class="container-fluid"><h1 id="TORK-DRIVER-1-2013-11-25-19-4-0">TORK-DRIVER 1 2013-11-25 19.4.0</h1><h2 id="NAME">NAME</h2><p>tork-driver - drives <a class="md2man-xref" href="../man1/tork-engine.1.html">tork-engine(1)</a> when files change</p><h2 id="SYNOPSIS">SYNOPSIS</h2><p><code>tork-driver</code> [<em>OPTION</em>]...</p><h2 id="DESCRIPTION">DESCRIPTION</h2><p>This program drives <a class="md2man-xref" href="../man1/tork-engine.1.html">tork-engine(1)</a> when <a class="md2man-xref" href="../man1/tork-herald.1.html">tork-herald(1)</a> reports files changes.</p><p>This program can be controlled remotely by multiple <a class="md2man-xref" href="../man1/tork-remote.1.html">tork-remote(1)</a> instances.</p><h3 id="Input">Input</h3><p>This program reads the following commands, which are single-line JSON arrays,
+from stdin and performs the actions described respectively.</p><dl><dt><code>[&quot;run_all_test_files&quot;]</code></dt><dd>Runs all test files found within and beneath the current working directory.</dd></dl><dl><dt><em>...</em></dt><dd>Commands for <a class="md2man-xref" href="../man1/tork-engine.1.html">tork-engine(1)</a> are also accepted here.</dd></dl><h3 id="Output">Output</h3><p>This program prints the following messages, which are single-line JSON arrays,
+to stdout.</p><dl><dt><code>[&quot;reabsorb&quot;,</code> <em>overhead_file</em><code>]</code></dt><dd>Test execution overhead is being reabsorbed because <em>overhead_file</em> has
+changed.</dd></dl><dl><dt><em>...</em></dt><dd>Messages from <a class="md2man-xref" href="../man1/tork-engine.1.html">tork-engine(1)</a> and <a class="md2man-xref" href="../man1/tork-master.1.html">tork-master(1)</a> are also reproduced here.</dd></dl><h2 id="OPTIONS">OPTIONS</h2><dl><dt><code>-h</code>, <code>--help</code></dt><dd>Show this help manual.</dd></dl><h2 id="FILES">FILES</h2><dl><dt><em>.tork/config.rb</em></dt><dd>Optional Ruby script that is loaded inside the driver process on startup.
+It can read and change the <code>ENV[&#39;TORK_CONFIGS&#39;]</code> environment variable.</dd></dl><dl><dt><code>.tork/driver.rb</code></dt><dd>Optional Ruby script that is loaded inside the driver process on startup.
+It can read and change the following variables.</dd></dl>
+<blockquote>
+<dl><dt><code>Tork::Driver::REABSORB_FILE_GREPS</code></dt><dd>Array of strings or regular expressions that match the paths of overhead
+files.  If any of these equal or match the path of a changed file
+reported by <a class="md2man-xref" href="../man1/tork-herald.1.html">tork-herald(1)</a>, then the test execution overhead will be
+reabsorbed in <a class="md2man-xref" href="../man1/tork-master.1.html">tork-master(1)</a>.</dd></dl><dl><dt><code>Tork::Driver::ALL_TEST_FILE_GLOBS</code></dt><dd>Array of file globbing patterns that describe the set of all test files
+in your Ruby application.</dd></dl><dl><dt><code>Tork::Driver::TEST_FILE_GLOBBERS</code></dt><dd>Hash that maps (1) a regular expression describing a set of file paths
+to (2) a lambda function that accepts a <code>MatchData</code> object containing
+the results of the regular expression matching against the path of a
+changed file, and yields one or more file globbing patterns (a single
+string, or an array of strings) that describe a set of test files that
+need to be run.</dd></dl><dl><dd>The results of these functions are recursively expanded (fed back into
+them) to construct an entire dependency tree of test files that need to
+be run.  For instance, if one function returns a glob that yields files
+matched by another function, then that second function will be called to
+glob more test files.  This process repeats until all dependent test
+files have been accounted for.</dd></dl>
+<blockquote>
+<p><strong><em>Single glob expansion</em></strong></p><p>For example, if test files had the same names as their source files
+followed by an underscore and the file name in reverse like this:</p>
+<ul>
+<li>lib/hello.rb =&gt; test/hello_olleh.rb</li>
+<li>app/world.rb =&gt; spec/world_ldrow.rb</li>
+</ul>
+<p>Then you would add the following to your configuration file:</p>
+<pre><code>Tork::Driver::TEST_FILE_GLOBBERS.update(
+  %r{^(lib|app)/.*?([^/]+?)\.rb$} =&gt; lambda do |matches|
+    name = matches[2]
+    &quot;{test,spec}/**/#{name}_#{name.reverse}.rb&quot;
+  end
+)
+</code></pre>
+<p><strong><em>Multi-glob expansion</em></strong></p><p>For example, if test files could optionally have &quot;test&quot; or &quot;spec&quot;
+prefixed or appended to their already peculiar names, like so:</p>
+<ul>
+<li>lib/hello.rb =&gt; test/hello_olleh_test.rb</li>
+<li>lib/hello.rb =&gt; test/test_hello_olleh.rb</li>
+<li>app/world.rb =&gt; spec/world_ldrow_spec.rb</li>
+<li>app/world.rb =&gt; spec/spec_world_ldrow.rb</li>
+</ul>
+<p>Then you would add the following to your configuration file:</p>
+<pre><code>Tork::Driver::TEST_FILE_GLOBBERS.update(
+  %r{^(lib|app)/.*?([^/]+?)\.rb$} =&gt; lambda do |matches|
+    name = matches[2]
+    [&quot;{test,spec}/**/#{name}_#{name.reverse}.rb&quot;,
+     &quot;{test,spec}/**/#{name}_#{name.reverse}_{test,spec}.rb&quot;,
+     &quot;{test,spec}/**/{test,spec}_#{name}_#{name.reverse}.rb&quot;]
+  end
+)
+</code></pre>
+<p><strong><em>Recursive expansion</em></strong></p><p>For example, if you wanted to run test files associated with
+<code>lib/hello.rb</code> whenever the <code>app/world.rb</code> file changed, then you would
+write:</p>
+<pre><code>Tork::Driver::TEST_FILE_GLOBBERS.update(
+  %r{^app/world\.rb$} =&gt; lambda do |matches|
+    &#39;lib/hello.rb&#39;
+  end
+)
+</code></pre>
+<p>This effectively aliases one file onto another, but not in both
+directions.</p><p><strong><em>Suppressing expansion</em></strong></p><p>These lambda functions can return <code>nil</code> if they do not wish for a
+particular source file to be tested.  For example, to ignore tests for
+all source files except those within a <code>models/</code> directory, you would
+write:</p>
+<pre><code>Tork::Driver::TEST_FILE_GLOBBERS.update(
+  %r{^(lib|app)(/.*?)([^/]+?)\.rb$} =&gt; lambda do |matches|
+    if matches[2].include? &#39;/models/&#39;
+      [&quot;{test,spec}/**/#{matches[3]}_{test,spec}.rb&quot;,
+       &quot;{test,spec}/**/{test,spec}_#{matches[3]}.rb&quot;]
+    #else     # implied by the Ruby language
+      #nil    # implied by the Ruby language
+    end
+  end
+)
+</code></pre>
+</blockquote>
+</blockquote>
+<h2 id="ENVIRONMENT">ENVIRONMENT</h2><p>See <a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a>.</p><h2 id="SEE-ALSO">SEE ALSO</h2><p><a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a>, <a class="md2man-xref" href="../man1/tork-remote.1.html">tork-remote(1)</a>, <a class="md2man-xref" href="../man1/tork-herald.1.html">tork-herald(1)</a>, <a class="md2man-xref" href="../man1/tork-engine.1.html">tork-engine(1)</a>, <a class="md2man-xref" href="../man1/tork-master.1.html">tork-master(1)</a></p></div></body>
+</html>
