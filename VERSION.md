@@ -1,3 +1,19 @@
+## Version 19.4.0 (2013-11-25)
+
+Minor:
+
+  * The "rails" configuration helper now automatically sets up your test
+    database for Tork's parallel testing system if your test database is
+    SQLite3 and you are using Rails 3 or newer.
+
+Other:
+
+  * rails: remove unused capture of rescued exception
+
+  * coverage: document the use of Ruby 1.9 hash syntax
+
+  * rename `*.markdown` file extension to shorter `*.md`
+
 ## Version 19.3.2 (2013-10-29)
 
 Other:
