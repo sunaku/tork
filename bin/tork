@@ -13,7 +13,8 @@ tork - Continuous testing tool for Ruby
 
 ## DESCRIPTION
 
-This program is a simple command-line user interface for tork-driver(1).
+This program can be thought of as an interactive version of tork-runner(1).
+It functions as a rudimentary command-line user interface to tork-driver(1).
 
 First, it applies the given *CONFIG* values, which are either (1) paths to
 directories that contain configuration files or (2) names of configuration
@@ -111,7 +112,7 @@ This program can be controlled remotely by multiple tork-remote(1) instances.
 
 ## SEE ALSO
 
-tork(1), tork-driver(1), tork-master(1)
+tork-runner(1), tork-driver(1), tork-master(1)
 
 [factory_girl]: https://github.com/thoughtbot/factory_girl
 [memory_test_fix]: https://github.com/stepahn/memory_test_fix

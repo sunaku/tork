@@ -1,0 +1,86 @@
+#!/usr/bin/env ruby
+=begin =======================================================================
+
+# TORK-RUNNER 1 2013-11-25 19.4.0
+
+## NAME
+
+tork-runner - runs tests once, non-interactively
+
+## SYNOPSIS
+
+`tork-runner` [*OPTION*]... [*TEST\_FILE\_GLOB*]...
+
+## DESCRIPTION
+
+This program can be thought of as a non-interactive version of tork(1).  It
+runs all test files that match the given *TEST\_FILE\_GLOB*s and then exits
+with a nonzero status if any tests failed.  If none are given, it runs all
+test files known to `Tork::Driver::TEST_FILE_GLOBBERS` in tork-driver(1).
+
+### Output
+
+This program prints the following messages to stdout.
+
+`>>` *failed\_test\_log\_file* `<<`
+  This message will be followed by the content of *failed\_test\_log\_file*.
+
+*T* `tested,` *P* `passed,` *F* `failed`
+  *T* test files were tested and *P* of them passed but *F* of them failed.
+
+## OPTIONS
+
+`-h`, `--help`
+  Show this help manual.
+
+## EXIT STATUS
+
+0
+  All test files passed.
+
+1
+  One or more test files failed.
+
+## ENVIRONMENT
+
+See tork(1).
+
+## SEE ALSO
+
+tork(1), tork-driver(1)
+
+=end =========================================================================
+
+$0 = File.basename(__FILE__) # for easier identification in ps(1) output
+
+require 'binman'
+BinMan.help
+
+require 'json'
+IO.popen('tork-driver', 'w+') do |driver|
+  # tell tork to run the given test files
+  # or run known test files if none given
+  test_files = Dir[*ARGV]
+  command =
+    if test_files.empty?
+      [:run_all_test_files]
+    else
+      [:run_test_files, test_files]
+    end
+  driver.puts JSON.dump(command)
+
+  # track test runs & exit when finished
+  tested, passed, failed = 0, 0, []
+  while line = driver.gets
+    response = JSON.load(line)
+    case response.first.to_sym
+    when :test then tested += 1
+    when :pass then passed += 1
+    when :fail then failed << response[3]
+    when :idle then
+      puts failed.map {|log| [nil, ">> #{log} <<", File.read(log)] }, nil,
+           "#{tested} tested, #{passed} passed, #{failed.count} failed"
+      exit failed.empty?
+    end
+  end
+end
