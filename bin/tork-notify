@@ -58,7 +58,8 @@ IO.popen('tork-remote tork-engine', 'r+') do |remote|
       statistics = File.readlines(log_file).grep(/^\d+ \w+,/).join.
         gsub(/\e\[\d+(;\d+)?m/, '') # strip ANSI SGR escape codes
 
-      Thread.new do # run in background
+      # run in background; see http://stackoverflow.com/q/16745840
+      Thread.new(icon, title, statistics) do |icon, title, statistics|
         system 'notify-send', '-i', icon, title, statistics or
         system 'growlnotify', '-a', 'Xcode', '-m', statistics, title or
         system 'xmessage', '-timeout', '5', '-title', title, statistics or
