@@ -17,35 +17,31 @@ class Server
     @stdout = STDOUT.dup
     STDOUT.reopen STDERR
 
-    @clients = Set.new.add(STDIN)
-    @servers = Set.new
     @address = Server.address
+    @welcome = UNIXServer.open(@address)
+    # socket files are not automatically deleted when closed
+    at_exit { File.delete @address if File.socket? @address }
+    @servers = Set.new.add(@welcome)
+    @clients = Set.new.add(STDIN)
   end
 
   def loop
-    server = UNIXServer.open(@address)
-    begin
-      catch :quit do
-        @servers.add server
-        while @clients.include? STDIN
-          IO.select((@servers + @clients).to_a).first.each do |stream|
-            @client = stream
+    catch :quit do
+      while @clients.include? STDIN
+        IO.select((@servers + @clients).to_a).first.each do |stream|
+          @client = stream
 
-            if stream == server
-              @clients.add stream.accept
+          if stream == @welcome
+            @clients.add stream.accept
 
-            elsif (stream.eof? rescue true)
-              @clients.delete stream
+          elsif (stream.eof? rescue true)
+            @clients.delete stream
 
-            elsif @command = hear(stream, stream.gets)
-              recv stream, @command
-            end
+          elsif @command = hear(stream, stream.gets)
+            recv stream, @command
           end
         end
       end
-    ensure
-      # UNIX domain socket files are not deleted automatically upon closing
-      File.delete @address if File.socket? @address
     end
   end
 
