@@ -17,15 +17,14 @@ class Engine < Server
   end
 
   def loop
-    create_master
+    @master = popen('tork-master')
     super
   ensure
-    destroy_master
+    pclose @master
   end
 
   def reabsorb_overhead
-    destroy_master
-    create_master
+    @master.reconnect
 
     # re-dispatch the previously dispatched files to the new master
     previous = @queued_test_files.to_a
@@ -120,14 +119,6 @@ private
     Diff::LCS.diff(old_lines, new_lines).flatten.
       # +1 because line numbers start at 1, not 0
       map {|change| change.position + 1 }.uniq
-  end
-
-  def create_master
-    @master = popen('tork-master')
-  end
-
-  def destroy_master
-    pclose @master
   end
 
 end
