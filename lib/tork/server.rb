@@ -31,27 +31,29 @@ class Server
       retry
     end
 
-    catch :quit do
-      @servers.add server
-      while @clients.include? STDIN
-        IO.select((@servers + @clients).to_a).first.each do |stream|
-          @client = stream
+    begin
+      catch :quit do
+        @servers.add server
+        while @clients.include? STDIN
+          IO.select((@servers + @clients).to_a).first.each do |stream|
+            @client = stream
 
-          if stream == server
-            @clients.add stream.accept
+            if stream == server
+              @clients.add stream.accept
 
-          elsif (stream.eof? rescue true)
-            @clients.delete stream
+            elsif (stream.eof? rescue true)
+              @clients.delete stream
 
-          elsif @command = hear(stream, stream.gets)
-            recv stream, @command
+            elsif @command = hear(stream, stream.gets)
+              recv stream, @command
+            end
           end
         end
       end
+    ensure
+      # UNIX domain socket files are not deleted automatically upon closing
+      File.delete @address if File.socket? @address
     end
-  ensure
-    # UNIX domain socket files are not deleted automatically upon closing
-    File.delete @address if File.socket? @address
   end
 
   def quit
