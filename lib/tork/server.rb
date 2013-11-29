@@ -23,14 +23,7 @@ class Server
   end
 
   def loop
-    begin
-      server = UNIXServer.open(@address)
-    rescue SystemCallError => error
-      warn "#{$0}: #{error}; retrying in #{timeout = 1 + rand(10)} seconds..."
-      sleep timeout
-      retry
-    end
-
+    server = UNIXServer.open(@address)
     begin
       catch :quit do
         @servers.add server
