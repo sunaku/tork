@@ -24,6 +24,11 @@ class CLIApp < Server
 
 protected
 
+  def join client
+    super
+    help client
+  end
+
   def recv client, message
     case client
     when @driver
@@ -59,13 +64,18 @@ protected
         call = Array(cmd) + args
         tell @clients, "Sending #{call.inspect} command...", false
         send @driver, call
-      else
-        # user typed an invalid command so help them along
-        COMMANDS.each do |key, cmd|
-          desc = Array(cmd).join(' with ').to_s.tr('_', ' ')
-          tell @client, "Type #{key} then ENTER to #{desc}.", false
-        end
+      else # user typed an invalid command so help them along
+        help client
       end
+    end
+  end
+
+private
+
+  def help client
+    COMMANDS.each do |key, cmd|
+      desc = Array(cmd).join(' with ').to_s.tr('_', ' ')
+      tell client, "Type #{key} then ENTER to #{desc}.", false
     end
   end
 

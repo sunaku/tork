@@ -29,7 +29,7 @@ class Server
     STDOUT.reopen STDERR
 
     @servers = Set.new.add(@welcome)
-    @clients = Set.new.add(STDIN)
+    @clients = Set.new; join STDIN # parent process connected on STDIN
   end
 
   def loop
@@ -37,10 +37,10 @@ class Server
       while @clients.include? STDIN
         IO.select((@servers + @clients).to_a).first.each do |stream|
           if stream == @welcome
-            @clients.add stream.accept
+            join stream.accept
 
           elsif (stream.eof? rescue true)
-            @clients.delete stream
+            part stream
 
           elsif @command = hear(stream, stream.gets) and not @command.empty?
             recv stream, @command
@@ -55,6 +55,14 @@ class Server
   end
 
 protected
+
+  def join client
+    @clients.add client
+  end
+
+  def part client
+    @clients.delete client
+  end
 
   # Returns nil if the message received was not meant for processing.
   def hear sender, message
