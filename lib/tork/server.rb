@@ -29,8 +29,6 @@ class Server
     catch :quit do
       while @clients.include? STDIN
         IO.select((@servers + @clients).to_a).first.each do |stream|
-          @client = stream
-
           if stream == @welcome
             @clients.add stream.accept
 
@@ -65,7 +63,9 @@ protected
     end
   end
 
+  # Sets the @client variable to the client we are currently serving.
   def recv client, command
+    @client = client
     __send__(*command)
   rescue => error
     tell client, error
