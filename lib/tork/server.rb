@@ -12,15 +12,22 @@ class Server
   end
 
   def initialize
+    begin
+      @welcome = UNIXServer.open(address = Server.address)
+      # UNIX domain socket files are not automatically deleted on close
+      at_exit { File.delete address if File.socket? address }
+    rescue Errno::EADDRINUSE
+      # another instance of this program is already running in the same
+      # directory so become a remote control for it rather than exiting
+      warn "#{$0}: remotely controlling existing instance..."
+      exec 'tork-remote', $0
+    end
+
     # only JSON messages are supposed to be emitted on STDOUT
     # so make puts() in the user code write to STDERR instead
     @stdout = STDOUT.dup
     STDOUT.reopen STDERR
 
-    @address = Server.address
-    @welcome = UNIXServer.open(@address)
-    # socket files are not automatically deleted when closed
-    at_exit { File.delete @address if File.socket? @address }
     @servers = Set.new.add(@welcome)
     @clients = Set.new.add(STDIN)
   end
