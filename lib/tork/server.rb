@@ -35,7 +35,7 @@ class Server
           elsif (stream.eof? rescue true)
             @clients.delete stream
 
-          elsif @command = hear(stream, stream.gets)
+          elsif @command = hear(stream, stream.gets) and not @command.empty?
             recv stream, @command
           end
         end
