@@ -37,7 +37,7 @@ require 'json'
 STDOUT.sync = true # flush puts() output immediately after writing
 
 require 'listen'
-Listen.to('.', :relative_paths => true) do |modified, added, removed|
+Listen.to! '.', :relative_paths => true do |modified, added, removed|
   files = modified + added
   puts JSON.dump(files) unless files.empty?
-end.start
+end
