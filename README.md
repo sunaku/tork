@@ -127,7 +127,7 @@ You can also do the same non-interactively using a pipeline:
 
 You can monitor your test processes from another terminal:
 
-    watch 'pgrep -f ^tork | xargs -r ps u'
+    watch 'pgrep -f ^tork | xargs -r ps uf'
 
 ### With MiniTest
 
