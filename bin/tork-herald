@@ -36,8 +36,14 @@ BinMan.help
 require 'json'
 STDOUT.sync = true # flush puts() output immediately after writing
 
+require 'pathname'
+PWD = Pathname.new(Dir.pwd)
+
 require 'listen'
-Listen.to('.', :relative_paths => true) do |modified, added, removed|
-  files = modified + added
+Listen.to PWD do |modified, added, removed|
+  files = (modified + added).uniq.map do |file|
+    Pathname.new(file).relative_path_from(PWD)
+  end
   puts JSON.dump(files) unless files.empty?
 end.start
+sleep
