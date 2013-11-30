@@ -49,7 +49,7 @@ for Tork by wrapping the tork-driver(1) program appropriately!
 * tork-engine(1) tells master to run tests and keeps track of test results
 * tork-master(1) absorbs test execution overhead and forks to run your tests
 * tork-remote(1) remotely controls any Tork program running in the same `pwd`
-* tork-notify(1) shows how to receive and process messages from Tork programs
+* tork-notify(1) notifies you when previously passing tests fail or vice versa
 
 When the herald observes that files in or beneath the current directory have
 been written to, it tells the driver, which then commands the master to fork a

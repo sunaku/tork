@@ -10,7 +10,7 @@ if defined? ActiveRecord::Base
     elsif base.respond_to? :connection_pool     # rails >= 2.2.1
       base.connection_pool.spec.config
     else
-      warn "#{$0}: config/rails/worker: couldn't read connection information"
+      warn "#{$0}: config/rails/worker: could not read connection information"
       {}
     end
 
