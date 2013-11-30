@@ -24,6 +24,11 @@ class CLIApp < Server
 
 protected
 
+  def join client
+    super
+    help client
+  end
+
   def recv client, message
     case client
     when @driver
@@ -51,22 +56,25 @@ protected
         tell @clients, message, false
       end
     else
-      key, *args = message
-      key &&= key.lstrip[0,1].downcase
-
-      if cmd = COMMANDS[key]
-        quit if cmd == :quit
-        call = Array(cmd) + args
-        tell @clients, "Sending #{call.inspect} command...", false
-        send @driver, call
+      key = message.shift.lstrip[0,1].downcase
+      cmd = Array(COMMANDS.fetch(key, [:help, client])) + message
+      if respond_to? cmd.first, true
+        __send__(*cmd)
       else
-        # user typed an invalid command so help them along
-        COMMANDS.each do |key, cmd|
-          desc = Array(cmd).join(' with ').to_s.tr('_', ' ')
-          tell @client, "Type #{key} then ENTER to #{desc}.", false
-        end
+        tell @clients, "Sending #{cmd.inspect} command...", false
+        send @driver, cmd
       end
     end
+  end
+
+private
+
+  def help client
+    COMMANDS.each do |key, cmd|
+      desc = Array(cmd).join(' with ').to_s.tr('_', ' ')
+      tell client, "Type #{key} then ENTER to #{desc}.", false
+    end
+    tell client, 'Type h then ENTER to see this message.', false
   end
 
 end

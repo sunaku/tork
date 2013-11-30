@@ -43,6 +43,7 @@ Following UNIX philosophy, Tork is composed of simple text-based programs that
 for Tork by wrapping the tork-driver(1) program appropriately!
 
 * tork(1) is an interactive command-line user interface for tork-driver(1)
+* tork-runner(1) runs your test suite once, non-interactively, and then exits
 * tork-herald(1) monitors current directory tree and reports changed files
 * tork-driver(1) drives the engine according to the herald's observations
 * tork-engine(1) tells master to run tests and keeps track of test results
@@ -75,6 +76,9 @@ performed *automatically*.  However, to run a test file *manually*, you can:
 
         # run lines 4, 33, and 21 of test/some_test.rb
         echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
+
+Alternatively, you can use tork-runner(1) to run your test suite in one shot
+and then exit with a nonzero status if tests failed, similar to `rake test`.
 
 ## Installation
 
