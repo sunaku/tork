@@ -7,53 +7,107 @@
   <link rel="stylesheet" href="../style.css"/>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
-<body><div class="navbar"><div class="navbar-inner"><span class="brand"><a href="../index.html#man0">man0</a>/VERSION</span></div></div><div class="container-fluid"><h2 id="Version-19-4-0-2013-11-25">Version 19.4.0 (2013-11-25)</h2><p>Minor:</p>
+<body><div class="navbar"><div class="navbar-inner"><span class="brand"><a href="../index.html#man0">man0</a>/VERSION</span></div></div><div class="container-fluid"><h2 id="Version-19-5-0-2013-11-30">Version 19.5.0 (2013-11-30)</h2><p>This release adds a <a class="md2man-xref" href="../man1/tork-runner.1.html">tork-runner(1)</a> program for non-interactive test execution,
+makes connections to tork subprocesses self-healing, eliminates &quot;address
+already in use&quot; errors, and fixes bugs in <a class="md2man-xref" href="../man1/tork-herald.1.html">tork-herald(1)</a> and <a class="md2man-xref" href="../man1/tork-notify.1.html">tork-notify(1)</a>.</p><h3 id="Minor">Minor:</h3>
+<ul>
+<li><p>Add <a class="md2man-xref" href="../man1/tork-runner.1.html">tork-runner(1)</a> to run tests once, non-interactively, and then exit.</p><p>You can use <a class="md2man-xref" href="../man1/tork-runner.1.html">tork-runner(1)</a> to run your test suite in one shot and then
+exit with a nonzero status if tests failed, similar to <code>rake test</code>.</p></li>
+<li><p>Add Tork::Bridge to make connections to tork subprocesses self-healing.</p><p>When a tork subprocess terminates, its parent process now replaces it
+with a fresh instance.  Thus the tork process tree is now self-healing.</p></li>
+<li><p>Server: become a remote control to existing instance on socket fail.</p><p>If an another instance of this tork program is already running, then
+become a remote to it rather than failing on binding its socket file.</p><p>This lets you run the same tork program more than once in the same working
+directory; latter runs will become remote controls for the first instance!</p><p>This also lets you run an instance of <a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a> for interactive usage and
+then run <a class="md2man-xref" href="../man1/tork-runner.1.html">tork-runner(1)</a> in another terminal in the same working directory
+to re-use the former&#39;s resources to run your test suite non-interactively.</p></li>
+<li><p><a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a>: show help message to clients upon connecting.</p></li>
+<li><p><a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a>: tell user to input &#39;h&#39; key for help message.</p></li>
+</ul>
+<h3 id="Patch">Patch:</h3>
+<ul>
+<li><p><a class="md2man-xref" href="../man1/tork-notify.1.html">tork-notify(1)</a>: must pass mutable local variables into Thread.new.</p><p>The <code>icon</code> local variable would be overwritten (to nil sometimes)
+outside of the thread and cause the thread body to silently fail.</p><p>See <a href="http://stackoverflow.com/q/16745840">http://stackoverflow.com/q/16745840</a> for details.</p></li>
+<li><p>Socket files were always deleted: even if not ours.</p><p>If a tork instance was already running and a new tork instance was
+started up in the same directory, then the latter would always delete
+the common socket files (currently belonging to the former) upon exit.</p></li>
+<li><p>Fail earlier on socket bind: avoid wasted overhead.</p><p>Before this patch, <a class="md2man-xref" href="../man1/tork-master.1.html">tork-master(1)</a> would first pay the price of absorbing
+the test execution overhead before trying to bind its socket.  In case
+of socket bind failure, the process would exit and the overhead wasted.</p></li>
+<li><p>Server: don&#39;t call method for empty command array.</p><p>This error would occur when pressing ENTER in tork-remote tork-driver:</p>
+<pre><code>tork-driver: #&lt;ArgumentError: no method name given&gt;
+tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:74:in `recv&#39;
+tork-driver: /home/skurapati/lab/tork/lib/tork/driver.rb:64:in `recv&#39;
+tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:46:in `block (2 levels) in loop&#39;
+tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:37:in `each&#39;
+tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:37:in `block in loop&#39;
+tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:35:in `catch&#39;
+tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:35:in `loop&#39;
+tork-driver: /home/skurapati/lab/tork/lib/tork/driver.rb:21:in `loop&#39;
+tork-driver: /home/skurapati/lab/tork/bin/tork-driver:173:in `&lt;top (required)&gt;&#39;
+tork-driver: /home/skurapati/.rvm/gems/ruby-1.9.3-p448/bin/tork-driver:23:in `load&#39;
+tork-driver: /home/skurapati/.rvm/gems/ruby-1.9.3-p448/bin/tork-driver:23:in `&lt;main&gt;&#39;
+</code></pre></li>
+<li><p><a class="md2man-xref" href="../man1/tork-herald.1.html">tork-herald(1)</a>: listen 2.2.0 gem is non-blocking and gives absolute paths.</p>
+<ul>
+<li>Calling #start no longer blocks the caller.</li>
+<li>The <code>:relative_paths</code> option no longer works:
+<a href="https://github.com/guard/listen/issues/170">https://github.com/guard/listen/issues/170</a></li>
+</ul></li>
+<li><p><a class="md2man-xref" href="../man1/tork-herald.1.html">tork-herald(1)</a>: downgrade to listen 1.x gem to maintain Ruby 1.8 support.</p></li>
+</ul>
+<h3 id="Other">Other:</h3>
+<ul>
+<li><p>GH-56: specify license in gemspec for rubygems.org.</p></li>
+<li><p>Document <a class="md2man-xref">sh(1)</a> word splitting in manual pages of all tork servers.</p></li>
+<li><p>README: use <code>ps uf</code> to visualize process hierarchy.</p></li>
+</ul>
+<h2 id="Version-19-4-0-2013-11-25">Version 19.4.0 (2013-11-25)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li>The &quot;rails&quot; configuration helper now automatically sets up your test
 database for Tork&#39;s parallel testing system if your test database is
 SQLite3 and you are using Rails 3 or newer.</li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>rails: remove unused capture of rescued exception</p></li>
 <li><p>coverage: document the use of Ruby 1.9 hash syntax</p></li>
 <li><p>rename <code>*.markdown</code> file extension to shorter <code>*.md</code></p></li>
 </ul>
-<h2 id="Version-19-3-2-2013-10-29">Version 19.3.2 (2013-10-29)</h2><p>Other:</p>
+<h2 id="Version-19-3-2-2013-10-29">Version 19.3.2 (2013-10-29)</h2><h3 id="Other">Other:</h3>
 <ul>
 <li><p>GH-55: upgrade listen &amp; rake gem dependencies.</p><p>Thanks to Matthew Albright for reporting this issue in GH-55:
 <a href="https://github.com/sunaku/tork/issues/55">https://github.com/sunaku/tork/issues/55</a></p></li>
 </ul>
-<h2 id="Version-19-3-1-2013-06-07">Version 19.3.1 (2013-06-07)</h2><p>Patch:</p>
+<h2 id="Version-19-3-1-2013-06-07">Version 19.3.1 (2013-06-07)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>server: rescue from failed writes to asynchronously closed clients.</p><p>Thanks to Jonathan Cairns for reporting and fixing this bug in GH-53:
 <a href="https://github.com/sunaku/tork/issues/53">https://github.com/sunaku/tork/issues/53</a></p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li>Upgrade to md2man 2.0.</li>
 </ul>
-<h2 id="Version-19-3-0-2013-05-05">Version 19.3.0 (2013-05-05)</h2><p>Minor:</p>
+<h2 id="Version-19-3-0-2013-05-05">Version 19.3.0 (2013-05-05)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li><p><a class="md2man-xref" href="../man1/tork-engine.1.html">tork-engine(1)</a> now emits <code>[&quot;idle&quot;]</code> messages whenever all tests
 have finished running and no more tests are queued for running.</p><p>Thanks to Jonathan Cairns for requesting this feature in GH-50:
 <a href="https://github.com/sunaku/tork/issues/50">https://github.com/sunaku/tork/issues/50</a></p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>add man/man0 subdir containing README and VERSION</p></li>
 <li><p>README: use manpage xrefs for linking in HTML mans</p></li>
 </ul>
 <h2 id="Version-19-2-2-2013-05-04">Version 19.2.2 (2013-05-04)</h2><p>This release makes Tork resilient to <code>Errno::EADDRINUSE</code> errors that may occur
-sometimes, intermittently, when test execution overhead is being reabsorbed.</p><p>Patch:</p>
+sometimes, intermittently, when test execution overhead is being reabsorbed.</p><h3 id="Patch">Patch:</h3>
 <ul>
 <li>server: retry until the socket opens successfully</li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li>include md2man rake tasks in developer&#39;s rakefile</li>
 </ul>
-<h2 id="Version-19-2-1-2013-02-08">Version 19.2.1 (2013-02-08)</h2><p>Patch:</p>
+<h2 id="Version-19-2-1-2013-02-08">Version 19.2.1 (2013-02-08)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>GH-46: allow reassigning <code>$tork_*</code> variable values.  Thanks to Joe
 Escalante for reminding me to fix this issue.</p></li>
@@ -61,40 +115,40 @@ Escalante for reminding me to fix this issue.</p></li>
 Thanks to Ryan Ahearn for fixing this issue and to Jonathan Cairns for
 reporting it.</p></li>
 </ul>
-<h2 id="Version-19-2-0-2012-12-30">Version 19.2.0 (2012-12-30)</h2><p>Minor:</p>
+<h2 id="Version-19-2-0-2012-12-30">Version 19.2.0 (2012-12-30)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li>Add &quot;devise&quot; configuration helper that adds support for testing Rails
 applications that use the Devise authentication framework.  Thanks to Ryan
 Ahearn for this contribution.</li>
 </ul>
-<p>Patch:</p>
+<h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>gemspec: upgrade to <em>listen</em> 0.7.0 to fix issue #43.  Thanks to Ryan
 Ahearn for reporting this issue and helping debug it, and to Thibaud
 Guillaume-Gentil for fixing this issue upstream in the <em>listen</em> library.</p></li>
 <li><p>Fix <code>undefined method &#39;path&#39; for nil</code> error on socket file removal.</p></li>
 </ul>
-<h2 id="Version-19-1-0-2012-12-12">Version 19.1.0 (2012-12-12)</h2><p>Minor:</p>
+<h2 id="Version-19-1-0-2012-12-12">Version 19.1.0 (2012-12-12)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li>tork-driver: don&#39;t run overhead files as test files</li>
 </ul>
-<p>Patch:</p>
+<h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>rails: run dependent tests when <code>app/views/*</code> change</p></li>
 <li><p>Clear FactoryGirl sequences and traits on fork in the <code>factory_girl</code>
 configuration helper.  Thanks to Ryan Ahearn for this contribution.</p></li>
 <li><p>server: fix clean up of socket files upon exit</p></li>
 </ul>
-<h2 id="Version-19-0-2-2012-11-07">Version 19.0.2 (2012-11-07)</h2><p>Patch:</p>
+<h2 id="Version-19-0-2-2012-11-07">Version 19.0.2 (2012-11-07)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>Monkeypatch <code>at_exit()</code> to fix RSpec and MiniTest:</p><p><a href="https://github.com/rspec/rspec-core/pull/720">https://github.com/rspec/rspec-core/pull/720</a></p><p><a href="https://github.com/seattlerb/minitest/pull/183">https://github.com/seattlerb/minitest/pull/183</a></p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>README: document RSpec 2.9.0+ autorun skipping bug</p></li>
 <li><p>README: MiniTest 1.3.2+ also has autorun skip bug</p></li>
 </ul>
-<h2 id="Version-19-0-1-2012-10-26">Version 19.0.1 (2012-10-26)</h2><p>Patch:</p>
+<h2 id="Version-19-0-1-2012-10-26">Version 19.0.1 (2012-10-26)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>Support testing projects that have both test/ and spec/ directories.</p><p>I assumed that users would only have either test/ or spec/ but not both.
 Do you know what happens when a test/ is run by RSpec or vice versa? :-)</p><p>Thanks to Kyle Peyton for reporting this issue.</p></li>
@@ -102,12 +156,12 @@ Do you know what happens when a test/ is run by RSpec or vice versa? :-)</p><p>T
 their spec/spec_helper.rb file because they use the <a class="md2man-xref">rspec(1)</a> executable
 to run their tests.  This commit makes things Just Work for them again.</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>test whether input is JSON by actually parsing it</p></li>
 <li><p>server: use Set instead of Array for faster lookup</p></li>
 </ul>
-<h2 id="Version-19-0-0-2012-10-17">Version 19.0.0 (2012-10-17)</h2><p>Major:</p>
+<h2 id="Version-19-0-0-2012-10-17">Version 19.0.0 (2012-10-17)</h2><h3 id="Major">Major:</h3>
 <ul>
 <li><p>The <code>.tork.rb</code> configuration file has been replaced by the <code>.tork/</code>
 directory, which contains specially-named Ruby scripts.  Refer to the
@@ -130,7 +184,7 @@ must specify load paths and overhead files in the <code>.tork/master.rb</code> f
 <li><p>The <code>tork/client</code> library has been removed.  The threaded IO and popen()
 wrappers that it provided have been replaced by the powerful IO.select().</p></li>
 </ul>
-<p>Minor:</p>
+<h3 id="Minor">Minor:</h3>
 <ul>
 <li><p><a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a>: allow user to specify arguments after command key</p></li>
 <li><p><a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a>: add &#39;k&#39; to stop all currently running tests with SIGKILL</p></li>
@@ -142,30 +196,30 @@ made possible by the awesome power of IO.select() and UNIX domain sockets.</p></
 events to notify you about changes in a test file&#39;s pass/fail status.</p></li>
 <li><p>typing Control-D now breaks tork programs out of <code>Tork::Server#loop()</code></p></li>
 </ul>
-<p>Patch:</p>
+<h3 id="Patch">Patch:</h3>
 <ul>
 <li><a class="md2man-xref" href="../man1/tork-master.1.html">tork-master(1)</a>: stop workers with SIGKILL when quitting</li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p><a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a>: document parameters for <code>t</code> and <code>s</code> commands</p></li>
 <li><p>README: add tip about rlwrap for better interactive</p></li>
 <li><p>README: simplify watch command using pgrep &amp; xargs</p></li>
 <li><p>README: use standard bundle exec; no <code>--binstubs</code></p></li>
 </ul>
-<h2 id="Version-18-2-4-2012-10-10">Version 18.2.4 (2012-10-10)</h2><p>Other:</p>
+<h2 id="Version-18-2-4-2012-10-10">Version 18.2.4 (2012-10-10)</h2><h3 id="Other">Other:</h3>
 <ul>
 <li>GH-39: upgrade listen gem version to fix a bug in OSX.
 Thanks to Adam Grant for reporting this issue.</li>
 </ul>
-<h2 id="Version-18-2-3-2012-09-26">Version 18.2.3 (2012-09-26)</h2><p>Patch:</p>
+<h2 id="Version-18-2-3-2012-09-26">Version 18.2.3 (2012-09-26)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>Restored support for building Tork from its gemspec under Ruby 1.8.
 Thanks to Ohno Shin&#39;ichi for reporting this issue and contributing a
 preliminary fix.</p></li>
 <li><p>Add resilience against failed command dispatch in <code>Tork::Server#loop()</code>.</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>It&#39;s not worth rescuing Interrupt only to exit silently.
 Let the user see stack traces when they press Control-C.</p></li>
@@ -173,7 +227,7 @@ Let the user see stack traces when they press Control-C.</p></li>
 replaced by reaping threads quite a few releases ago.</p></li>
 <li><p>Use $0 instead of hard-coding the program name.</p></li>
 </ul>
-<h2 id="Version-18-2-2-2012-07-11">Version 18.2.2 (2012-07-11)</h2><p>Patch:</p>
+<h2 id="Version-18-2-2-2012-07-11">Version 18.2.2 (2012-07-11)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>GH-35: resume dispatched but not yet started tests.</p><p>After reabsorbing overhead, we need to resume previously dispatched test
 files that have not yet finished running.  This includes the waiting set
@@ -181,17 +235,17 @@ files that have not yet finished running.  This includes the waiting set
 and already started running).  Otherwise, we encounter a bug where test
 files in the waiting set can NEVER be run again!</p></li>
 </ul>
-<h2 id="Version-18-2-1-2012-07-05">Version 18.2.1 (2012-07-05)</h2><p>Patch:</p>
+<h2 id="Version-18-2-1-2012-07-05">Version 18.2.1 (2012-07-05)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li>GH-37: switch from Guard::Listener to Listen gem.
 Thanks to Jesse Cooke for reporting this issue.</li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>gemspec: need to provide .0 suffix for ~&gt; operator.</p></li>
 <li><p>gemspec: LICENSE file contains UTF-8 author names.</p></li>
 </ul>
-<h2 id="Version-18-2-0-2012-03-27">Version 18.2.0 (2012-03-27)</h2><p>Minor:</p>
+<h2 id="Version-18-2-0-2012-03-27">Version 18.2.0 (2012-03-27)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li>Emit warnings when commands cannot be performed.  This improves the user
 experience by giving them immediate feedback.  For example, if you issue
@@ -199,7 +253,7 @@ the &quot;rerun<em>failed</em>tests&quot; command and no tests have failed yet, 
 now see a warning message that explains the situation.  Thanks to
 NagaChaitanya Vellanki (@chaitanyav) for suggesting this change.</li>
 </ul>
-<p>Patch:</p>
+<h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>GH-32: Restore support for Selenium and Capybara by replacing the global
 SIGCHLD handler in <a class="md2man-xref" href="../man1/tork-master.1.html">tork-master(1)</a> with individual threads, one per forked
@@ -207,7 +261,7 @@ worker process.  Thanks to Bjørn Trondsen (@Sharagoz) for reporting this
 issue and verifying the fix.</p></li>
 <li><p>README: Recommend a newer fork of the &quot;memory<em>test</em>fix&quot; Rails plugin.</p></li>
 </ul>
-<h2 id="Version-18-1-0-2012-02-26">Version 18.1.0 (2012-02-26)</h2><p>Minor:</p>
+<h2 id="Version-18-1-0-2012-02-26">Version 18.1.0 (2012-02-26)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li><p>Add <code>tork/config/coverage</code> configuration helper for Ruby 1.9, which prints
 a coverage report at the end of your log file in YAML format.  The report
@@ -219,19 +273,19 @@ that exist in or beneath the current working directory:</p>
 <li>:holes - line numbers of source lines that were not covered</li>
 </ul></li>
 </ul>
-<h2 id="Version-18-0-1-2012-02-13">Version 18.0.1 (2012-02-13)</h2><p>Alert:</p>
+<h2 id="Version-18-0-1-2012-02-13">Version 18.0.1 (2012-02-13)</h2><h3 id="Alert">Alert:</h3>
 <ul>
 <li>If you&#39;re on Ruby 1.9, please use 1.9.3 or newer because 1.9.2 is
 known to segfault under RSpec and Rails.  See GH-30 and GH-32.</li>
 </ul>
-<p>Patch:</p>
+<h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>GH-27: Cucumber features now run correctly under RSpec.  Thanks to Scott
 Radcliff for reporting this issue and to David Burrows for solving it!</p></li>
 <li><p><a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a>: fix undefined method `strip&#39; for nil:NilClass error.</p></li>
 <li><p>tork/config: ignore directories given as configuration files.</p></li>
 </ul>
-<h2 id="Version-18-0-0-2012-02-06">Version 18.0.0 (2012-02-06)</h2><p>Alert:</p>
+<h2 id="Version-18-0-0-2012-02-06">Version 18.0.0 (2012-02-06)</h2><h3 id="Alert">Alert:</h3>
 <ul>
 <li>RSpec 2.8.0 and older contain <a href="https://github.com/sunaku/tork/issues/31">a bug</a> where a nonzero
 exit status (caused by an uncaught exception) is overridden
@@ -239,7 +293,7 @@ by RSpec&#39;s <code>Kernel#at_exit</code> handler to be zero, thereby
 falsely indicating that a spec had passed.  <a href="https://github.com/rspec/rspec-core/pull/569/files">This patch</a> fixes the
 problem.  Thanks to Gumaro Melendez for reporting this issue.</li>
 </ul>
-<p>Major:</p>
+<h3 id="Major">Major:</h3>
 <ul>
 <li><p>Dropped first parameter to <code>Tork::Config::test_file_globbers</code>.</p></li>
 <li><p>GH-31: tork-master now emits separate exit code and info.
@@ -247,12 +301,12 @@ Update your <code>Tork::Config::test_event_hooks</code> accordingly.</p></li>
 <li><p>tork/server: switch from modules to class inheritance.</p></li>
 <li><p>tork/config: switch to Struct to prevent misspellings.</p></li>
 </ul>
-<p>Minor:</p>
+<h3 id="Minor">Minor:</h3>
 <ul>
 <li><p>tork-driver now recursively expands dependent test files while globbing.</p></li>
 <li><p>Extracted bookkeeping stuff from tork-driver into tork-engine component.</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>tork/config: do not reabsorb when .tork.rb
 changes.  Since the configuration is loaded in
@@ -264,7 +318,7 @@ restart Tork if you change your configuration.</p></li>
 <li><p>GH-29: bump guard version requirement to v1 series.</p></li>
 <li><p>Improve documentation; revise markdown; clean up.</p></li>
 </ul>
-<h2 id="Version-17-1-0-2012-01-30">Version 17.1.0 (2012-01-30)</h2><p>Minor:</p>
+<h2 id="Version-17-1-0-2012-01-30">Version 17.1.0 (2012-01-30)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li><p>Added <code>Tork::Config.test_event_hooks</code> configuration option.</p></li>
 <li><p>Added <code>tork/config/notify</code> configuration helper for receiving
@@ -278,19 +332,19 @@ multiple globs in an array, in addition to just a single glob or <code>nil</code
 <li><p>Added support for the MiniTest convention of naming test files as
 <code>test/**/test_*.rb</code> and <code>spec/**/spec_*.rb</code>. (Jose Pablo Barrantes)</p></li>
 </ul>
-<h2 id="Version-17-0-1-2012-01-29">Version 17.0.1 (2012-01-29)</h2><p>Patch:</p>
+<h2 id="Version-17-0-1-2012-01-29">Version 17.0.1 (2012-01-29)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p><a class="md2man-xref" href="../man1/tork-herald.1.html">tork-herald(1)</a> <em>sometimes</em> reported changed test files twice.</p></li>
 <li><p>tork/driver: only whole test file runs should qualify as pass.</p></li>
 <li><p>tork/config/cucumber: only set ARGV for <code>*.feature</code> test files.</p></li>
 <li><p>Tork::Client::Transceiver needs to stop both TX &amp; RX loops.</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>tork/driver: store test file lists in Set, not Array.</p></li>
 <li><p>HISTORY: use single-word change-set descriptions.</p></li>
 </ul>
-<h2 id="Version-17-0-0-2012-01-27">Version 17.0.0 (2012-01-27)</h2><p>Major:</p>
+<h2 id="Version-17-0-0-2012-01-27">Version 17.0.0 (2012-01-27)</h2><h3 id="Major">Major:</h3>
 <ul>
 <li><p><a class="md2man-xref" href="../man1/tork-herald.1.html">tork-herald(1)</a> now emits batches of single-line JSON arrays instead of
 printing one (raw) path per line.  This makes IPC uniform across Tork.</p></li>
@@ -302,7 +356,7 @@ better reflect the order of items in <a class="md2man-xref" href="../man1/tork-m
 <li>The new order is:  test<em>file, line</em>numbers, log<em>file, worker</em>number.</li>
 </ul></li>
 </ul>
-<p>Minor:</p>
+<h3 id="Minor">Minor:</h3>
 <ul>
 <li><p>GH-24: add <code>tork/config/dotlog</code> configuration helper to &quot;hide&quot; log files.
 (Nicolas Fouché)</p></li>
@@ -311,7 +365,7 @@ better reflect the order of items in <a class="md2man-xref" href="../man1/tork-m
 <li><p><a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a> now strips all whitespace from your input, in case you pressed
 spacebar or tab a few times, by accident, before entering your command.</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>tork/client: Replace write lock with queue to support SIGCHLD handler.</p><p>The SIGCHLD handler in <a class="md2man-xref" href="../man1/tork-master.1.html">tork-master(1)</a> can be triggered at any time, even
 in the middle of writing to the standard output stream!  Locking access
@@ -325,25 +379,25 @@ responsibility of (and access to) continually writing those outgoing
 items to the output stream.</p></li>
 <li><p>README: revise instructions, reorganize document, and other improvements.</p></li>
 </ul>
-<h2 id="Version-16-0-0-2012-01-25">Version 16.0.0 (2012-01-25)</h2><p>Major:</p>
+<h2 id="Version-16-0-0-2012-01-25">Version 16.0.0 (2012-01-25)</h2><h3 id="Major">Major:</h3>
 <ul>
 <li><p>Drop the <code>Tork::Config.test_name_extractor</code> configuration option.</p></li>
 <li><p>Pass line numbers instead of test names to before/after fork hooks.</p></li>
 <li><p>Pass $~ (MatchData) to <code>Tork::Config::test_file_globbers</code> functions.</p></li>
 </ul>
-<p>Minor:</p>
+<h3 id="Minor">Minor:</h3>
 <ul>
 <li>tork/config/cucumber: only run changed scenarios in changed features.</li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li>README: update instructions on running Tork directly from Git clone.</li>
 </ul>
-<h2 id="Version-15-1-0-2012-01-25">Version 15.1.0 (2012-01-25)</h2><p>Minor:</p>
+<h2 id="Version-15-1-0-2012-01-25">Version 15.1.0 (2012-01-25)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li>GH-19: add <code>tork cucumber</code> for running cucumber features.</li>
 </ul>
-<p>Patch:</p>
+<h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>tork/config/rails: support Rails 2 and don&#39;t assume AR is used.  (Benjamin
 Quorning)</p></li>
@@ -354,12 +408,12 @@ $TORK_CONFIGS should override settings from the <code>.tork.rb</code> file.</p><
 See <a href="http://stackoverflow.com/questions/1497756">http://stackoverflow.com/questions/1497756</a>.
 Also added forgotten Luke Wendling to the list.</p></li>
 </ul>
-<h2 id="Version-15-0-1-2012-01-24">Version 15.0.1 (2012-01-24)</h2><p>Patch:</p>
+<h2 id="Version-15-0-1-2012-01-24">Version 15.0.1 (2012-01-24)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>GH-21: Ruby 1.9 class_eval() is smarter than 1.8.</p></li>
 <li><p>GH-20: forgot <code>require &#39;thread&#39;</code> for Mutex class.  (Jesse Cooke)</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p><a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a>: fix shadowed variable names.  (Jose Pablo Barrantes)</p></li>
 <li><p>GH-22: fix command to build &amp; install gem from source.</p></li>
@@ -369,7 +423,7 @@ Also added forgotten Luke Wendling to the list.</p></li>
 <li><p>README: missed a testr =&gt; tork rename in watch cmd.</p></li>
 <li><p>README: add tip about Guard&#39;s FS watching backends.</p></li>
 </ul>
-<h2 id="Version-15-0-0-2012-01-23">Version 15.0.0 (2012-01-23)</h2><p>Major:</p>
+<h2 id="Version-15-0-0-2012-01-23">Version 15.0.0 (2012-01-23)</h2><h3 id="Major">Major:</h3>
 <ul>
 <li><p>This project has been renamed from TestR to Tork (test with fork) in order
 to better compete with rival projects, namely Spork! &gt;:-)  Credit goes to
@@ -377,7 +431,7 @@ Brian D. Burns for thinking of this most succinct &amp; awesome project name!
 He also created the snazzy ASCII-art logo featured in the project README.</p></li>
 <li><p><a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a>: rename <code>r</code> command, which runs all tests, to <code>t</code>, for <em>t</em>ork.</p></li>
 </ul>
-<h2 id="Version-14-3-0-2012-01-20">Version 14.3.0 (2012-01-20)</h2><p>Minor:</p>
+<h2 id="Version-14-3-0-2012-01-20">Version 14.3.0 (2012-01-20)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li><p><a class="md2man-xref">testr(1)</a>: notify user while dispatching their commands. This is especially
 useful when the &quot;rerun<em>passed</em>test_files&quot; command has been dispatched but
@@ -390,7 +444,7 @@ PGError: connection not open
 <p>Thanks to Spencer Steffen for <a href="https://github.com/sunaku/tork/issues/14#issuecomment-3539470">contributing this solution</a>.</p></li>
 <li><p><a class="md2man-xref">testr-driver(1)</a>: document the &quot;over&quot; status message in manual page.</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p><a class="md2man-xref">testr-driver(1)</a>: keep same herald; only replace master.</p></li>
 <li><p><a class="md2man-xref">testr(1)</a>: shorten code for loop break on quit command.</p></li>
@@ -399,35 +453,35 @@ PGError: connection not open
 <li><p>Explain <code>$0</code> override at the start of bin/ scripts.</p></li>
 <li><p>LICENSE: credit our most recent contributors.</p></li>
 </ul>
-<h2 id="Version-14-2-0-2012-01-16">Version 14.2.0 (2012-01-16)</h2><p>Minor:</p>
+<h2 id="Version-14-2-0-2012-01-16">Version 14.2.0 (2012-01-16)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li><p>Add ability to run <code>testr rails</code> without needing a <code>.testr.rb</code> file.</p></li>
 <li><p><a class="md2man-xref">testr(1)</a> no longer shows command menu at startup.  Press ENTER to see it.</p></li>
 <li><p><a class="md2man-xref">testr(1)</a> now notifies you before absorbing overhead at startup.</p></li>
 </ul>
-<p>Patch:</p>
+<h3 id="Patch">Patch:</h3>
 <ul>
 <li><a class="md2man-xref">testr(1)</a> now accepts death silently when Control-C is pressed.</li>
 </ul>
-<h2 id="Version-14-1-3-2012-01-13">Version 14.1.3 (2012-01-13)</h2><p>Patch:</p>
+<h2 id="Version-14-1-3-2012-01-13">Version 14.1.3 (2012-01-13)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li>Add support Guard v0.9.0 and newer in <code>testr-herald</code>.  (Jose Pablo
 Barrantes)</li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li>Tighten version constraints for gem dependencies to avoid future
 breakages.</li>
 </ul>
-<h2 id="Version-14-1-2-2012-01-09">Version 14.1.2 (2012-01-09)</h2><p>Minor:</p>
+<h2 id="Version-14-1-2-2012-01-09">Version 14.1.2 (2012-01-09)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li>Don&#39;t consider partial test file pass as full pass.</li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li>Upgrade to binman 3 for better bundler support.</li>
 </ul>
-<h2 id="Version-14-1-1-2011-12-07">Version 14.1.1 (2011-12-07)</h2><p>Patch:</p>
+<h2 id="Version-14-1-1-2011-12-07">Version 14.1.1 (2011-12-07)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>Do not fail when given test file no longer exists.</p></li>
 <li><p>Make xUnit <code>--name</code> option regexp case-insensitive.</p></li>
@@ -436,7 +490,7 @@ see <a href="https://github.com/rspec/rspec-core/issues/445">https://github.com/
 and <a href="https://github.com/dchelimsky/rspec/issues/44">https://github.com/dchelimsky/rspec/issues/44</a></p></li>
 <li><p>Ruby 187 does not have Symbol#upcase() method.</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>README: add another SQLite3 error to known issues.
 Thanks to Luke Wendling for contributing this patch.</p></li>
@@ -446,7 +500,7 @@ Thanks to Luke Wendling for contributing this patch.</p></li>
 <li><p>Better variable naming for self-documentation.</p></li>
 <li><p>Upgrade to binman 2.0.0 for UNIX man pages.</p></li>
 </ul>
-<h2 id="Version-14-1-0-2011-11-03">Version 14.1.0 (2011-11-03)</h2><p>Minor:</p>
+<h2 id="Version-14-1-0-2011-11-03">Version 14.1.0 (2011-11-03)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li><p>Make servers responsive to quit request (SIGTERM) from upstream.</p><p>This change lets the user quit <a class="md2man-xref">testr-master(1)</a> while it is loading
 test execution overhead (which can be a lengthy, blocking operation).</p><p>By sending a signal to the server, we don&#39;t have to wait for it to
@@ -456,44 +510,44 @@ have a <code>--help</code> option which displays their UNIX manual page.  Try it
 documented in their manual pages, so you should have everything you
 need to create <em>your own custom user interface to TestR</em> if you wish! :-)</p></li>
 </ul>
-<p>Patch:</p>
+<h3 id="Patch">Patch:</h3>
 <ul>
 <li>SIGCHLD does not awaken main thread in Ruby 1.9.3p0.</li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>Simplify <a class="md2man-xref">watch(1)</a> <a class="md2man-xref">ps(1)</a> process title monitoring.</p></li>
 <li><p>Testr: tell user to press ENTER after command key.</p></li>
 <li><p>README: add tip on loading factory_girl factories.</p></li>
 </ul>
-<h2 id="Version-14-0-3-2011-10-11">Version 14.0.3 (2011-10-11)</h2><p>Patch:</p>
+<h2 id="Version-14-0-3-2011-10-11">Version 14.0.3 (2011-10-11)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li>Forgot to migrate the <code>testr/config/rails</code> configuration helper to use the
 new TestR configuration parameter names.</li>
 </ul>
-<h2 id="Version-14-0-2-2011-10-11">Version 14.0.2 (2011-10-11)</h2><p>Patch:</p>
+<h2 id="Version-14-0-2-2011-10-11">Version 14.0.2 (2011-10-11)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>Fix updating passed/failed test files bookkeeping.  Once a test file
 failed, it was (incorrectly) always considered failed, even if it passed
 later on.</p></li>
 <li><p>Do not requeue test files that are waiting to run.</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li>Rename <code>*.md</code> files to <code>*.markdown</code> to avoid ambiguity.</li>
 </ul>
-<h2 id="Version-14-0-1-2011-10-10">Version 14.0.1 (2011-10-10)</h2><p>Patch:</p>
+<h2 id="Version-14-0-1-2011-10-10">Version 14.0.1 (2011-10-10)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>Use blue/red for pass/fail instead of green/red to accommodate the color
 blind.</p></li>
 <li><p>Incorrect test name regexp was passed down to Test::Unit.  This broke
 focused testing, where only changed tests in a changed test file are run.</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li>Make <code>testr-master</code> wait for killed worker processes before exiting.</li>
 </ul>
-<h2 id="Version-14-0-0-2011-10-09">Version 14.0.0 (2011-10-09)</h2><p>Major:</p>
+<h2 id="Version-14-0-0-2011-10-09">Version 14.0.0 (2011-10-09)</h2><h3 id="Major">Major:</h3>
 <ul>
 <li><p>Renamed this project and its resources from test-loop to TestR.</p></li>
 <li><p>Renamed the <code>reabsorb_file_globs</code> configuration parameter to
@@ -510,7 +564,7 @@ focused testing, where only changed tests in a changed test file are run.</p></l
 parameters.</p></li>
 <li><p>Removed the <code>test/loop/notify</code> and <code>test-loop/coco</code> libraries.</p></li>
 </ul>
-<p>Minor:</p>
+<h3 id="Minor">Minor:</h3>
 <ul>
 <li><p>The file system is no longer polled to detect modified files.  Instead, it
 is monitored for file modification events in a portable and efficient
@@ -521,24 +575,24 @@ manner using the <a href="https://github.com/guard/guard">Guard</a> library.</p>
 <code>before_fork_hooks</code> configuration parameters.</p></li>
 <li><p>Added ability to re-run passed and failed tests in the <code>testr</code> script.</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>The monolithic <code>test-loop</code> script has been replaced by several smaller
 ones that communicate with each other using single-line JSON messages via
 their standard input &amp; output streams.  See &quot;Architecture&quot; in the README.</p></li>
 <li><p>Now using Bundler to manage development dependencies and gem packaging.</p></li>
 </ul>
-<h2 id="Version-13-0-1-2011-09-21">Version 13.0.1 (2011-09-21)</h2><p>Other:</p>
+<h2 id="Version-13-0-1-2011-09-21">Version 13.0.1 (2011-09-21)</h2><h3 id="Other">Other:</h3>
 <ul>
 <li><p>Forgot to include <code>test/loop/coco</code> preset in gem package.</p></li>
 <li><p>Forgot to mention <code>test/loop/parallel_tests</code> preset in README.</p></li>
 </ul>
-<h2 id="Version-13-0-0-2011-08-24">Version 13.0.0 (2011-08-24)</h2><p>Major:</p>
+<h2 id="Version-13-0-0-2011-08-24">Version 13.0.0 (2011-08-24)</h2><h3 id="Major">Major:</h3>
 <ul>
 <li>Pass worker sequence number as the last argument to lambda functions in
 <code>Test::Loop.before_each_test</code> and <code>Test::Loop.after_each_test</code> arrays.</li>
 </ul>
-<p>Minor:</p>
+<h3 id="Minor">Minor:</h3>
 <ul>
 <li><p>In the <code>test/loop/rails</code> configuration preset:</p>
 <ul>
@@ -552,22 +606,22 @@ gem.  (Corné Verbruggen)</p></li>
 processes like connecting to separate databases better.  (Corné
 Verbruggen)</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>README: move configuration presets above options.</p></li>
 <li><p>Eliminate 1 SLOC: .rb extension used in file glob.</p></li>
 <li><p>Turn off executable bit on loop.rb file mode.</p></li>
 <li><p>Pass child ENV directly to exec() for atomicity.</p></li>
 </ul>
-<h2 id="Version-12-3-1-2011-07-19">Version 12.3.1 (2011-07-19)</h2><p>Patch:</p>
+<h2 id="Version-12-3-1-2011-07-19">Version 12.3.1 (2011-07-19)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li>Binary data could not be stored in environment variable values.</li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li>Forgot to add Jacob Helwig to the gemspec&#39;s authors list.</li>
 </ul>
-<h2 id="Version-12-3-0-2011-07-19">Version 12.3.0 (2011-07-19)</h2><p>Minor:</p>
+<h2 id="Version-12-3-0-2011-07-19">Version 12.3.0 (2011-07-19)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li><p>Add <code>Test::Loop::max_concurrent_tests</code> configuration parameter to limit
 the number of test files run concurrently (default 4).  Otherwise, with
@@ -575,7 +629,7 @@ large test suites, we could end up swamping the machine running the tests
 by forking hundreds of test files at once.  (Jacob Helwig)</p></li>
 <li><p>Rails: add matcher for <code>test/factories/*_factory.rb</code>.</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>ENV returns a Hash with duplicate/frozen keys/values.  (Brian D. Burns)</p></li>
 <li><p>Use Marshal to propagate resume_files to reabsorb.</p></li>
@@ -589,12 +643,12 @@ requested by Juan G. Hurtado..</p></li>
 <li><p>Add <code>test/loop/coco</code> preset for integrating the <a href="http://lkdjiin.github.com/coco/">Coco code coverage
 library</a>.</p></li>
 </ul>
-<h2 id="Version-12-1-0-2011-04-29">Version 12.1.0 (2011-04-29)</h2><p>Minor:</p>
+<h2 id="Version-12-1-0-2011-04-29">Version 12.1.0 (2011-04-29)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li>Add <code>Test::Loop.delay_per_iteration</code> parameter to control the number of
 seconds (or fractions thereof) to sleep in between test-loop iterations.</li>
 </ul>
-<h2 id="Version-12-0-4-2011-04-29">Version 12.0.4 (2011-04-29)</h2><p>Patch:</p>
+<h2 id="Version-12-0-4-2011-04-29">Version 12.0.4 (2011-04-29)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>Reabsorb overhead when user&#39;s configuration file changes.  (Brian D. Burns
 and Daniel Pittman)</p></li>
@@ -602,7 +656,7 @@ and Daniel Pittman)</p></li>
 not necessary!  <a href="https://github.com/sunaku/test-loop/issues/5">This issue</a>
 was solved by upgrading to the newer 2.6.38.4-1 Linux kernel on my system.</p></li>
 </ul>
-<h2 id="Version-12-0-3-2011-04-25">Version 12.0.3 (2011-04-25)</h2><p>Patch:</p>
+<h2 id="Version-12-0-3-2011-04-25">Version 12.0.3 (2011-04-25)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>Fix SIGCHLD handling and test completion reporting (Daniel Pittman).</p><p>We need to reap all ready children in SIGCHLD, not just the first, and
 should not be reporting completion in the signal handler.</p><p>On a fast machine, or where there is a slow hook executed at the
@@ -635,13 +689,13 @@ that would also stop you from doing clever things.&quot; ~Doug Gwyn</p></blockqu
 Many thanks to Brian D. Burns and Daniel Pittman for helping solve <a href="https://github.com/sunaku/test-loop/issues/5">this
 issue</a>.</p></li>
 </ul>
-<h2 id="Version-12-0-2-2011-04-21">Version 12.0.2 (2011-04-21)</h2><p>Patch:</p>
+<h2 id="Version-12-0-2-2011-04-21">Version 12.0.2 (2011-04-21)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>Consider DB schema dump file as overhead in Rails.</p></li>
 <li><p>Do not consider test factories as overhead in Rails.</p></li>
 <li><p>Run test files when test factory files change in Rails.</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>Detach worker from master&#39;s terminal device sooner.</p></li>
 <li><p>All required signals must be present in irb check.</p></li>
@@ -649,19 +703,19 @@ issue</a>.</p></li>
 <li><p>Retain <a class="md2man-xref">ps(1)</a> column header in watch command output.</p></li>
 <li><p>Begin parameter descriptions with the noun itself.</p></li>
 </ul>
-<h2 id="Version-12-0-1-2011-04-20">Version 12.0.1 (2011-04-20)</h2><p>Patch:</p>
+<h2 id="Version-12-0-1-2011-04-20">Version 12.0.1 (2011-04-20)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>Restore support for Ruby 1.8.7.</p></li>
 <li><p>Allow user&#39;s test execution overhead to fork.</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>Freeze master&#39;s ENV properly; keep resume key.</p></li>
 <li><p>Remove completed test from running list sooner.</p></li>
 <li><p>Add instructions to check for POSIX prerequisites.</p></li>
 <li><p>Support multiple test-loop instances in watch command.</p></li>
 </ul>
-<h2 id="Version-12-0-0-2011-04-19">Version 12.0.0 (2011-04-19)</h2><p>Major:</p>
+<h2 id="Version-12-0-0-2011-04-19">Version 12.0.0 (2011-04-19)</h2><h3 id="Major">Major:</h3>
 <ul>
 <li><p>You must now explicitly <code>require &#39;test/loop/rails&#39;</code> for Rails support
 because we can only <em>automatically</em> apply our Railtie (to disable class
@@ -670,7 +724,7 @@ your models are already loaded &amp; cached by the Rails environment.</p></li>
 <li><p>Your tests can no longer read from the user&#39;s terminal (master&#39;s STDIN);
 instead they will read from an empty stream (the reading end of IO.popen).</p></li>
 </ul>
-<p>Patch:</p>
+<h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>Replace threads with SIGCHLD for reporting test results.</p><p>This fixes deadlock errors that sometimes occurred when the user&#39;s chosen
 test library tried to print something to STDOUT/STDERR (even though those
@@ -678,7 +732,7 @@ streams were redirected to a log file in the worker process).</p><p>Thanks to Br
 threads to monitor workers was the culprit behind the deadlocks errors.</p></li>
 <li><p>Ctrl-C did not raise Interrupt in my Rails 3 test suite.</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>Ensure a clean ENV when reabsorbing overhead.  Environment variables set
 by your test execution overhead are not propagated to subsequent
@@ -694,22 +748,22 @@ reabsorptions.  (Brian D. Burns)</p></li>
 <li><p>Add tip about annihilating test-loop processes.</p></li>
 <li><p>Fix markdown formatting.</p></li>
 </ul>
-<h2 id="Version-11-0-1-2011-04-14">Version 11.0.1 (2011-04-14)</h2><p>Patch:</p>
+<h2 id="Version-11-0-1-2011-04-14">Version 11.0.1 (2011-04-14)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li>Only attempt to define Railtie if the current Rails version supports it.</li>
 </ul>
-<h2 id="Version-11-0-0-2011-04-14">Version 11.0.0 (2011-04-14)</h2><p>Major:</p>
+<h2 id="Version-11-0-0-2011-04-14">Version 11.0.0 (2011-04-14)</h2><h3 id="Major">Major:</h3>
 <ul>
 <li>The <code>test/loop/rails</code> preset has been internalized and is now applied
 automatically if your test execution overhead includes Ruby on Rails.</li>
 </ul>
-<p>Minor:</p>
+<h3 id="Minor">Minor:</h3>
 <ul>
 <li>If you are using Rails 3, test-loop will automatically set
 <code>config.cache_classes = false</code> for your test environment.  (Brian D.
 Burns)</li>
 </ul>
-<p>Patch:</p>
+<h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>Avoid deadlock errors when printing output from Test::Unit and MiniTest.
 (Brian D. Burns)</p>
@@ -719,7 +773,7 @@ Burns)</li>
 Do not treat it as a failure by printing the log file.</p></li>
 <li><p>Ignore SIGINT in workers; only master must honor it.</p></li>
 </ul>
-<h2 id="Version-10-0-1-2011-04-08">Version 10.0.1 (2011-04-08)</h2><p>Patch:</p>
+<h2 id="Version-10-0-1-2011-04-08">Version 10.0.1 (2011-04-08)</h2><h3 id="Patch">Patch:</h3>
 <ul>
 <li><p>Workers must ignore SIGTSTP, otherwise master waits forever before
 exiting.</p></li>
@@ -728,12 +782,12 @@ unregister the trap handlers inherited from the master process.</p></li>
 <li><p>Prevent uncaught throw error on subsequent Ctrl-C.</p></li>
 <li><p>Simpler solution for terminating loop upon Ctrl-C.</p></li>
 </ul>
-<h2 id="Version-10-0-0-2011-04-06">Version 10.0.0 (2011-04-06)</h2><p>Major:</p>
+<h2 id="Version-10-0-0-2011-04-06">Version 10.0.0 (2011-04-06)</h2><h3 id="Major">Major:</h3>
 <ul>
 <li>The <code>Test::Loop.before_each_test</code> and <code>Test::Loop.after_each_test</code>
 parameters are arrays now.</li>
 </ul>
-<h2 id="Version-9-4-0-2011-04-06">Version 9.4.0 (2011-04-06)</h2><p>Minor:</p>
+<h2 id="Version-9-4-0-2011-04-06">Version 9.4.0 (2011-04-06)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li><p>Allow lambda functions in <code>Test::Loop.test_file_matchers</code> to return <code>nil</code>
 so that you can exclude certain tests from being executed.  (Brian D.
@@ -744,20 +798,20 @@ the following:</p>
 <pre><code>watch &#39;ps xf | grep test-loop | sed 1,3d&#39;
 </code></pre></li>
 </ul>
-<p>Patch:</p>
+<h3 id="Patch">Patch:</h3>
 <ul>
 <li>Skip <code>at_exit()</code> when exiting master process.  This prevents an empty test
 from being run when exiting the loop after having processed a test/spec
 helper that loads the Test::Unit library.  (Brian D. Burns)</li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>Use throw/catch to break loop instead of raising SystemExit exception.</p></li>
 <li><p>Trap SIGTERM with IGNORE/DEFAULT instead of using a closure in master.</p></li>
 <li><p>Unregister master&#39;s custom signal handlers inside worker processes.</p></li>
 <li><p>Separate configuration parameters into subsections in README.</p></li>
 </ul>
-<h2 id="Version-9-3-0-2011-04-01">Version 9.3.0 (2011-04-01)</h2><p>Minor:</p>
+<h2 id="Version-9-3-0-2011-04-01">Version 9.3.0 (2011-04-01)</h2><h3 id="Minor">Minor:</h3>
 <ul>
 <li><p>Resume currently running tests--as well as those currently needing to be
 run--after reabsorbing test execution overhead.  (Brian D. Burns)</p></li>
@@ -770,7 +824,7 @@ system resources.</p></li>
 <li><p>Use ANSI clear line command to erase control-key combinations outputted by
 shells such as BASH and ZSH in test-loop&#39;s output.  (Brian D. Burns)</p></li>
 </ul>
-<p>Patch:</p>
+<h3 id="Patch">Patch:</h3>
 <ul>
 <li><p><code>@last_ran_at</code> was being set during every iteration of the loop.  This is
 problematic when Ruby&#39;s <code>Time.now</code> is more precise than your filesystem&#39;s
@@ -782,7 +836,7 @@ running waitall(), instead of sending SIGKILL to the entire process group.
 As a result, test-loop no longer exits with a non-zero status upon SIGINT.</p></li>
 <li><p>Remove &#39;ansi&#39; gem dependency.  (Brian D. Burns)</p></li>
 </ul>
-<p>Other:</p>
+<h3 id="Other">Other:</h3>
 <ul>
 <li><p>Add tip on deleting logs for passing tests.  (Brian D. Burns)</p></li>
 <li><p>Add tip on monitoring test processes with <a class="md2man-xref">watch(1)</a> in README.</p></li>

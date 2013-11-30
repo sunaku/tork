@@ -9,16 +9,10 @@ programs
 \fB\fCtork-remote\fR [\fIOPTION\fP]... \fIPROGRAM\fP
 .SH DESCRIPTION
 .PP
-This program sends single\-line JSON messages read from its stdin to the given
-\fIPROGRAM\fP which is already running in the same working directory as this one.
-.PP
-If lines read from stdin are not single\-line JSON messages, then they are
-split into an array of words, using the same word\-splitting algorithm as
-.BR sh (1), 
-before being sent to the \fIPROGRAM\fP as a single\-line JSON message.
-.PP
-If the \fIPROGRAM\fP sends any messages in response, then they are printed to
-stdout if they are valid single\-line JSON messages or to stderr otherwise.
+This program reads lines from its stdin and sends them to the given \fIPROGRAM\fP,
+which must already be running in the same working directory as this program.
+It also prints lines, received in response, from the given \fIPROGRAM\fP either
+to stdout if they are valid single\-line JSON arrays or to stderr otherwise.
 .SH OPTIONS
 .TP
 \fB\fC-h\fR, \fB\fC--help\fR

@@ -1,4 +1,4 @@
-.TH TORK 1 2013\-11\-25 19.4.0
+.TH TORK 1 2013\-11\-30 19.5.0
 .SH NAME
 .PP
 tork \- Continuous testing tool for Ruby
@@ -7,7 +7,9 @@ tork \- Continuous testing tool for Ruby
 \fB\fCtork\fR [\fIOPTION\fP]... [\fICONFIG\fP]...
 .SH DESCRIPTION
 .PP
-This program is a simple command\-line user interface for 
+This program can be thought of as an interactive version of 
+.BR tork-runner (1).
+It functions as a rudimentary command\-line user interface to 
 .BR tork-driver (1).
 .PP
 First, it applies the given \fICONFIG\fP values, which are either (1) paths to
@@ -137,6 +139,6 @@ testing library.
 .RE
 .SH SEE ALSO
 .PP
-.BR tork (1), 
+.BR tork-runner (1), 
 .BR tork-driver (1), 
 .BR tork-master (1)

@@ -1,4 +1,4 @@
-.TH TORK\-MASTER 1 2013\-11\-25 19.4.0
+.TH TORK\-MASTER 1 2013\-11\-30 19.5.0
 .SH NAME
 .PP
 tork\-master \- absorbs overhead and runs tests
@@ -20,7 +20,12 @@ instances.
 .SS Input
 .PP
 This program reads the following commands, which are single\-line JSON arrays,
-from stdin and performs the actions described respectively.
+from stdin and then performs the associated actions.  For lines read from
+stdin that are single\-line JSON arrays, it splits each of them into an array
+of words, using the same word\-splitting algorithm as 
+.BR sh (1), 
+before processing
+them.  For example, the line \fB\fCa "b c"\fR is split into the \fB\fC["a", "b c"]\fR array.
 .TP
 \fB\fC["test",\fR \fItest_file\fP\fB\fC,\fR \fIline_numbers\fP\fB\fC]\fR
 Forks a worker process to run tests that correspond to the given

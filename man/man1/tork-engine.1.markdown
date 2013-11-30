@@ -1,4 +1,4 @@
-# TORK-ENGINE 1 2013-11-25 19.4.0
+# TORK-ENGINE 1 2013-11-30 19.5.0
 
 ## NAME
 
@@ -17,7 +17,10 @@ This program can be controlled remotely by multiple tork-remote(1) instances.
 ### Input
 
 This program reads the following commands, which are single-line JSON arrays,
-from stdin and performs the actions described respectively.
+from stdin and then performs the associated actions.  For lines read from
+stdin that are single-line JSON arrays, it splits each of them into an array
+of words, using the same word-splitting algorithm as sh(1), before processing
+them.  For example, the line `a "b c"` is split into the `["a", "b c"]` array.
 
 `["reabsorb_overhead"]`
   Stops any test files that are currently running, reabsorbs the test

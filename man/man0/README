@@ -57,6 +57,9 @@ program appropriately!
 is an interactive command\-line user interface for 
 .BR tork-driver (1)
 .IP \(bu 2
+.BR tork-runner (1) 
+runs your test suite once, non\-interactively, and then exits
+.IP \(bu 2
 .BR tork-herald (1) 
 monitors current directory tree and reports changed files
 .IP \(bu 2
@@ -73,7 +76,7 @@ absorbs test execution overhead and forks to run your tests
 remotely controls any Tork program running in the same \fB\fCpwd\fR
 .IP \(bu 2
 .BR tork-notify (1) 
-shows how to receive and process messages from Tork programs
+notifies you when previously passing tests fail or vice versa
 .RE
 .PP
 When the herald observes that files in or beneath the current directory have
@@ -114,6 +117,11 @@ echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
 .fi
 .RE
 .RE
+.PP
+Alternatively, you can use 
+.BR tork-runner (1) 
+to run your test suite in one shot
+and then exit with a nonzero status if tests failed, similar to \fB\fCrake test\fR\&.
 .SH Installation
 .PP
 .RS
@@ -204,7 +212,7 @@ You can monitor your test processes from another terminal:
 .PP
 .RS
 .nf
-watch 'pgrep -f ^tork | xargs -r ps u'
+watch 'pgrep -f ^tork | xargs -r ps uf'
 .fi
 .RE
 .SS With MiniTest

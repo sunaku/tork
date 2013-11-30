@@ -1,0 +1,44 @@
+.TH TORK\-RUNNER 1 2013\-11\-30 19.5.0
+.SH NAME
+.PP
+tork\-runner \- runs tests once, non\-interactively
+.SH SYNOPSIS
+.PP
+\fB\fCtork-runner\fR [\fIOPTION\fP]... [\fITEST_FILE_GLOB\fP]...
+.SH DESCRIPTION
+.PP
+This program can be thought of as a non\-interactive version of 
+.BR tork (1).  
+It
+runs all test files that match the given \fITEST_FILE_GLOB\fPs and then exits
+with a nonzero status if any tests failed.  If none are given, it runs all
+test files known to \fB\fCTork::Driver::TEST_FILE_GLOBBERS\fR in 
+.BR tork-driver (1).
+.SS Output
+.PP
+This program prints the following messages to stdout.
+.TP
+\fB\fC>>\fR \fIfailed_test_log_file\fP \fB\fC<<\fR
+This message will be followed by the content of \fIfailed_test_log_file\fP\&.
+.TP
+\fIT\fP \fB\fCtested,\fR \fIP\fP \fB\fCpassed,\fR \fIF\fP \fB\fCfailed\fR
+\fIT\fP test files were tested and \fIP\fP of them passed but \fIF\fP of them failed.
+.SH OPTIONS
+.TP
+\fB\fC-h\fR, \fB\fC--help\fR
+Show this help manual.
+.SH EXIT STATUS
+.TP
+0
+All test files passed.
+.TP
+1
+One or more test files failed.
+.SH ENVIRONMENT
+.PP
+See 
+.BR tork (1).
+.SH SEE ALSO
+.PP
+.BR tork (1), 
+.BR tork-driver (1)
