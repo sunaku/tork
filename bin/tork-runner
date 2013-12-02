@@ -22,6 +22,9 @@ test files known to `Tork::Driver::TEST_FILE_GLOBBERS` in tork-driver(1).
 
 This program prints the following messages to stdout.
 
+`.`
+  A test has started running.
+
 `>>` *failed\_test\_log\_file* `<<`
   This message will be followed by the content of *failed\_test\_log\_file*.
 
@@ -74,7 +77,7 @@ IO.popen('tork-driver', 'w+') do |driver|
   while line = driver.gets
     response = JSON.load(line)
     case response.first.to_sym
-    when :test then tested += 1
+    when :test then tested += 1; print '.' # notify user of testing activity
     when :pass then passed += 1
     when :fail then failed << response[3]
     when :idle then
