@@ -81,12 +81,11 @@ protected
       send @clients, message # propagate downstream
 
       event, file, line_numbers = message
-      case event.to_sym
+      case event_sym = event.to_sym
       when :test
         @queued_test_files.delete file
 
       when :pass
-        finished = true
         # only whole test file runs should qualify as pass
         if line_numbers.empty?
           was_fail = @failed_test_files.delete? file
@@ -95,13 +94,16 @@ protected
         end
 
       when :fail
-        finished = true
         was_pass = @passed_test_files.delete? file
         now_fail = @failed_test_files.add? file
         send @clients, [:pass_now_fail, file, message] if was_pass and now_fail
       end
 
-      send @clients, [:idle] if finished and @queued_test_files.empty?
+      # notify the user when all queued test files have finished running
+      if @queued_test_files.empty? and [:pass, :fail].include? event_sym
+        send @clients, [:idle]
+      end
+
     else
       super
     end
