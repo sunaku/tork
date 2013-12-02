@@ -1,3 +1,26 @@
+## Version 19.5.1 (2013-12-02)
+
+This release restores support for Capybara integration tests in the `rails`
+configuration helper, corrects the `idle` event in tork-engine(1), and fixes
+some minor bugs in tork-runner(1) and tork(1).
+
+### Patch:
+
+  * Rails: keep sub-Rails connected to in-memory SQLite3 test database.
+
+    When another Rails instance is started by Capybara, it sets up a new
+    connection to the test database instead of re-using our in-memory DB.
+
+    http://www.spacevatican.org/2012/8/18/threading-the-rat/
+
+  * tork-engine(1) sent `idle` event when 1 test was still running.
+
+  * tork-runner(1): prevent Test::Unit from running in `at_exit` hook.
+
+    Test::Unit is finding and running 0 tests in tork-runner(1) itself.
+
+  * tork(1): forgot to update man page: ENTER by itself does nothing now.
+
 ## Version 19.5.0 (2013-11-30)
 
 This release adds a tork-runner(1) program for non-interactive test execution,
