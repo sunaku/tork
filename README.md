@@ -172,6 +172,10 @@ database adapter][memory_test_fix].  Otherwise, you *might* face these errors:
 
 > cannot start a transaction within a transaction
 
+For older Rails, to use SQLite3 as your test database along with browser-based
+acceptance testing frameworks such as Capybara, see
+http://www.spacevatican.org/2012/8/18/threading-the-rat/
+
 ## Configuration
 
 Tork looks for a configuration directory named `.tork/` inside its working

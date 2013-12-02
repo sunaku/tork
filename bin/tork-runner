@@ -80,7 +80,7 @@ IO.popen('tork-driver', 'w+') do |driver|
     when :idle then
       puts failed.map {|log| [nil, ">> #{log} <<", File.read(log)] }, nil,
            "#{tested} tested, #{passed} passed, #{failed.count} failed"
-      exit failed.empty?
+      exit! failed.empty?
     end
   end
 end

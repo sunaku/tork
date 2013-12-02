@@ -31,6 +31,14 @@ begin
         if File.exist? seeds = "#{Rails.root}/db/seeds.rb"
           load seeds
         end
+
+        # keep sub-Rails connected to in-memory database
+        # e.g. when another Rails is started by Capybara
+        # http://www.spacevatican.org/2012/8/18/threading-the-rat/
+        class << ActiveRecord::Base
+          memory_database_connection = ActiveRecord::Base.connection
+          define_method(:connection) { memory_database_connection }
+        end
       end
     end
   end
