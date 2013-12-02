@@ -7,7 +7,17 @@
   <link rel="stylesheet" href="../style.css"/>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
-<body><div class="navbar"><div class="navbar-inner"><span class="brand"><a href="../index.html#man0">man0</a>/VERSION</span></div></div><div class="container-fluid"><h2 id="Version-19-5-0-2013-11-30">Version 19.5.0 (2013-11-30)</h2><p>This release adds a <a class="md2man-xref" href="../man1/tork-runner.1.html">tork-runner(1)</a> program for non-interactive test execution,
+<body><div class="navbar"><div class="navbar-inner"><span class="brand"><a href="../index.html#man0">man0</a>/VERSION</span></div></div><div class="container-fluid"><h2 id="Version-19-5-1-2013-12-02">Version 19.5.1 (2013-12-02)</h2><p>This release restores support for Capybara integration tests in the <code>rails</code>
+configuration helper, corrects the <code>idle</code> event in <a class="md2man-xref" href="../man1/tork-engine.1.html">tork-engine(1)</a>, and fixes
+some minor bugs in <a class="md2man-xref" href="../man1/tork-runner.1.html">tork-runner(1)</a> and <a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a>.</p><h3 id="Patch">Patch:</h3>
+<ul>
+<li><p>Rails: keep sub-Rails connected to in-memory SQLite3 test database.</p><p>When another Rails instance is started by Capybara, it sets up a new
+connection to the test database instead of re-using our in-memory DB.</p><p><a href="http://www.spacevatican.org/2012/8/18/threading-the-rat/">http://www.spacevatican.org/2012/8/18/threading-the-rat/</a></p></li>
+<li><p><a class="md2man-xref" href="../man1/tork-engine.1.html">tork-engine(1)</a> sent <code>idle</code> event when 1 test was still running.</p></li>
+<li><p><a class="md2man-xref" href="../man1/tork-runner.1.html">tork-runner(1)</a>: prevent Test::Unit from running in <code>at_exit</code> hook.</p><p>Test::Unit is finding and running 0 tests in <a class="md2man-xref" href="../man1/tork-runner.1.html">tork-runner(1)</a> itself.</p></li>
+<li><p><a class="md2man-xref" href="../man1/tork.1.html">tork(1)</a>: forgot to update man page: ENTER by itself does nothing now.</p></li>
+</ul>
+<h2 id="Version-19-5-0-2013-11-30">Version 19.5.0 (2013-11-30)</h2><p>This release adds a <a class="md2man-xref" href="../man1/tork-runner.1.html">tork-runner(1)</a> program for non-interactive test execution,
 makes connections to tork subprocesses self-healing, eliminates &quot;address
 already in use&quot; errors, and fixes bugs in <a class="md2man-xref" href="../man1/tork-herald.1.html">tork-herald(1)</a> and <a class="md2man-xref" href="../man1/tork-notify.1.html">tork-notify(1)</a>.</p><h3 id="Minor">Minor:</h3>
 <ul>

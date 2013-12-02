@@ -1,3 +1,37 @@
+.SH Version 19.5.1 (2013\-12\-02)
+.PP
+This release restores support for Capybara integration tests in the \fB\fCrails\fR
+configuration helper, corrects the \fB\fCidle\fR event in 
+.BR tork-engine (1), 
+and fixes
+some minor bugs in 
+.BR tork-runner (1) 
+and 
+.BR tork (1).
+.SS Patch:
+.RS
+.IP \(bu 2
+Rails: keep sub\-Rails connected to in\-memory SQLite3 test database.
+.PP
+When another Rails instance is started by Capybara, it sets up a new
+connection to the test database instead of re\-using our in\-memory DB.
+.TP
+.UR http://www.spacevatican.org/2012/8/18/threading-the-rat/
+.UE
+.IP \(bu 2
+.BR tork-engine (1) 
+sent \fB\fCidle\fR event when 1 test was still running.
+.IP \(bu 2
+.BR tork-runner (1): 
+prevent Test::Unit from running in \fB\fCat_exit\fR hook.
+.PP
+Test::Unit is finding and running 0 tests in 
+.BR tork-runner (1) 
+itself.
+.IP \(bu 2
+.BR tork (1): 
+forgot to update man page: ENTER by itself does nothing now.
+.RE
 .SH Version 19.5.0 (2013\-11\-30)
 .PP
 This release adds a 

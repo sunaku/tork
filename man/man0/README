@@ -269,6 +269,11 @@ SQLite3::BusyException: database is locked
 .PP
 cannot start a transaction within a transaction
 .RE
+.PP
+For older Rails, to use SQLite3 as your test database along with browser\-based
+acceptance testing frameworks such as Capybara, see
+.UR http://www.spacevatican.org/2012/8/18/threading-the-rat/
+.UE
 .SH Configuration
 .PP
 Tork looks for a configuration directory named \fB\fC.tork/\fR inside its working

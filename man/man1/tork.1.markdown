@@ -1,4 +1,4 @@
-# TORK 1 2013-11-30 19.5.0
+# TORK 1 2013-12-02 19.5.1
 
 ## NAME
 
@@ -18,8 +18,8 @@ directories that contain configuration files or (2) names of configuration
 helpers listed in the description of the `TORK_CONFIGS` environment variable.
 
 Next, it waits for you to supply interactive commands either (1) directly on
-its stdin or (2) remotely through tork-remote(1).  From then onward, you may
-press the ENTER key (supplying no command) to see a menu of accepted commands.
+its stdin or (2) remotely through tork-remote(1).  From then onward, type `h`
+and press ENTER to see a help message that shows a menu of accepted commands.
 
 Some interactive commands accept additional arguments, described as follows.
 

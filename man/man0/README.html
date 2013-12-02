@@ -131,7 +131,9 @@ specified <code>rails</code> configuration helper has a chance to disable class 
 database adapter</a>.  Otherwise, you <em>might</em> face these errors:</p>
 <blockquote>
 <p>SQLite3::BusyException: database is locked</p><p>cannot start a transaction within a transaction</p></blockquote>
-<h2 id="Configuration">Configuration</h2><p>Tork looks for a configuration directory named <code>.tork/</code> inside its working
+<p>For older Rails, to use SQLite3 as your test database along with browser-based
+acceptance testing frameworks such as Capybara, see
+<a href="http://www.spacevatican.org/2012/8/18/threading-the-rat/">http://www.spacevatican.org/2012/8/18/threading-the-rat/</a></p><h2 id="Configuration">Configuration</h2><p>Tork looks for a configuration directory named <code>.tork/</code> inside its working
 directory.  The configuration directory contains specially-named Ruby scripts,
 within which you can query and modify the settings for various tork programs.
 See the &quot;FILES&quot; sections in the manual pages of tork programs for details.</p><p>Note that tork <em>does not</em> automatically reload changes from your configuration
