@@ -10,7 +10,7 @@ class Engine < Server
     super
     Tork.config :engine
 
-    @queued_test_files = Set.new
+    @running_test_files = Set.new
     @passed_test_files = Set.new
     @failed_test_files = Set.new
     @lines_by_file = {}
@@ -26,14 +26,14 @@ class Engine < Server
   def reabsorb_overhead
     @master.reconnect
 
-    # re-dispatch the previously dispatched files to the new master
-    previous = @queued_test_files.to_a
-    @queued_test_files.clear
+    # resume running the previously running test files in new master
+    previous = @running_test_files.to_a
+    @running_test_files.clear
     run_test_files previous
   end
 
   def run_test_file test_file, *line_numbers
-    if File.exist? test_file and @queued_test_files.add? test_file
+    if File.exist? test_file and @running_test_files.add? test_file
       if line_numbers.empty?
         line_numbers = find_changed_line_numbers(test_file)
       else
@@ -49,11 +49,11 @@ class Engine < Server
   end
 
   def stop_running_test_files signal=nil
-    if @queued_test_files.empty?
+    if @running_test_files.empty?
       tell @client, 'There are no running test files to stop.'
     else
       send @master, [:stop, signal].compact
-      @queued_test_files.clear
+      @running_test_files.clear
     end
   end
 
@@ -82,26 +82,23 @@ protected
 
       event, file, line_numbers = message
       case event_sym = event.to_sym
-      when :test
-        @queued_test_files.delete file
+      when :fail, :pass
+        @running_test_files.delete file
 
-      when :pass
-        # only whole test file runs should qualify as pass
-        if line_numbers.empty?
+        if event_sym == :fail
+          was_pass = @passed_test_files.delete? file
+          now_fail = @failed_test_files.add? file
+          send @clients, [:pass_now_fail, file, message] if was_pass and now_fail
+
+        elsif line_numbers.empty?
+          # only whole test file runs should qualify as pass
           was_fail = @failed_test_files.delete? file
           now_pass = @passed_test_files.add? file
           send @clients, [:fail_now_pass, file, message] if was_fail and now_pass
         end
 
-      when :fail
-        was_pass = @passed_test_files.delete? file
-        now_fail = @failed_test_files.add? file
-        send @clients, [:pass_now_fail, file, message] if was_pass and now_fail
-      end
-
-      # notify the user when all queued test files have finished running
-      if @queued_test_files.empty? and [:pass, :fail].include? event_sym
-        send @clients, [:idle]
+        # notify user when all test files have finished running
+        send @clients, [:idle] if @running_test_files.empty?
       end
 
     else
