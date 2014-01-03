@@ -22,14 +22,16 @@ test files known to `Tork::Driver::TEST_FILE_GLOBBERS` in tork-driver(1).
 
 This program prints the following messages to stdout.
 
-`.`
-  A test has started running.
-
 `>>` *failed\_test\_log\_file* `<<`
   This message will be followed by the content of *failed\_test\_log\_file*.
 
 *T* `tested,` *P* `passed,` *F* `failed`
   *T* test files were tested and *P* of them passed but *F* of them failed.
+
+This program prints the following messages to stderr if it is a TTY device.
+
+`tork-runner:` *NN.N*`% tested`
+  *NN.N* percent of test files were tested so far.
 
 ## OPTIONS
 
@@ -77,7 +79,7 @@ IO.popen('tork-driver', 'w+') do |driver|
   while line = driver.gets
     response = JSON.load(line)
     case response.first.to_sym
-    when :test then tested += 1; print '.' # notify user of testing activity
+    when :test then tested += 1
     when :pass then passed += 1
     when :fail then failed << response[3]
     when :idle then
@@ -85,5 +87,10 @@ IO.popen('tork-driver', 'w+') do |driver|
            "#{tested} tested, #{passed} passed, #{failed.count} failed"
       exit! failed.empty?
     end
+
+    # tell user how many tests (percentage) have finished running;
+    # see http://www.termsys.demon.co.uk/vtansi.htm for ANSI VT100
+    STDERR.printf "\e[s\e[K%s: %02.1f%% tested\e[u", $0,
+      ((passed + failed.count) / tested.to_f) * 100 if STDERR.tty?
   end
 end
