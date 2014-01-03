@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../style.css"/>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
-<body><div class="navbar"><div class="navbar-inner"><span class="brand"><a href="../index.html#man1">man1</a>/tork-master.1</span></div></div><div class="container-fluid"><h1 id="TORK-MASTER-1-2013-12-02-19-5-1">TORK-MASTER 1 2013-12-02 19.5.1</h1><h2 id="NAME">NAME</h2><p>tork-master - absorbs overhead and runs tests</p><h2 id="SYNOPSIS">SYNOPSIS</h2><p><code>tork-master</code> [<em>OPTION</em>]...</p><h2 id="DESCRIPTION">DESCRIPTION</h2><p>This program absorbs your Ruby application&#39;s test execution overhead once and
+<body><div class="navbar"><div class="navbar-inner"><span class="brand"><a href="../index.html#man1">man1</a>/tork-master.1</span></div></div><div class="container-fluid"><h1 id="TORK-MASTER-1-2014-01-02-19-6-0">TORK-MASTER 1 2014-01-02 19.6.0</h1><h2 id="NAME">NAME</h2><p>tork-master - absorbs overhead and runs tests</p><h2 id="SYNOPSIS">SYNOPSIS</h2><p><code>tork-master</code> [<em>OPTION</em>]...</p><h2 id="DESCRIPTION">DESCRIPTION</h2><p>This program absorbs your Ruby application&#39;s test execution overhead once and
 simply <a class="md2man-xref">fork(3)</a>s worker processses to run your tests thereafter.  As a result,
 your tests run faster because they no longer spend any time absorbing the test
 execution overhead: worker processes simply inherit the overhead when forked.</p><p>This program can be controlled remotely by multiple <a class="md2man-xref" href="../man1/tork-remote.1.html">tork-remote(1)</a> instances.</p><h3 id="Input">Input</h3><p>This program reads the following commands, which are single-line JSON arrays,

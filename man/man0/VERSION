@@ -1,3 +1,21 @@
+.SH Version 19.6.0 (2014\-01\-02)
+.PP
+This release improves 
+.BR tork-runner (1) 
+responsiveness and fixes 
+.BR tork-engine (1).
+.SS Minor:
+.RS
+.IP \(bu 2
+.BR tork-runner (1) 
+now prints the percentage of completed tests to stderr.
+.RE
+.SS Patch:
+.RS
+.IP \(bu 2
+.BR tork-engine (1) 
+emitted the \fB\fCidle\fR event when tests were still running.
+.RE
 .SH Version 19.5.1 (2013\-12\-02)
 .PP
 This release restores support for Capybara integration tests in the \fB\fCrails\fR

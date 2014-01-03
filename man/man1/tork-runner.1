@@ -1,4 +1,4 @@
-.TH TORK\-RUNNER 1 2013\-12\-02 19.5.1
+.TH TORK\-RUNNER 1 2014\-01\-02 19.6.0
 .SH NAME
 .PP
 tork\-runner \- runs tests once, non\-interactively
@@ -23,6 +23,11 @@ This message will be followed by the content of \fIfailed_test_log_file\fP\&.
 .TP
 \fIT\fP \fB\fCtested,\fR \fIP\fP \fB\fCpassed,\fR \fIF\fP \fB\fCfailed\fR
 \fIT\fP test files were tested and \fIP\fP of them passed but \fIF\fP of them failed.
+.PP
+This program prints the following messages to stderr if it is a TTY device.
+.TP
+\fB\fCtork-runner:\fR \fINN.N\fP\fB\fC% tested\fR
+\fINN.N\fP percent of test files were tested so far.
 .SH OPTIONS
 .TP
 \fB\fC-h\fR, \fB\fC--help\fR

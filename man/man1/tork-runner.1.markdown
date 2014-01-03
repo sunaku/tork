@@ -1,4 +1,4 @@
-# TORK-RUNNER 1 2013-12-02 19.5.1
+# TORK-RUNNER 1 2014-01-02 19.6.0
 
 ## NAME
 
@@ -24,6 +24,11 @@ This program prints the following messages to stdout.
 
 *T* `tested,` *P* `passed,` *F* `failed`
   *T* test files were tested and *P* of them passed but *F* of them failed.
+
+This program prints the following messages to stderr if it is a TTY device.
+
+`tork-runner:` *NN.N*`% tested`
+  *NN.N* percent of test files were tested so far.
 
 ## OPTIONS
 
