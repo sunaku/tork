@@ -28,6 +28,11 @@ This program prints the following messages to stdout.
 *T* `tested,` *P* `passed,` *F* `failed`
   *T* test files were tested and *P* of them passed but *F* of them failed.
 
+This program prints the following messages to stderr if it is a TTY device.
+
+`tork-runner:` *NN.N*`% tested`
+  *NN.N* percent of test files were tested so far.
+
 ## OPTIONS
 
 `-h`, `--help`
@@ -82,5 +87,10 @@ IO.popen('tork-driver', 'w+') do |driver|
            "#{tested} tested, #{passed} passed, #{failed.count} failed"
       exit! failed.empty?
     end
+
+    # tell user how many tests (percentage) have finished running;
+    # see http://www.termsys.demon.co.uk/vtansi.htm for ANSI VT100
+    STDERR.printf "\e[s\e[K%s: %02.1f%% tested\e[u", $0,
+      ((passed + failed.count) / tested.to_f) * 100 if STDERR.tty?
   end
 end
