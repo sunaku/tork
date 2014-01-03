@@ -1,3 +1,15 @@
+## Version 19.6.0 (2014-01-02)
+
+This release improves tork-runner(1) responsiveness and fixes tork-engine(1).
+
+### Minor:
+
+  * tork-runner(1) now prints the percentage of completed tests to stderr.
+
+### Patch:
+
+  * tork-engine(1) emitted the `idle` event when tests were still running.
+
 ## Version 19.5.1 (2013-12-02)
 
 This release restores support for Capybara integration tests in the `rails`
