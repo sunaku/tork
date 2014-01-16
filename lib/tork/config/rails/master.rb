@@ -9,7 +9,12 @@ begin
     # if using an sqlite3 database for the test environment, make
     # it an in-memory database to support parallel test execution
     config.after_initialize do
-      current = ActiveRecord::Base.connection_config
+      current =
+        if ActiveRecord::Base.respond_to? :connection_config
+          ActiveRecord::Base.connection_config
+        else # for Rails < 3.1.0
+          ActiveRecord::Base.connection.instance_variable_get :@config
+        end
       memory = {:adapter => 'sqlite3', :database => ':memory:'}
 
       if current[:adapter] == memory[:adapter]
