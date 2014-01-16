@@ -30,7 +30,9 @@ begin
 
         # apply application schema to in-memory database
         silence_stream(STDOUT) { load schema }
-        ActiveRecord::Base.connection.schema_cache.clear!
+        if ActiveRecord::Base.connection.respond_to? :schema_cache
+          ActiveRecord::Base.connection.schema_cache.clear! # for Rails >= 4
+        end
 
         # load any seed data into the in-memory database
         if File.exist? seeds = "#{Rails.root}/db/seeds.rb"
