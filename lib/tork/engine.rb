@@ -29,6 +29,7 @@ class Engine < Server
     # resume running the previously running test files in new master
     previous = @running_test_files.to_a
     @running_test_files.clear
+    rerun_failed_test_files
     run_test_files previous
   end
 
