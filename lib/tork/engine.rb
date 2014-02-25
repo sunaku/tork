@@ -26,11 +26,11 @@ class Engine < Server
   def reabsorb_overhead
     @master.reconnect
 
-    # resume running the previously running test files in new master
-    previous = @running_test_files.to_a
+    # resume running all previously running test files and
+    # all previously failed test files in the new master
+    resume = @running_test_files + @failed_test_files
     @running_test_files.clear
-    rerun_failed_test_files
-    run_test_files previous
+    run_test_files resume
   end
 
   def run_test_file test_file, *line_numbers
