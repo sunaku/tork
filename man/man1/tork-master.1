@@ -1,10 +1,10 @@
-.TH TORK\-MASTER 1 2014\-01\-02 19.6.0
+.TH TORK\-MASTER 1 2014\-03\-04 19.7.0
 .SH NAME
 .PP
 tork\-master \- absorbs overhead and runs tests
 .SH SYNOPSIS
 .PP
-\fB\fCtork-master\fR [\fIOPTION\fP]...
+\fB\fCtork\-master\fR [\fIOPTION\fP]...
 .SH DESCRIPTION
 .PP
 This program absorbs your Ruby application's test execution overhead once and
@@ -48,7 +48,7 @@ Test execution overhead has been absorbed.  We are ready for testing!
 .TP
 \fB\fC["test",\fR \fItest_file\fP\fB\fC,\fR \fIline_numbers\fP\fB\fC,\fR \fIlog_file\fP\fB\fC,\fR \fIworker_number\fP\fB\fC]\fR
 Test has begun running.  Its output (both stdout and stderr) is being
-captured into \fIlog_file\fP in real time, so you can watch it with \fB\fCtail -f\fR\&.
+captured into \fIlog_file\fP in real time, so you can watch it with \fB\fCtail \-f\fR\&.
 .TP
 \fB\fC["pass",\fR \fItest_file\fP\fB\fC,\fR \fIline_numbers\fP\fB\fC,\fR \fIlog_file\fP\fB\fC,\fR \fIworker_number\fP\fB\fC,\fR \fIexit_code\fP\fB\fC,\fR \fIexit_info\fP\fB\fC]\fR
 Test has passed.
@@ -57,7 +57,7 @@ Test has passed.
 Test has failed.
 .SH OPTIONS
 .TP
-\fB\fC-h\fR, \fB\fC--help\fR
+\fB\fC\-h\fR, \fB\fC\-\-help\fR
 Show this help manual.
 .SH FILES
 .TP

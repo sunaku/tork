@@ -6,8 +6,26 @@ _______      _______
   _  __/ __ \\  __/ /_/
   / /_/ /_/ / / / ,\\
   \\__/\\____/_/ /_/|_\\
-             >>>------>
+             >>>\-\-\-\-\-\->
 .fi
+.RE
+.RS
+.IP \(bu 2
+Package: 
+.UR https://rubygems.org/gems/tork
+.UE
+.IP \(bu 2
+Manuals: 
+.UR https://sunaku.github.io/tork
+.UE
+.IP \(bu 2
+Sources: 
+.UR https://github.com/sunaku/tork
+.UE
+.IP \(bu 2
+Support: 
+.UR https://github.com/sunaku/tork/issues
+.UE
 .RE
 .TH \fITest with fork\fP
 .PP
@@ -111,9 +129,9 @@ using
 .RS
 .nf
 # run all of test/some_test.rb
-echo run_test_file test/some_test.rb | tork-remote tork-engine
+echo run_test_file test/some_test.rb | tork\-remote tork\-engine
 # run lines 4, 33, and 21 of test/some_test.rb
-echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
+echo run_test_file test/some_test.rb 4 33 21 | tork\-remote tork\-engine
 .fi
 .RE
 .RE
@@ -153,8 +171,8 @@ program's filesystem monitoring more efficient:
 .PP
 .RS
 .nf
-gem install rb-inotify  # linux
-gem install rb-fsevent  # macosx
+gem install rb\-inotify  # linux
+gem install rb\-fsevent  # macosx
 .fi
 .RE
 .RE
@@ -165,8 +183,8 @@ gem install rb-fsevent  # macosx
 git clone git://github.com/sunaku/tork
 cd tork
 bundle install
-bundle exec tork --help  # run it directly
-bundle exec rake --tasks # packaging tasks
+bundle exec tork \-\-help  # run it directly
+bundle exec rake \-\-tasks # packaging tasks
 .fi
 .RE
 .SH Usage
@@ -174,7 +192,7 @@ bundle exec rake --tasks # packaging tasks
 .PP
 .RS
 .nf
-tork --help
+tork \-\-help
 .fi
 .RE
 .PP
@@ -182,7 +200,7 @@ You can add line editing, history, and filename completion:
 .PP
 .RS
 .nf
-rlwrap -c tork
+rlwrap \-c tork
 .fi
 .RE
 .PP
@@ -192,9 +210,9 @@ interactively from another terminal:
 .PP
 .RS
 .nf
-tork-remote tork-engine
+tork\-remote tork\-engine
 # type your commands here, one per line.
-# press Control-D to exit 
+# press Control\-D to exit 
 .BR tork-remote (1)
 .fi
 .RE
@@ -204,7 +222,7 @@ You can also do the same non\-interactively using a pipeline:
 .RS
 .nf
 # run lines 4, 33, and 21 of test/some_test.rb
-echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
+echo run_test_file test/some_test.rb 4 33 21 | tork\-remote tork\-engine
 .fi
 .RE
 .PP
@@ -212,7 +230,7 @@ You can monitor your test processes from another terminal:
 .PP
 .RS
 .nf
-watch 'pgrep -f ^tork | xargs -r ps uf'
+watch 'pgrep \-f ^tork | xargs \-r ps uf'
 .fi
 .RE
 .SS With MiniTest
@@ -276,7 +294,7 @@ acceptance testing frameworks such as Capybara, see
 .UE
 .SH Configuration
 .PP
-Tork looks for a configuration directory named \fB\fC.tork/\fR inside its working
+Tork looks for a configuration directory named \fB\fC\&.tork/\fR inside its working
 directory.  The configuration directory contains specially\-named Ruby scripts,
 within which you can query and modify the settings for various tork programs.
 See the "FILES" sections in the manual pages of tork programs for details.

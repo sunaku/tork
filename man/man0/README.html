@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <meta name="generator" content="md2man 2.0.2 https://github.com/sunaku/md2man" />
+  <meta name="generator" content="md2man 2.1.1 https://github.com/sunaku/md2man" />
   <title>README</title>
   <link rel="stylesheet" href="../style.css"/>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -12,15 +12,22 @@
   _  __/ __ \  __/ /_/
   / /_/ /_/ / / / ,\
   \__/\____/_/ /_/|_\
-             &gt;&gt;&gt;------>
+             &gt;&gt;&gt;------&gt;
 </code></pre>
-<h1 id="Test-with-fork"><em>Test with fork</em></h1><p>Tork runs your tests as they change, in parallel:</p>
+
+<ul>
+<li>Package: <a href="https://rubygems.org/gems/tork">https://rubygems.org/gems/tork</a></li>
+<li>Manuals: <a href="https://sunaku.github.io/tork">https://sunaku.github.io/tork</a></li>
+<li>Sources: <a href="https://github.com/sunaku/tork">https://github.com/sunaku/tork</a></li>
+<li>Support: <a href="https://github.com/sunaku/tork/issues">https://github.com/sunaku/tork/issues</a></li>
+</ul>
+<h1 id="Test-with-fork"><span class="md2man-title"><em>Test</span> <span class="md2man-section">with</span> <span class="md2man-date">fork</em></span><a name="Test-with-fork" href="#Test-with-fork" class="md2man-permalink"></a></h1><p>Tork runs your tests as they change, in parallel:</p>
 <ol>
 <li><p>Absorbs test execution overhead into a master process.</p></li>
 <li><p>Forks to inherit overhead and run test files in parallel.</p></li>
 <li><p>Avoids running unchanged tests inside changed test files.</p></li>
 </ol>
-<h2 id="Features">Features</h2>
+<h2 id="Features">Features<a name="Features" href="#Features" class="md2man-permalink"></a></h2>
 <ul>
 <li><p>No configuration necessary: simply run <code>tork</code> to start testing <em>now!</em></p></li>
 <li><p>Runs test files in parallel using fork for multi-core/CPU utilization.</p></li>
@@ -34,7 +41,7 @@ your application&#39;s <code>test/test_helper.rb</code> or <code>spec/spec_helpe
 <li><p>You can override the modular <code>tork*</code> programs with your own in $PATH.</p></li>
 <li><p>You can remotely control other <code>tork*</code> programs using <a class="md2man-xref" href="../man1/tork-remote.1.html">tork-remote(1)</a>.</p></li>
 </ul>
-<h3 id="Architecture">Architecture</h3><p>Following UNIX philosophy, Tork is composed of simple text-based programs that
+<h3 id="Architecture">Architecture<a name="Architecture" href="#Architecture" class="md2man-permalink"></a></h3><p>Following UNIX philosophy, Tork is composed of simple text-based programs that
 <em>do one thing well</em>.  As a result, you can even create your own user interface
 for Tork by wrapping the <a class="md2man-xref" href="../man1/tork-driver.1.html">tork-driver(1)</a> program appropriately!</p>
 <ul>
@@ -72,10 +79,10 @@ echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
 </code></pre></li>
 </ol>
 <p>Alternatively, you can use <a class="md2man-xref" href="../man1/tork-runner.1.html">tork-runner(1)</a> to run your test suite in one shot
-and then exit with a nonzero status if tests failed, similar to <code>rake test</code>.</p><h2 id="Installation">Installation</h2>
+and then exit with a nonzero status if tests failed, similar to <code>rake test</code>.</p><h2 id="Installation">Installation<a name="Installation" href="#Installation" class="md2man-permalink"></a></h2>
 <pre><code>gem install tork
 </code></pre>
-<h3 id="Prerequisites">Prerequisites</h3>
+<h3 id="Prerequisites">Prerequisites<a name="Prerequisites" href="#Prerequisites" class="md2man-permalink"></a></h3>
 <ul>
 <li><p>Ruby 1.8.7 or 1.9.3 or newer.</p></li>
 <li><p>Operating system that supports POSIX signals and the <code>fork()</code> system call.
@@ -89,14 +96,14 @@ Signal.list.key? &#39;KILL&#39;    # must be true
 gem install rb-fsevent  # macosx
 </code></pre></li>
 </ul>
-<h3 id="Development">Development</h3>
+<h3 id="Development">Development<a name="Development" href="#Development" class="md2man-permalink"></a></h3>
 <pre><code>git clone git://github.com/sunaku/tork
 cd tork
 bundle install
 bundle exec tork --help  # run it directly
 bundle exec rake --tasks # packaging tasks
 </code></pre>
-<h2 id="Usage">Usage</h2><h3 id="At-the-command-line">At the command line</h3>
+<h2 id="Usage">Usage<a name="Usage" href="#Usage" class="md2man-permalink"></a></h2><h3 id="At-the-command-line">At the command line<a name="At-the-command-line" href="#At-the-command-line" class="md2man-permalink"></a></h3>
 <pre><code>tork --help
 </code></pre>
 <p>You can add line editing, history, and filename completion:</p>
@@ -114,15 +121,15 @@ echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
 <p>You can monitor your test processes from another terminal:</p>
 <pre><code>watch &#39;pgrep -f ^tork | xargs -r ps uf&#39;
 </code></pre>
-<h3 id="With-MiniTest">With MiniTest</h3><p>MiniTest 1.3.2 and newer contain a bug where <code>minitest/autorun</code> won&#39;t run any
+<h3 id="With-MiniTest">With MiniTest<a name="With-MiniTest" href="#With-MiniTest" class="md2man-permalink"></a></h3><p>MiniTest 1.3.2 and newer contain a bug where <code>minitest/autorun</code> won&#39;t run any
 tests if someone calls <code>Kernel#exit</code> explicitly or simply loads a library
 (such as RSpec) which makes the call implicitly.  Use Tork 19.0.2+ to avoid
-this problem or <a href="https://github.com/seattlerb/minitest/pull/183/files">apply this patch to the minitest library</a> to fix the problem.</p><h3 id="With-RSpec">With RSpec</h3><p>RSpec 2.9.0 and newer contain a bug where RSpec&#39;s autorun helper won&#39;t run any
+this problem or <a href="https://github.com/seattlerb/minitest/pull/183/files">apply this patch to the minitest library</a> to fix the problem.</p><h3 id="With-RSpec">With RSpec<a name="With-RSpec" href="#With-RSpec" class="md2man-permalink"></a></h3><p>RSpec 2.9.0 and newer contain a bug where RSpec&#39;s autorun helper won&#39;t run any
 specs if someone calls <code>Kernel#exit</code> explicitly or simply loads a library
 (such as Test::Unit) which makes the call implicitly.  Use Tork 19.0.2+ to
 avoid this problem or <a href="https://github.com/rspec/rspec-core/pull/720/files">apply this patch to the rspec-core library</a> to fix the problem.</p><p>RSpec 2.8.0 and older contain <a href="https://github.com/sunaku/tork/issues/31">a bug</a> where a nonzero exit status (caused
 by an uncaught exception) is overridden by RSpec&#39;s <code>Kernel#at_exit</code> handler to
-be zero, thereby falsely indicating that a spec had passed.  <a href="https://github.com/rspec/rspec-core/pull/569/files">This patch</a> fixes the problem.</p><h3 id="With-Ruby-on-Rails">With <a href="http://rubyonrails.org">Ruby on Rails</a></h3><p>For Rails 3 or newer, use the <code>rails</code> configuration helper <em>before</em> the <code>test</code>
+be zero, thereby falsely indicating that a spec had passed.  <a href="https://github.com/rspec/rspec-core/pull/569/files">This patch</a> fixes the problem.</p><h3 id="With-Ruby-on-Rails">With <a href="http://rubyonrails.org">Ruby on Rails</a><a name="With-Ruby-on-Rails" href="#With-Ruby-on-Rails" class="md2man-permalink"></a></h3><p>For Rails 3 or newer, use the <code>rails</code> configuration helper <em>before</em> the <code>test</code>
 or <code>spec</code> helpers.  Otherwise your test helper will load Rails <em>before</em> the
 specified <code>rails</code> configuration helper has a chance to disable class caching!</p><p>For older Rails, make sure your <code>config/environments/test.rb</code> file contains:</p>
 <pre><code>config.cache_classes = false
@@ -133,9 +140,9 @@ database adapter</a>.  Otherwise, you <em>might</em> face these errors:</p>
 <p>SQLite3::BusyException: database is locked</p><p>cannot start a transaction within a transaction</p></blockquote>
 <p>For older Rails, to use SQLite3 as your test database along with browser-based
 acceptance testing frameworks such as Capybara, see
-<a href="http://www.spacevatican.org/2012/8/18/threading-the-rat/">http://www.spacevatican.org/2012/8/18/threading-the-rat/</a></p><h2 id="Configuration">Configuration</h2><p>Tork looks for a configuration directory named <code>.tork/</code> inside its working
+<a href="http://www.spacevatican.org/2012/8/18/threading-the-rat/">http://www.spacevatican.org/2012/8/18/threading-the-rat/</a></p><h2 id="Configuration">Configuration<a name="Configuration" href="#Configuration" class="md2man-permalink"></a></h2><p>Tork looks for a configuration directory named <code>.tork/</code> inside its working
 directory.  The configuration directory contains specially-named Ruby scripts,
 within which you can query and modify the settings for various tork programs.
 See the &quot;FILES&quot; sections in the manual pages of tork programs for details.</p><p>Note that tork <em>does not</em> automatically reload changes from your configuration
-directory.  Consequently, you must restart tork if your configuration changes.</p><h2 id="License">License</h2><p>Released under the ISC license.  See the LICENSE file for details.</p></div></body>
+directory.  Consequently, you must restart tork if your configuration changes.</p><h2 id="License">License<a name="License" href="#License" class="md2man-permalink"></a></h2><p>Released under the ISC license.  See the LICENSE file for details.</p></div></body>
 </html>

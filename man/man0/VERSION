@@ -1,3 +1,26 @@
+.SH Version 19.7.0 (2014\-03\-04)
+.PP
+This release automatically re\-runs failed tests after reabsorbing overhead.
+.SS Minor:
+.RS
+.IP \(bu 2
+Re\-run failed tests after reabsorbing overhead.
+.PP
+Thanks to Chris Scharf for contributing this
+patch
+.UR https://github.com/sunaku/tork/pull/57
+.UE \&.
+.RE
+.SH Version 19.6.1 (2014\-03\-04)
+.PP
+This release improves support for old Rails versions.
+.SS Patch:
+.RS
+.IP \(bu 2
+Rails < 3.1.0 does not have \fB\fCconnection_config()\fR\&.
+.IP \(bu 2
+\fB\fCschema_cache()\fR is only defined in Rails >= 4.
+.RE
 .SH Version 19.6.0 (2014\-01\-02)
 .PP
 This release improves 
@@ -133,18 +156,18 @@ This error would occur when pressing ENTER in tork\-remote tork\-driver:
 .PP
 .RS
 .nf
-tork-driver: #<ArgumentError: no method name given>
-tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:74:in `recv'
-tork-driver: /home/skurapati/lab/tork/lib/tork/driver.rb:64:in `recv'
-tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:46:in `block (2 levels) in loop'
-tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:37:in `each'
-tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:37:in `block in loop'
-tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:35:in `catch'
-tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:35:in `loop'
-tork-driver: /home/skurapati/lab/tork/lib/tork/driver.rb:21:in `loop'
-tork-driver: /home/skurapati/lab/tork/bin/tork-driver:173:in `<top (required)>'
-tork-driver: /home/skurapati/.rvm/gems/ruby-1.9.3-p448/bin/tork-driver:23:in `load'
-tork-driver: /home/skurapati/.rvm/gems/ruby-1.9.3-p448/bin/tork-driver:23:in `<main>'
+tork\-driver: #<ArgumentError: no method name given>
+tork\-driver: /home/skurapati/lab/tork/lib/tork/server.rb:74:in `recv'
+tork\-driver: /home/skurapati/lab/tork/lib/tork/driver.rb:64:in `recv'
+tork\-driver: /home/skurapati/lab/tork/lib/tork/server.rb:46:in `block (2 levels) in loop'
+tork\-driver: /home/skurapati/lab/tork/lib/tork/server.rb:37:in `each'
+tork\-driver: /home/skurapati/lab/tork/lib/tork/server.rb:37:in `block in loop'
+tork\-driver: /home/skurapati/lab/tork/lib/tork/server.rb:35:in `catch'
+tork\-driver: /home/skurapati/lab/tork/lib/tork/server.rb:35:in `loop'
+tork\-driver: /home/skurapati/lab/tork/lib/tork/driver.rb:21:in `loop'
+tork\-driver: /home/skurapati/lab/tork/bin/tork\-driver:173:in `<top (required)>'
+tork\-driver: /home/skurapati/.rvm/gems/ruby\-1.9.3\-p448/bin/tork\-driver:23:in `load'
+tork\-driver: /home/skurapati/.rvm/gems/ruby\-1.9.3\-p448/bin/tork\-driver:23:in `<main>'
 .fi
 .RE
 .IP \(bu 2
@@ -341,7 +364,7 @@ server: use Set instead of Array for faster lookup
 .SS Major:
 .RS
 .IP \(bu 2
-The \fB\fC.tork.rb\fR configuration file has been replaced by the \fB\fC.tork/\fR
+The \fB\fC\&.tork.rb\fR configuration file has been replaced by the \fB\fC\&.tork/\fR
 directory, which contains specially\-named Ruby scripts.  Refer to the
 \fB\fCTORK_CONFIGS\fR environment variable in 
 .BR tork (1) 
@@ -377,7 +400,7 @@ when zero is given as one of the line numbers to be run.
 .IP \(bu 2
 .BR tork-master (1): 
 the \fB\fCload\fR command is no longer accepted.  Instead, you
-must specify load paths and overhead files in the \fB\fC.tork/master.rb\fR file.
+must specify load paths and overhead files in the \fB\fC\&.tork/master.rb\fR file.
 .IP \(bu 2
 The \fB\fCTORK_CONFIGS\fR env\-var is now a colon delimited list of directories.
 .IP \(bu 2
@@ -430,7 +453,7 @@ README: add tip about rlwrap for better interactive
 .IP \(bu 2
 README: simplify watch command using pgrep & xargs
 .IP \(bu 2
-README: use standard bundle exec; no \fB\fC--binstubs\fR
+README: use standard bundle exec; no \fB\fC\-\-binstubs\fR
 .RE
 .SH Version 18.2.4 (2012\-10\-10)
 .SS Other:
@@ -723,7 +746,7 @@ tork/config/rails: support Rails 2 and don't assume AR is used.  (Benjamin
 Quorning)
 .IP \(bu 2
 tork/config: settings from configuration helpers specified in
-$TORK_CONFIGS should override settings from the \fB\fC.tork.rb\fR file.
+$TORK_CONFIGS should override settings from the \fB\fC\&.tork.rb\fR file.
 .IP \(bu 2
 README: need to set $PATH to run this project from a git clone.
 .IP \(bu 2
@@ -818,7 +841,7 @@ LICENSE: credit our most recent contributors.
 .SS Minor:
 .RS
 .IP \(bu 2
-Add ability to run \fB\fCtestr rails\fR without needing a \fB\fC.testr.rb\fR file.
+Add ability to run \fB\fCtestr rails\fR without needing a \fB\fC\&.testr.rb\fR file.
 .IP \(bu 2
 .BR testr (1) 
 no longer shows command menu at startup.  Press ENTER to see it.
@@ -836,7 +859,7 @@ now accepts death silently when Control\-C is pressed.
 .SS Patch:
 .RS
 .IP \(bu 2
-Add support Guard v0.9.0 and newer in \fB\fCtestr-herald\fR\&.  (Jose Pablo
+Add support Guard v0.9.0 and newer in \fB\fCtestr\-herald\fR\&.  (Jose Pablo
 Barrantes)
 .RE
 .SS Other:
@@ -862,9 +885,9 @@ Upgrade to binman 3 for better bundler support.
 .IP \(bu 2
 Do not fail when given test file no longer exists.
 .IP \(bu 2
-Make xUnit \fB\fC--name\fR option regexp case\-insensitive.
+Make xUnit \fB\fC\-\-name\fR option regexp case\-insensitive.
 .IP \(bu 2
-RSpec does not accept regexp for \fB\fC--example\fR option;
+RSpec does not accept regexp for \fB\fC\-\-example\fR option;
 see 
 .UR https://github.com/rspec/rspec-core/issues/445
 .UE
@@ -905,7 +928,7 @@ By sending a signal to the server, we don't have to wait for it to
 finish processing its current command before seeing our :quit command.
 .IP \(bu 2
 Add embedded BinMan manual pages to bin scripts.  All TestR scripts now
-have a \fB\fC--help\fR option which displays their UNIX manual page.  Try it!
+have a \fB\fC\-\-help\fR option which displays their UNIX manual page.  Try it!
 .PP
 The single\-line JSON message protocol used by these scripts is now
 documented in their manual pages, so you should have everything you
@@ -963,7 +986,7 @@ focused testing, where only changed tests in a changed test file are run.
 .SS Other:
 .RS
 .IP \(bu 2
-Make \fB\fCtestr-master\fR wait for killed worker processes before exiting.
+Make \fB\fCtestr\-master\fR wait for killed worker processes before exiting.
 .RE
 .SH Version 14.0.0 (2011\-10\-09)
 .SS Major:
@@ -989,7 +1012,7 @@ Renamed the \fB\fCbefore_each_test\fR configuration parameter to
 Removed the \fB\fCdelay_per_iteration\fR and \fB\fCafter_each_test\fR configuration
 parameters.
 .IP \(bu 2
-Removed the \fB\fCtest/loop/notify\fR and \fB\fCtest-loop/coco\fR libraries.
+Removed the \fB\fCtest/loop/notify\fR and \fB\fCtest\-loop/coco\fR libraries.
 .RE
 .SS Minor:
 .RS
@@ -1012,7 +1035,7 @@ Added ability to re\-run passed and failed tests in the \fB\fCtestr\fR script.
 .SS Other:
 .RS
 .IP \(bu 2
-The monolithic \fB\fCtest-loop\fR script has been replaced by several smaller
+The monolithic \fB\fCtest\-loop\fR script has been replaced by several smaller
 ones that communicate with each other using single\-line JSON messages via
 their standard input & output streams.  See "Architecture" in the README.
 .IP \(bu 2
@@ -1359,7 +1382,7 @@ the following:
 .PP
 .RS
 .nf
-watch 'ps xf | grep test-loop | sed 1,3d'
+watch 'ps xf | grep test\-loop | sed 1,3d'
 .fi
 .RE
 .RE
@@ -1474,7 +1497,7 @@ Handle Ctrl\-Z signal from the very beginning.
 .IP \(bu 2
 Move configuration into \fB\fCTest::Loop\fR object itself.
 .IP \(bu 2
-Allow loading \fB\fCbin/test-loop\fR into IRB for testing.
+Allow loading \fB\fCbin/test\-loop\fR into IRB for testing.
 .IP \(bu 2
 Simplify initialization of default configuration.
 .IP \(bu 2
@@ -1705,7 +1728,7 @@ the test\fPhelper.rb and spec_helper.rb files.
 .SH Version 1.0.1 (2010\-10\-16)
 .RS
 .IP \(bu 2
-Ensure that $LOAD_PATH reflects \fB\fCruby -Ilib:test\fR\&.
+Ensure that $LOAD_PATH reflects \fB\fCruby \-Ilib:test\fR\&.
 .RE
 .SH Version 1.0.0 (2010\-10\-15)
 .RS
@@ -1721,7 +1744,7 @@ Display status messages for better user interactivity.
 .SH Version 0.0.2 (2010\-10\-11)
 .RS
 .IP \(bu 2
-Forgot to register \fB\fCbin/test-loop\fR as gem executable.
+Forgot to register \fB\fCbin/test\-loop\fR as gem executable.
 .IP \(bu 2
 Revise Usage section into Invocation and Operation.
 .RE
