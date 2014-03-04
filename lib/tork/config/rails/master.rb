@@ -9,7 +9,12 @@ begin
     # if using an sqlite3 database for the test environment, make
     # it an in-memory database to support parallel test execution
     config.after_initialize do
-      current = ActiveRecord::Base.connection_config
+      current =
+        if ActiveRecord::Base.respond_to? :connection_config
+          ActiveRecord::Base.connection_config
+        else # for Rails < 3.1.0
+          ActiveRecord::Base.connection.instance_variable_get :@config
+        end
       memory = {:adapter => 'sqlite3', :database => ':memory:'}
 
       if current[:adapter] == memory[:adapter]
@@ -25,7 +30,9 @@ begin
 
         # apply application schema to in-memory database
         silence_stream(STDOUT) { load schema }
-        ActiveRecord::Base.connection.schema_cache.clear!
+        if ActiveRecord::Base.connection.respond_to? :schema_cache
+          ActiveRecord::Base.connection.schema_cache.clear! # for Rails >= 4
+        end
 
         # load any seed data into the in-memory database
         if File.exist? seeds = "#{Rails.root}/db/seeds.rb"
