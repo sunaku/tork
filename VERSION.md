@@ -1,3 +1,13 @@
+## Version 19.6.1 (2014-03-04)
+
+This release improves support for old Rails versions.
+
+### Patch:
+
+  * Rails < 3.1.0 does not have `connection_config()`.
+
+  * `schema_cache()` is only defined in Rails >= 4.
+
 ## Version 19.6.0 (2014-01-02)
 
 This release improves tork-runner(1) responsiveness and fixes tork-engine(1).
