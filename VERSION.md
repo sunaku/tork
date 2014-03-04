@@ -1,3 +1,14 @@
+## Version 19.7.0 (2014-03-04)
+
+This release automatically re-runs failed tests after reabsorbing overhead.
+
+### Minor:
+
+  * Re-run failed tests after reabsorbing overhead.
+
+    Thanks to Chris Scharf for [contributing this
+    patch](https://github.com/sunaku/tork/pull/57).
+
 ## Version 19.6.1 (2014-03-04)
 
 This release improves support for old Rails versions.
