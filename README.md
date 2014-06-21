@@ -5,6 +5,11 @@
       \__/\____/_/ /_/|_\
                  >>>------>
 
+* Package: <https://rubygems.org/gems/tork>
+* Manuals: <https://sunaku.github.io/tork>
+* Sources: <https://github.com/sunaku/tork>
+* Support: <https://github.com/sunaku/tork/issues>
+
 # _Test with fork_
 
 Tork runs your tests as they change, in parallel:
