@@ -77,7 +77,7 @@ IO.popen('tork-driver', 'w+') do |driver|
   # track test runs & exit when finished
   tested, passed, failed = 0, 0, []
   while line = driver.gets
-    response = JSON.load(line)
+    response = JSON.parse(line)
     case response.first.to_sym
     when :test then tested += 1
     when :pass then passed += 1
