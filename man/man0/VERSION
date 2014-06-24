@@ -1,3 +1,52 @@
+.SH Version 19.8.0 (2014\-06\-23)
+.SS Minor:
+.RS
+.IP \(bu 2
+Add \fB\fCbundler\fR configuration helper to load a bundle into 
+.BR tork-master (1).
+.PP
+This lets you run Tork inside any application that uses Bundler without
+having to first add Tork to its \fB\fCGemfile\fR and then \fB\fCbundle install\fR it.
+In fact, installing the Tork gem \fIoutside\fP of the bundle is sufficient.
+.PP
+Try it: go into a bundled application and call \fB\fCtork\fR to run its tests!
+.RE
+.SS Patch:
+.RS
+.IP \(bu 2
+Server: fix crash when Fixnum is sent as a message.
+.PP
+.RS
+.nf
+lib/tork/server.rb:45:in `block (2 levels) in loop':
+undefined method `empty?' for 6:Fixnum (NoMethodError)
+lib/tork/cliapp.rb:59:in `recv':
+undefined method `lstrip' for 6:Fixnum (NoMethodError)
+.fi
+.RE
+.PP
+Because JSON.load() and JSON.parse() are different:
+.PP
+.RS
+.nf
+$ irb \-r json
+>> JSON.load '6'
+6
+>> JSON.parse '6'
+JSON::ParserError: A JSON text must at least contain two octets!
+        from /usr/lib/ruby/2.1.0/json/common.rb:155:in `initialize'
+        from /usr/lib/ruby/2.1.0/json/common.rb:155:in `new'
+        from /usr/lib/ruby/2.1.0/json/common.rb:155:in `parse'
+        from (irb):2
+        from /usr/bin/irb:11:in `<main>'
+.fi
+.RE
+.RE
+.SS Other:
+.RS
+.IP \(bu 2
+Upgrade to md2man 3.0 for improved HTML manuals.
+.RE
 .SH Version 19.7.0 (2014\-03\-04)
 .PP
 This release automatically re\-runs failed tests after reabsorbing overhead.

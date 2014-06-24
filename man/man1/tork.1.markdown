@@ -1,4 +1,4 @@
-# TORK 1 2014-03-04 19.7.0
+# TORK 1 2014-06-23 19.8.0
 
 ## NAME
 
@@ -58,6 +58,7 @@ This program can be controlled remotely by multiple tork-remote(1) instances.
   >   current working directory appears to utilize what they configure.
   >   See below for complete descriptions of these configuration helpers.
   >
+  >   * bundler
   >   * rails
   >   * devise
   >   * test
@@ -95,6 +96,9 @@ This program can be controlled remotely by multiple tork-remote(1) instances.
   > `cucumber`
   >   Supports the [Cucumber] testing framework.
   >
+  > `bundler`
+  >   Supports the [Bundler] dependency framework.
+  >
   > `rails`
   >   Supports the [Ruby on Rails] web framework.
   >
@@ -118,3 +122,4 @@ tork-runner(1), tork-driver(1), tork-master(1)
 [Cucumber]: https://cukes.info
 [RSpec]: http://rspec.info
 [Devise]: https://github.com/plataformatec/devise
+[Bundler]: http://bundler.io

@@ -138,6 +138,17 @@ You can monitor your test processes from another terminal:
 
     watch 'pgrep -f ^tork | xargs -r ps uf'
 
+### With Bundler
+
+The `bundler` configuration helper loads a Bundler bundle into tork-master(1).
+The `default` configuration helper does this for you automatically if there is
+a `Gemfile` or `Gemfile.lock` file present in your current working directory.
+
+As a result, you don't need to add Tork to your `Gemfile` _just_ to run tests!
+Instead, installing Tork as a Ruby gem _outside_ of your bundle is sufficient.
+
+Try it: go into any bundled application and call `tork` to run its test suite.
+
 ### With MiniTest
 
 MiniTest 1.3.2 and newer contain a bug where `minitest/autorun` won't run any

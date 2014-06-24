@@ -1,3 +1,42 @@
+## Version 19.8.0 (2014-06-23)
+
+### Minor:
+
+  * Add `bundler` configuration helper to load a bundle into tork-master(1).
+
+    This lets you run Tork inside any application that uses Bundler without
+    having to first add Tork to its `Gemfile` and then `bundle install` it.
+    In fact, installing the Tork gem _outside_ of the bundle is sufficient.
+
+    Try it: go into a bundled application and call `tork` to run its tests!
+
+### Patch:
+
+  * Server: fix crash when Fixnum is sent as a message.
+
+        lib/tork/server.rb:45:in `block (2 levels) in loop':
+        undefined method `empty?' for 6:Fixnum (NoMethodError)
+
+        lib/tork/cliapp.rb:59:in `recv':
+        undefined method `lstrip' for 6:Fixnum (NoMethodError)
+
+    Because JSON.load() and JSON.parse() are different:
+
+        $ irb -r json
+        >> JSON.load '6'
+        6
+        >> JSON.parse '6'
+        JSON::ParserError: A JSON text must at least contain two octets!
+                from /usr/lib/ruby/2.1.0/json/common.rb:155:in `initialize'
+                from /usr/lib/ruby/2.1.0/json/common.rb:155:in `new'
+                from /usr/lib/ruby/2.1.0/json/common.rb:155:in `parse'
+                from (irb):2
+                from /usr/bin/irb:11:in `<main>'
+
+### Other:
+
+  * Upgrade to md2man 3.0 for improved HTML manuals.
+
 ## Version 19.7.0 (2014-03-04)
 
 This release automatically re-runs failed tests after reabsorbing overhead.
