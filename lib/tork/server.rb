@@ -66,7 +66,7 @@ protected
 
   # Returns nil if the message received was not meant for processing.
   def hear sender, message
-    JSON.load message
+    JSON.parse message
   rescue JSON::ParserError => error
     if @clients.include? sender
       # accept non-JSON "command lines" from clients
