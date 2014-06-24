@@ -1,3 +1,4 @@
+ENV['TORK_CONFIGS'] += ':bundler' if Dir['Gemfile{,.lock}'].any?
 ENV['TORK_CONFIGS'] += ':rails' if Dir['script/{rails,console}'].any?
 ENV['TORK_CONFIGS'] += ':devise' if File.exist? 'config/initializers/devise.rb'
 ENV['TORK_CONFIGS'] += ':test' if File.directory? 'test'
