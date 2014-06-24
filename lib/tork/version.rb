@@ -1,3 +1,3 @@
 module Tork
-  VERSION = "19.7.0"
+  VERSION = "19.8.0"
 end
