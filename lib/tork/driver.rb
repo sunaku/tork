@@ -1,4 +1,5 @@
 require 'set'
+require 'pathname'
 require 'tork/engine'
 require 'tork/server'
 require 'tork/config'
@@ -51,6 +52,10 @@ protected
 
     when @herald
       message.each do |changed_file|
+        # make sure this path works with the GREPS and GLOBBERS below
+        # by squashing relative directory traversal and extra slashes
+        changed_file = Pathname.new(changed_file).cleanpath.to_s
+
         # reabsorb text execution overhead if overhead files changed
         if overhead_file? changed_file
           send @clients, [:reabsorb, changed_file]
