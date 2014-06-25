@@ -11,12 +11,8 @@ _______      _______
 .RE
 .RS
 .IP \(bu 2
-Package: 
-.UR https://rubygems.org/gems/tork
-.UE
-.IP \(bu 2
 Manuals: 
-.UR https://sunaku.github.io/tork
+.UR https://sunaku.github.io/tork/man
 .UE
 .IP \(bu 2
 Sources: 
@@ -25,6 +21,10 @@ Sources:
 .IP \(bu 2
 Support: 
 .UR https://github.com/sunaku/tork/issues
+.UE
+.IP \(bu 2
+Package: 
+.UR https://rubygems.org/gems/tork
 .UE
 .RE
 .TH \fITest with fork\fP

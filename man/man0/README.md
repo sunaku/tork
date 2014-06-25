@@ -5,10 +5,10 @@
       \__/\____/_/ /_/|_\
                  >>>------>
 
-* Package: <https://rubygems.org/gems/tork>
-* Manuals: <https://sunaku.github.io/tork>
+* Manuals: <https://sunaku.github.io/tork/man>
 * Sources: <https://github.com/sunaku/tork>
 * Support: <https://github.com/sunaku/tork/issues>
+* Package: <https://rubygems.org/gems/tork>
 
 # _Test with fork_
 
