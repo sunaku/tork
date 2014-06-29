@@ -80,7 +80,7 @@ rescue Errno::ECONNREFUSED
   # so it should be safe to delete the socket file and start up a new server
   warn "#{$0}: replacing unresponsive #{program} instance..."
   File.delete address
-  exec program
+  exec program, *ARGV
 
 rescue SystemCallError => error
   warn "#{$0}: could not connect to #{program}: #{error}"

@@ -20,7 +20,7 @@ class Server
       # another instance of this program is already running in the same
       # directory so become a remote control for it rather than exiting
       warn "#{$0}: remotely controlling existing instance..."
-      exec 'tork-remote', $0
+      exec 'tork-remote', $0, *ARGV
     end
 
     # only JSON messages are supposed to be emitted on STDOUT
