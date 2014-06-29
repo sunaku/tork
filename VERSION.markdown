@@ -1,3 +1,26 @@
+## Version 19.8.1 (2014-06-28)
+
+### Patch:
+
+  * tork-driver(1): sanitize the file paths reported by tork-herald(1).
+
+    This allows a user to override tork-herald(1) with their own program
+    that reports changed file paths in a less than ideal, but valid, way.
+    For example, with relative directory traversals and redundant slashes.
+
+  * tork-remote(1): deal with stale server socket files; don't just exit.
+
+    A stale socket file is left behind by a server that was prematurely
+    killed so it should be safe to delete it and start up a new server.
+
+  * tork/server: ensure that tork-remote(1) gets the same ARGV we did.
+
+### Other:
+
+  * Rename `*.md` file extension to the full `*.markdown`.
+
+  * README: link to manuals index; demote package link.
+
 ## Version 19.8.0 (2014-06-23)
 
 ### Minor:
