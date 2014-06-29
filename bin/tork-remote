@@ -73,7 +73,16 @@ begin
       socket.puts output
     end
   end
-rescue Errno::ENOENT => error
+
+rescue Errno::ECONNREFUSED
+  # the socket file is already there but it's not responding; it's probably
+  # a stale socket file left behind by a server that was prematurely killed
+  # so it should be safe to delete the socket file and start up a new server
+  warn "#{$0}: replacing unresponsive #{program} instance..."
+  File.delete address
+  exec program
+
+rescue SystemCallError => error
   warn "#{$0}: could not connect to #{program}: #{error}"
   exit 1
 end
