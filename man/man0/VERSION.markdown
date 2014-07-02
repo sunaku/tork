@@ -1,3 +1,14 @@
+## Version 19.8.2 (2014-07-01)
+
+This release adds support for RSpec 3+ in the `spec` configuration helper.
+
+### Patch:
+
+  * GH-58: RSpec 3.0 removed `--line_number` command-line option.
+
+    Thanks to Jonathan Cairns for reporting this issue in GH-58:
+    https://github.com/sunaku/tork/issues/58
+
 ## Version 19.8.1 (2014-06-28)
 
 ### Patch:

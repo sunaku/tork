@@ -1,3 +1,15 @@
+.SH Version 19.8.2 (2014\-07\-01)
+.PP
+This release adds support for RSpec 3+ in the \fB\fCspec\fR configuration helper.
+.SS Patch:
+.RS
+.IP \(bu 2
+GH\-58: RSpec 3.0 removed \fB\fC\-\-line_number\fR command\-line option.
+.PP
+Thanks to Jonathan Cairns for reporting this issue in GH\-58:
+.UR https://github.com/sunaku/tork/issues/58
+.UE
+.RE
 .SH Version 19.8.1 (2014\-06\-28)
 .SS Patch:
 .RS
