@@ -5,7 +5,7 @@ rescue LoadError, NameError
   # ignore
 end
 
-if $tork_test_file.start_with? 'spec/' and $tork_line_numbers.any?
+if $tork_line_numbers.any? and $tork_test_file =~ $tork_config_spec_grep
   if rspec_version and rspec_version >= '3.0'
     ARGV.push [$tork_test_file, *$tork_line_numbers].join(':')
   else
