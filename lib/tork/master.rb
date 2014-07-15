@@ -31,7 +31,7 @@ class Master < Server
 
   def test test_file, line_numbers
     # throttle forking rate to meet the maximum concurrent workers limit
-    sleep 1 until @command_by_worker_pid.size < @worker_number_pool.size
+    sleep 1 until @command_by_worker_pid.size <= @worker_number_pool.size
 
     $tork_test_file = test_file
     $tork_line_numbers = line_numbers
