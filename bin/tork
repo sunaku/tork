@@ -129,6 +129,7 @@ tork-runner(1), tork-driver(1), tork-master(1)
 
 =end =========================================================================
 
+TORK_DOLLAR_ZERO = $0
 $0 = File.basename(__FILE__) # for easier identification in ps(1) output
 
 require 'binman'

@@ -18,6 +18,10 @@ protected
     help client
   end
 
+  BACKTRACE_CENSOR = /\n\s+(?:from\s)?#{
+    Regexp.union(File.expand_path('../../..', __FILE__), TORK_DOLLAR_ZERO)
+  }[^:]*:\d+:.+$/
+
   def recv client, message
     case client
     when @driver
@@ -40,7 +44,12 @@ protected
                 when :fail then "\e[31m%s\e[0m" # red
                 end
         message = color % message if color and STDOUT.tty?
-        message = [message, File.read(log_file), message] if event_sym == :fail
+
+        if event_sym == :fail
+          # censor Tork internals from test failure backtraces
+          log = File.read(log_file).gsub(BACKTRACE_CENSOR, '')
+          message = [message, log, message]
+        end
 
         tell @clients, message, false
       end
