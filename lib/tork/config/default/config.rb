@@ -1,1 +1,0 @@
-Tork.config :detect, '*'
