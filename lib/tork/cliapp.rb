@@ -3,17 +3,6 @@ require 'tork/server'
 module Tork
 class CLIApp < Server
 
-  COMMANDS = {
-    't' => :run_test_file,
-    'a' => :run_all_test_files,
-    's' => :stop_running_test_files,
-    'k' => [:stop_running_test_files, :SIGKILL],
-    'p' => :rerun_passed_test_files,
-    'f' => :rerun_failed_test_files,
-    'o' => :reabsorb_overhead,
-    'q' => :quit,
-  }
-
   def loop
     tell @clients, 'Absorbing test execution overhead...', false
     @driver = popen('tork-driver')
@@ -69,12 +58,29 @@ protected
 
 private
 
+  COMMANDS = {
+    't' => :run_test_file,
+    'a' => :run_all_test_files,
+    's' => :stop_running_test_files,
+    'k' => [:stop_running_test_files, :SIGKILL],
+    'p' => :rerun_passed_test_files,
+    'f' => :rerun_failed_test_files,
+    'o' => :reabsorb_overhead,
+    'q' => :quit,
+  }
+
   def help client
-    COMMANDS.each do |key, cmd|
-      desc = Array(cmd).join(' with ').to_s.tr('_', ' ')
-      tell client, "Type #{key} then ENTER to #{desc}.", false
-    end
-    tell client, 'Type h then ENTER to see this message.', false
+    tell client, <<HELP, false
+Type a then ENTER to run all test files.
+Type t then SPACE then a filename then ENTER to run a specific test file.
+Type s then ENTER to stop currently running test files.
+Type k then ENTER to stop currently running test files with SIGKILL.
+Type p then ENTER to re-run passing test files.
+Type f then ENTER to re-run failing test files.
+Type o then ENTER to reabsorb test execution overhead.
+Type h then ENTER to see this help message.
+Type q then ENTER to quit.
+HELP
   end
 
 end
