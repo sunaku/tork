@@ -46,7 +46,7 @@ This program can be controlled remotely by multiple tork-remote(1) instances.
 ## FILES
 
 *.tork/config.rb*
-  Optional Ruby script that is loaded inside the driver process on startup.
+  Optional Ruby script that is loaded inside this Tork process on startup.
   It can read and change the `ENV['TORK_CONFIGS']` environment variable.
 
 ## ENVIRONMENT
@@ -54,21 +54,7 @@ This program can be controlled remotely by multiple tork-remote(1) instances.
 `TORK_CONFIGS`
   Colon-separated (:) list of either paths to directories that contain
   configuration files or names of the following configuration helpers.
-  If this variable is not set, then its value is assumed to be "default".
 
-  > `default`
-  >   Loads the following configuration helpers (as appropriate) if your
-  >   current working directory appears to utilize what they configure.
-  >   See below for complete descriptions of these configuration helpers.
-  >
-  >   * bundler
-  >   * rails
-  >   * devise
-  >   * test
-  >   * spec
-  >   * cucumber
-  >   * factory_girl
-  >
   > `dotlog`
   >   Hides log files by prefixing their names with a period (dot).
   >
@@ -129,6 +115,7 @@ tork-runner(1), tork-driver(1), tork-master(1)
 
 =end =========================================================================
 
+TORK_DOLLAR_ZERO = $0
 $0 = File.basename(__FILE__) # for easier identification in ps(1) output
 
 require 'binman'

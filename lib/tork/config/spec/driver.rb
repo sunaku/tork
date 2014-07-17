@@ -1,17 +1,13 @@
-Tork::Driver::REABSORB_FILE_GREPS.push 'spec/spec_helper.rb'
+Tork::Driver::REABSORB_FILE_GREPS.push /\bspec_helper\.rb$/
 
-Tork::Driver::ALL_TEST_FILE_GLOBS.push 'spec/**/{spec_*,*_spec}.rb'
+Tork::Driver::ALL_TEST_FILE_GLOBS.push $tork_config_spec_glob
 
 Tork::Driver::TEST_FILE_GLOBBERS.update(
   # source files that correspond to test files
-  %r{^lib/.*?([^/]+)\.rb$} => lambda do |matches|
-    target = matches[1]
-    "spec/**/{spec_#{target},#{target}_spec}.rb"
+  %r{([^/]+)\.rb$} => lambda do |matches|
+    $tork_config_spec_glob.gsub(/(?<=_)\*|\*(?=_)/, matches[1])
   end,
 
   # the actual test files themselves
-  %r{^spec/.+\.rb$} => lambda do |matches|
-    target = matches[0]
-    target if File.basename(target) =~ /^spec_|_spec\./
-  end
+  $tork_config_spec_grep => lambda {|matches| matches[0] }
 )

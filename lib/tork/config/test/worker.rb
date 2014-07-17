@@ -1,4 +1,4 @@
-if $tork_test_file.start_with? 'test/' and $tork_line_numbers.any?
+if $tork_line_numbers.any? and $tork_test_file =~ $tork_config_test_grep
   test_file_lines = File.readlines($tork_test_file)
   test_names = $tork_line_numbers.map do |line|
     catch :found do
