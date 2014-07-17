@@ -1,4 +1,4 @@
-# TORK-MASTER 1 2014-07-01 19.8.2
+# TORK-MASTER 1 2014-07-17 19.9.0
 
 ## NAME
 
@@ -63,7 +63,7 @@ to stdout.
 ## FILES
 
 *.tork/config.rb*
-  Optional Ruby script that is loaded inside the driver process on startup.
+  Optional Ruby script that is loaded inside this Tork process on startup.
   It can read and change the `ENV['TORK_CONFIGS']` environment variable.
 
 *.tork/master.rb*

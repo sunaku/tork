@@ -1,3 +1,30 @@
+## Version 19.9.0 (2014-07-17)
+
+### Minor:
+
+  * Add support for testing outside `test/` and `spec/` directories.  This
+    change lets you run test files directly from the current working directory
+    without having to put them inside special `test/` and `spec/` directories.
+
+    This can be useful if you are learning Ruby or writing tests for simple
+    scripts because you need not create a directory structure that is fit for
+    a larger application just for the sole purpose of running your tests!
+
+  * Drop the `default` configuration helper and load the `config.rb` files of
+    all configuration helpers on startup instead.  This way, each helper can
+    itself detect whether it is needed from inside its own `config.rb` file.
+
+  * Censor Tork internals from test failure backtraces so that users can
+    inspect them quickly to find where errors are arising in their code.
+
+### Patch:
+
+  * Only 1 worker was being used on a dual-core system.
+
+### Other:
+
+  * tork(1): use complete sentences in the help message.
+
 ## Version 19.8.2 (2014-07-01)
 
 This release adds support for RSpec 3+ in the `spec` configuration helper.

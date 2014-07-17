@@ -12,20 +12,16 @@ _______      _______
 .RS
 .IP \(bu 2
 Manuals: 
-.UR https://sunaku.github.io/tork/man
-.UE
+\[la]https://sunaku.github.io/tork/man\[ra]
 .IP \(bu 2
 Sources: 
-.UR https://github.com/sunaku/tork
-.UE
+\[la]https://github.com/sunaku/tork\[ra]
 .IP \(bu 2
 Support: 
-.UR https://github.com/sunaku/tork/issues
-.UE
+\[la]https://github.com/sunaku/tork/issues\[ra]
 .IP \(bu 2
 Package: 
-.UR https://rubygems.org/gems/tork
-.UE
+\[la]https://rubygems.org/gems/tork\[ra]
 .RE
 .TH \fITest with fork\fP
 .PP
@@ -250,31 +246,22 @@ MiniTest 1.3.2 and newer contain a bug where \fB\fCminitest/autorun\fR won't run
 tests if someone calls \fB\fCKernel#exit\fR explicitly or simply loads a library
 (such as RSpec) which makes the call implicitly.  Use Tork 19.0.2+ to avoid
 this problem or apply this patch to the minitest library
-.UR https://github.com/seattlerb/minitest/pull/183/files
-.UE
-to fix the problem.
+\[la]https://github.com/seattlerb/minitest/pull/183/files\[ra] to fix the problem.
 .SS With RSpec
 .PP
 RSpec 2.9.0 and newer contain a bug where RSpec's autorun helper won't run any
 specs if someone calls \fB\fCKernel#exit\fR explicitly or simply loads a library
 (such as Test::Unit) which makes the call implicitly.  Use Tork 19.0.2+ to
 avoid this problem or apply this patch to the rspec\-core library
-.UR https://github.com/rspec/rspec-core/pull/720/files
-.UE
-to fix the problem.
+\[la]https://github.com/rspec/rspec-core/pull/720/files\[ra] to fix the problem.
 .PP
 RSpec 2.8.0 and older contain a bug
-.UR https://github.com/sunaku/tork/issues/31
-.UE
-where a nonzero exit status (caused
+\[la]https://github.com/sunaku/tork/issues/31\[ra] where a nonzero exit status (caused
 by an uncaught exception) is overridden by RSpec's \fB\fCKernel#at_exit\fR handler to
 be zero, thereby falsely indicating that a spec had passed.  This patch
-.UR https://github.com/rspec/rspec-core/pull/569/files
-.UE
-fixes the problem.
+\[la]https://github.com/rspec/rspec-core/pull/569/files\[ra] fixes the problem.
 .SS With Ruby on Rails
-.UR http://rubyonrails.org
-.UE
+\[la]http://rubyonrails.org\[ra]
 .PP
 For Rails 3 or newer, use the \fB\fCrails\fR configuration helper \fIbefore\fP the \fB\fCtest\fR
 or \fB\fCspec\fR helpers.  Otherwise your test helper will load Rails \fIbefore\fP the
@@ -290,8 +277,7 @@ config.cache_classes = false
 .PP
 For older Rails, to use SQLite3 as your test database, install the in\-memory
 database adapter
-.UR https://github.com/stepahn/memory_test_fix
-.UE \&.  Otherwise, you \fImight\fP face these errors:
+\[la]https://github.com/stepahn/memory_test_fix\[ra]\&.  Otherwise, you \fImight\fP face these errors:
 .PP
 .RS
 SQLite3::BusyException: database is locked
@@ -301,8 +287,7 @@ cannot start a transaction within a transaction
 .PP
 For older Rails, to use SQLite3 as your test database along with browser\-based
 acceptance testing frameworks such as Capybara, see
-.UR http://www.spacevatican.org/2012/8/18/threading-the-rat/
-.UE
+\[la]http://www.spacevatican.org/2012/8/18/threading-the-rat/\[ra]
 .SH Configuration
 .PP
 Tork looks for a configuration directory named \fB\fC\&.tork/\fR inside its working

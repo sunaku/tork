@@ -1,4 +1,4 @@
-.TH TORK 1 2014\-07\-01 19.8.2
+.TH TORK 1 2014\-07\-17 19.9.0
 .SH NAME
 .PP
 tork \- Continuous testing tool for Ruby
@@ -44,37 +44,15 @@ Show this help manual.
 .SH FILES
 .TP
 \fI\&.tork/config.rb\fP
-Optional Ruby script that is loaded inside the driver process on startup.
+Optional Ruby script that is loaded inside this Tork process on startup.
 It can read and change the \fB\fCENV['TORK_CONFIGS']\fR environment variable.
 .SH ENVIRONMENT
 .TP
 \fB\fCTORK_CONFIGS\fR
 Colon\-separated (:) list of either paths to directories that contain
 configuration files or names of the following configuration helpers.
-If this variable is not set, then its value is assumed to be "default".
 .PP
 .RS
-.TP
-\fB\fCdefault\fR
-Loads the following configuration helpers (as appropriate) if your
-current working directory appears to utilize what they configure.
-See below for complete descriptions of these configuration helpers.
-.RS
-.IP \(bu 2
-bundler
-.IP \(bu 2
-rails
-.IP \(bu 2
-devise
-.IP \(bu 2
-test
-.IP \(bu 2
-spec
-.IP \(bu 2
-cucumber
-.IP \(bu 2
-factory_girl
-.RE
 .TP
 \fB\fCdotlog\fR
 Hides log files by prefixing their names with a period (dot).
@@ -105,45 +83,31 @@ Supports the Test::Unit standard library.
 .PP
 \fB\fCspec\fR
   Supports the RSpec
-.UR http://rspec.info
-.UE
-testing framework.
+\[la]http://rspec.info\[ra] testing framework.
 .PP
 \fB\fCcucumber\fR
   Supports the Cucumber
-.UR https://cukes.info
-.UE
-testing framework.
+\[la]https://cukes.info\[ra] testing framework.
 .PP
 \fB\fCbundler\fR
   Supports the Bundler
-.UR http://bundler.io
-.UE
-dependency framework.
+\[la]http://bundler.io\[ra] dependency framework.
 .PP
 \fB\fCrails\fR
   Supports the Ruby on Rails
-.UR http://rubyonrails.org
-.UE
-web framework.
+\[la]http://rubyonrails.org\[ra] web framework.
 .PP
 \fB\fCdevise\fR
   Supports the Devise
-.UR https://github.com/plataformatec/devise
-.UE
-authentication framework.
+\[la]https://github.com/plataformatec/devise\[ra] authentication framework.
 .PP
 \fB\fCfactory_girl\fR
   Supports the factory_girl
-.UR https://github.com/thoughtbot/factory_girl
-.UE
-testing library.
+\[la]https://github.com/thoughtbot/factory_girl\[ra] testing library.
 .PP
 \fB\fCparallel_tests\fR
   Supports the parallel_tests
-.UR https://github.com/grosser/parallel_tests
-.UE
-testing library.
+\[la]https://github.com/grosser/parallel_tests\[ra] testing library.
 .RE
 .SH SEE ALSO
 .PP

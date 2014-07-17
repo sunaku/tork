@@ -1,3 +1,33 @@
+.SH Version 19.9.0 (2014\-07\-17)
+.SS Minor:
+.RS
+.IP \(bu 2
+Add support for testing outside \fB\fCtest/\fR and \fB\fCspec/\fR directories.  This
+change lets you run test files directly from the current working directory
+without having to put them inside special \fB\fCtest/\fR and \fB\fCspec/\fR directories.
+.PP
+This can be useful if you are learning Ruby or writing tests for simple
+scripts because you need not create a directory structure that is fit for
+a larger application just for the sole purpose of running your tests!
+.IP \(bu 2
+Drop the \fB\fCdefault\fR configuration helper and load the \fB\fCconfig.rb\fR files of
+all configuration helpers on startup instead.  This way, each helper can
+itself detect whether it is needed from inside its own \fB\fCconfig.rb\fR file.
+.IP \(bu 2
+Censor Tork internals from test failure backtraces so that users can
+inspect them quickly to find where errors are arising in their code.
+.RE
+.SS Patch:
+.RS
+.IP \(bu 2
+Only 1 worker was being used on a dual\-core system.
+.RE
+.SS Other:
+.RS
+.IP \(bu 2
+.BR tork (1): 
+use complete sentences in the help message.
+.RE
 .SH Version 19.8.2 (2014\-07\-01)
 .PP
 This release adds support for RSpec 3+ in the \fB\fCspec\fR configuration helper.
@@ -7,8 +37,7 @@ This release adds support for RSpec 3+ in the \fB\fCspec\fR configuration helper
 GH\-58: RSpec 3.0 removed \fB\fC\-\-line_number\fR command\-line option.
 .PP
 Thanks to Jonathan Cairns for reporting this issue in GH\-58:
-.UR https://github.com/sunaku/tork/issues/58
-.UE
+\[la]https://github.com/sunaku/tork/issues/58\[ra]
 .RE
 .SH Version 19.8.1 (2014\-06\-28)
 .SS Patch:
@@ -100,8 +129,7 @@ Re\-run failed tests after reabsorbing overhead.
 .PP
 Thanks to Chris Scharf for contributing this
 patch
-.UR https://github.com/sunaku/tork/pull/57
-.UE \&.
+\[la]https://github.com/sunaku/tork/pull/57\[ra]\&.
 .RE
 .SH Version 19.6.1 (2014\-03\-04)
 .PP
@@ -149,8 +177,7 @@ Rails: keep sub\-Rails connected to in\-memory SQLite3 test database.
 When another Rails instance is started by Capybara, it sets up a new
 connection to the test database instead of re\-using our in\-memory DB.
 .TP
-.UR http://www.spacevatican.org/2012/8/18/threading-the-rat/
-.UE
+\[la]http://www.spacevatican.org/2012/8/18/threading-the-rat/\[ra]
 .IP \(bu 2
 .BR tork-engine (1) 
 sent \fB\fCidle\fR event when 1 test was still running.
@@ -224,9 +251,7 @@ The \fB\fCicon\fR local variable would be overwritten (to nil sometimes)
 outside of the thread and cause the thread body to silently fail.
 .PP
 See 
-.UR http://stackoverflow.com/q/16745840
-.UE
-for details.
+\[la]http://stackoverflow.com/q/16745840\[ra] for details.
 .IP \(bu 2
 Socket files were always deleted: even if not ours.
 .PP
@@ -270,8 +295,7 @@ listen 2.2.0 gem is non\-blocking and gives absolute paths.
 Calling #start no longer blocks the caller.
 .IP \(bu 2
 The \fB\fC:relative_paths\fR option no longer works:
-.UR https://github.com/guard/listen/issues/170
-.UE
+\[la]https://github.com/guard/listen/issues/170\[ra]
 .RE
 .IP \(bu 2
 .BR tork-herald (1): 
@@ -312,8 +336,7 @@ rename \fB\fC*.markdown\fR file extension to shorter \fB\fC*.md\fR
 GH\-55: upgrade listen & rake gem dependencies.
 .PP
 Thanks to Matthew Albright for reporting this issue in GH\-55:
-.UR https://github.com/sunaku/tork/issues/55
-.UE
+\[la]https://github.com/sunaku/tork/issues/55\[ra]
 .RE
 .SH Version 19.3.1 (2013\-06\-07)
 .SS Patch:
@@ -322,8 +345,7 @@ Thanks to Matthew Albright for reporting this issue in GH\-55:
 server: rescue from failed writes to asynchronously closed clients.
 .PP
 Thanks to Jonathan Cairns for reporting and fixing this bug in GH\-53:
-.UR https://github.com/sunaku/tork/issues/53
-.UE
+\[la]https://github.com/sunaku/tork/issues/53\[ra]
 .RE
 .SS Other:
 .RS
@@ -339,8 +361,7 @@ now emits \fB\fC["idle"]\fR messages whenever all tests
 have finished running and no more tests are queued for running.
 .PP
 Thanks to Jonathan Cairns for requesting this feature in GH\-50:
-.UR https://github.com/sunaku/tork/issues/50
-.UE
+\[la]https://github.com/sunaku/tork/issues/50\[ra]
 .RE
 .SS Other:
 .RS
@@ -413,11 +434,9 @@ server: fix clean up of socket files upon exit
 .IP \(bu 2
 Monkeypatch \fB\fCat_exit()\fR to fix RSpec and MiniTest:
 .TP
-.UR https://github.com/rspec/rspec-core/pull/720
-.UE
+\[la]https://github.com/rspec/rspec-core/pull/720\[ra]
 .TP
-.UR https://github.com/seattlerb/minitest/pull/183
-.UE
+\[la]https://github.com/seattlerb/minitest/pull/183\[ra]
 .RE
 .SS Other:
 .RS
@@ -663,15 +682,11 @@ tork/config: ignore directories given as configuration files.
 .RS
 .IP \(bu 2
 RSpec 2.8.0 and older contain a bug
-.UR https://github.com/sunaku/tork/issues/31
-.UE
-where a nonzero
+\[la]https://github.com/sunaku/tork/issues/31\[ra] where a nonzero
 exit status (caused by an uncaught exception) is overridden
 by RSpec's \fB\fCKernel#at_exit\fR handler to be zero, thereby
 falsely indicating that a spec had passed.  This patch
-.UR https://github.com/rspec/rspec-core/pull/569/files
-.UE
-fixes the
+\[la]https://github.com/rspec/rspec-core/pull/569/files\[ra] fixes the
 problem.  Thanks to Gumaro Melendez for reporting this issue.
 .RE
 .SS Major:
@@ -844,8 +859,7 @@ README: need to set $PATH to run this project from a git clone.
 .IP \(bu 2
 LICENSE: give copyright to major contributors only.
 See 
-.UR http://stackoverflow.com/questions/1497756
-.UE \&.
+\[la]http://stackoverflow.com/questions/1497756\[ra]\&.
 Also added forgotten Luke Wendling to the list.
 .RE
 .SH Version 15.0.1 (2012\-01\-24)
@@ -906,8 +920,7 @@ PGError: connection not open
 .RE
 .PP
 Thanks to Spencer Steffen for contributing this solution
-.UR https://github.com/sunaku/tork/issues/14#issuecomment-3539470
-.UE \&.
+\[la]https://github.com/sunaku/tork/issues/14#issuecomment-3539470\[ra]\&.
 .IP \(bu 2
 .BR testr-driver (1): 
 document the "over" status message in manual page.
@@ -981,11 +994,9 @@ Make xUnit \fB\fC\-\-name\fR option regexp case\-insensitive.
 .IP \(bu 2
 RSpec does not accept regexp for \fB\fC\-\-example\fR option;
 see 
-.UR https://github.com/rspec/rspec-core/issues/445
-.UE
+\[la]https://github.com/rspec/rspec-core/issues/445\[ra]
 and 
-.UR https://github.com/dchelimsky/rspec/issues/44
-.UE
+\[la]https://github.com/dchelimsky/rspec/issues/44\[ra]
 .IP \(bu 2
 Ruby 187 does not have Symbol#upcase() method.
 .RE
@@ -1112,9 +1123,7 @@ Removed the \fB\fCtest/loop/notify\fR and \fB\fCtest\-loop/coco\fR libraries.
 The file system is no longer polled to detect modified files.  Instead, it
 is monitored for file modification events in a portable and efficient
 manner using the Guard
-.UR https://github.com/guard/guard
-.UE
-library.
+\[la]https://github.com/guard/guard\[ra] library.
 .IP \(bu 2
 The number of processors on your system is automatically detected for the
 \fB\fCmax_forked_workers\fR configuration parameter.
@@ -1219,8 +1228,7 @@ requested by Juan G. Hurtado..
 .IP \(bu 2
 Add \fB\fCtest/loop/coco\fR preset for integrating the Coco code coverage
 library
-.UR http://lkdjiin.github.com/coco/
-.UE \&.
+\[la]http://lkdjiin.github.com/coco/\[ra]\&.
 .RE
 .SH Version 12.1.0 (2011\-04\-29)
 .SS Minor:
@@ -1238,8 +1246,7 @@ and Daniel Pittman)
 .IP \(bu 2
 \fB\fCThread.new { system() }\fR really is backgrounded so \fB\fCfork { system() }\fR is
 not necessary!  This issue
-.UR https://github.com/sunaku/test-loop/issues/5
-.UE
+\[la]https://github.com/sunaku/test-loop/issues/5\[ra]
 was solved by upgrading to the newer 2.6.38.4\-1 Linux kernel on my system.
 .RE
 .SH Version 12.0.3 (2011\-04\-25)
@@ -1299,8 +1306,7 @@ that would also stop you from doing clever things." ~Doug Gwyn
 \fB\fCThread.new { system() }\fR is not really backgrounded so \fB\fCfork()\fR instead!
 Many thanks to Brian D. Burns and Daniel Pittman for helping solve this
 issue
-.UR https://github.com/sunaku/test-loop/issues/5
-.UE \&.
+\[la]https://github.com/sunaku/test-loop/issues/5\[ra]\&.
 .RE
 .SH Version 12.0.2 (2011\-04\-21)
 .SS Patch:
@@ -1382,12 +1388,10 @@ by your test execution overhead are not propagated to subsequent
 reabsorptions.  (Brian D. Burns)
 .IP \(bu 2
 Call \fB\fCsetsid()\fR to detach worker from master's terminal.
-.UR http://stackoverflow.com/questions/1740308#1740314
-.UE
+\[la]http://stackoverflow.com/questions/1740308#1740314\[ra]
 .IP \(bu 2
 Mutex is not needed since we only use GIL'ed array methods.
-.UR http://www.ruby-forum.com/topic/174086#762788
-.UE
+\[la]http://www.ruby-forum.com/topic/174086#762788\[ra]
 .IP \(bu 2
 Remove redundant STDOUT coercion after loading user's testing library.
 .IP \(bu 2
@@ -1667,8 +1671,7 @@ Add better explanation for the \fB\fCtest_file_matchers\fR example.
 Use "diff/lcs" library instead of "diff" for RSpec compatibility.
 .PP
 Thanks to millisami for reporting this bug:
-.UR https://github.com/sunaku/test-loop/issues/3
-.UE
+\[la]https://github.com/sunaku/test-loop/issues/3\[ra]
 .IP \(bu 2
 Terminate worker processes when user presses Control\-C.
 .IP \(bu 2
@@ -1776,8 +1779,7 @@ Reduce the amount of notifications shown to user.
 .IP \(bu 2
 Fix syntax error caused by a dangling comma. Thanks
 to darthdeus (Jakub Arnold) for reporting this bug
-.UR https://github.com/sunaku/test-loop/issues#issue/1
-.UE \&.
+\[la]https://github.com/sunaku/test-loop/issues#issue/1\[ra]\&.
 .IP \(bu 2
 Notify user before reabsorbing overhead.
 .RE
