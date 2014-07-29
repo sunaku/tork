@@ -48,6 +48,9 @@ them.  For example, the line `a "b c"` is split into the `["a", "b c"]` array.
 `["rerun_failed_test_files"]`
   Runs all test files that have failed during their most recent run.
 
+`["list_failed_test_files"]`
+  Lists all test files that have failed during their most recent run.
+
 `["quit"]`
   Stops all tests that are currently running and exits.
 

@@ -74,7 +74,7 @@ class Engine < Server
     end
   end
 
-  def report_failed_test_files
+  def list_failed_test_files
     if @failed_test_files.empty?
       tell @client, 'There are no failing test files'
     else
