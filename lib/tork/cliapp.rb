@@ -74,6 +74,7 @@ private
     'k' => [:stop_running_test_files, :SIGKILL],
     'p' => :rerun_passed_test_files,
     'f' => :rerun_failed_test_files,
+    'r' => :report_failed_test_files,
     'o' => :reabsorb_overhead,
     'q' => :quit,
   }
@@ -87,6 +88,7 @@ Type k then ENTER to stop currently running test files with SIGKILL.
 Type p then ENTER to re-run passing test files.
 Type f then ENTER to re-run failing test files.
 Type o then ENTER to reabsorb test execution overhead.
+Type r then ENTER to report failing test files.
 Type h then ENTER to see this help message.
 Type q then ENTER to quit.
 HELP

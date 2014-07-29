@@ -74,6 +74,15 @@ class Engine < Server
     end
   end
 
+  def report_failed_test_files
+    if @failed_test_files.empty?
+      tell @client, 'There are no failing test files'
+    else
+      tell @client, "Failing test files: \n"
+      tell @client, @failed_test_files.sort.join("\n"), false
+    end
+  end
+
 protected
 
   def recv client, message
