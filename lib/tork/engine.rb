@@ -78,7 +78,6 @@ class Engine < Server
     if @failed_test_files.empty?
       tell @client, 'There are no failing test files'
     else
-      tell @client, "Failing test files: \n"
       tell @client, @failed_test_files.sort.join("\n"), false
     end
   end
