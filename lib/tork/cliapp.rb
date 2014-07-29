@@ -74,6 +74,7 @@ private
     'k' => [:stop_running_test_files, :SIGKILL],
     'p' => :rerun_passed_test_files,
     'f' => :rerun_failed_test_files,
+    'l' => :list_failed_test_files,
     'o' => :reabsorb_overhead,
     'q' => :quit,
   }
@@ -86,6 +87,7 @@ Type s then ENTER to stop currently running test files.
 Type k then ENTER to kill currently running test files.
 Type p then ENTER to re-run currently passing test files.
 Type f then ENTER to re-run currently failing test files.
+Type l then ENTER to list currently failing test files.
 Type o then ENTER to re-absorb test execution overhead.
 Type h then ENTER to see this help message.
 Type q then ENTER to quit.

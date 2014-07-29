@@ -74,6 +74,14 @@ class Engine < Server
     end
   end
 
+  def list_failed_test_files
+    if @failed_test_files.empty?
+      tell @client, 'There are no failed test files to list.'
+    else
+      tell @client, @failed_test_files.sort, false
+    end
+  end
+
 protected
 
   def recv client, message
