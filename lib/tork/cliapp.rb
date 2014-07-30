@@ -4,7 +4,7 @@ module Tork
 class CLIApp < Server
 
   def loop
-    tell @clients, 'Absorbing test execution overhead...', false
+    tell @clients, 'Absorbing test execution overhead...'
     @driver = popen('tork-driver')
     super
   ensure
@@ -29,10 +29,10 @@ protected
 
       case event_sym = event.to_sym
       when :absorb
-        tell @clients, 'Overhead absorbed. Ready for testing!', false
+        tell @clients, 'Test execution overhead absorbed; ready to test!'
 
       when :reabsorb
-        tell @clients, 'Reabsorbing changed overhead files...', false
+        tell @clients, 'Test execution overhead changed; re-absorbing...'
 
       when :test, :pass, :fail
         test_file, line_numbers, log_file, worker_number, exit_status = details
@@ -63,7 +63,7 @@ protected
       if respond_to? cmd.first, true
         __send__(*cmd)
       else
-        tell @clients, "Sending #{cmd.inspect} command...", false
+        tell @clients, "Sending #{cmd.inspect} command..."
         send @driver, cmd
       end
     end
@@ -84,7 +84,7 @@ private
   }
 
   def help client
-    tell client, <<HELP, false
+    tell client, <<HELP
 Type a then ENTER to run all test files.
 Type t then SPACE then a filename then ENTER to run a specific test file.
 Type s then ENTER to stop currently running test files.
