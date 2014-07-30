@@ -52,6 +52,10 @@ protected
         end
 
         tell @clients, message, false
+
+      when :idle
+        tested, passed, failed = details
+        tell @clients, "#{tested} tested, #{passed} passed, #{failed} failed"
       end
     else
       key = message.shift.lstrip[0,1].downcase
