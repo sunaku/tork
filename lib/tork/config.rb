@@ -15,3 +15,8 @@ end
 
 ENV['TORK_CONFIGS'] ||= String.new.freeze # ENV values come frozen by default
 Tork.config :config, '*'
+
+unless ENV['TORK_CONFIGS_DETECTED'] =~ /\S/
+  ENV['TORK_CONFIGS_DETECTED'] = $0
+  Tork.config :detect, '*'
+end
