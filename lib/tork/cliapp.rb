@@ -54,7 +54,7 @@ protected
         tell @clients, message, false
 
       when :idle
-        tested, passed, failed = details
+        tested, passed, failed = details.map(&:length)
         tell @clients, "#{tested} tested, #{passed} passed, #{failed} failed"
       end
     else

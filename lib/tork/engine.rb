@@ -108,8 +108,8 @@ protected
 
         # notify user when all test files have finished running
         if @running_test_files.empty?
-          passed = @passed_test_files.count
-          failed = @failed_test_files.count
+          passed = @passed_test_files.to_a
+          failed = @failed_test_files.to_a
           tested = passed + failed
           send @clients, [:idle, tested, passed, failed]
         end
