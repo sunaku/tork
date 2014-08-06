@@ -60,8 +60,8 @@ This program prints the following messages, which are single-line JSON arrays,
 to stdout.
 
 `["idle",` *ran_test_files*`,` *passed_test_files*`,` *failed_test_files*`]`
-  All tests have finished running and no tests are queued for running either.
-  As of now, *ran_test_files* test files have been run, *passed_test_files*
+  All queued tests have finished running and no new tests have been queued.
+  In particular, *ran_test_files* test files have run, *passed_test_files*
   test files have passed, and *failed_test_files* test files have failed.
 
 `["pass_now_fail",` *test_file*`,` *message*`]`
