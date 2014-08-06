@@ -31,7 +31,7 @@ protected
       when :boot
         tell @clients, 'Test execution overhead absorbed; ready to test!'
 
-      when :over
+      when :boot!
         tell @clients, 'Test execution overhead changed; re-absorbing...'
 
       when :test, :pass, :fail
@@ -57,6 +57,7 @@ protected
         tested, passed, failed = details.map(&:length)
         tell @clients, "#{tested} tested, #{passed} passed, #{failed} failed"
       end
+
     else
       key = message.shift.lstrip[0,1].downcase
       cmd = Array(COMMANDS.fetch(key, [:help, client])) + message
@@ -72,27 +73,27 @@ protected
 private
 
   COMMANDS = {
-    't' => :run_test_file,
-    'a' => :run_all_test_files,
-    's' => :stop_running_test_files,
-    'k' => [:stop_running_test_files, :SIGKILL],
-    'p' => :rerun_passed_test_files,
-    'f' => :rerun_failed_test_files,
-    'l' => :list_failed_test_files,
-    'o' => :reabsorb_overhead,
+    't' => :test,
+    'a' => :test!,
+    's' => :stop,
+    'k' => [:stop, :SIGKILL],
+    'p' => :pass!,
+    'f' => :fail!,
+    'l' => :fail?,
+    'b' => :boot!,
     'q' => :quit,
   }
 
   def help client
     tell client, <<HELP
-Type a then ENTER to run all test files.
+Type a then ENTER to run all available test files.
 Type t then SPACE then a filename then ENTER to run a specific test file.
 Type s then ENTER to stop currently running test files.
 Type k then ENTER to kill currently running test files.
 Type p then ENTER to re-run currently passing test files.
 Type f then ENTER to re-run currently failing test files.
 Type l then ENTER to list currently failing test files.
-Type o then ENTER to re-absorb test execution overhead.
+Type b then ENTER to re-absorb test execution overhead.
 Type h then ENTER to see this help message.
 Type q then ENTER to quit.
 HELP

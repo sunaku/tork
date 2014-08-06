@@ -68,9 +68,9 @@ IO.popen('tork-driver', 'w+') do |driver|
   test_files = Dir[*ARGV]
   command =
     if test_files.empty?
-      [:run_all_test_files]
+      [:test!]
     else
-      [:run_test_files, test_files]
+      [:test, test_files]
     end
   driver.puts JSON.dump(command)
 
