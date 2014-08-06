@@ -10,10 +10,12 @@ class Engine < Server
     super
     Tork.config :engine
 
-    @running_test_files = Set.new
+    @lines_by_file = {}
     @passed_test_files = Set.new
     @failed_test_files = Set.new
-    @lines_by_file = {}
+    @running_test_files = Set.new
+    @recently_passed_test_files = Set.new
+    @recently_failed_test_files = Set.new
   end
 
   def loop
@@ -74,6 +76,14 @@ class Engine < Server
     end
   end
 
+  def list_failed_test_files
+    if @failed_test_files.empty?
+      tell @client, 'There are no failed test files to list.'
+    else
+      tell @client, @failed_test_files.sort, false
+    end
+  end
+
 protected
 
   def recv client, message
@@ -87,19 +97,30 @@ protected
         @running_test_files.delete file
 
         if event_sym == :fail
+          @recently_failed_test_files.add file
           was_pass = @passed_test_files.delete? file
           now_fail = @failed_test_files.add? file
           send @clients, [:pass_now_fail, file, message] if was_pass and now_fail
 
         elsif line_numbers.empty?
           # only whole test file runs should qualify as pass
+          @recently_passed_test_files.add file
           was_fail = @failed_test_files.delete? file
           now_pass = @passed_test_files.add? file
           send @clients, [:fail_now_pass, file, message] if was_fail and now_pass
         end
 
         # notify user when all test files have finished running
-        send @clients, [:idle] if @running_test_files.empty?
+        if @running_test_files.empty?
+          passed = @recently_passed_test_files.to_a
+          @recently_passed_test_files.clear
+
+          failed = @recently_failed_test_files.to_a
+          @recently_failed_test_files.clear
+
+          tested = passed + failed
+          send @clients, [:idle, tested, passed, failed]
+        end
       end
 
     else

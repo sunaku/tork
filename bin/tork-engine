@@ -48,6 +48,9 @@ them.  For example, the line `a "b c"` is split into the `["a", "b c"]` array.
 `["rerun_failed_test_files"]`
   Runs all test files that have failed during their most recent run.
 
+`["list_failed_test_files"]`
+  Lists all test files that have failed during their most recent run.
+
 `["quit"]`
   Stops all tests that are currently running and exits.
 
@@ -56,8 +59,10 @@ them.  For example, the line `a "b c"` is split into the `["a", "b c"]` array.
 This program prints the following messages, which are single-line JSON arrays,
 to stdout.
 
-`["idle"]`
-  All tests have finished running and no tests are queued for running either.
+`["idle",` *ran_test_files*`,` *passed_test_files*`,` *failed_test_files*`]`
+  All queued tests have finished running and no new tests have been queued.
+  In particular, *ran_test_files* test files have run, *passed_test_files*
+  test files have passed, and *failed_test_files* test files have failed.
 
 `["pass_now_fail",` *test_file*`,` *message*`]`
   A previously passing *test_file* has now failed.  See *message* for details.
