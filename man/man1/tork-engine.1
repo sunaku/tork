@@ -1,4 +1,4 @@
-.TH TORK\-ENGINE 1 2014\-07\-17 19.9.0
+.TH TORK\-ENGINE 1 2014\-08\-06 19.10.0
 .SH NAME
 .PP
 tork\-engine \- wraps 
@@ -49,6 +49,9 @@ Runs all test files that have passed during their most recent run.
 \fB\fC["rerun_failed_test_files"]\fR
 Runs all test files that have failed during their most recent run.
 .TP
+\fB\fC["list_failed_test_files"]\fR
+Lists all test files that have failed during their most recent run.
+.TP
 \fB\fC["quit"]\fR
 Stops all tests that are currently running and exits.
 .SS Output
@@ -56,8 +59,10 @@ Stops all tests that are currently running and exits.
 This program prints the following messages, which are single\-line JSON arrays,
 to stdout.
 .TP
-\fB\fC["idle"]\fR
-All tests have finished running and no tests are queued for running either.
+\fB\fC["idle",\fR \fIran\fItest\fPfiles\fP\fB\fC,\fR \fIpassed\fItest\fPfiles\fP\fB\fC,\fR \fIfailed\fItest\fPfiles\fP\fB\fC]\fR
+All queued tests have finished running and no new tests have been queued.
+In particular, \fIran\fItest\fPfiles\fP test files have run, \fIpassed\fItest\fPfiles\fP
+test files have passed, and \fIfailed\fItest\fPfiles\fP test files have failed.
 .TP
 \fB\fC["pass_now_fail",\fR \fItest_file\fP\fB\fC,\fR \fImessage\fP\fB\fC]\fR
 A previously passing \fItest_file\fP has now failed.  See \fImessage\fP for details.

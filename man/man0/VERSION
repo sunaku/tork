@@ -1,3 +1,47 @@
+.SH Version 19.10.0 (2014\-08\-06)
+.PP
+This release improves responsiveness and adds a command to list failed files.
+.SS Minor:
+.RS
+.IP \(bu 2
+.BR tork-engine (1): 
+list most recently ran test files in \fB\fC:idle\fR event.  This
+allows 
+.BR tork (1) 
+to summarize a run after tests finish running, as follows:
+.PP
+.RS
+.nf
+tork: 10 tested, 10 passed, 0 failed
+.fi
+.RE
+.IP \(bu 2
+.BR tork-engine (1): 
+add \fB\fClist_failed_test_files\fR command that lists all test
+files that have failed during their most recent run.
+.PP
+.BR tork (1): 
+add \fB\fCl\fR key (bound to the \fB\fClist_failed_test_files\fR command).
+.PP
+Thanks to Chris Scharf for contributing this feature in issue\-60:
+\[la]https://github.com/sunaku/tork/pull/60\[ra]
+.RE
+.SS Patch:
+.RS
+.IP \(bu 2
+tork/config: auto\-detect \fB\fC$TORK_CONFIGS\fR values only once per session.
+This makes Tork load configuration helpers faster on slow file\-systems.
+.IP \(bu 2
+Use block\-form of Dir.glob() to react more quickly on slow file\-systems.
+This makes 
+.BR tork-driver (1)'s 
+\fB\fCrun_all_test_files\fR command more responsive.
+.RE
+.SS Other:
+.RS
+.IP \(bu 2
+Align error/help message wording with manual pages.
+.RE
 .SH Version 19.9.0 (2014\-07\-17)
 .SS Minor:
 .RS
