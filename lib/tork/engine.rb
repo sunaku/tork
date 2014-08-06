@@ -100,14 +100,14 @@ protected
           @recently_failed_test_files.add file
           was_pass = @passed_test_files.delete? file
           now_fail = @failed_test_files.add? file
-          send @clients, [:pass_now_fail, file, message] if was_pass and now_fail
+          send @clients, [:fail!, file, message] if was_pass and now_fail
 
         elsif line_numbers.empty?
           # only whole test file runs should qualify as pass
           @recently_passed_test_files.add file
           was_fail = @failed_test_files.delete? file
           now_pass = @passed_test_files.add? file
-          send @clients, [:fail_now_pass, file, message] if was_fail and now_pass
+          send @clients, [:pass!, file, message] if was_fail and now_pass
         end
 
         # notify user when all test files have finished running
@@ -119,7 +119,7 @@ protected
           @recently_failed_test_files.clear
 
           tested = passed + failed
-          send @clients, [:idle, tested, passed, failed]
+          send @clients, [:done, tested, passed, failed]
         end
       end
 

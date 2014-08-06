@@ -59,7 +59,7 @@ protected
 
         # reabsorb text execution overhead if overhead files changed
         if overhead_file? changed_file
-          send @clients, [:reabsorb, changed_file]
+          send @clients, [:over, changed_file]
           reabsorb_overhead
         else
           run_non_overhead_test_files find_dependent_test_files(changed_file)

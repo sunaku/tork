@@ -28,10 +28,10 @@ protected
       event, *details = message
 
       case event_sym = event.to_sym
-      when :absorb
+      when :boot
         tell @clients, 'Test execution overhead absorbed; ready to test!'
 
-      when :reabsorb
+      when :over
         tell @clients, 'Test execution overhead changed; re-absorbing...'
 
       when :test, :pass, :fail
@@ -53,7 +53,7 @@ protected
 
         tell @clients, message, false
 
-      when :idle
+      when :done
         tested, passed, failed = details.map(&:length)
         tell @clients, "#{tested} tested, #{passed} passed, #{failed} failed"
       end

@@ -36,9 +36,8 @@ them.  For example, the line `a "b c"` is split into the `["a", "b c"]` array.
 This program prints the following messages, which are single-line JSON arrays,
 to stdout.
 
-`["reabsorb",` *overhead_file*`]`
-  Test execution overhead is being reabsorbed because *overhead_file* has
-  changed.
+`["over",` *overhead_file*`]`
+  Reabsorbing test execution overhead because *overhead_file* has changed.
 
 *...*
   Messages from tork-engine(1) and tork-master(1) are also reproduced here.

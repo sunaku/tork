@@ -82,7 +82,7 @@ IO.popen('tork-driver', 'w+') do |driver|
     when :test then tested += 1
     when :pass then passed += 1
     when :fail then failed << response[3]
-    when :idle then break
+    when :done then break
     end
 
     progress = "#{tested} tested, #{passed} passed, #{failed.length} failed"
