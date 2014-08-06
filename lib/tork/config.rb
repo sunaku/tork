@@ -9,7 +9,7 @@ module Tork
     dirs = search_path.to_s.strip.split(/:+/).reject(&:empty?).uniq.
            map {|dir| [dir, __FILE__.sub(/\.rb$/, "/#{dir}")] }.flatten
 
-    Dir["{#{dirs.join(',')},.tork}/#{name}.rb"].each {|script| load script }
+    Dir.glob("{#{dirs.join(',')},.tork}/#{name}.rb") {|script| load script }
   end
 end
 
