@@ -1,3 +1,34 @@
+## Version 19.10.0 (2014-08-06)
+
+This release improves responsiveness and adds a command to list failed files.
+
+### Minor:
+
+  * tork-engine(1): list most recently ran test files in `:idle` event.  This
+    allows tork(1) to summarize a run after tests finish running, as follows:
+
+        tork: 10 tested, 10 passed, 0 failed
+
+  * tork-engine(1): add `list_failed_test_files` command that lists all test
+    files that have failed during their most recent run.
+
+    tork(1): add `l` key (bound to the `list_failed_test_files` command).
+
+    Thanks to Chris Scharf for contributing this feature in issue-60:
+    https://github.com/sunaku/tork/pull/60
+
+### Patch:
+
+  * tork/config: auto-detect `$TORK_CONFIGS` values only once per session.
+    This makes Tork load configuration helpers faster on slow file-systems.
+
+  * Use block-form of Dir.glob() to react more quickly on slow file-systems.
+    This makes tork-driver(1)'s `run_all_test_files` command more responsive.
+
+### Other:
+
+  * Align error/help message wording with manual pages.
+
 ## Version 19.9.0 (2014-07-17)
 
 ### Minor:
