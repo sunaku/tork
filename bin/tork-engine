@@ -36,12 +36,18 @@ them.  For example, the line `a "b c"` is split into the `["a", "b c"]` array.
   that have changed since the last run of *test_file* will be substituted.
   If any *line_numbers* are zero, then the entire *test_file* will be run.
 
+`["test?"]`
+  Lists all test files that are currently running.
+
 `["stop"`, *signal*`]`
   Stops test files that are currently running by sending the given *signal*
   (optional; defaults to "SIGTERM") to their respective worker processes.
 
 `["pass!"]`
   Runs all test files that have passed during their most recent run.
+
+`["pass?"]`
+  Lists all test files that have passed during their most recent run.
 
 `["fail!"]`
   Runs all test files that have failed during their most recent run.

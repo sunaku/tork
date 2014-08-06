@@ -51,6 +51,14 @@ class Engine < Server
     end
   end
 
+  def test?
+    if @running_test_files.empty?
+      tell @client, 'There are no running test files to list.'
+    else
+      tell @client, @running_test_files.sort, false
+    end
+  end
+
   def stop signal=nil
     if @running_test_files.empty?
       tell @client, 'There are no running test files to stop.'
@@ -65,6 +73,14 @@ class Engine < Server
       tell @client, 'There are no passed test files to re-run.'
     else
       test @passed_test_files
+    end
+  end
+
+  def pass?
+    if @passed_test_files.empty?
+      tell @client, 'There are no passed test files to list.'
+    else
+      tell @client, @passed_test_files.sort, false
     end
   end
 
