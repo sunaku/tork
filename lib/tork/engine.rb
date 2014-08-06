@@ -51,7 +51,7 @@ class Engine < Server
 
   def stop_running_test_files signal=nil
     if @running_test_files.empty?
-      tell @client, 'There are no test files currently running.'
+      tell @client, 'There are no running test files to stop.'
     else
       send @master, [:stop, signal].compact
       @running_test_files.clear
@@ -60,7 +60,7 @@ class Engine < Server
 
   def rerun_passed_test_files
     if @passed_test_files.empty?
-      tell @client, 'There are no passing test files to re-run.'
+      tell @client, 'There are no passed test files to re-run.'
     else
       run_test_files @passed_test_files
     end
@@ -68,7 +68,7 @@ class Engine < Server
 
   def rerun_failed_test_files
     if @failed_test_files.empty?
-      tell @client, 'There are no failing test files to re-run.'
+      tell @client, 'There are no failed test files to re-run.'
     else
       run_test_files @failed_test_files
     end
