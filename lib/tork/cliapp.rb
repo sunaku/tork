@@ -83,10 +83,10 @@ private
 Type a then ENTER to run all test files.
 Type t then SPACE then a filename then ENTER to run a specific test file.
 Type s then ENTER to stop currently running test files.
-Type k then ENTER to stop currently running test files with SIGKILL.
-Type p then ENTER to re-run passing test files.
-Type f then ENTER to re-run failing test files.
-Type o then ENTER to reabsorb test execution overhead.
+Type k then ENTER to kill currently running test files.
+Type p then ENTER to re-run currently passing test files.
+Type f then ENTER to re-run currently failing test files.
+Type o then ENTER to re-absorb test execution overhead.
 Type h then ENTER to see this help message.
 Type q then ENTER to quit.
 HELP
