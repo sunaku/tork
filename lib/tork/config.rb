@@ -9,9 +9,14 @@ module Tork
     dirs = search_path.to_s.strip.split(/:+/).reject(&:empty?).uniq.
            map {|dir| [dir, __FILE__.sub(/\.rb$/, "/#{dir}")] }.flatten
 
-    Dir["{#{dirs.join(',')},.tork}/#{name}.rb"].each {|script| load script }
+    Dir.glob("{#{dirs.join(',')},.tork}/#{name}.rb") {|script| load script }
   end
 end
 
 ENV['TORK_CONFIGS'] ||= String.new.freeze # ENV values come frozen by default
 Tork.config :config, '*'
+
+unless ENV['TORK_CONFIGS_DETECTED'] =~ /\S/
+  ENV['TORK_CONFIGS_DETECTED'] = $0
+  Tork.config :detect, '*'
+end

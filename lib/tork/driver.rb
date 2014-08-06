@@ -26,12 +26,13 @@ class Driver < Server
   end
 
   def run_all_test_files
-    all_test_files = Dir[*ALL_TEST_FILE_GLOBS]
-    if all_test_files.empty?
-      tell @client, 'There are no test files to run.'
-    else
-      run_non_overhead_test_files all_test_files
+    test_files_found = false
+    Dir.glob(*ALL_TEST_FILE_GLOBS) do |test_file|
+      next if overhead_file? test_file
+      run_test_file test_file
+      test_files_found = true
     end
+    tell @client, 'There are no test files to run.' unless test_files_found
   end
 
   # accept and delegate tork-engine(1) commands
@@ -89,7 +90,7 @@ private
   def find_dependent_test_files source_file, results=Set.new
     TEST_FILE_GLOBBERS.each do |regexp, globber|
       if regexp =~ source_file and globs = globber.call($~)
-        Dir[*globs].each do |dependent_file|
+        Dir.glob(*globs) do |dependent_file|
           if results.add? dependent_file
             find_dependent_test_files dependent_file, results
           end
