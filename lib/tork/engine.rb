@@ -76,11 +76,12 @@ class Engine < Server
     end
   end
 
-  def list_failed_test_files
-    if @failed_test_files.empty?
-      tell @client, 'There are no failing test files to list.'
+  def list_test_files
+    lists = [@running_test_files, @passed_test_files, @failed_test_files]
+    if lists.all?(&:empty?)
+      tell @client, 'There are no test files to list.'
     else
-      tell @client, @failed_test_files.sort, false
+      send @client, [:list] + lists.map(&:sort)
     end
   end
 

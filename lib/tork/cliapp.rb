@@ -53,6 +53,13 @@ protected
 
         tell @clients, message, false
 
+      when :list
+        running, passing, failing = details
+        tell @clients,
+          running.map {|t| "TEST #{t}" } +
+          passing.map {|t| "PASS #{t}" } +
+          failing.map {|t| "FAIL #{t}" }
+
       when :idle
         tested, passed, failed = details
         tell @clients, "#{tested.count} tested, #{passed.count} passed, #{failed.count} failed"
@@ -78,7 +85,7 @@ private
     'k' => [:stop_running_test_files, :SIGKILL],
     'p' => :rerun_passed_test_files,
     'f' => :rerun_failed_test_files,
-    'l' => :list_failed_test_files,
+    'l' => :list_test_files,
     'o' => :reabsorb_overhead,
     'q' => :quit,
   }
@@ -89,10 +96,10 @@ Type a then ENTER to run all test files.
 Type t then SPACE then a filename then ENTER to run a specific test file.
 Type s then ENTER to stop currently running test files.
 Type k then ENTER to stop currently running test files with SIGKILL.
+Type l then ENTER to list running, passing, and failing files.
 Type p then ENTER to re-run passing test files.
 Type f then ENTER to re-run failing test files.
 Type o then ENTER to reabsorb test execution overhead.
-Type l then ENTER to list failing test files.
 Type h then ENTER to see this help message.
 Type q then ENTER to quit.
 HELP
