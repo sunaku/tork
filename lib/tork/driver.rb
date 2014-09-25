@@ -27,7 +27,7 @@ class Driver < Server
 
   def run_all_test_files
     test_files_found = false
-    Dir.glob(*ALL_TEST_FILE_GLOBS) do |test_file|
+    Dir.glob(ALL_TEST_FILE_GLOBS) do |test_file|
       next if overhead_file? test_file
       run_test_file test_file
       test_files_found = true
