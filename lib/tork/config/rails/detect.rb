@@ -1,1 +1,1 @@
-ENV['TORK_CONFIGS'] += ':rails' if Dir['script/{rails,console}'].any?
+ENV['TORK_CONFIGS'] += ':rails' if Dir['{script,bin}/{rails,console}'].any?
