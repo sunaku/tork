@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <meta name="generator" content="md2man 3.0.1 https://github.com/sunaku/md2man" />
+  <meta name="generator" content="md2man 4.0.0 https://github.com/sunaku/md2man" />
   <title>tork-driver(1) &mdash; drives tork-engine(1) when files change</title>
   <link rel="stylesheet" href="../style.css"/>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -39,8 +39,7 @@ followed by an underscore and the file name in reverse like this:</p>
 <li>lib/hello.rb =&gt; test/hello_olleh.rb</li>
 <li>app/world.rb =&gt; spec/world_ldrow.rb</li>
 </ul>
-<p>Then you would add the following to your configuration file:</p>
-<pre><code>Tork::Driver::TEST_FILE_GLOBBERS.update(
+<p>Then you would add the following to your configuration file:</p><pre><code>Tork::Driver::TEST_FILE_GLOBBERS.update(
   %r{^(lib|app)/.*?([^/]+?)\.rb$} =&gt; lambda do |matches|
     name = matches[2]
     &quot;{test,spec}/**/#{name}_#{name.reverse}.rb&quot;
@@ -55,8 +54,7 @@ prefixed or appended to their already peculiar names, like so:</p>
 <li>app/world.rb =&gt; spec/world_ldrow_spec.rb</li>
 <li>app/world.rb =&gt; spec/spec_world_ldrow.rb</li>
 </ul>
-<p>Then you would add the following to your configuration file:</p>
-<pre><code>Tork::Driver::TEST_FILE_GLOBBERS.update(
+<p>Then you would add the following to your configuration file:</p><pre><code>Tork::Driver::TEST_FILE_GLOBBERS.update(
   %r{^(lib|app)/.*?([^/]+?)\.rb$} =&gt; lambda do |matches|
     name = matches[2]
     [&quot;{test,spec}/**/#{name}_#{name.reverse}.rb&quot;,
@@ -67,8 +65,7 @@ prefixed or appended to their already peculiar names, like so:</p>
 </code></pre>
 <p><strong><em>Recursive expansion</em></strong></p><p>For example, if you wanted to run test files associated with
 <code>lib/hello.rb</code> whenever the <code>app/world.rb</code> file changed, then you would
-write:</p>
-<pre><code>Tork::Driver::TEST_FILE_GLOBBERS.update(
+write:</p><pre><code>Tork::Driver::TEST_FILE_GLOBBERS.update(
   %r{^app/world\.rb$} =&gt; lambda do |matches|
     &#39;lib/hello.rb&#39;
   end
@@ -78,8 +75,7 @@ write:</p>
 directions.</p><p><strong><em>Suppressing expansion</em></strong></p><p>These lambda functions can return <code>nil</code> if they do not wish for a
 particular source file to be tested.  For example, to ignore tests for
 all source files except those within a <code>models/</code> directory, you would
-write:</p>
-<pre><code>Tork::Driver::TEST_FILE_GLOBBERS.update(
+write:</p><pre><code>Tork::Driver::TEST_FILE_GLOBBERS.update(
   %r{^(lib|app)(/.*?)([^/]+?)\.rb$} =&gt; lambda do |matches|
     if matches[2].include? &#39;/models/&#39;
       [&quot;{test,spec}/**/#{matches[3]}_{test,spec}.rb&quot;,

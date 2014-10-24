@@ -208,8 +208,7 @@ interactively from another terminal:
 .nf
 tork\-remote tork\-engine
 # type your commands here, one per line.
-# press Control\-D to exit 
-.BR tork-remote (1)
+# press Control\-D to exit tork\-remote(1)
 .fi
 .RE
 .PP
