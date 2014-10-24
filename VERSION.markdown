@@ -1,3 +1,15 @@
+## Version 19.11.1 (2014-10-24)
+
+This release improves support for RSpec 3 and Rails 4.
+
+### Patch:
+
+  * GH-61: `uninitialized constant RSpec` for rspec > 3 (Jonathan Cairns).
+
+  * Fix TypeError in driver when multiple globs are used (Jonathan Cairns).
+
+  * Simple fix for detecting rails 4 apps (Jonathan Cairns).
+
 ## Version 19.10.0 (2014-08-06)
 
 This release improves responsiveness and adds a command to list failed files.
