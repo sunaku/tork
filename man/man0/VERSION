@@ -1,3 +1,15 @@
+.SH Version 19.11.1 (2014\-10\-24)
+.PP
+This release improves support for RSpec 3 and Rails 4.
+.SS Patch:
+.RS
+.IP \(bu 2
+GH\-61: \fB\fCuninitialized constant RSpec\fR for rspec > 3 (Jonathan Cairns).
+.IP \(bu 2
+Fix TypeError in driver when multiple globs are used (Jonathan Cairns).
+.IP \(bu 2
+Simple fix for detecting rails 4 apps (Jonathan Cairns).
+.RE
 .SH Version 19.10.0 (2014\-08\-06)
 .PP
 This release improves responsiveness and adds a command to list failed files.
