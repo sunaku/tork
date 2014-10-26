@@ -1,4 +1,4 @@
-# TORK-DRIVER 1 2014-10-24 19.11.1
+# TORK-DRIVER 1 2014-10-26 20.0.0
 
 ## NAME
 
@@ -22,7 +22,7 @@ stdin that are single-line JSON arrays, it splits each of them into an array
 of words, using the same word-splitting algorithm as sh(1), before processing
 them.  For example, the line `a "b c"` is split into the `["a", "b c"]` array.
 
-`["run_all_test_files"]`
+`["test!"]`
   Runs all test files found within and beneath the current working directory.
 
 *...*
@@ -33,9 +33,8 @@ them.  For example, the line `a "b c"` is split into the `["a", "b c"]` array.
 This program prints the following messages, which are single-line JSON arrays,
 to stdout.
 
-`["reabsorb",` *overhead_file*`]`
-  Test execution overhead is being reabsorbed because *overhead_file* has
-  changed.
+`["boot!",` *overhead_file*`]`
+  Reabsorbing test execution overhead because *overhead_file* has changed.
 
 *...*
   Messages from tork-engine(1) and tork-master(1) are also reproduced here.

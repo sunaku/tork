@@ -1,4 +1,4 @@
-# TORK-MASTER 1 2014-10-24 19.11.1
+# TORK-MASTER 1 2014-10-26 20.0.0
 
 ## NAME
 
@@ -42,7 +42,7 @@ them.  For example, the line `a "b c"` is split into the `["a", "b c"]` array.
 This program prints the following messages, which are single-line JSON arrays,
 to stdout.
 
-`["absorb"]`
+`["boot"]`
   Test execution overhead has been absorbed.  We are ready for testing!
 
 `["test",` *test_file*`,` *line_numbers*`,` *log_file*`,` *worker_number*`]`

@@ -1,3 +1,101 @@
+.SH Version 20.0.0 (2014\-10\-26)
+.SS Major:
+.RS
+.IP \(bu 2
+.BR tork-runner (1): 
+percentage lied; print counts instead.
+.PP
+The percentage of completion is not accurate because it only measures
+how many tests that have started running \fIso far\fP have been completed.
+This makes the percentage jump from 100% to lesser values as tests run.
+.PP
+Also drop the \fB\fCtork\-runner:\fR prefix from progress messages and replace
+VT100 escape codes for reprinting in\-place with a \[rs]r (carriage return).
+.IP \(bu 2
+Shorten all status message tokens to ~4 characters.
+.RS
+.IP \(bu 2
+In 
+.BR tork-driver (1):
+.RS
+.IP \(bu 2
+\fB\fCreabsorb\fR is now \fB\fCover\fR
+.RE
+.IP \(bu 2
+In 
+.BR tork-engine (1):
+.RS
+.IP \(bu 2
+\fB\fCidle\fR is now \fB\fCdone\fR
+.IP \(bu 2
+\fB\fCpass_now_fail\fR is now \fB\fCfail!\fR
+.IP \(bu 2
+\fB\fCfail_now_pass\fR is now \fB\fCpass!\fR
+.RE
+.IP \(bu 2
+In 
+.BR tork-master (1):
+.RS
+.IP \(bu 2
+\fB\fCabsorb\fR is now \fB\fCboot\fR
+.RE
+.RE
+.IP \(bu 2
+Shorten all commands names down to ~4 characters.
+.RS
+.IP \(bu 2
+In 
+.BR tork (1):
+.RS
+.IP \(bu 2
+the \fB\fCo\fR input command character is now named \fB\fCb\fR
+.RE
+.IP \(bu 2
+In 
+.BR tork-driver (1):
+.RS
+.IP \(bu 2
+the \fB\fCrun_all_test_files\fR command is now named \fB\fCtest!\fR
+.IP \(bu 2
+the \fB\fCover\fR message is now named \fB\fCboot!\fR
+.RE
+.IP \(bu 2
+In 
+.BR tork-engine (1):
+.RS
+.IP \(bu 2
+the \fB\fCreabsorb_overhead\fR command is now named \fB\fCboot!\fR
+.IP \(bu 2
+the \fB\fCrun_test_file\fR command is now named \fB\fCtest\fR
+.IP \(bu 2
+the \fB\fCrun_test_files\fR command is now named \fB\fCtest\fR
+.IP \(bu 2
+the \fB\fCstop_running_test_files\fR command is now named \fB\fCstop\fR
+.IP \(bu 2
+the \fB\fCrerun_passed_test_files\fR command is now named \fB\fCpass!\fR
+.IP \(bu 2
+the \fB\fCrerun_failed_test_files\fR command is now named \fB\fCfail!\fR
+.IP \(bu 2
+the \fB\fClist_failed_test_files\fR command is now named \fB\fCfail?\fR
+.IP \(bu 2
+the \fB\fCover\fR status message is now named \fB\fCboot!\fR
+.RE
+.RE
+.RE
+.SS Minor:
+.RS
+.IP \(bu 2
+.BR tork-engine (1): 
+add \fB\fCtest?\fR and \fB\fCpass?\fR listing commands.
+.IP \(bu 2
+.BR tork (1): 
+emit "tork:" prefix on all messages sent to user.
+.RE
+.SS Other:
+.RS
+.IP \(bu 2
+Upgrade to md2man 4.0 and binman 4.0.
+.RE
 .SH Version 19.11.1 (2014\-10\-24)
 .PP
 This release improves support for RSpec 3 and Rails 4.

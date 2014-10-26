@@ -7,13 +7,75 @@
   <link rel="stylesheet" href="../style.css"/>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
-<body><div class="navbar"><div class="navbar-inner"><span class="brand"><a href="../index.html#man0">man0</a>/VERSION</span></div></div><div class="container-fluid"><h2 id="version-19-11-1-2014-10-24"><a name="version-19-11-1-2014-10-24" href="#version-19-11-1-2014-10-24" class="md2man-permalink" title="permalink"></a>Version 19.11.1 (2014-10-24)</h2><p>This release improves support for RSpec 3 and Rails 4.</p><h3 id="patch"><a name="patch" href="#patch" class="md2man-permalink" title="permalink"></a>Patch:</h3>
+<body><div class="navbar"><div class="navbar-inner"><span class="brand"><a href="../index.html#man0">man0</a>/VERSION</span></div></div><div class="container-fluid"><h2 id="version-20-0-0-2014-10-26"><a name="version-20-0-0-2014-10-26" href="#version-20-0-0-2014-10-26" class="md2man-permalink" title="permalink"></a>Version 20.0.0 (2014-10-26)</h2><h3 id="major"><a name="major" href="#major" class="md2man-permalink" title="permalink"></a>Major:</h3>
+<ul>
+<li><p><a class="md2man-reference" href="../man1/tork-runner.1.html">tork-runner(1)</a>: percentage lied; print counts instead.</p><p>The percentage of completion is not accurate because it only measures
+how many tests that have started running <em>so far</em> have been completed.
+This makes the percentage jump from 100% to lesser values as tests run.</p><p>Also drop the <code>tork-runner:</code> prefix from progress messages and replace
+VT100 escape codes for reprinting in-place with a \r (carriage return).</p></li>
+<li><p>Shorten all status message tokens to ~4 characters.</p>
+<ul>
+<li>In <a class="md2man-reference" href="../man1/tork-driver.1.html">tork-driver(1)</a>:
+
+<ul>
+<li><code>reabsorb</code> is now <code>over</code></li>
+</ul></li>
+<li>In <a class="md2man-reference" href="../man1/tork-engine.1.html">tork-engine(1)</a>:
+
+<ul>
+<li><code>idle</code> is now <code>done</code></li>
+<li><code>pass_now_fail</code> is now <code>fail!</code></li>
+<li><code>fail_now_pass</code> is now <code>pass!</code></li>
+</ul></li>
+<li>In <a class="md2man-reference" href="../man1/tork-master.1.html">tork-master(1)</a>:
+
+<ul>
+<li><code>absorb</code> is now <code>boot</code></li>
+</ul></li>
+</ul></li>
+<li><p>Shorten all commands names down to ~4 characters.</p>
+<ul>
+<li>In <a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a>:
+
+<ul>
+<li>the <code>o</code> input command character is now named <code>b</code></li>
+</ul></li>
+<li>In <a class="md2man-reference" href="../man1/tork-driver.1.html">tork-driver(1)</a>:
+
+<ul>
+<li>the <code>run_all_test_files</code> command is now named <code>test!</code></li>
+<li>the <code>over</code> message is now named <code>boot!</code></li>
+</ul></li>
+<li>In <a class="md2man-reference" href="../man1/tork-engine.1.html">tork-engine(1)</a>:
+
+<ul>
+<li>the <code>reabsorb_overhead</code> command is now named <code>boot!</code></li>
+<li>the <code>run_test_file</code> command is now named <code>test</code></li>
+<li>the <code>run_test_files</code> command is now named <code>test</code></li>
+<li>the <code>stop_running_test_files</code> command is now named <code>stop</code></li>
+<li>the <code>rerun_passed_test_files</code> command is now named <code>pass!</code></li>
+<li>the <code>rerun_failed_test_files</code> command is now named <code>fail!</code></li>
+<li>the <code>list_failed_test_files</code> command is now named <code>fail?</code></li>
+<li>the <code>over</code> status message is now named <code>boot!</code></li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="minor"><a name="minor" href="#minor" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<ul>
+<li><p><a class="md2man-reference" href="../man1/tork-engine.1.html">tork-engine(1)</a>: add <code>test?</code> and <code>pass?</code> listing commands.</p></li>
+<li><p><a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a>: emit &quot;tork:&quot; prefix on all messages sent to user.</p></li>
+</ul>
+<h3 id="other"><a name="other" href="#other" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<ul>
+<li>Upgrade to md2man 4.0 and binman 4.0.</li>
+</ul>
+<h2 id="version-19-11-1-2014-10-24"><a name="version-19-11-1-2014-10-24" href="#version-19-11-1-2014-10-24" class="md2man-permalink" title="permalink"></a>Version 19.11.1 (2014-10-24)</h2><p>This release improves support for RSpec 3 and Rails 4.</p><h3 id="patch"><a name="patch" href="#patch" class="md2man-permalink" title="permalink"></a>Patch:</h3>
 <ul>
 <li><p>GH-61: <code>uninitialized constant RSpec</code> for rspec &gt; 3 (Jonathan Cairns).</p></li>
 <li><p>Fix TypeError in driver when multiple globs are used (Jonathan Cairns).</p></li>
 <li><p>Simple fix for detecting rails 4 apps (Jonathan Cairns).</p></li>
 </ul>
-<h2 id="version-19-10-0-2014-08-06"><a name="version-19-10-0-2014-08-06" href="#version-19-10-0-2014-08-06" class="md2man-permalink" title="permalink"></a>Version 19.10.0 (2014-08-06)</h2><p>This release improves responsiveness and adds a command to list failed files.</p><h3 id="minor"><a name="minor" href="#minor" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-19-10-0-2014-08-06"><a name="version-19-10-0-2014-08-06" href="#version-19-10-0-2014-08-06" class="md2man-permalink" title="permalink"></a>Version 19.10.0 (2014-08-06)</h2><p>This release improves responsiveness and adds a command to list failed files.</p><h3 id="minor-1"><a name="minor-1" href="#minor-1" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p><a class="md2man-reference" href="../man1/tork-engine.1.html">tork-engine(1)</a>: list most recently ran test files in <code>:idle</code> event.  This
 allows <a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a> to summarize a run after tests finish running, as follows:</p><pre><code>tork: 10 tested, 10 passed, 0 failed
@@ -29,11 +91,11 @@ This makes Tork load configuration helpers faster on slow file-systems.</p></li>
 <li><p>Use block-form of Dir.glob() to react more quickly on slow file-systems.
 This makes <a class="md2man-reference" href="../man1/tork-driver.1.html">tork-driver(1)</a>&#39;s <code>run_all_test_files</code> command more responsive.</p></li>
 </ul>
-<h3 id="other"><a name="other" href="#other" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-1"><a name="other-1" href="#other-1" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li>Align error/help message wording with manual pages.</li>
 </ul>
-<h2 id="version-19-9-0-2014-07-17"><a name="version-19-9-0-2014-07-17" href="#version-19-9-0-2014-07-17" class="md2man-permalink" title="permalink"></a>Version 19.9.0 (2014-07-17)</h2><h3 id="minor-1"><a name="minor-1" href="#minor-1" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-19-9-0-2014-07-17"><a name="version-19-9-0-2014-07-17" href="#version-19-9-0-2014-07-17" class="md2man-permalink" title="permalink"></a>Version 19.9.0 (2014-07-17)</h2><h3 id="minor-2"><a name="minor-2" href="#minor-2" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p>Add support for testing outside <code>test/</code> and <code>spec/</code> directories.  This
 change lets you run test files directly from the current working directory
@@ -50,7 +112,7 @@ inspect them quickly to find where errors are arising in their code.</p></li>
 <ul>
 <li>Only 1 worker was being used on a dual-core system.</li>
 </ul>
-<h3 id="other-1"><a name="other-1" href="#other-1" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-2"><a name="other-2" href="#other-2" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a>: use complete sentences in the help message.</li>
 </ul>
@@ -68,12 +130,12 @@ For example, with relative directory traversals and redundant slashes.</p></li>
 killed so it should be safe to delete it and start up a new server.</p></li>
 <li><p>tork/server: ensure that <a class="md2man-reference" href="../man1/tork-remote.1.html">tork-remote(1)</a> gets the same ARGV we did.</p></li>
 </ul>
-<h3 id="other-2"><a name="other-2" href="#other-2" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-3"><a name="other-3" href="#other-3" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>Rename <code>*.md</code> file extension to the full <code>*.markdown</code>.</p></li>
 <li><p>README: link to manuals index; demote package link.</p></li>
 </ul>
-<h2 id="version-19-8-0-2014-06-23"><a name="version-19-8-0-2014-06-23" href="#version-19-8-0-2014-06-23" class="md2man-permalink" title="permalink"></a>Version 19.8.0 (2014-06-23)</h2><h3 id="minor-2"><a name="minor-2" href="#minor-2" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-19-8-0-2014-06-23"><a name="version-19-8-0-2014-06-23" href="#version-19-8-0-2014-06-23" class="md2man-permalink" title="permalink"></a>Version 19.8.0 (2014-06-23)</h2><h3 id="minor-3"><a name="minor-3" href="#minor-3" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p>Add <code>bundler</code> configuration helper to load a bundle into <a class="md2man-reference" href="../man1/tork-master.1.html">tork-master(1)</a>.</p><p>This lets you run Tork inside any application that uses Bundler without
 having to first add Tork to its <code>Gemfile</code> and then <code>bundle install</code> it.
@@ -99,11 +161,11 @@ JSON::ParserError: A JSON text must at least contain two octets!
         from /usr/bin/irb:11:in `&lt;main&gt;&#39;
 </code></pre></li>
 </ul>
-<h3 id="other-3"><a name="other-3" href="#other-3" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-4"><a name="other-4" href="#other-4" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li>Upgrade to md2man 3.0 for improved HTML manuals.</li>
 </ul>
-<h2 id="version-19-7-0-2014-03-04"><a name="version-19-7-0-2014-03-04" href="#version-19-7-0-2014-03-04" class="md2man-permalink" title="permalink"></a>Version 19.7.0 (2014-03-04)</h2><p>This release automatically re-runs failed tests after reabsorbing overhead.</p><h3 id="minor-3"><a name="minor-3" href="#minor-3" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-19-7-0-2014-03-04"><a name="version-19-7-0-2014-03-04" href="#version-19-7-0-2014-03-04" class="md2man-permalink" title="permalink"></a>Version 19.7.0 (2014-03-04)</h2><p>This release automatically re-runs failed tests after reabsorbing overhead.</p><h3 id="minor-4"><a name="minor-4" href="#minor-4" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p>Re-run failed tests after reabsorbing overhead.</p><p>Thanks to Chris Scharf for <a href="https://github.com/sunaku/tork/pull/57">contributing this
 patch</a>.</p></li>
@@ -113,7 +175,7 @@ patch</a>.</p></li>
 <li><p>Rails &lt; 3.1.0 does not have <code>connection_config()</code>.</p></li>
 <li><p><code>schema_cache()</code> is only defined in Rails &gt;= 4.</p></li>
 </ul>
-<h2 id="version-19-6-0-2014-01-02"><a name="version-19-6-0-2014-01-02" href="#version-19-6-0-2014-01-02" class="md2man-permalink" title="permalink"></a>Version 19.6.0 (2014-01-02)</h2><p>This release improves <a class="md2man-reference" href="../man1/tork-runner.1.html">tork-runner(1)</a> responsiveness and fixes <a class="md2man-reference" href="../man1/tork-engine.1.html">tork-engine(1)</a>.</p><h3 id="minor-4"><a name="minor-4" href="#minor-4" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-19-6-0-2014-01-02"><a name="version-19-6-0-2014-01-02" href="#version-19-6-0-2014-01-02" class="md2man-permalink" title="permalink"></a>Version 19.6.0 (2014-01-02)</h2><p>This release improves <a class="md2man-reference" href="../man1/tork-runner.1.html">tork-runner(1)</a> responsiveness and fixes <a class="md2man-reference" href="../man1/tork-engine.1.html">tork-engine(1)</a>.</p><h3 id="minor-5"><a name="minor-5" href="#minor-5" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><a class="md2man-reference" href="../man1/tork-runner.1.html">tork-runner(1)</a> now prints the percentage of completed tests to stderr.</li>
 </ul>
@@ -133,7 +195,7 @@ connection to the test database instead of re-using our in-memory DB.</p><p><a h
 </ul>
 <h2 id="version-19-5-0-2013-11-30"><a name="version-19-5-0-2013-11-30" href="#version-19-5-0-2013-11-30" class="md2man-permalink" title="permalink"></a>Version 19.5.0 (2013-11-30)</h2><p>This release adds a <a class="md2man-reference" href="../man1/tork-runner.1.html">tork-runner(1)</a> program for non-interactive test execution,
 makes connections to tork subprocesses self-healing, eliminates &quot;address
-already in use&quot; errors, and fixes bugs in <a class="md2man-reference" href="../man1/tork-herald.1.html">tork-herald(1)</a> and <a class="md2man-reference" href="../man1/tork-notify.1.html">tork-notify(1)</a>.</p><h3 id="minor-5"><a name="minor-5" href="#minor-5" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+already in use&quot; errors, and fixes bugs in <a class="md2man-reference" href="../man1/tork-herald.1.html">tork-herald(1)</a> and <a class="md2man-reference" href="../man1/tork-notify.1.html">tork-notify(1)</a>.</p><h3 id="minor-6"><a name="minor-6" href="#minor-6" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p>Add <a class="md2man-reference" href="../man1/tork-runner.1.html">tork-runner(1)</a> to run tests once, non-interactively, and then exit.</p><p>You can use <a class="md2man-reference" href="../man1/tork-runner.1.html">tork-runner(1)</a> to run your test suite in one shot and then
 exit with a nonzero status if tests failed, similar to <code>rake test</code>.</p></li>
@@ -178,25 +240,25 @@ tork-driver: /home/skurapati/.rvm/gems/ruby-1.9.3-p448/bin/tork-driver:23:in `&l
 </ul></li>
 <li><p><a class="md2man-reference" href="../man1/tork-herald.1.html">tork-herald(1)</a>: downgrade to listen 1.x gem to maintain Ruby 1.8 support.</p></li>
 </ul>
-<h3 id="other-4"><a name="other-4" href="#other-4" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-5"><a name="other-5" href="#other-5" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>GH-56: specify license in gemspec for rubygems.org.</p></li>
 <li><p>Document <a class="md2man-reference">sh(1)</a> word splitting in manual pages of all tork servers.</p></li>
 <li><p>README: use <code>ps uf</code> to visualize process hierarchy.</p></li>
 </ul>
-<h2 id="version-19-4-0-2013-11-25"><a name="version-19-4-0-2013-11-25" href="#version-19-4-0-2013-11-25" class="md2man-permalink" title="permalink"></a>Version 19.4.0 (2013-11-25)</h2><h3 id="minor-6"><a name="minor-6" href="#minor-6" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-19-4-0-2013-11-25"><a name="version-19-4-0-2013-11-25" href="#version-19-4-0-2013-11-25" class="md2man-permalink" title="permalink"></a>Version 19.4.0 (2013-11-25)</h2><h3 id="minor-7"><a name="minor-7" href="#minor-7" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li>The &quot;rails&quot; configuration helper now automatically sets up your test
 database for Tork&#39;s parallel testing system if your test database is
 SQLite3 and you are using Rails 3 or newer.</li>
 </ul>
-<h3 id="other-5"><a name="other-5" href="#other-5" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-6"><a name="other-6" href="#other-6" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>rails: remove unused capture of rescued exception</p></li>
 <li><p>coverage: document the use of Ruby 1.9 hash syntax</p></li>
 <li><p>rename <code>*.markdown</code> file extension to shorter <code>*.md</code></p></li>
 </ul>
-<h2 id="version-19-3-2-2013-10-29"><a name="version-19-3-2-2013-10-29" href="#version-19-3-2-2013-10-29" class="md2man-permalink" title="permalink"></a>Version 19.3.2 (2013-10-29)</h2><h3 id="other-6"><a name="other-6" href="#other-6" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h2 id="version-19-3-2-2013-10-29"><a name="version-19-3-2-2013-10-29" href="#version-19-3-2-2013-10-29" class="md2man-permalink" title="permalink"></a>Version 19.3.2 (2013-10-29)</h2><h3 id="other-7"><a name="other-7" href="#other-7" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>GH-55: upgrade listen &amp; rake gem dependencies.</p><p>Thanks to Matthew Albright for reporting this issue in GH-55:
 <a href="https://github.com/sunaku/tork/issues/55">https://github.com/sunaku/tork/issues/55</a></p></li>
@@ -206,17 +268,17 @@ SQLite3 and you are using Rails 3 or newer.</li>
 <li><p>server: rescue from failed writes to asynchronously closed clients.</p><p>Thanks to Jonathan Cairns for reporting and fixing this bug in GH-53:
 <a href="https://github.com/sunaku/tork/issues/53">https://github.com/sunaku/tork/issues/53</a></p></li>
 </ul>
-<h3 id="other-7"><a name="other-7" href="#other-7" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-8"><a name="other-8" href="#other-8" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li>Upgrade to md2man 2.0.</li>
 </ul>
-<h2 id="version-19-3-0-2013-05-05"><a name="version-19-3-0-2013-05-05" href="#version-19-3-0-2013-05-05" class="md2man-permalink" title="permalink"></a>Version 19.3.0 (2013-05-05)</h2><h3 id="minor-7"><a name="minor-7" href="#minor-7" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-19-3-0-2013-05-05"><a name="version-19-3-0-2013-05-05" href="#version-19-3-0-2013-05-05" class="md2man-permalink" title="permalink"></a>Version 19.3.0 (2013-05-05)</h2><h3 id="minor-8"><a name="minor-8" href="#minor-8" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p><a class="md2man-reference" href="../man1/tork-engine.1.html">tork-engine(1)</a> now emits <code>[&quot;idle&quot;]</code> messages whenever all tests
 have finished running and no more tests are queued for running.</p><p>Thanks to Jonathan Cairns for requesting this feature in GH-50:
 <a href="https://github.com/sunaku/tork/issues/50">https://github.com/sunaku/tork/issues/50</a></p></li>
 </ul>
-<h3 id="other-8"><a name="other-8" href="#other-8" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-9"><a name="other-9" href="#other-9" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>add man/man0 subdir containing README and VERSION</p></li>
 <li><p>README: use manpage xrefs for linking in HTML mans</p></li>
@@ -226,7 +288,7 @@ sometimes, intermittently, when test execution overhead is being reabsorbed.</p>
 <ul>
 <li>server: retry until the socket opens successfully</li>
 </ul>
-<h3 id="other-9"><a name="other-9" href="#other-9" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-10"><a name="other-10" href="#other-10" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li>include md2man rake tasks in developer&#39;s rakefile</li>
 </ul>
@@ -238,7 +300,7 @@ Escalante for reminding me to fix this issue.</p></li>
 Thanks to Ryan Ahearn for fixing this issue and to Jonathan Cairns for
 reporting it.</p></li>
 </ul>
-<h2 id="version-19-2-0-2012-12-30"><a name="version-19-2-0-2012-12-30" href="#version-19-2-0-2012-12-30" class="md2man-permalink" title="permalink"></a>Version 19.2.0 (2012-12-30)</h2><h3 id="minor-8"><a name="minor-8" href="#minor-8" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-19-2-0-2012-12-30"><a name="version-19-2-0-2012-12-30" href="#version-19-2-0-2012-12-30" class="md2man-permalink" title="permalink"></a>Version 19.2.0 (2012-12-30)</h2><h3 id="minor-9"><a name="minor-9" href="#minor-9" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li>Add &quot;devise&quot; configuration helper that adds support for testing Rails
 applications that use the Devise authentication framework.  Thanks to Ryan
@@ -251,7 +313,7 @@ Ahearn for reporting this issue and helping debug it, and to Thibaud
 Guillaume-Gentil for fixing this issue upstream in the <em>listen</em> library.</p></li>
 <li><p>Fix <code>undefined method &#39;path&#39; for nil</code> error on socket file removal.</p></li>
 </ul>
-<h2 id="version-19-1-0-2012-12-12"><a name="version-19-1-0-2012-12-12" href="#version-19-1-0-2012-12-12" class="md2man-permalink" title="permalink"></a>Version 19.1.0 (2012-12-12)</h2><h3 id="minor-9"><a name="minor-9" href="#minor-9" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-19-1-0-2012-12-12"><a name="version-19-1-0-2012-12-12" href="#version-19-1-0-2012-12-12" class="md2man-permalink" title="permalink"></a>Version 19.1.0 (2012-12-12)</h2><h3 id="minor-10"><a name="minor-10" href="#minor-10" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li>tork-driver: don&#39;t run overhead files as test files</li>
 </ul>
@@ -266,7 +328,7 @@ configuration helper.  Thanks to Ryan Ahearn for this contribution.</p></li>
 <ul>
 <li><p>Monkeypatch <code>at_exit()</code> to fix RSpec and MiniTest:</p><p><a href="https://github.com/rspec/rspec-core/pull/720">https://github.com/rspec/rspec-core/pull/720</a></p><p><a href="https://github.com/seattlerb/minitest/pull/183">https://github.com/seattlerb/minitest/pull/183</a></p></li>
 </ul>
-<h3 id="other-10"><a name="other-10" href="#other-10" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-11"><a name="other-11" href="#other-11" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>README: document RSpec 2.9.0+ autorun skipping bug</p></li>
 <li><p>README: MiniTest 1.3.2+ also has autorun skip bug</p></li>
@@ -279,12 +341,12 @@ Do you know what happens when a test/ is run by RSpec or vice versa? :-)</p><p>T
 their spec/spec_helper.rb file because they use the <a class="md2man-reference">rspec(1)</a> executable
 to run their tests.  This commit makes things Just Work for them again.</p></li>
 </ul>
-<h3 id="other-11"><a name="other-11" href="#other-11" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-12"><a name="other-12" href="#other-12" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>test whether input is JSON by actually parsing it</p></li>
 <li><p>server: use Set instead of Array for faster lookup</p></li>
 </ul>
-<h2 id="version-19-0-0-2012-10-17"><a name="version-19-0-0-2012-10-17" href="#version-19-0-0-2012-10-17" class="md2man-permalink" title="permalink"></a>Version 19.0.0 (2012-10-17)</h2><h3 id="major"><a name="major" href="#major" class="md2man-permalink" title="permalink"></a>Major:</h3>
+<h2 id="version-19-0-0-2012-10-17"><a name="version-19-0-0-2012-10-17" href="#version-19-0-0-2012-10-17" class="md2man-permalink" title="permalink"></a>Version 19.0.0 (2012-10-17)</h2><h3 id="major-1"><a name="major-1" href="#major-1" class="md2man-permalink" title="permalink"></a>Major:</h3>
 <ul>
 <li><p>The <code>.tork.rb</code> configuration file has been replaced by the <code>.tork/</code>
 directory, which contains specially-named Ruby scripts.  Refer to the
@@ -307,7 +369,7 @@ must specify load paths and overhead files in the <code>.tork/master.rb</code> f
 <li><p>The <code>tork/client</code> library has been removed.  The threaded IO and popen()
 wrappers that it provided have been replaced by the powerful IO.select().</p></li>
 </ul>
-<h3 id="minor-10"><a name="minor-10" href="#minor-10" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h3 id="minor-11"><a name="minor-11" href="#minor-11" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p><a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a>: allow user to specify arguments after command key</p></li>
 <li><p><a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a>: add &#39;k&#39; to stop all currently running tests with SIGKILL</p></li>
@@ -323,14 +385,14 @@ events to notify you about changes in a test file&#39;s pass/fail status.</p></l
 <ul>
 <li><a class="md2man-reference" href="../man1/tork-master.1.html">tork-master(1)</a>: stop workers with SIGKILL when quitting</li>
 </ul>
-<h3 id="other-12"><a name="other-12" href="#other-12" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-13"><a name="other-13" href="#other-13" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p><a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a>: document parameters for <code>t</code> and <code>s</code> commands</p></li>
 <li><p>README: add tip about rlwrap for better interactive</p></li>
 <li><p>README: simplify watch command using pgrep &amp; xargs</p></li>
 <li><p>README: use standard bundle exec; no <code>--binstubs</code></p></li>
 </ul>
-<h2 id="version-18-2-4-2012-10-10"><a name="version-18-2-4-2012-10-10" href="#version-18-2-4-2012-10-10" class="md2man-permalink" title="permalink"></a>Version 18.2.4 (2012-10-10)</h2><h3 id="other-13"><a name="other-13" href="#other-13" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h2 id="version-18-2-4-2012-10-10"><a name="version-18-2-4-2012-10-10" href="#version-18-2-4-2012-10-10" class="md2man-permalink" title="permalink"></a>Version 18.2.4 (2012-10-10)</h2><h3 id="other-14"><a name="other-14" href="#other-14" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li>GH-39: upgrade listen gem version to fix a bug in OSX.
 Thanks to Adam Grant for reporting this issue.</li>
@@ -342,7 +404,7 @@ Thanks to Ohno Shin&#39;ichi for reporting this issue and contributing a
 preliminary fix.</p></li>
 <li><p>Add resilience against failed command dispatch in <code>Tork::Server#loop()</code>.</p></li>
 </ul>
-<h3 id="other-14"><a name="other-14" href="#other-14" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-15"><a name="other-15" href="#other-15" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>It&#39;s not worth rescuing Interrupt only to exit silently.
 Let the user see stack traces when they press Control-C.</p></li>
@@ -363,12 +425,12 @@ files in the waiting set can NEVER be run again!</p></li>
 <li>GH-37: switch from Guard::Listener to Listen gem.
 Thanks to Jesse Cooke for reporting this issue.</li>
 </ul>
-<h3 id="other-15"><a name="other-15" href="#other-15" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-16"><a name="other-16" href="#other-16" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>gemspec: need to provide .0 suffix for ~&gt; operator.</p></li>
 <li><p>gemspec: LICENSE file contains UTF-8 author names.</p></li>
 </ul>
-<h2 id="version-18-2-0-2012-03-27"><a name="version-18-2-0-2012-03-27" href="#version-18-2-0-2012-03-27" class="md2man-permalink" title="permalink"></a>Version 18.2.0 (2012-03-27)</h2><h3 id="minor-11"><a name="minor-11" href="#minor-11" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-18-2-0-2012-03-27"><a name="version-18-2-0-2012-03-27" href="#version-18-2-0-2012-03-27" class="md2man-permalink" title="permalink"></a>Version 18.2.0 (2012-03-27)</h2><h3 id="minor-12"><a name="minor-12" href="#minor-12" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li>Emit warnings when commands cannot be performed.  This improves the user
 experience by giving them immediate feedback.  For example, if you issue
@@ -384,7 +446,7 @@ worker process.  Thanks to Bjørn Trondsen (@Sharagoz) for reporting this
 issue and verifying the fix.</p></li>
 <li><p>README: Recommend a newer fork of the &quot;memory<em>test</em>fix&quot; Rails plugin.</p></li>
 </ul>
-<h2 id="version-18-1-0-2012-02-26"><a name="version-18-1-0-2012-02-26" href="#version-18-1-0-2012-02-26" class="md2man-permalink" title="permalink"></a>Version 18.1.0 (2012-02-26)</h2><h3 id="minor-12"><a name="minor-12" href="#minor-12" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-18-1-0-2012-02-26"><a name="version-18-1-0-2012-02-26" href="#version-18-1-0-2012-02-26" class="md2man-permalink" title="permalink"></a>Version 18.1.0 (2012-02-26)</h2><h3 id="minor-13"><a name="minor-13" href="#minor-13" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p>Add <code>tork/config/coverage</code> configuration helper for Ruby 1.9, which prints
 a coverage report at the end of your log file in YAML format.  The report
@@ -416,7 +478,7 @@ by RSpec&#39;s <code>Kernel#at_exit</code> handler to be zero, thereby
 falsely indicating that a spec had passed.  <a href="https://github.com/rspec/rspec-core/pull/569/files">This patch</a> fixes the
 problem.  Thanks to Gumaro Melendez for reporting this issue.</li>
 </ul>
-<h3 id="major-1"><a name="major-1" href="#major-1" class="md2man-permalink" title="permalink"></a>Major:</h3>
+<h3 id="major-2"><a name="major-2" href="#major-2" class="md2man-permalink" title="permalink"></a>Major:</h3>
 <ul>
 <li><p>Dropped first parameter to <code>Tork::Config::test_file_globbers</code>.</p></li>
 <li><p>GH-31: tork-master now emits separate exit code and info.
@@ -424,12 +486,12 @@ Update your <code>Tork::Config::test_event_hooks</code> accordingly.</p></li>
 <li><p>tork/server: switch from modules to class inheritance.</p></li>
 <li><p>tork/config: switch to Struct to prevent misspellings.</p></li>
 </ul>
-<h3 id="minor-13"><a name="minor-13" href="#minor-13" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h3 id="minor-14"><a name="minor-14" href="#minor-14" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p>tork-driver now recursively expands dependent test files while globbing.</p></li>
 <li><p>Extracted bookkeeping stuff from tork-driver into tork-engine component.</p></li>
 </ul>
-<h3 id="other-16"><a name="other-16" href="#other-16" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-17"><a name="other-17" href="#other-17" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>tork/config: do not reabsorb when .tork.rb
 changes.  Since the configuration is loaded in
@@ -441,7 +503,7 @@ restart Tork if you change your configuration.</p></li>
 <li><p>GH-29: bump guard version requirement to v1 series.</p></li>
 <li><p>Improve documentation; revise markdown; clean up.</p></li>
 </ul>
-<h2 id="version-17-1-0-2012-01-30"><a name="version-17-1-0-2012-01-30" href="#version-17-1-0-2012-01-30" class="md2man-permalink" title="permalink"></a>Version 17.1.0 (2012-01-30)</h2><h3 id="minor-14"><a name="minor-14" href="#minor-14" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-17-1-0-2012-01-30"><a name="version-17-1-0-2012-01-30" href="#version-17-1-0-2012-01-30" class="md2man-permalink" title="permalink"></a>Version 17.1.0 (2012-01-30)</h2><h3 id="minor-15"><a name="minor-15" href="#minor-15" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p>Added <code>Tork::Config.test_event_hooks</code> configuration option.</p></li>
 <li><p>Added <code>tork/config/notify</code> configuration helper for receiving
@@ -462,12 +524,12 @@ multiple globs in an array, in addition to just a single glob or <code>nil</code
 <li><p>tork/config/cucumber: only set ARGV for <code>*.feature</code> test files.</p></li>
 <li><p>Tork::Client::Transceiver needs to stop both TX &amp; RX loops.</p></li>
 </ul>
-<h3 id="other-17"><a name="other-17" href="#other-17" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-18"><a name="other-18" href="#other-18" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>tork/driver: store test file lists in Set, not Array.</p></li>
 <li><p>HISTORY: use single-word change-set descriptions.</p></li>
 </ul>
-<h2 id="version-17-0-0-2012-01-27"><a name="version-17-0-0-2012-01-27" href="#version-17-0-0-2012-01-27" class="md2man-permalink" title="permalink"></a>Version 17.0.0 (2012-01-27)</h2><h3 id="major-2"><a name="major-2" href="#major-2" class="md2man-permalink" title="permalink"></a>Major:</h3>
+<h2 id="version-17-0-0-2012-01-27"><a name="version-17-0-0-2012-01-27" href="#version-17-0-0-2012-01-27" class="md2man-permalink" title="permalink"></a>Version 17.0.0 (2012-01-27)</h2><h3 id="major-3"><a name="major-3" href="#major-3" class="md2man-permalink" title="permalink"></a>Major:</h3>
 <ul>
 <li><p><a class="md2man-reference" href="../man1/tork-herald.1.html">tork-herald(1)</a> now emits batches of single-line JSON arrays instead of
 printing one (raw) path per line.  This makes IPC uniform across Tork.</p></li>
@@ -479,7 +541,7 @@ better reflect the order of items in <a class="md2man-reference" href="../man1/t
 <li>The new order is:  test<em>file, line</em>numbers, log<em>file, worker</em>number.</li>
 </ul></li>
 </ul>
-<h3 id="minor-15"><a name="minor-15" href="#minor-15" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h3 id="minor-16"><a name="minor-16" href="#minor-16" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p>GH-24: add <code>tork/config/dotlog</code> configuration helper to &quot;hide&quot; log files.
 (Nicolas Fouché)</p></li>
@@ -488,7 +550,7 @@ better reflect the order of items in <a class="md2man-reference" href="../man1/t
 <li><p><a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a> now strips all whitespace from your input, in case you pressed
 spacebar or tab a few times, by accident, before entering your command.</p></li>
 </ul>
-<h3 id="other-18"><a name="other-18" href="#other-18" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-19"><a name="other-19" href="#other-19" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>tork/client: Replace write lock with queue to support SIGCHLD handler.</p><p>The SIGCHLD handler in <a class="md2man-reference" href="../man1/tork-master.1.html">tork-master(1)</a> can be triggered at any time, even
 in the middle of writing to the standard output stream!  Locking access
@@ -502,21 +564,21 @@ responsibility of (and access to) continually writing those outgoing
 items to the output stream.</p></li>
 <li><p>README: revise instructions, reorganize document, and other improvements.</p></li>
 </ul>
-<h2 id="version-16-0-0-2012-01-25"><a name="version-16-0-0-2012-01-25" href="#version-16-0-0-2012-01-25" class="md2man-permalink" title="permalink"></a>Version 16.0.0 (2012-01-25)</h2><h3 id="major-3"><a name="major-3" href="#major-3" class="md2man-permalink" title="permalink"></a>Major:</h3>
+<h2 id="version-16-0-0-2012-01-25"><a name="version-16-0-0-2012-01-25" href="#version-16-0-0-2012-01-25" class="md2man-permalink" title="permalink"></a>Version 16.0.0 (2012-01-25)</h2><h3 id="major-4"><a name="major-4" href="#major-4" class="md2man-permalink" title="permalink"></a>Major:</h3>
 <ul>
 <li><p>Drop the <code>Tork::Config.test_name_extractor</code> configuration option.</p></li>
 <li><p>Pass line numbers instead of test names to before/after fork hooks.</p></li>
 <li><p>Pass $~ (MatchData) to <code>Tork::Config::test_file_globbers</code> functions.</p></li>
 </ul>
-<h3 id="minor-16"><a name="minor-16" href="#minor-16" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h3 id="minor-17"><a name="minor-17" href="#minor-17" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li>tork/config/cucumber: only run changed scenarios in changed features.</li>
 </ul>
-<h3 id="other-19"><a name="other-19" href="#other-19" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-20"><a name="other-20" href="#other-20" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li>README: update instructions on running Tork directly from Git clone.</li>
 </ul>
-<h2 id="version-15-1-0-2012-01-25"><a name="version-15-1-0-2012-01-25" href="#version-15-1-0-2012-01-25" class="md2man-permalink" title="permalink"></a>Version 15.1.0 (2012-01-25)</h2><h3 id="minor-17"><a name="minor-17" href="#minor-17" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-15-1-0-2012-01-25"><a name="version-15-1-0-2012-01-25" href="#version-15-1-0-2012-01-25" class="md2man-permalink" title="permalink"></a>Version 15.1.0 (2012-01-25)</h2><h3 id="minor-18"><a name="minor-18" href="#minor-18" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li>GH-19: add <code>tork cucumber</code> for running cucumber features.</li>
 </ul>
@@ -536,7 +598,7 @@ Also added forgotten Luke Wendling to the list.</p></li>
 <li><p>GH-21: Ruby 1.9 class_eval() is smarter than 1.8.</p></li>
 <li><p>GH-20: forgot <code>require &#39;thread&#39;</code> for Mutex class.  (Jesse Cooke)</p></li>
 </ul>
-<h3 id="other-20"><a name="other-20" href="#other-20" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-21"><a name="other-21" href="#other-21" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p><a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a>: fix shadowed variable names.  (Jose Pablo Barrantes)</p></li>
 <li><p>GH-22: fix command to build &amp; install gem from source.</p></li>
@@ -546,7 +608,7 @@ Also added forgotten Luke Wendling to the list.</p></li>
 <li><p>README: missed a testr =&gt; tork rename in watch cmd.</p></li>
 <li><p>README: add tip about Guard&#39;s FS watching backends.</p></li>
 </ul>
-<h2 id="version-15-0-0-2012-01-23"><a name="version-15-0-0-2012-01-23" href="#version-15-0-0-2012-01-23" class="md2man-permalink" title="permalink"></a>Version 15.0.0 (2012-01-23)</h2><h3 id="major-4"><a name="major-4" href="#major-4" class="md2man-permalink" title="permalink"></a>Major:</h3>
+<h2 id="version-15-0-0-2012-01-23"><a name="version-15-0-0-2012-01-23" href="#version-15-0-0-2012-01-23" class="md2man-permalink" title="permalink"></a>Version 15.0.0 (2012-01-23)</h2><h3 id="major-5"><a name="major-5" href="#major-5" class="md2man-permalink" title="permalink"></a>Major:</h3>
 <ul>
 <li><p>This project has been renamed from TestR to Tork (test with fork) in order
 to better compete with rival projects, namely Spork! &gt;:-)  Credit goes to
@@ -554,7 +616,7 @@ Brian D. Burns for thinking of this most succinct &amp; awesome project name!
 He also created the snazzy ASCII-art logo featured in the project README.</p></li>
 <li><p><a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a>: rename <code>r</code> command, which runs all tests, to <code>t</code>, for <em>t</em>ork.</p></li>
 </ul>
-<h2 id="version-14-3-0-2012-01-20"><a name="version-14-3-0-2012-01-20" href="#version-14-3-0-2012-01-20" class="md2man-permalink" title="permalink"></a>Version 14.3.0 (2012-01-20)</h2><h3 id="minor-18"><a name="minor-18" href="#minor-18" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-14-3-0-2012-01-20"><a name="version-14-3-0-2012-01-20" href="#version-14-3-0-2012-01-20" class="md2man-permalink" title="permalink"></a>Version 14.3.0 (2012-01-20)</h2><h3 id="minor-19"><a name="minor-19" href="#minor-19" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p><a class="md2man-reference">testr(1)</a>: notify user while dispatching their commands. This is especially
 useful when the &quot;rerun<em>passed</em>test_files&quot; command has been dispatched but
@@ -566,7 +628,7 @@ PGError: connection not open
 <p>Thanks to Spencer Steffen for <a href="https://github.com/sunaku/tork/issues/14#issuecomment-3539470">contributing this solution</a>.</p></li>
 <li><p><a class="md2man-reference">testr-driver(1)</a>: document the &quot;over&quot; status message in manual page.</p></li>
 </ul>
-<h3 id="other-21"><a name="other-21" href="#other-21" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-22"><a name="other-22" href="#other-22" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p><a class="md2man-reference">testr-driver(1)</a>: keep same herald; only replace master.</p></li>
 <li><p><a class="md2man-reference">testr(1)</a>: shorten code for loop break on quit command.</p></li>
@@ -575,7 +637,7 @@ PGError: connection not open
 <li><p>Explain <code>$0</code> override at the start of bin/ scripts.</p></li>
 <li><p>LICENSE: credit our most recent contributors.</p></li>
 </ul>
-<h2 id="version-14-2-0-2012-01-16"><a name="version-14-2-0-2012-01-16" href="#version-14-2-0-2012-01-16" class="md2man-permalink" title="permalink"></a>Version 14.2.0 (2012-01-16)</h2><h3 id="minor-19"><a name="minor-19" href="#minor-19" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-14-2-0-2012-01-16"><a name="version-14-2-0-2012-01-16" href="#version-14-2-0-2012-01-16" class="md2man-permalink" title="permalink"></a>Version 14.2.0 (2012-01-16)</h2><h3 id="minor-20"><a name="minor-20" href="#minor-20" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p>Add ability to run <code>testr rails</code> without needing a <code>.testr.rb</code> file.</p></li>
 <li><p><a class="md2man-reference">testr(1)</a> no longer shows command menu at startup.  Press ENTER to see it.</p></li>
@@ -590,16 +652,16 @@ PGError: connection not open
 <li>Add support Guard v0.9.0 and newer in <code>testr-herald</code>.  (Jose Pablo
 Barrantes)</li>
 </ul>
-<h3 id="other-22"><a name="other-22" href="#other-22" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-23"><a name="other-23" href="#other-23" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li>Tighten version constraints for gem dependencies to avoid future
 breakages.</li>
 </ul>
-<h2 id="version-14-1-2-2012-01-09"><a name="version-14-1-2-2012-01-09" href="#version-14-1-2-2012-01-09" class="md2man-permalink" title="permalink"></a>Version 14.1.2 (2012-01-09)</h2><h3 id="minor-20"><a name="minor-20" href="#minor-20" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-14-1-2-2012-01-09"><a name="version-14-1-2-2012-01-09" href="#version-14-1-2-2012-01-09" class="md2man-permalink" title="permalink"></a>Version 14.1.2 (2012-01-09)</h2><h3 id="minor-21"><a name="minor-21" href="#minor-21" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li>Don&#39;t consider partial test file pass as full pass.</li>
 </ul>
-<h3 id="other-23"><a name="other-23" href="#other-23" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-24"><a name="other-24" href="#other-24" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li>Upgrade to binman 3 for better bundler support.</li>
 </ul>
@@ -612,7 +674,7 @@ see <a href="https://github.com/rspec/rspec-core/issues/445">https://github.com/
 and <a href="https://github.com/dchelimsky/rspec/issues/44">https://github.com/dchelimsky/rspec/issues/44</a></p></li>
 <li><p>Ruby 187 does not have Symbol#upcase() method.</p></li>
 </ul>
-<h3 id="other-24"><a name="other-24" href="#other-24" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-25"><a name="other-25" href="#other-25" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>README: add another SQLite3 error to known issues.
 Thanks to Luke Wendling for contributing this patch.</p></li>
@@ -622,7 +684,7 @@ Thanks to Luke Wendling for contributing this patch.</p></li>
 <li><p>Better variable naming for self-documentation.</p></li>
 <li><p>Upgrade to binman 2.0.0 for UNIX man pages.</p></li>
 </ul>
-<h2 id="version-14-1-0-2011-11-03"><a name="version-14-1-0-2011-11-03" href="#version-14-1-0-2011-11-03" class="md2man-permalink" title="permalink"></a>Version 14.1.0 (2011-11-03)</h2><h3 id="minor-21"><a name="minor-21" href="#minor-21" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-14-1-0-2011-11-03"><a name="version-14-1-0-2011-11-03" href="#version-14-1-0-2011-11-03" class="md2man-permalink" title="permalink"></a>Version 14.1.0 (2011-11-03)</h2><h3 id="minor-22"><a name="minor-22" href="#minor-22" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p>Make servers responsive to quit request (SIGTERM) from upstream.</p><p>This change lets the user quit <a class="md2man-reference">testr-master(1)</a> while it is loading
 test execution overhead (which can be a lengthy, blocking operation).</p><p>By sending a signal to the server, we don&#39;t have to wait for it to
@@ -636,7 +698,7 @@ need to create <em>your own custom user interface to TestR</em> if you wish! :-)
 <ul>
 <li>SIGCHLD does not awaken main thread in Ruby 1.9.3p0.</li>
 </ul>
-<h3 id="other-25"><a name="other-25" href="#other-25" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-26"><a name="other-26" href="#other-26" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>Simplify <a class="md2man-reference">watch(1)</a> <a class="md2man-reference">ps(1)</a> process title monitoring.</p></li>
 <li><p>Testr: tell user to press ENTER after command key.</p></li>
@@ -654,7 +716,7 @@ failed, it was (incorrectly) always considered failed, even if it passed
 later on.</p></li>
 <li><p>Do not requeue test files that are waiting to run.</p></li>
 </ul>
-<h3 id="other-26"><a name="other-26" href="#other-26" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-27"><a name="other-27" href="#other-27" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li>Rename <code>*.md</code> files to <code>*.markdown</code> to avoid ambiguity.</li>
 </ul>
@@ -665,11 +727,11 @@ blind.</p></li>
 <li><p>Incorrect test name regexp was passed down to Test::Unit.  This broke
 focused testing, where only changed tests in a changed test file are run.</p></li>
 </ul>
-<h3 id="other-27"><a name="other-27" href="#other-27" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-28"><a name="other-28" href="#other-28" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li>Make <code>testr-master</code> wait for killed worker processes before exiting.</li>
 </ul>
-<h2 id="version-14-0-0-2011-10-09"><a name="version-14-0-0-2011-10-09" href="#version-14-0-0-2011-10-09" class="md2man-permalink" title="permalink"></a>Version 14.0.0 (2011-10-09)</h2><h3 id="major-5"><a name="major-5" href="#major-5" class="md2man-permalink" title="permalink"></a>Major:</h3>
+<h2 id="version-14-0-0-2011-10-09"><a name="version-14-0-0-2011-10-09" href="#version-14-0-0-2011-10-09" class="md2man-permalink" title="permalink"></a>Version 14.0.0 (2011-10-09)</h2><h3 id="major-6"><a name="major-6" href="#major-6" class="md2man-permalink" title="permalink"></a>Major:</h3>
 <ul>
 <li><p>Renamed this project and its resources from test-loop to TestR.</p></li>
 <li><p>Renamed the <code>reabsorb_file_globs</code> configuration parameter to
@@ -686,7 +748,7 @@ focused testing, where only changed tests in a changed test file are run.</p></l
 parameters.</p></li>
 <li><p>Removed the <code>test/loop/notify</code> and <code>test-loop/coco</code> libraries.</p></li>
 </ul>
-<h3 id="minor-22"><a name="minor-22" href="#minor-22" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h3 id="minor-23"><a name="minor-23" href="#minor-23" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p>The file system is no longer polled to detect modified files.  Instead, it
 is monitored for file modification events in a portable and efficient
@@ -697,24 +759,24 @@ manner using the <a href="https://github.com/guard/guard">Guard</a> library.</p>
 <code>before_fork_hooks</code> configuration parameters.</p></li>
 <li><p>Added ability to re-run passed and failed tests in the <code>testr</code> script.</p></li>
 </ul>
-<h3 id="other-28"><a name="other-28" href="#other-28" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-29"><a name="other-29" href="#other-29" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>The monolithic <code>test-loop</code> script has been replaced by several smaller
 ones that communicate with each other using single-line JSON messages via
 their standard input &amp; output streams.  See &quot;Architecture&quot; in the README.</p></li>
 <li><p>Now using Bundler to manage development dependencies and gem packaging.</p></li>
 </ul>
-<h2 id="version-13-0-1-2011-09-21"><a name="version-13-0-1-2011-09-21" href="#version-13-0-1-2011-09-21" class="md2man-permalink" title="permalink"></a>Version 13.0.1 (2011-09-21)</h2><h3 id="other-29"><a name="other-29" href="#other-29" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h2 id="version-13-0-1-2011-09-21"><a name="version-13-0-1-2011-09-21" href="#version-13-0-1-2011-09-21" class="md2man-permalink" title="permalink"></a>Version 13.0.1 (2011-09-21)</h2><h3 id="other-30"><a name="other-30" href="#other-30" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>Forgot to include <code>test/loop/coco</code> preset in gem package.</p></li>
 <li><p>Forgot to mention <code>test/loop/parallel_tests</code> preset in README.</p></li>
 </ul>
-<h2 id="version-13-0-0-2011-08-24"><a name="version-13-0-0-2011-08-24" href="#version-13-0-0-2011-08-24" class="md2man-permalink" title="permalink"></a>Version 13.0.0 (2011-08-24)</h2><h3 id="major-6"><a name="major-6" href="#major-6" class="md2man-permalink" title="permalink"></a>Major:</h3>
+<h2 id="version-13-0-0-2011-08-24"><a name="version-13-0-0-2011-08-24" href="#version-13-0-0-2011-08-24" class="md2man-permalink" title="permalink"></a>Version 13.0.0 (2011-08-24)</h2><h3 id="major-7"><a name="major-7" href="#major-7" class="md2man-permalink" title="permalink"></a>Major:</h3>
 <ul>
 <li>Pass worker sequence number as the last argument to lambda functions in
 <code>Test::Loop.before_each_test</code> and <code>Test::Loop.after_each_test</code> arrays.</li>
 </ul>
-<h3 id="minor-23"><a name="minor-23" href="#minor-23" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h3 id="minor-24"><a name="minor-24" href="#minor-24" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p>In the <code>test/loop/rails</code> configuration preset:</p>
 <ul>
@@ -728,7 +790,7 @@ gem.  (Corné Verbruggen)</p></li>
 processes like connecting to separate databases better.  (Corné
 Verbruggen)</p></li>
 </ul>
-<h3 id="other-30"><a name="other-30" href="#other-30" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-31"><a name="other-31" href="#other-31" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>README: move configuration presets above options.</p></li>
 <li><p>Eliminate 1 SLOC: .rb extension used in file glob.</p></li>
@@ -739,11 +801,11 @@ Verbruggen)</p></li>
 <ul>
 <li>Binary data could not be stored in environment variable values.</li>
 </ul>
-<h3 id="other-31"><a name="other-31" href="#other-31" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-32"><a name="other-32" href="#other-32" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li>Forgot to add Jacob Helwig to the gemspec&#39;s authors list.</li>
 </ul>
-<h2 id="version-12-3-0-2011-07-19"><a name="version-12-3-0-2011-07-19" href="#version-12-3-0-2011-07-19" class="md2man-permalink" title="permalink"></a>Version 12.3.0 (2011-07-19)</h2><h3 id="minor-24"><a name="minor-24" href="#minor-24" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-12-3-0-2011-07-19"><a name="version-12-3-0-2011-07-19" href="#version-12-3-0-2011-07-19" class="md2man-permalink" title="permalink"></a>Version 12.3.0 (2011-07-19)</h2><h3 id="minor-25"><a name="minor-25" href="#minor-25" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p>Add <code>Test::Loop::max_concurrent_tests</code> configuration parameter to limit
 the number of test files run concurrently (default 4).  Otherwise, with
@@ -751,7 +813,7 @@ large test suites, we could end up swamping the machine running the tests
 by forking hundreds of test files at once.  (Jacob Helwig)</p></li>
 <li><p>Rails: add matcher for <code>test/factories/*_factory.rb</code>.</p></li>
 </ul>
-<h3 id="other-32"><a name="other-32" href="#other-32" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-33"><a name="other-33" href="#other-33" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>ENV returns a Hash with duplicate/frozen keys/values.  (Brian D. Burns)</p></li>
 <li><p>Use Marshal to propagate resume_files to reabsorb.</p></li>
@@ -765,7 +827,7 @@ requested by Juan G. Hurtado..</p></li>
 <li><p>Add <code>test/loop/coco</code> preset for integrating the <a href="http://lkdjiin.github.com/coco/">Coco code coverage
 library</a>.</p></li>
 </ul>
-<h2 id="version-12-1-0-2011-04-29"><a name="version-12-1-0-2011-04-29" href="#version-12-1-0-2011-04-29" class="md2man-permalink" title="permalink"></a>Version 12.1.0 (2011-04-29)</h2><h3 id="minor-25"><a name="minor-25" href="#minor-25" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-12-1-0-2011-04-29"><a name="version-12-1-0-2011-04-29" href="#version-12-1-0-2011-04-29" class="md2man-permalink" title="permalink"></a>Version 12.1.0 (2011-04-29)</h2><h3 id="minor-26"><a name="minor-26" href="#minor-26" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li>Add <code>Test::Loop.delay_per_iteration</code> parameter to control the number of
 seconds (or fractions thereof) to sleep in between test-loop iterations.</li>
@@ -817,7 +879,7 @@ issue</a>.</p></li>
 <li><p>Do not consider test factories as overhead in Rails.</p></li>
 <li><p>Run test files when test factory files change in Rails.</p></li>
 </ul>
-<h3 id="other-33"><a name="other-33" href="#other-33" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-34"><a name="other-34" href="#other-34" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>Detach worker from master&#39;s terminal device sooner.</p></li>
 <li><p>All required signals must be present in irb check.</p></li>
@@ -830,14 +892,14 @@ issue</a>.</p></li>
 <li><p>Restore support for Ruby 1.8.7.</p></li>
 <li><p>Allow user&#39;s test execution overhead to fork.</p></li>
 </ul>
-<h3 id="other-34"><a name="other-34" href="#other-34" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-35"><a name="other-35" href="#other-35" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>Freeze master&#39;s ENV properly; keep resume key.</p></li>
 <li><p>Remove completed test from running list sooner.</p></li>
 <li><p>Add instructions to check for POSIX prerequisites.</p></li>
 <li><p>Support multiple test-loop instances in watch command.</p></li>
 </ul>
-<h2 id="version-12-0-0-2011-04-19"><a name="version-12-0-0-2011-04-19" href="#version-12-0-0-2011-04-19" class="md2man-permalink" title="permalink"></a>Version 12.0.0 (2011-04-19)</h2><h3 id="major-7"><a name="major-7" href="#major-7" class="md2man-permalink" title="permalink"></a>Major:</h3>
+<h2 id="version-12-0-0-2011-04-19"><a name="version-12-0-0-2011-04-19" href="#version-12-0-0-2011-04-19" class="md2man-permalink" title="permalink"></a>Version 12.0.0 (2011-04-19)</h2><h3 id="major-8"><a name="major-8" href="#major-8" class="md2man-permalink" title="permalink"></a>Major:</h3>
 <ul>
 <li><p>You must now explicitly <code>require &#39;test/loop/rails&#39;</code> for Rails support
 because we can only <em>automatically</em> apply our Railtie (to disable class
@@ -854,7 +916,7 @@ streams were redirected to a log file in the worker process).</p><p>Thanks to Br
 threads to monitor workers was the culprit behind the deadlocks errors.</p></li>
 <li><p>Ctrl-C did not raise Interrupt in my Rails 3 test suite.</p></li>
 </ul>
-<h3 id="other-35"><a name="other-35" href="#other-35" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-36"><a name="other-36" href="#other-36" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>Ensure a clean ENV when reabsorbing overhead.  Environment variables set
 by your test execution overhead are not propagated to subsequent
@@ -874,12 +936,12 @@ reabsorptions.  (Brian D. Burns)</p></li>
 <ul>
 <li>Only attempt to define Railtie if the current Rails version supports it.</li>
 </ul>
-<h2 id="version-11-0-0-2011-04-14"><a name="version-11-0-0-2011-04-14" href="#version-11-0-0-2011-04-14" class="md2man-permalink" title="permalink"></a>Version 11.0.0 (2011-04-14)</h2><h3 id="major-8"><a name="major-8" href="#major-8" class="md2man-permalink" title="permalink"></a>Major:</h3>
+<h2 id="version-11-0-0-2011-04-14"><a name="version-11-0-0-2011-04-14" href="#version-11-0-0-2011-04-14" class="md2man-permalink" title="permalink"></a>Version 11.0.0 (2011-04-14)</h2><h3 id="major-9"><a name="major-9" href="#major-9" class="md2man-permalink" title="permalink"></a>Major:</h3>
 <ul>
 <li>The <code>test/loop/rails</code> preset has been internalized and is now applied
 automatically if your test execution overhead includes Ruby on Rails.</li>
 </ul>
-<h3 id="minor-26"><a name="minor-26" href="#minor-26" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h3 id="minor-27"><a name="minor-27" href="#minor-27" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li>If you are using Rails 3, test-loop will automatically set
 <code>config.cache_classes = false</code> for your test environment.  (Brian D.
@@ -903,12 +965,12 @@ unregister the trap handlers inherited from the master process.</p></li>
 <li><p>Prevent uncaught throw error on subsequent Ctrl-C.</p></li>
 <li><p>Simpler solution for terminating loop upon Ctrl-C.</p></li>
 </ul>
-<h2 id="version-10-0-0-2011-04-06"><a name="version-10-0-0-2011-04-06" href="#version-10-0-0-2011-04-06" class="md2man-permalink" title="permalink"></a>Version 10.0.0 (2011-04-06)</h2><h3 id="major-9"><a name="major-9" href="#major-9" class="md2man-permalink" title="permalink"></a>Major:</h3>
+<h2 id="version-10-0-0-2011-04-06"><a name="version-10-0-0-2011-04-06" href="#version-10-0-0-2011-04-06" class="md2man-permalink" title="permalink"></a>Version 10.0.0 (2011-04-06)</h2><h3 id="major-10"><a name="major-10" href="#major-10" class="md2man-permalink" title="permalink"></a>Major:</h3>
 <ul>
 <li>The <code>Test::Loop.before_each_test</code> and <code>Test::Loop.after_each_test</code>
 parameters are arrays now.</li>
 </ul>
-<h2 id="version-9-4-0-2011-04-06"><a name="version-9-4-0-2011-04-06" href="#version-9-4-0-2011-04-06" class="md2man-permalink" title="permalink"></a>Version 9.4.0 (2011-04-06)</h2><h3 id="minor-27"><a name="minor-27" href="#minor-27" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-9-4-0-2011-04-06"><a name="version-9-4-0-2011-04-06" href="#version-9-4-0-2011-04-06" class="md2man-permalink" title="permalink"></a>Version 9.4.0 (2011-04-06)</h2><h3 id="minor-28"><a name="minor-28" href="#minor-28" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p>Allow lambda functions in <code>Test::Loop.test_file_matchers</code> to return <code>nil</code>
 so that you can exclude certain tests from being executed.  (Brian D.
@@ -924,14 +986,14 @@ the following:</p><pre><code>watch &#39;ps xf | grep test-loop | sed 1,3d&#39;
 from being run when exiting the loop after having processed a test/spec
 helper that loads the Test::Unit library.  (Brian D. Burns)</li>
 </ul>
-<h3 id="other-36"><a name="other-36" href="#other-36" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-37"><a name="other-37" href="#other-37" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>Use throw/catch to break loop instead of raising SystemExit exception.</p></li>
 <li><p>Trap SIGTERM with IGNORE/DEFAULT instead of using a closure in master.</p></li>
 <li><p>Unregister master&#39;s custom signal handlers inside worker processes.</p></li>
 <li><p>Separate configuration parameters into subsections in README.</p></li>
 </ul>
-<h2 id="version-9-3-0-2011-04-01"><a name="version-9-3-0-2011-04-01" href="#version-9-3-0-2011-04-01" class="md2man-permalink" title="permalink"></a>Version 9.3.0 (2011-04-01)</h2><h3 id="minor-28"><a name="minor-28" href="#minor-28" class="md2man-permalink" title="permalink"></a>Minor:</h3>
+<h2 id="version-9-3-0-2011-04-01"><a name="version-9-3-0-2011-04-01" href="#version-9-3-0-2011-04-01" class="md2man-permalink" title="permalink"></a>Version 9.3.0 (2011-04-01)</h2><h3 id="minor-29"><a name="minor-29" href="#minor-29" class="md2man-permalink" title="permalink"></a>Minor:</h3>
 <ul>
 <li><p>Resume currently running tests--as well as those currently needing to be
 run--after reabsorbing test execution overhead.  (Brian D. Burns)</p></li>
@@ -956,7 +1018,7 @@ running waitall(), instead of sending SIGKILL to the entire process group.
 As a result, test-loop no longer exits with a non-zero status upon SIGINT.</p></li>
 <li><p>Remove &#39;ansi&#39; gem dependency.  (Brian D. Burns)</p></li>
 </ul>
-<h3 id="other-37"><a name="other-37" href="#other-37" class="md2man-permalink" title="permalink"></a>Other:</h3>
+<h3 id="other-38"><a name="other-38" href="#other-38" class="md2man-permalink" title="permalink"></a>Other:</h3>
 <ul>
 <li><p>Add tip on deleting logs for passing tests.  (Brian D. Burns)</p></li>
 <li><p>Add tip on monitoring test processes with <a class="md2man-reference">watch(1)</a> in README.</p></li>

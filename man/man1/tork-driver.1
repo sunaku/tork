@@ -1,4 +1,4 @@
-.TH TORK\-DRIVER 1 2014\-10\-24 19.11.1
+.TH TORK\-DRIVER 1 2014\-10\-26 20.0.0
 .SH NAME
 .PP
 tork\-driver \- drives 
@@ -28,7 +28,7 @@ of words, using the same word\-splitting algorithm as
 before processing
 them.  For example, the line \fB\fCa "b c"\fR is split into the \fB\fC["a", "b c"]\fR array.
 .TP
-\fB\fC["run_all_test_files"]\fR
+\fB\fC["test!"]\fR
 Runs all test files found within and beneath the current working directory.
 .TP
 \fI\&...\fP
@@ -40,9 +40,8 @@ are also accepted here.
 This program prints the following messages, which are single\-line JSON arrays,
 to stdout.
 .TP
-\fB\fC["reabsorb",\fR \fIoverhead_file\fP\fB\fC]\fR
-Test execution overhead is being reabsorbed because \fIoverhead_file\fP has
-changed.
+\fB\fC["boot!",\fR \fIoverhead_file\fP\fB\fC]\fR
+Reabsorbing test execution overhead because \fIoverhead_file\fP has changed.
 .TP
 \fI\&...\fP
 Messages from 

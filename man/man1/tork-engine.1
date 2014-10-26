@@ -1,4 +1,4 @@
-.TH TORK\-ENGINE 1 2014\-10\-24 19.11.1
+.TH TORK\-ENGINE 1 2014\-10\-26 20.0.0
 .SH NAME
 .PP
 tork\-engine \- wraps 
@@ -26,30 +26,34 @@ of words, using the same word\-splitting algorithm as
 before processing
 them.  For example, the line \fB\fCa "b c"\fR is split into the \fB\fC["a", "b c"]\fR array.
 .TP
-\fB\fC["reabsorb_overhead"]\fR
+\fB\fC["boot!"]\fR
 Stops any test files that are currently running, reabsorbs the test
 execution overhead, and then re\-runs those stopped test files.
+.PP
+\fB\fC["test"\fR, \fItest_file\fP\fB\fC,\fR \fIline_numbers\fP\&...\fB\fC]\fR
+\fB\fC["test"\fR, \fB\fC[\fR\fItest_file\fP\fB\fC,\fR \fIline_numbers\fP\&...\fB\fC]\fR\&...\fB\fC]\fR
+  Runs tests that correspond to the given sequence of \fIline_numbers\fP in the
+  given \fItest_file\fP\&.  If no \fIline_numbers\fP are given, then only those lines
+  that have changed since the last run of \fItest_file\fP will be substituted.
+  If any \fIline_numbers\fP are zero, then the entire \fItest_file\fP will be run.
 .TP
-\fB\fC["run_test_file"\fR, \fItest_file\fP\fB\fC,\fR \fIline_numbers\fP\&...\fB\fC]\fR
-Runs tests that correspond to the given sequence of \fIline_numbers\fP in the
-given \fItest_file\fP\&.  If no \fIline_numbers\fP are given, then only those lines
-that have changed since the last run of \fItest_file\fP will be substituted.
-If any \fIline_numbers\fP are zero, then the entire \fItest_file\fP will be run.
+\fB\fC["test?"]\fR
+Lists all test files that are currently running.
 .TP
-\fB\fC["run_test_files"\fR, \fItest_files_with_optional_line_numbers\fP\fB\fC]\fR
-Calls the \fB\fCrun_test_file\fR command once for each item in the given array.
-.TP
-\fB\fC["stop_running_test_files"\fR, \fIsignal\fP\fB\fC]\fR
+\fB\fC["stop"\fR, \fIsignal\fP\fB\fC]\fR
 Stops test files that are currently running by sending the given \fIsignal\fP
 (optional; defaults to "SIGTERM") to their respective worker processes.
 .TP
-\fB\fC["rerun_passed_test_files"]\fR
+\fB\fC["pass!"]\fR
 Runs all test files that have passed during their most recent run.
 .TP
-\fB\fC["rerun_failed_test_files"]\fR
+\fB\fC["pass?"]\fR
+Lists all test files that have passed during their most recent run.
+.TP
+\fB\fC["fail!"]\fR
 Runs all test files that have failed during their most recent run.
 .TP
-\fB\fC["list_failed_test_files"]\fR
+\fB\fC["fail?"]\fR
 Lists all test files that have failed during their most recent run.
 .TP
 \fB\fC["quit"]\fR
@@ -59,15 +63,15 @@ Stops all tests that are currently running and exits.
 This program prints the following messages, which are single\-line JSON arrays,
 to stdout.
 .TP
-\fB\fC["idle",\fR \fIran\fItest\fPfiles\fP\fB\fC,\fR \fIpassed\fItest\fPfiles\fP\fB\fC,\fR \fIfailed\fItest\fPfiles\fP\fB\fC]\fR
+\fB\fC["done",\fR \fIran\fItest\fPfiles\fP\fB\fC,\fR \fIpassed\fItest\fPfiles\fP\fB\fC,\fR \fIfailed\fItest\fPfiles\fP\fB\fC]\fR
 All queued tests have finished running and no new tests have been queued.
 In particular, \fIran\fItest\fPfiles\fP test files have run, \fIpassed\fItest\fPfiles\fP
 test files have passed, and \fIfailed\fItest\fPfiles\fP test files have failed.
 .TP
-\fB\fC["pass_now_fail",\fR \fItest_file\fP\fB\fC,\fR \fImessage\fP\fB\fC]\fR
+\fB\fC["fail!",\fR \fItest_file\fP\fB\fC,\fR \fImessage\fP\fB\fC]\fR
 A previously passing \fItest_file\fP has now failed.  See \fImessage\fP for details.
 .TP
-\fB\fC["fail_now_pass",\fR \fItest_file\fP\fB\fC,\fR \fImessage\fP\fB\fC]\fR
+\fB\fC["pass!",\fR \fItest_file\fP\fB\fC,\fR \fImessage\fP\fB\fC]\fR
 A previously failing \fItest_file\fP has now passed.  See \fImessage\fP for details.
 .TP
 \fI\&...\fP

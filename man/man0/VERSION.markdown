@@ -1,3 +1,58 @@
+## Version 20.0.0 (2014-10-26)
+
+### Major:
+
+  * tork-runner(1): percentage lied; print counts instead.
+
+    The percentage of completion is not accurate because it only measures
+    how many tests that have started running _so far_ have been completed.
+    This makes the percentage jump from 100% to lesser values as tests run.
+
+    Also drop the `tork-runner:` prefix from progress messages and replace
+    VT100 escape codes for reprinting in-place with a \r (carriage return).
+
+  * Shorten all status message tokens to ~4 characters.
+
+    * In tork-driver(1):
+      * `reabsorb` is now `over`
+
+    * In tork-engine(1):
+      * `idle` is now `done`
+      * `pass_now_fail` is now `fail!`
+      * `fail_now_pass` is now `pass!`
+
+    * In tork-master(1):
+      * `absorb` is now `boot`
+
+  * Shorten all commands names down to ~4 characters.
+
+    * In tork(1):
+      * the `o` input command character is now named `b`
+
+    * In tork-driver(1):
+      * the `run_all_test_files` command is now named `test!`
+      * the `over` message is now named `boot!`
+
+    * In tork-engine(1):
+      * the `reabsorb_overhead` command is now named `boot!`
+      * the `run_test_file` command is now named `test`
+      * the `run_test_files` command is now named `test`
+      * the `stop_running_test_files` command is now named `stop`
+      * the `rerun_passed_test_files` command is now named `pass!`
+      * the `rerun_failed_test_files` command is now named `fail!`
+      * the `list_failed_test_files` command is now named `fail?`
+      * the `over` status message is now named `boot!`
+
+### Minor:
+
+  * tork-engine(1): add `test?` and `pass?` listing commands.
+
+  * tork(1): emit "tork:" prefix on all messages sent to user.
+
+### Other:
+
+  * Upgrade to md2man 4.0 and binman 4.0.
+
 ## Version 19.11.1 (2014-10-24)
 
 This release improves support for RSpec 3 and Rails 4.
