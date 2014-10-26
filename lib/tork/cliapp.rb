@@ -22,6 +22,9 @@ protected
     Regexp.union(File.expand_path('../../..', __FILE__), TORK_DOLLAR_ZERO)
   }[^:]*:\d+:.+$/
 
+  # remove Ruby's built-in Kernel#test() method so our test() method works
+  undef test
+
   def recv client, message
     case client
     when @driver
