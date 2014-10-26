@@ -25,30 +25,34 @@ stdin that are single-line JSON arrays, it splits each of them into an array
 of words, using the same word-splitting algorithm as sh(1), before processing
 them.  For example, the line `a "b c"` is split into the `["a", "b c"]` array.
 
-`["reabsorb_overhead"]`
+`["boot!"]`
   Stops any test files that are currently running, reabsorbs the test
   execution overhead, and then re-runs those stopped test files.
 
-`["run_test_file"`, *test_file*`,` *line_numbers*...`]`
+`["test"`, *test_file*`,` *line_numbers*...`]`
+`["test"`, `[`*test_file*`,` *line_numbers*...`]`...`]`
   Runs tests that correspond to the given sequence of *line_numbers* in the
   given *test_file*.  If no *line_numbers* are given, then only those lines
   that have changed since the last run of *test_file* will be substituted.
   If any *line_numbers* are zero, then the entire *test_file* will be run.
 
-`["run_test_files"`, *test\_files\_with\_optional\_line\_numbers*`]`
-  Calls the `run_test_file` command once for each item in the given array.
+`["test?"]`
+  Lists all test files that are currently running.
 
-`["stop_running_test_files"`, *signal*`]`
+`["stop"`, *signal*`]`
   Stops test files that are currently running by sending the given *signal*
   (optional; defaults to "SIGTERM") to their respective worker processes.
 
-`["rerun_passed_test_files"]`
+`["pass!"]`
   Runs all test files that have passed during their most recent run.
 
-`["rerun_failed_test_files"]`
+`["pass?"]`
+  Lists all test files that have passed during their most recent run.
+
+`["fail!"]`
   Runs all test files that have failed during their most recent run.
 
-`["list_failed_test_files"]`
+`["fail?"]`
   Lists all test files that have failed during their most recent run.
 
 `["quit"]`
@@ -59,15 +63,15 @@ them.  For example, the line `a "b c"` is split into the `["a", "b c"]` array.
 This program prints the following messages, which are single-line JSON arrays,
 to stdout.
 
-`["idle",` *ran_test_files*`,` *passed_test_files*`,` *failed_test_files*`]`
+`["done",` *ran_test_files*`,` *passed_test_files*`,` *failed_test_files*`]`
   All queued tests have finished running and no new tests have been queued.
   In particular, *ran_test_files* test files have run, *passed_test_files*
   test files have passed, and *failed_test_files* test files have failed.
 
-`["pass_now_fail",` *test_file*`,` *message*`]`
+`["fail!",` *test_file*`,` *message*`]`
   A previously passing *test_file* has now failed.  See *message* for details.
 
-`["fail_now_pass",` *test_file*`,` *message*`]`
+`["pass!",` *test_file*`,` *message*`]`
   A previously failing *test_file* has now passed.  See *message* for details.
 
 *...*

@@ -17,7 +17,7 @@ class Master < Server
   def initialize
     super
     Tork.config :master
-    send @clients, [:absorb]
+    send @clients, [:boot]
 
     @worker_number_pool = (0 ... MAX_CONCURRENT_WORKERS).to_a
     @command_by_worker_pid = {}

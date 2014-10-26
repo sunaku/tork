@@ -25,11 +25,11 @@ class Driver < Server
     pclose @engine
   end
 
-  def run_all_test_files
+  def test!
     test_files_found = false
     Dir.glob(ALL_TEST_FILE_GLOBS) do |test_file|
       next if overhead_file? test_file
-      run_test_file test_file
+      test test_file
       test_files_found = true
     end
     tell @client, 'There are no test files to run.' unless test_files_found
@@ -59,8 +59,8 @@ protected
 
         # reabsorb text execution overhead if overhead files changed
         if overhead_file? changed_file
-          send @clients, [:reabsorb, changed_file]
-          reabsorb_overhead
+          send @clients, [:boot!, changed_file]
+          boot!
         else
           run_non_overhead_test_files find_dependent_test_files(changed_file)
         end
@@ -74,7 +74,7 @@ protected
 private
 
   def run_non_overhead_test_files test_files
-    run_test_files test_files.reject {|f| overhead_file? f }
+    test test_files.reject {|f| overhead_file? f }
   end
 
   def overhead_file? file

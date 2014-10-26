@@ -46,8 +46,8 @@ IO.popen('tork-remote tork-engine', 'r+') do |remote|
     # make notifications edge-triggered: pass => fail or vice versa.
     # we do not care about pass => pass or fail => fail transitions.
     icon = case event.to_sym
-           when :fail_now_pass then 'dialog-information'
-           when :pass_now_fail then 'dialog-error'
+           when :pass! then 'dialog-information'
+           when :fail! then 'dialog-error'
            end
 
     if icon

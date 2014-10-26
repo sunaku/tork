@@ -30,8 +30,8 @@ This program prints the following messages to stdout.
 
 This program prints the following messages to stderr if it is a TTY device.
 
-`tork-runner:` *NN.N*`% tested`
-  *NN.N* percent of test files were tested so far.
+*T* `tested,` *P* `passed,` *F* `failed`
+  So far, *T* test files were tested, *P* of them passed, *F* of them failed.
 
 ## OPTIONS
 
@@ -68,13 +68,13 @@ IO.popen('tork-driver', 'w+') do |driver|
   test_files = Dir[*ARGV]
   command =
     if test_files.empty?
-      [:run_all_test_files]
+      [:test!]
     else
-      [:run_test_files, test_files]
+      [:test, test_files]
     end
   driver.puts JSON.dump(command)
 
-  # track test runs & exit when finished
+  # track test runs and show the progress
   tested, passed, failed = 0, 0, []
   while line = driver.gets
     response = JSON.parse(line)
@@ -82,15 +82,22 @@ IO.popen('tork-driver', 'w+') do |driver|
     when :test then tested += 1
     when :pass then passed += 1
     when :fail then failed << response[3]
-    when :idle then
-      puts failed.map {|log| [nil, ">> #{log} <<", File.read(log)] }, nil,
-           "#{tested} tested, #{passed} passed, #{failed.count} failed"
-      exit! failed.empty?
+    when :done then break
     end
 
-    # tell user how many tests (percentage) have finished running;
-    # see http://www.termsys.demon.co.uk/vtansi.htm for ANSI VT100
-    STDERR.printf "\e[s\e[K%s: %02.1f%% tested\e[u", $0,
-      ((passed + failed.count) / tested.to_f) * 100 if STDERR.tty?
+    progress = "#{tested} tested, #{passed} passed, #{failed.length} failed"
+    #
+    # show testing progress if we are connected to a terminal device
+    #
+    # NOTE: \r (carriage return) moves cursor to beginning of line so we end
+    #       up overwriting any previously printed progress message; we don't
+    #       need to erase the line because message length is non-decreasing:
+    #       i.e. the counts shown in the message can only increase over time
+    #
+    STDERR.print "\r", progress if STDERR.tty?
   end
+
+  # report failures and exit accordingly
+  puts failed.map {|log| [nil, ">> #{log} <<", File.read(log)] }, nil, progress
+  exit! failed.empty?
 end

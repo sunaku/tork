@@ -25,18 +25,22 @@ class Engine < Server
     pclose @master
   end
 
-  def reabsorb_overhead
+  def boot!
     @master.reconnect
 
     # resume running all previously running test files and
     # all previously failed test files in the new master
-    resume = @running_test_files + @failed_test_files
+    resumable = @running_test_files + @failed_test_files
     @running_test_files.clear
-    run_test_files resume
+    test resumable
   end
 
-  def run_test_file test_file, *line_numbers
-    if File.exist? test_file and @running_test_files.add? test_file
+  def test test_file, *line_numbers
+    # a list of tests was passed in for the first argument
+    if test_file.respond_to? :each and line_numbers.empty?
+      test_file.each {|args| test(*args) }
+
+    elsif File.exist? test_file and @running_test_files.add? test_file
       if line_numbers.empty?
         line_numbers = find_changed_line_numbers(test_file)
       else
@@ -47,11 +51,15 @@ class Engine < Server
     end
   end
 
-  def run_test_files test_files_with_optional_line_numbers
-    test_files_with_optional_line_numbers.each {|f| run_test_file(*f) }
+  def test?
+    if @running_test_files.empty?
+      tell @client, 'There are no running test files to list.'
+    else
+      tell @client, @running_test_files.sort, false
+    end
   end
 
-  def stop_running_test_files signal=nil
+  def stop signal=nil
     if @running_test_files.empty?
       tell @client, 'There are no running test files to stop.'
     else
@@ -60,23 +68,31 @@ class Engine < Server
     end
   end
 
-  def rerun_passed_test_files
+  def pass!
     if @passed_test_files.empty?
       tell @client, 'There are no passed test files to re-run.'
     else
-      run_test_files @passed_test_files
+      test @passed_test_files
     end
   end
 
-  def rerun_failed_test_files
+  def pass?
+    if @passed_test_files.empty?
+      tell @client, 'There are no passed test files to list.'
+    else
+      tell @client, @passed_test_files.sort, false
+    end
+  end
+
+  def fail!
     if @failed_test_files.empty?
       tell @client, 'There are no failed test files to re-run.'
     else
-      run_test_files @failed_test_files
+      test @failed_test_files
     end
   end
 
-  def list_failed_test_files
+  def fail?
     if @failed_test_files.empty?
       tell @client, 'There are no failed test files to list.'
     else
@@ -100,14 +116,14 @@ protected
           @recently_failed_test_files.add file
           was_pass = @passed_test_files.delete? file
           now_fail = @failed_test_files.add? file
-          send @clients, [:pass_now_fail, file, message] if was_pass and now_fail
+          send @clients, [:fail!, file, message] if was_pass and now_fail
 
         elsif line_numbers.empty?
           # only whole test file runs should qualify as pass
           @recently_passed_test_files.add file
           was_fail = @failed_test_files.delete? file
           now_pass = @passed_test_files.add? file
-          send @clients, [:fail_now_pass, file, message] if was_fail and now_pass
+          send @clients, [:pass!, file, message] if was_fail and now_pass
         end
 
         # notify user when all test files have finished running
@@ -119,7 +135,7 @@ protected
           @recently_failed_test_files.clear
 
           tested = passed + failed
-          send @clients, [:idle, tested, passed, failed]
+          send @clients, [:done, tested, passed, failed]
         end
       end
 
