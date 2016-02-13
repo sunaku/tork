@@ -1,3 +1,11 @@
+## Version 20.0.1 (2016-02-13)
+
+### Other:
+
+  * Upgrade to md2man 5.0 and binman 5.0 for manual pages.
+
+  * Document optional regexp argument to `-h` and `--help`.
+
 ## Version 20.0.0 (2014-10-26)
 
 ### Major:
