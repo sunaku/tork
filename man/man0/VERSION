@@ -1,3 +1,11 @@
+.SH Version 20.0.1 (2016\-02\-13)
+.SS Other:
+.RS
+.IP \(bu 2
+Upgrade to md2man 5.0 and binman 5.0 for manual pages.
+.IP \(bu 2
+Document optional regexp argument to \fB\fC\-h\fR and \fB\fC\-\-help\fR\&.
+.RE
 .SH Version 20.0.0 (2014\-10\-26)
 .SS Major:
 .RS
