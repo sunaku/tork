@@ -20,8 +20,8 @@ none are available on your system, then the notification is printed to stdout.
 
 ## OPTIONS
 
-`-h`, `--help`
-  Show this help manual.
+`-h` [*PATTERN*], `--help` [*PATTERN*]
+  Show this help manual and search for *PATTERN* regular expression therein.
 
 ## EXIT STATUS
 
