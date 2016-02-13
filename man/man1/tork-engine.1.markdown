@@ -76,8 +76,8 @@ to stdout.
 
 ## OPTIONS
 
-`-h`, `--help`
-  Show this help manual.
+`-h` [*PATTERN*], `--help` [*PATTERN*]
+  Show this help manual and search for *PATTERN* regular expression therein.
 
 ## FILES
 

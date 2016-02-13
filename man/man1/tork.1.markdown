@@ -37,8 +37,8 @@ This program can be controlled remotely by multiple tork-remote(1) instances.
 
 ## OPTIONS
 
-`-h`, `--help`
-  Show this help manual.
+`-h` [*PATTERN*], `--help` [*PATTERN*]
+  Show this help manual and search for *PATTERN* regular expression therein.
 
 ## FILES
 

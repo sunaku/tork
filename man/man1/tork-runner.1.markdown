@@ -32,8 +32,8 @@ This program prints the following messages to stderr if it is a TTY device.
 
 ## OPTIONS
 
-`-h`, `--help`
-  Show this help manual.
+`-h` [*PATTERN*], `--help` [*PATTERN*]
+  Show this help manual and search for *PATTERN* regular expression therein.
 
 ## EXIT STATUS
 

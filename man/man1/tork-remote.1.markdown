@@ -17,8 +17,8 @@ to stdout if they are valid single-line JSON arrays or to stderr otherwise.
 
 ## OPTIONS
 
-`-h`, `--help`
-  Show this help manual.
+`-h` [*PATTERN*], `--help` [*PATTERN*]
+  Show this help manual and search for *PATTERN* regular expression therein.
 
 ## EXIT STATUS
 
