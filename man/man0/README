@@ -11,17 +11,14 @@ _______      _______
 .RE
 .RS
 .IP \(bu 2
-Manuals: 
-\[la]https://sunaku.github.io/tork/man\[ra]
-.IP \(bu 2
-Sources: 
+Code: 
 \[la]https://github.com/sunaku/tork\[ra]
 .IP \(bu 2
-Support: 
-\[la]https://github.com/sunaku/tork/issues\[ra]
+Docs: 
+\[la]https://sunaku.github.io/tork/man\[ra]
 .IP \(bu 2
-Package: 
-\[la]https://rubygems.org/gems/tork\[ra]
+Bugs: 
+\[la]https://github.com/sunaku/tork/issues\[ra]
 .RE
 .TH \fITest with fork\fP
 .PP

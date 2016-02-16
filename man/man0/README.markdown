@@ -6,10 +6,9 @@
       \__/\____/_/ /_/|_\
                  >>>------>
 
-* Manuals: <https://sunaku.github.io/tork/man>
-* Sources: <https://github.com/sunaku/tork>
-* Support: <https://github.com/sunaku/tork/issues>
-* Package: <https://rubygems.org/gems/tork>
+* Code: <https://github.com/sunaku/tork>
+* Docs: <https://sunaku.github.io/tork/man>
+* Bugs: <https://github.com/sunaku/tork/issues>
 
 # _Test with fork_
 
