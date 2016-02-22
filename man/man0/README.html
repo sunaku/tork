@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <meta name="generator" content="md2man 5.0.3 https://github.com/sunaku/md2man" />
-  <title>README</title>
+  <meta name="generator" content="md2man 5.1.0 https://github.com/sunaku/md2man" />
+  <title>README &mdash; tork</title>
   <link rel="stylesheet" href="../style.css"/>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
-<body><div class="navbar"><div class="navbar-inner"><span class="brand"><a href="../index.html#man0">man0</a>/README</span></div></div><div class="container-fluid"><pre><code>_______      _______
+<body><div class="navbar"><div class="navbar-inner"><span class="brand"><a href="../index.html#man0">man0</a>/README</span></div></div><div class="container-fluid"><pre class="highlight plaintext"><code>_______      _______
  ___  /___________ /__
   _  __/ __ \  __/ /_/
   / /_/ /_/ / / / ,\
@@ -62,13 +62,13 @@ performed <em>automatically</em>.  However, to run a test file <em>manually</em>
  inside your newly saved test file have changed (using diff and regexps)
  and then attempts to run just those.  To make it run <em>all</em> tests in your
  saved file, simply save the file <em>again</em> without changing it.</p></li>
-<li><p>Type <code>t</code> followed by a space and the file you want to run into <a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a>:</p><pre><code># run all of test/some_test.rb
+<li><p>Type <code>t</code> followed by a space and the file you want to run into <a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a>:</p><pre class="highlight plaintext"><code># run all of test/some_test.rb
 t test/some_test.rb
 
 # run lines 4, 33, and 21 of test/some_test.rb
 t test/some_test.rb 4 33 21
 </code></pre></li>
-<li><p>Send a <code>[&quot;run_test_file&quot;]</code> message to <a class="md2man-reference" href="../man1/tork-engine.1.html">tork-engine(1)</a> using <a class="md2man-reference" href="../man1/tork-remote.1.html">tork-remote(1)</a>:</p><pre><code># run all of test/some_test.rb
+<li><p>Send a <code>[&quot;run_test_file&quot;]</code> message to <a class="md2man-reference" href="../man1/tork-engine.1.html">tork-engine(1)</a> using <a class="md2man-reference" href="../man1/tork-remote.1.html">tork-remote(1)</a>:</p><pre class="highlight plaintext"><code># run all of test/some_test.rb
 echo run_test_file test/some_test.rb | tork-remote tork-engine
 
 # run lines 4, 33, and 21 of test/some_test.rb
@@ -76,38 +76,38 @@ echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
 </code></pre></li>
 </ol>
 <p>Alternatively, you can use <a class="md2man-reference" href="../man1/tork-runner.1.html">tork-runner(1)</a> to run your test suite in one shot
-and then exit with a nonzero status if tests failed, similar to <code>rake test</code>.</p><h2 id="installation">Installation<a name="installation" href="#installation" class="md2man-permalink" title="permalink"></a></h2><pre><code>gem install tork
+and then exit with a nonzero status if tests failed, similar to <code>rake test</code>.</p><h2 id="installation">Installation<a name="installation" href="#installation" class="md2man-permalink" title="permalink"></a></h2><pre class="highlight plaintext"><code>gem install tork
 </code></pre>
 <h3 id="prerequisites">Prerequisites<a name="prerequisites" href="#prerequisites" class="md2man-permalink" title="permalink"></a></h3>
 <ul>
 <li><p>Ruby 1.8.7 or 1.9.3 or newer.</p></li>
 <li><p>Operating system that supports POSIX signals and the <code>fork()</code> system call.
-To check if your system qualifies, launch <a class="md2man-reference">irb(1)</a> and enter the following:</p><pre><code>Process.respond_to? :fork  # must be true
-Signal.list.key? &#39;TERM&#39;    # must be true
-Signal.list.key? &#39;KILL&#39;    # must be true
+To check if your system qualifies, launch <a class="md2man-reference">irb(1)</a> and enter the following:</p><pre class="highlight plaintext"><code>Process.respond_to? :fork  # must be true
+Signal.list.key? 'TERM'    # must be true
+Signal.list.key? 'KILL'    # must be true
 </code></pre></li>
-<li><p>To make the <a class="md2man-reference" href="../man1/tork-herald.1.html">tork-herald(1)</a> program&#39;s filesystem monitoring more efficient:</p><pre><code>gem install rb-inotify  # linux
+<li><p>To make the <a class="md2man-reference" href="../man1/tork-herald.1.html">tork-herald(1)</a> program&#39;s filesystem monitoring more efficient:</p><pre class="highlight plaintext"><code>gem install rb-inotify  # linux
 gem install rb-fsevent  # macosx
 </code></pre></li>
 </ul>
-<h3 id="development">Development<a name="development" href="#development" class="md2man-permalink" title="permalink"></a></h3><pre><code>git clone git://github.com/sunaku/tork
+<h3 id="development">Development<a name="development" href="#development" class="md2man-permalink" title="permalink"></a></h3><pre class="highlight plaintext"><code>git clone git://github.com/sunaku/tork
 cd tork
 bundle install
 bundle exec tork --help  # run it directly
 bundle exec rake --tasks # packaging tasks
 </code></pre>
-<h2 id="usage">Usage<a name="usage" href="#usage" class="md2man-permalink" title="permalink"></a></h2><h3 id="at-the-command-line">At the command line<a name="at-the-command-line" href="#at-the-command-line" class="md2man-permalink" title="permalink"></a></h3><pre><code>tork --help
+<h2 id="usage">Usage<a name="usage" href="#usage" class="md2man-permalink" title="permalink"></a></h2><h3 id="at-the-command-line">At the command line<a name="at-the-command-line" href="#at-the-command-line" class="md2man-permalink" title="permalink"></a></h3><pre class="highlight plaintext"><code>tork --help
 </code></pre>
-<p>You can add line editing, history, and filename completion:</p><pre><code>rlwrap -c tork
+<p>You can add line editing, history, and filename completion:</p><pre class="highlight plaintext"><code>rlwrap -c tork
 </code></pre>
-<p>You can control <a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a> interactively from another terminal:</p><pre><code>tork-remote tork-engine
+<p>You can control <a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a> interactively from another terminal:</p><pre class="highlight plaintext"><code>tork-remote tork-engine
 # type your commands here, one per line.
 # press Control-D to exit tork-remote(1)
 </code></pre>
-<p>You can also do the same non-interactively using a pipeline:</p><pre><code># run lines 4, 33, and 21 of test/some_test.rb
+<p>You can also do the same non-interactively using a pipeline:</p><pre class="highlight plaintext"><code># run lines 4, 33, and 21 of test/some_test.rb
 echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
 </code></pre>
-<p>You can monitor your test processes from another terminal:</p><pre><code>watch &#39;pgrep -f ^tork | xargs -r ps uf&#39;
+<p>You can monitor your test processes from another terminal:</p><pre class="highlight plaintext"><code>watch 'pgrep -f ^tork | xargs -r ps uf'
 </code></pre>
 <h3 id="with-bundler">With Bundler<a name="with-bundler" href="#with-bundler" class="md2man-permalink" title="permalink"></a></h3><p>The <code>bundler</code> configuration helper loads a Bundler bundle into <a class="md2man-reference" href="../man1/tork-master.1.html">tork-master(1)</a>.
 The <code>default</code> configuration helper does this for you automatically if there is
@@ -122,7 +122,7 @@ avoid this problem or <a href="https://github.com/rspec/rspec-core/pull/720/file
 by an uncaught exception) is overridden by RSpec&#39;s <code>Kernel#at_exit</code> handler to
 be zero, thereby falsely indicating that a spec had passed.  <a href="https://github.com/rspec/rspec-core/pull/569/files">This patch</a> fixes the problem.</p><h3 id="with-ruby-on-rails">With <a href="http://rubyonrails.org">Ruby on Rails</a><a name="with-ruby-on-rails" href="#with-ruby-on-rails" class="md2man-permalink" title="permalink"></a></h3><p>For Rails 3 or newer, use the <code>rails</code> configuration helper <em>before</em> the <code>test</code>
 or <code>spec</code> helpers.  Otherwise your test helper will load Rails <em>before</em> the
-specified <code>rails</code> configuration helper has a chance to disable class caching!</p><p>For older Rails, make sure your <code>config/environments/test.rb</code> file contains:</p><pre><code>config.cache_classes = false
+specified <code>rails</code> configuration helper has a chance to disable class caching!</p><p>For older Rails, make sure your <code>config/environments/test.rb</code> file contains:</p><pre class="highlight plaintext"><code>config.cache_classes = false
 </code></pre>
 <p>For older Rails, to use SQLite3 as your test database, install the <a href="https://github.com/stepahn/memory_test_fix">in-memory
 database adapter</a>.  Otherwise, you <em>might</em> face these errors:</p>

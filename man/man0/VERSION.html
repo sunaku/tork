@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <meta name="generator" content="md2man 5.0.3 https://github.com/sunaku/md2man" />
-  <title>VERSION</title>
+  <meta name="generator" content="md2man 5.1.0 https://github.com/sunaku/md2man" />
+  <title>VERSION &mdash; tork</title>
   <link rel="stylesheet" href="../style.css"/>
   <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
@@ -83,7 +83,7 @@ VT100 escape codes for reprinting in-place with a \r (carriage return).</p></li>
 <h2 id="version-19-10-0-2014-08-06">Version 19.10.0 (2014-08-06)<a name="version-19-10-0-2014-08-06" href="#version-19-10-0-2014-08-06" class="md2man-permalink" title="permalink"></a></h2><p>This release improves responsiveness and adds a command to list failed files.</p><h3 id="minor-1">Minor:<a name="minor-1" href="#minor-1" class="md2man-permalink" title="permalink"></a></h3>
 <ul>
 <li><p><a class="md2man-reference" href="../man1/tork-engine.1.html">tork-engine(1)</a>: list most recently ran test files in <code>:idle</code> event.  This
-allows <a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a> to summarize a run after tests finish running, as follows:</p><pre><code>tork: 10 tested, 10 passed, 0 failed
+allows <a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a> to summarize a run after tests finish running, as follows:</p><pre class="highlight plaintext"><code>tork: 10 tested, 10 passed, 0 failed
 </code></pre></li>
 <li><p><a class="md2man-reference" href="../man1/tork-engine.1.html">tork-engine(1)</a>: add <code>list_failed_test_files</code> command that lists all test
 files that have failed during their most recent run.</p><p><a class="md2man-reference" href="../man1/tork.1.html">tork(1)</a>: add <code>l</code> key (bound to the <code>list_failed_test_files</code> command).</p><p>Thanks to Chris Scharf for contributing this feature in issue-60:
@@ -148,22 +148,22 @@ In fact, installing the Tork gem <em>outside</em> of the bundle is sufficient.</
 </ul>
 <h3 id="patch-5">Patch:<a name="patch-5" href="#patch-5" class="md2man-permalink" title="permalink"></a></h3>
 <ul>
-<li><p>Server: fix crash when Fixnum is sent as a message.</p><pre><code>lib/tork/server.rb:45:in `block (2 levels) in loop&#39;:
-undefined method `empty?&#39; for 6:Fixnum (NoMethodError)
+<li><p>Server: fix crash when Fixnum is sent as a message.</p><pre class="highlight plaintext"><code>lib/tork/server.rb:45:in `block (2 levels) in loop':
+undefined method `empty?' for 6:Fixnum (NoMethodError)
 
-lib/tork/cliapp.rb:59:in `recv&#39;:
-undefined method `lstrip&#39; for 6:Fixnum (NoMethodError)
+lib/tork/cliapp.rb:59:in `recv':
+undefined method `lstrip' for 6:Fixnum (NoMethodError)
 </code></pre>
-<p>Because JSON.load() and JSON.parse() are different:</p><pre><code>$ irb -r json
-&gt;&gt; JSON.load &#39;6&#39;
+<p>Because JSON.load() and JSON.parse() are different:</p><pre class="highlight plaintext"><code>$ irb -r json
+&gt;&gt; JSON.load '6'
 6
-&gt;&gt; JSON.parse &#39;6&#39;
+&gt;&gt; JSON.parse '6'
 JSON::ParserError: A JSON text must at least contain two octets!
-        from /usr/lib/ruby/2.1.0/json/common.rb:155:in `initialize&#39;
-        from /usr/lib/ruby/2.1.0/json/common.rb:155:in `new&#39;
-        from /usr/lib/ruby/2.1.0/json/common.rb:155:in `parse&#39;
+        from /usr/lib/ruby/2.1.0/json/common.rb:155:in `initialize'
+        from /usr/lib/ruby/2.1.0/json/common.rb:155:in `new'
+        from /usr/lib/ruby/2.1.0/json/common.rb:155:in `parse'
         from (irb):2
-        from /usr/bin/irb:11:in `&lt;main&gt;&#39;
+        from /usr/bin/irb:11:in `&lt;main&gt;'
 </code></pre></li>
 </ul>
 <h3 id="other-5">Other:<a name="other-5" href="#other-5" class="md2man-permalink" title="permalink"></a></h3>
@@ -224,18 +224,18 @@ the common socket files (currently belonging to the former) upon exit.</p></li>
 <li><p>Fail earlier on socket bind: avoid wasted overhead.</p><p>Before this patch, <a class="md2man-reference" href="../man1/tork-master.1.html">tork-master(1)</a> would first pay the price of absorbing
 the test execution overhead before trying to bind its socket.  In case
 of socket bind failure, the process would exit and the overhead wasted.</p></li>
-<li><p>Server: don&#39;t call method for empty command array.</p><p>This error would occur when pressing ENTER in tork-remote tork-driver:</p><pre><code>tork-driver: #&lt;ArgumentError: no method name given&gt;
-tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:74:in `recv&#39;
-tork-driver: /home/skurapati/lab/tork/lib/tork/driver.rb:64:in `recv&#39;
-tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:46:in `block (2 levels) in loop&#39;
-tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:37:in `each&#39;
-tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:37:in `block in loop&#39;
-tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:35:in `catch&#39;
-tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:35:in `loop&#39;
-tork-driver: /home/skurapati/lab/tork/lib/tork/driver.rb:21:in `loop&#39;
-tork-driver: /home/skurapati/lab/tork/bin/tork-driver:173:in `&lt;top (required)&gt;&#39;
-tork-driver: /home/skurapati/.rvm/gems/ruby-1.9.3-p448/bin/tork-driver:23:in `load&#39;
-tork-driver: /home/skurapati/.rvm/gems/ruby-1.9.3-p448/bin/tork-driver:23:in `&lt;main&gt;&#39;
+<li><p>Server: don&#39;t call method for empty command array.</p><p>This error would occur when pressing ENTER in tork-remote tork-driver:</p><pre class="highlight plaintext"><code>tork-driver: #&lt;ArgumentError: no method name given&gt;
+tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:74:in `recv'
+tork-driver: /home/skurapati/lab/tork/lib/tork/driver.rb:64:in `recv'
+tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:46:in `block (2 levels) in loop'
+tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:37:in `each'
+tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:37:in `block in loop'
+tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:35:in `catch'
+tork-driver: /home/skurapati/lab/tork/lib/tork/server.rb:35:in `loop'
+tork-driver: /home/skurapati/lab/tork/lib/tork/driver.rb:21:in `loop'
+tork-driver: /home/skurapati/lab/tork/bin/tork-driver:173:in `&lt;top (required)&gt;'
+tork-driver: /home/skurapati/.rvm/gems/ruby-1.9.3-p448/bin/tork-driver:23:in `load'
+tork-driver: /home/skurapati/.rvm/gems/ruby-1.9.3-p448/bin/tork-driver:23:in `&lt;main&gt;'
 </code></pre></li>
 <li><p><a class="md2man-reference" href="../man1/tork-herald.1.html">tork-herald(1)</a>: listen 2.2.0 gem is non-blocking and gives absolute paths.</p>
 <ul>
@@ -627,7 +627,7 @@ He also created the snazzy ASCII-art logo featured in the project README.</p></l
 useful when the &quot;rerun<em>passed</em>test_files&quot; command has been dispatched but
 there are no passed test files, so nothing happens and from the user&#39;s
 perspective: TestR sucks because it&#39;s unresponsive.</p></li>
-<li><p>config/testr/rails: Reopen connections in forked workers to fix errors:</p><pre><code>Mysql2::Error: MySQL server has gone away
+<li><p>config/testr/rails: Reopen connections in forked workers to fix errors:</p><pre class="highlight plaintext"><code>Mysql2::Error: MySQL server has gone away
 PGError: connection not open
 </code></pre>
 <p>Thanks to Spencer Steffen for <a href="https://github.com/sunaku/tork/issues/14#issuecomment-3539470">contributing this solution</a>.</p></li>
@@ -955,7 +955,7 @@ Burns)</li>
 <h3 id="patch-40">Patch:<a name="patch-40" href="#patch-40" class="md2man-permalink" title="permalink"></a></h3>
 <ul>
 <li><p>Avoid deadlock errors when printing output from Test::Unit and MiniTest.
-(Brian D. Burns)</p><pre><code>`write&#39;: deadlock detected (fatal)
+(Brian D. Burns)</p><pre class="highlight plaintext"><code>`write': deadlock detected (fatal)
 </code></pre></li>
 <li><p>Signaled worker termination is neither pass nor fail.
 Do not treat it as a failure by printing the log file.</p></li>
@@ -982,7 +982,7 @@ so that you can exclude certain tests from being executed.  (Brian D.
 Burns)</p></li>
 <li><p>Prefix worker process title with &quot;test-loop&quot; for easier <a class="md2man-reference">ps(1)</a>
 searchability.  The monitoring command in the README is now simplified to
-the following:</p><pre><code>watch &#39;ps xf | grep test-loop | sed 1,3d&#39;
+the following:</p><pre class="highlight plaintext"><code>watch 'ps xf | grep test-loop | sed 1,3d'
 </code></pre></li>
 </ul>
 <h3 id="patch-42">Patch:<a name="patch-42" href="#patch-42" class="md2man-permalink" title="permalink"></a></h3>
