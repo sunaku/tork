@@ -18,7 +18,7 @@ none are available on your system, then the notification is printed to stdout.
 ## OPTIONS
 
 `-h` [*PATTERN*], `--help` [*PATTERN*]
-  Show this help manual and search for *PATTERN* regular expression therein.
+  Show this help manual and optionally search for *PATTERN* regular expression.
 
 ## EXIT STATUS
 

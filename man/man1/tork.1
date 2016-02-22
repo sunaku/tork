@@ -9,6 +9,7 @@ tork \- Continuous testing tool for Ruby
 .PP
 This program can be thought of as an interactive version of 
 .BR tork-runner (1).
+
 It functions as a rudimentary command\-line user interface to 
 .BR tork-driver (1).
 .PP
@@ -40,7 +41,7 @@ instances.
 .SH OPTIONS
 .TP
 \fB\fC\-h\fR [\fIPATTERN\fP], \fB\fC\-\-help\fR [\fIPATTERN\fP]
-Show this help manual and search for \fIPATTERN\fP regular expression therein.
+Show this help manual and optionally search for \fIPATTERN\fP regular expression.
 .SH FILES
 .TP
 \fI\&.tork/config.rb\fP
@@ -80,34 +81,27 @@ Line numbers of source lines that were not covered.
 .TP
 \fB\fCtest\fR
 Supports the Test::Unit standard library.
-.PP
+.TP
 \fB\fCspec\fR
-  Supports the RSpec
-\[la]http://rspec.info\[ra] testing framework.
-.PP
+Supports the RSpec \[la]http://rspec.info\[ra] testing framework.
+.TP
 \fB\fCcucumber\fR
-  Supports the Cucumber
-\[la]https://cukes.info\[ra] testing framework.
-.PP
+Supports the Cucumber \[la]https://cukes.info\[ra] testing framework.
+.TP
 \fB\fCbundler\fR
-  Supports the Bundler
-\[la]http://bundler.io\[ra] dependency framework.
-.PP
+Supports the Bundler \[la]http://bundler.io\[ra] dependency framework.
+.TP
 \fB\fCrails\fR
-  Supports the Ruby on Rails
-\[la]http://rubyonrails.org\[ra] web framework.
-.PP
+Supports the Ruby on Rails \[la]http://rubyonrails.org\[ra] web framework.
+.TP
 \fB\fCdevise\fR
-  Supports the Devise
-\[la]https://github.com/plataformatec/devise\[ra] authentication framework.
-.PP
+Supports the Devise \[la]https://github.com/plataformatec/devise\[ra] authentication framework.
+.TP
 \fB\fCfactory_girl\fR
-  Supports the factory_girl
-\[la]https://github.com/thoughtbot/factory_girl\[ra] testing library.
-.PP
+Supports the factory_girl \[la]https://github.com/thoughtbot/factory_girl\[ra] testing library.
+.TP
 \fB\fCparallel_tests\fR
-  Supports the parallel_tests
-\[la]https://github.com/grosser/parallel_tests\[ra] testing library.
+Supports the parallel_tests \[la]https://github.com/grosser/parallel_tests\[ra] testing library.
 .RE
 .SH SEE ALSO
 .PP

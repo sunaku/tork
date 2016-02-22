@@ -11,14 +11,11 @@ _______      _______
 .RE
 .RS
 .IP \(bu 2
-Code: 
-\[la]https://github.com/sunaku/tork\[ra]
+Code: \[la]https://github.com/sunaku/tork\[ra]
 .IP \(bu 2
-Docs: 
-\[la]https://sunaku.github.io/tork/man\[ra]
+Docs: \[la]https://sunaku.github.io/tork/man\[ra]
 .IP \(bu 2
-Bugs: 
-\[la]https://github.com/sunaku/tork/issues\[ra]
+Bugs: \[la]https://github.com/sunaku/tork/issues\[ra]
 .RE
 .TH \fITest with fork\fP
 .PP
@@ -109,6 +106,7 @@ Type \fB\fCt\fR followed by a space and the file you want to run into
 .nf
 # run all of test/some_test.rb
 t test/some_test.rb
+
 # run lines 4, 33, and 21 of test/some_test.rb
 t test/some_test.rb 4 33 21
 .fi
@@ -123,6 +121,7 @@ using
 .nf
 # run all of test/some_test.rb
 echo run_test_file test/some_test.rb | tork\-remote tork\-engine
+
 # run lines 4, 33, and 21 of test/some_test.rb
 echo run_test_file test/some_test.rb 4 33 21 | tork\-remote tork\-engine
 .fi
@@ -229,6 +228,7 @@ watch 'pgrep \-f ^tork | xargs \-r ps uf'
 .PP
 The \fB\fCbundler\fR configuration helper loads a Bundler bundle into 
 .BR tork-master (1).
+
 The \fB\fCdefault\fR configuration helper does this for you automatically if there is
 a \fB\fCGemfile\fR or \fB\fCGemfile.lock\fR file present in your current working directory.
 .PP
@@ -241,23 +241,18 @@ Try it: go into any bundled application and call \fB\fCtork\fR to run its test s
 MiniTest 1.3.2 and newer contain a bug where \fB\fCminitest/autorun\fR won't run any
 tests if someone calls \fB\fCKernel#exit\fR explicitly or simply loads a library
 (such as RSpec) which makes the call implicitly.  Use Tork 19.0.2+ to avoid
-this problem or apply this patch to the minitest library
-\[la]https://github.com/seattlerb/minitest/pull/183/files\[ra] to fix the problem.
+this problem or apply this patch to the minitest library \[la]https://github.com/seattlerb/minitest/pull/183/files\[ra] to fix the problem.
 .SS With RSpec
 .PP
 RSpec 2.9.0 and newer contain a bug where RSpec's autorun helper won't run any
 specs if someone calls \fB\fCKernel#exit\fR explicitly or simply loads a library
 (such as Test::Unit) which makes the call implicitly.  Use Tork 19.0.2+ to
-avoid this problem or apply this patch to the rspec\-core library
-\[la]https://github.com/rspec/rspec-core/pull/720/files\[ra] to fix the problem.
+avoid this problem or apply this patch to the rspec\-core library \[la]https://github.com/rspec/rspec-core/pull/720/files\[ra] to fix the problem.
 .PP
-RSpec 2.8.0 and older contain a bug
-\[la]https://github.com/sunaku/tork/issues/31\[ra] where a nonzero exit status (caused
+RSpec 2.8.0 and older contain a bug \[la]https://github.com/sunaku/tork/issues/31\[ra] where a nonzero exit status (caused
 by an uncaught exception) is overridden by RSpec's \fB\fCKernel#at_exit\fR handler to
-be zero, thereby falsely indicating that a spec had passed.  This patch
-\[la]https://github.com/rspec/rspec-core/pull/569/files\[ra] fixes the problem.
-.SS With Ruby on Rails
-\[la]http://rubyonrails.org\[ra]
+be zero, thereby falsely indicating that a spec had passed.  This patch \[la]https://github.com/rspec/rspec-core/pull/569/files\[ra] fixes the problem.
+.SS With Ruby on Rails \[la]http://rubyonrails.org\[ra]
 .PP
 For Rails 3 or newer, use the \fB\fCrails\fR configuration helper \fIbefore\fP the \fB\fCtest\fR
 or \fB\fCspec\fR helpers.  Otherwise your test helper will load Rails \fIbefore\fP the
@@ -272,8 +267,7 @@ config.cache_classes = false
 .RE
 .PP
 For older Rails, to use SQLite3 as your test database, install the in\-memory
-database adapter
-\[la]https://github.com/stepahn/memory_test_fix\[ra]\&.  Otherwise, you \fImight\fP face these errors:
+database adapter \[la]https://github.com/stepahn/memory_test_fix\[ra]\&.  Otherwise, you \fImight\fP face these errors:
 .PP
 .RS
 SQLite3::BusyException: database is locked

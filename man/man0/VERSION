@@ -254,6 +254,7 @@ Server: fix crash when Fixnum is sent as a message.
 .nf
 lib/tork/server.rb:45:in `block (2 levels) in loop':
 undefined method `empty?' for 6:Fixnum (NoMethodError)
+
 lib/tork/cliapp.rb:59:in `recv':
 undefined method `lstrip' for 6:Fixnum (NoMethodError)
 .fi
@@ -290,8 +291,7 @@ This release automatically re\-runs failed tests after reabsorbing overhead.
 Re\-run failed tests after reabsorbing overhead.
 .PP
 Thanks to Chris Scharf for contributing this
-patch
-\[la]https://github.com/sunaku/tork/pull/57\[ra]\&.
+patch \[la]https://github.com/sunaku/tork/pull/57\[ra]\&.
 .RE
 .SH Version 19.6.1 (2014\-03\-04)
 .PP
@@ -338,7 +338,7 @@ Rails: keep sub\-Rails connected to in\-memory SQLite3 test database.
 .PP
 When another Rails instance is started by Capybara, it sets up a new
 connection to the test database instead of re\-using our in\-memory DB.
-.TP
+.PP
 \[la]http://www.spacevatican.org/2012/8/18/threading-the-rat/\[ra]
 .IP \(bu 2
 .BR tork-engine (1) 
@@ -412,8 +412,7 @@ must pass mutable local variables into Thread.new.
 The \fB\fCicon\fR local variable would be overwritten (to nil sometimes)
 outside of the thread and cause the thread body to silently fail.
 .PP
-See 
-\[la]http://stackoverflow.com/q/16745840\[ra] for details.
+See \[la]http://stackoverflow.com/q/16745840\[ra] for details.
 .IP \(bu 2
 Socket files were always deleted: even if not ours.
 .PP
@@ -595,9 +594,9 @@ server: fix clean up of socket files upon exit
 .RS
 .IP \(bu 2
 Monkeypatch \fB\fCat_exit()\fR to fix RSpec and MiniTest:
-.TP
+.PP
 \[la]https://github.com/rspec/rspec-core/pull/720\[ra]
-.TP
+.PP
 \[la]https://github.com/seattlerb/minitest/pull/183\[ra]
 .RE
 .SS Other:
@@ -843,12 +842,10 @@ tork/config: ignore directories given as configuration files.
 .SS Alert:
 .RS
 .IP \(bu 2
-RSpec 2.8.0 and older contain a bug
-\[la]https://github.com/sunaku/tork/issues/31\[ra] where a nonzero
+RSpec 2.8.0 and older contain a bug \[la]https://github.com/sunaku/tork/issues/31\[ra] where a nonzero
 exit status (caused by an uncaught exception) is overridden
 by RSpec's \fB\fCKernel#at_exit\fR handler to be zero, thereby
-falsely indicating that a spec had passed.  This patch
-\[la]https://github.com/rspec/rspec-core/pull/569/files\[ra] fixes the
+falsely indicating that a spec had passed.  This patch \[la]https://github.com/rspec/rspec-core/pull/569/files\[ra] fixes the
 problem.  Thanks to Gumaro Melendez for reporting this issue.
 .RE
 .SS Major:
@@ -1020,8 +1017,7 @@ $TORK_CONFIGS should override settings from the \fB\fC\&.tork.rb\fR file.
 README: need to set $PATH to run this project from a git clone.
 .IP \(bu 2
 LICENSE: give copyright to major contributors only.
-See 
-\[la]http://stackoverflow.com/questions/1497756\[ra]\&.
+See \[la]http://stackoverflow.com/questions/1497756\[ra]\&.
 Also added forgotten Luke Wendling to the list.
 .RE
 .SH Version 15.0.1 (2012\-01\-24)
@@ -1081,8 +1077,7 @@ PGError: connection not open
 .fi
 .RE
 .PP
-Thanks to Spencer Steffen for contributing this solution
-\[la]https://github.com/sunaku/tork/issues/14#issuecomment-3539470\[ra]\&.
+Thanks to Spencer Steffen for contributing this solution \[la]https://github.com/sunaku/tork/issues/14#issuecomment-3539470\[ra]\&.
 .IP \(bu 2
 .BR testr-driver (1): 
 document the "over" status message in manual page.
@@ -1155,10 +1150,8 @@ Do not fail when given test file no longer exists.
 Make xUnit \fB\fC\-\-name\fR option regexp case\-insensitive.
 .IP \(bu 2
 RSpec does not accept regexp for \fB\fC\-\-example\fR option;
-see 
-\[la]https://github.com/rspec/rspec-core/issues/445\[ra]
-and 
-\[la]https://github.com/dchelimsky/rspec/issues/44\[ra]
+see \[la]https://github.com/rspec/rspec-core/issues/445\[ra]
+and \[la]https://github.com/dchelimsky/rspec/issues/44\[ra]
 .IP \(bu 2
 Ruby 187 does not have Symbol#upcase() method.
 .RE
@@ -1284,8 +1277,7 @@ Removed the \fB\fCtest/loop/notify\fR and \fB\fCtest\-loop/coco\fR libraries.
 .IP \(bu 2
 The file system is no longer polled to detect modified files.  Instead, it
 is monitored for file modification events in a portable and efficient
-manner using the Guard
-\[la]https://github.com/guard/guard\[ra] library.
+manner using the Guard \[la]https://github.com/guard/guard\[ra] library.
 .IP \(bu 2
 The number of processors on your system is automatically detected for the
 \fB\fCmax_forked_workers\fR configuration parameter.
@@ -1389,8 +1381,7 @@ Report test execution statistics in \fB\fCtest/loop/notify\fR preset as
 requested by Juan G. Hurtado..
 .IP \(bu 2
 Add \fB\fCtest/loop/coco\fR preset for integrating the Coco code coverage
-library
-\[la]http://lkdjiin.github.com/coco/\[ra]\&.
+library \[la]http://lkdjiin.github.com/coco/\[ra]\&.
 .RE
 .SH Version 12.1.0 (2011\-04\-29)
 .SS Minor:
@@ -1407,8 +1398,7 @@ Reabsorb overhead when user's configuration file changes.  (Brian D. Burns
 and Daniel Pittman)
 .IP \(bu 2
 \fB\fCThread.new { system() }\fR really is backgrounded so \fB\fCfork { system() }\fR is
-not necessary!  This issue
-\[la]https://github.com/sunaku/test-loop/issues/5\[ra]
+not necessary!  This issue \[la]https://github.com/sunaku/test-loop/issues/5\[ra]
 was solved by upgrading to the newer 2.6.38.4\-1 Linux kernel on my system.
 .RE
 .SH Version 12.0.3 (2011\-04\-25)
@@ -1467,8 +1457,7 @@ that would also stop you from doing clever things." ~Doug Gwyn
 .IP \(bu 2
 \fB\fCThread.new { system() }\fR is not really backgrounded so \fB\fCfork()\fR instead!
 Many thanks to Brian D. Burns and Daniel Pittman for helping solve this
-issue
-\[la]https://github.com/sunaku/test-loop/issues/5\[ra]\&.
+issue \[la]https://github.com/sunaku/test-loop/issues/5\[ra]\&.
 .RE
 .SH Version 12.0.2 (2011\-04\-21)
 .SS Patch:
@@ -1635,6 +1624,7 @@ Burns)
 .IP \(bu 2
 Prefix worker process title with "test\-loop" for easier 
 .BR ps (1)
+
 searchability.  The monitoring command in the README is now simplified to
 the following:
 .PP
@@ -1940,8 +1930,7 @@ Reduce the amount of notifications shown to user.
 .RS
 .IP \(bu 2
 Fix syntax error caused by a dangling comma. Thanks
-to darthdeus (Jakub Arnold) for reporting this bug
-\[la]https://github.com/sunaku/test-loop/issues#issue/1\[ra]\&.
+to darthdeus (Jakub Arnold) for reporting this bug \[la]https://github.com/sunaku/test-loop/issues#issue/1\[ra]\&.
 .IP \(bu 2
 Notify user before reabsorbing overhead.
 .RE
