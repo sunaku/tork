@@ -68,19 +68,19 @@ performed *automatically*.  However, to run a test file *manually*, you can:
 
   2. Type `t` followed by a space and the file you want to run into tork(1):
 
-        # run all of test/some_test.rb
-        t test/some_test.rb
+         # run all of test/some_test.rb
+         t test/some_test.rb
 
-        # run lines 4, 33, and 21 of test/some_test.rb
-        t test/some_test.rb 4 33 21
+         # run lines 4, 33, and 21 of test/some_test.rb
+         t test/some_test.rb 4 33 21
 
   3. Send a `["run_test_file"]` message to tork-engine(1) using tork-remote(1):
 
-        # run all of test/some_test.rb
-        echo run_test_file test/some_test.rb | tork-remote tork-engine
+         # run all of test/some_test.rb
+         echo run_test_file test/some_test.rb | tork-remote tork-engine
 
-        # run lines 4, 33, and 21 of test/some_test.rb
-        echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
+         # run lines 4, 33, and 21 of test/some_test.rb
+         echo run_test_file test/some_test.rb 4 33 21 | tork-remote tork-engine
 
 Alternatively, you can use tork-runner(1) to run your test suite in one shot
 and then exit with a nonzero status if tests failed, similar to `rake test`.
@@ -204,9 +204,9 @@ directory.  Consequently, you must restart tork if your configuration changes.
 
 ## License
 
-> Like my work? :+1: Please [spare a life] today as thanks!
-> :cow::pig::chicken::fish::speak_no_evil::v::revolving_hearts:
-[spare a life]: https://sunaku.github.io/vegan-for-life.html
+[Spare A Life]: https://sunaku.github.io/vegan-for-life.html
+> Like my work? :+1:  Please [spare a life] today as thanks!
+:cow::pig::chicken::fish::speak_no_evil::v::revolving_hearts:
 
 Copyright 2010 Suraj N. Kurapati <https://github.com/sunaku>
 
